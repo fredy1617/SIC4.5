@@ -48,11 +48,12 @@ include('fredyNav.php');
 			        <th>Nombre</th>
 			        <th>Telefono</th>
 			        <th>Dispositivo</th>
+			        <th>Estatus</th>
 			        <th>Falla</th>
 			        <th>Observación</th>
 			        <th>Total</th>
-			        <th>Fecha</th>
-			        <th>Estatus</th>
+			        <th>Entrada</th>
+			        <th>Salida</th>
 			        <th></th>
 			      </tr>
 			    </thead>

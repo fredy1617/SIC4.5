@@ -3,14 +3,10 @@
 include("../fpdf/fpdf.php");
 include('is_logged.php');
 $pass='root';
-if (isset($_POST['id_dispositivo']) == false) {
-    echo "<html><font color = 'red'><h3>No se esta recibiendo una variable se recomienda cerrar la ventana!</h3></font></html>";
-}else{
-$id_dispositivo = $_POST['id_dispositivo'];
+$id_dispositivo =$_GET['id'];
 //Incluimos el archivo de conexion a la base de datos
 class PDF extends FPDF{
-    function folioCliente()
-    {
+    function folioCliente(){
         global $id_dispositivo;
         global $pass;
         $enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
@@ -109,13 +105,23 @@ class PDF extends FPDF{
                 $sub=$sub+$refaccion['cantidad'];
             }
             }
+            $sql = mysqli_query($enlace, "SELECT * FROM pagos WHERE id_cliente = '$id_dispositivo' AND descripcion = 'Anticipo' AND tipo = 'Dispositivo'");
+            $Total_anti = 0;
+            if (mysqli_num_rows($sql)>0) {
+                            
+                while ($anticipo = mysqli_fetch_array($sql)) {
+                  $Total_anti += $anticipo['cantidad'];
+                }
+            }
             if ($fila['precio'] == 0) {
                 $this->SetFont('Arial','B',10);
                 $this->MultiCell(70,4,utf8_decode("SUBTOTAL"),0,'L',true);
                 $this->MultiCell(70,4,utf8_decode("$ ".$fila['t_refacciones'].".00"),0,'R',true);
-                $Total=$fila['mano_obra']+$fila['t_refacciones'];
+                $Total=$fila['mano_obra']+$fila['t_refacciones']-$Total_anti;
                 $this->MultiCell(70,4,utf8_decode("Mano de Obra"),0,'L',true);
                 $this->MultiCell(70,4,utf8_decode("$ ".$fila['mano_obra'].".00"),0,'R',true);
+                $this->MultiCell(70,4,utf8_decode("Anticipó"),0,'L',true);
+                $this->MultiCell(70,4,utf8_decode("- $ ".$Total_anti.".00"),0,'R',true);
                 $this->SetFont('Arial','B',12);
                 $this->Ln(5);
                 $this->MultiCell(70,4,utf8_decode('TOTAL: $'.$Total.'.00'),0,'R',true);
@@ -127,9 +133,12 @@ class PDF extends FPDF{
                 $mano=$fila['precio']-$sub;
                 $this->MultiCell(70,4,utf8_decode("Mano de Obra"),0,'L',true);
                 $this->MultiCell(70,4,utf8_decode("$ ".$mano.".00"),0,'R',true);
+                $this->MultiCell(70,4,utf8_decode("Anticipó"),0,'L',true);
+                $this->MultiCell(70,4,utf8_decode("- $ ".$Total_anti.".00"),0,'R',true);
                 $this->SetFont('Arial','B',12);
                 $this->Ln(5);
-                $this->MultiCell(70,4,utf8_decode('TOTAL: $'.$fila['precio'].'.00'),0,'R',true);
+                $Total=$fila['precio']-$Total_anti;
+                $this->MultiCell(70,4,utf8_decode('TOTAL: $'.$Total.'.00'),0,'R',true);
                 $this->Ln(10);
             }
         $this->SetX(6);
@@ -141,15 +150,13 @@ class PDF extends FPDF{
         $this->SetFont('Arial','B',7); 
         $this->SetX(5);
         $this->MultiCell(69,4,utf8_decode('ADVERTENCIA:
-    1.- PASADOS 30 DÍAS NO SOMOS RESPONSABLES DE LOS EQUIPOS. 
-    2.- EN SOFTWARE (PROGRAMAS) NO HAY GARANTÍA.
-    3.- SIN ESTE TICKET, NO SE HARÁ LA ENTREGA DEL EQUIPO.'),1,'L',true);
+            1.- PASADOS 30 DÍAS NO SOMOS RESPONSABLES DE LOS EQUIPOS. 
+            2.- EN SOFTWARE (PROGRAMAS) NO HAY GARANTÍA.
+            3.- SIN ESTE TICKET NO SE ACEPTAN RECLAMACIONES.'),1,'L',true);
 
-       
-        mysqli_close($enlace);
     }
-    function folioCliente2()
-    {
+
+    function folioCliente2(){
         global $id_dispositivo;
         global $pass;
         $enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
@@ -252,13 +259,23 @@ class PDF extends FPDF{
                 $sub=$sub+$refaccion['cantidad'];
             }
         }
+            $sql = mysqli_query($enlace, "SELECT * FROM pagos WHERE id_cliente = '$id_dispositivo' AND descripcion = 'Anticipo' AND tipo = 'Dispositivo'");
+            $Total_anti = 0;
+            if (mysqli_num_rows($sql)>0) {
+                            
+                while ($anticipo = mysqli_fetch_array($sql)) {
+                  $Total_anti += $anticipo['cantidad'];
+                }
+            }
             if ($fila['precio'] == 0) {
                 $this->SetFont('Arial','B',10);
                 $this->MultiCell(70,4,utf8_decode("SUBTOTAL"),0,'L',true);
                 $this->MultiCell(70,4,utf8_decode("$ ".$fila['t_refacciones'].".00"),0,'R',true);
-                $Total=$fila['mano_obra']+$fila['t_refacciones'];
+                $Total=$fila['mano_obra']+$fila['t_refacciones']-$Total_anti;
                 $this->MultiCell(70,4,utf8_decode("Mano de Obra"),0,'L',true);
                 $this->MultiCell(70,4,utf8_decode("$ ".$fila['mano_obra'].".00"),0,'R',true);
+                $this->MultiCell(70,4,utf8_decode("Anticipó"),0,'L',true);
+                $this->MultiCell(70,4,utf8_decode("- $ ".$Total_anti.".00"),0,'R',true);
                 $this->SetFont('Arial','B',12);
                 $this->Ln(5);
                 $this->MultiCell(70,4,utf8_decode('TOTAL: $'.$Total.'.00'),0,'R',true);
@@ -270,9 +287,12 @@ class PDF extends FPDF{
                 $mano=$fila['precio']-$sub;
                 $this->MultiCell(70,4,utf8_decode("Mano de Obra"),0,'L',true);
                 $this->MultiCell(70,4,utf8_decode("$ ".$mano.".00"),0,'R',true);
+                $this->MultiCell(70,4,utf8_decode("Anticipó"),0,'L',true);
+                $this->MultiCell(70,4,utf8_decode("- $ ".$Total_anti.".00"),0,'R',true);
                 $this->SetFont('Arial','B',12);
                 $this->Ln(5);
-                $this->MultiCell(70,4,utf8_decode('TOTAL: $'.$fila['precio'].'.00'),0,'R',true);
+                $Total=$fila['precio']-$Total_anti;
+                $this->MultiCell(70,4,utf8_decode('TOTAL: $'.$Total.'.00'),0,'R',true);
                 $this->Ln(10);
             }
         $this->SetX(6);
@@ -284,65 +304,28 @@ class PDF extends FPDF{
         $this->SetFont('Arial','B',7); 
         $this->SetX(5);
         $this->MultiCell(69,4,utf8_decode('ADVERTENCIA:
-    1.- PASADOS 30 DÍAS NO SOMOS RESPONSABLES DE LOS EQUIPOS. 
-    2.- EN SOFTWARE (PROGRAMAS) NO HAY GARANTÍA.
-    3.- SIN ESTE TICKET, NO SE HARÁ LA ENTREGA DEL EQUIPO.'),1,'L',true);
- 
-        mysqli_close($enlace);
+            1.- PASADOS 30 DÍAS NO SOMOS RESPONSABLES DE LOS EQUIPOS. 
+            2.- EN SOFTWARE (PROGRAMAS) NO HAY GARANTÍA.
+            3.- SIN ESTE TICKET NO SE ACEPTAN RECLAMACIONES.'),1,'L',true);
+
     }
-    }
+}
 
 global $pass;
 global $id_dispositivo;
 $enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
-
 $listado = mysqli_query($enlace, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
-$num_filas = mysqli_num_rows($listado);
-if ($num_filas > 0) {
-    $fila = mysqli_fetch_array($listado);
-
-    date_default_timezone_set('America/Mexico_City');
-    $FechaSalida = date('Y-m-d');
-
-    mysqli_query ($enlace, "UPDATE dispositivos SET  estatus='Entregado', fecha_salida='$FechaSalida' WHERE id_dispositivo='$id_dispositivo'");
-    //DAR DE ALTA LOS PAGOS
-    $id_User =  $_SESSION['user_id'];
-
-    $SqlRefacciones = mysqli_query($enlace, "SELECT * FROM refacciones WHERE id_dispositivo = '$id_dispositivo'");
-    $filas = mysqli_num_rows($SqlRefacciones);
-    $sub = 0;
-    if ($filas > 0) {
-        //REFACCIONES-------            
-        while($refaccion = mysqli_fetch_array($SqlRefacciones)){
-                $sub=$sub+$refaccion['cantidad'];
-                $descripcion = 'Refaccion: '.$refaccion['descripcion'];
-                $precio = $refaccion['cantidad'];
-                if (mysqli_num_rows(mysqli_query($enlace, "SELECT * FROM pagos WHERE id_cliente = '$id_dispositivo' AND descripcion = '$descripcion' AND tipo = 'Dispositivo'")) == 0){
-                    $sql = "INSERT INTO pagos(id_cliente, descripcion, cantidad, fecha, tipo, id_user, corte, tipo_cambio, Cotejado) VALUES ($id_dispositivo, '$descripcion', '$precio', '$FechaSalida', 'Dispositivo', $id_User, 0, 'Efectivo', 0)";
-                    mysqli_query($enlace, $sql);
-                }else{
-                    echo "nel";
-                }
-        }
-    }
-    if ($fila['precio'] == 0) {
-        $cantidad = $fila['mano_obra'];
-    }else{
-        $cantidad = $fila['precio']-$sub;
-    }
-    //MANO DE ORBRA-----}
-    if (mysqli_num_rows(mysqli_query($enlace, "SELECT * FROM pagos WHERE id_cliente = $id_dispositivo AND descripcion = 'Mano de Obra' AND tipo = 'Dispositivo'")) == 0){
-        $sql = "INSERT INTO pagos(id_cliente, descripcion, cantidad, fecha, tipo, id_user, corte, tipo_cambio, Cotejado) VALUES ($id_dispositivo, 'Mano de Obra', '$cantidad', '$FechaSalida', 'Dispositivo', $id_User, 0, 'Efectivo', 0)";
-        mysqli_query($enlace, $sql);
-    }
-}
-
-
+$fila = mysqli_fetch_array($listado);
 $pdf = new PDF('P', 'mm', array(80,297));
 $pdf->SetTitle('Folio_'.$id_dispositivo.'_'.$fila['nombre'].'_'.'_'.$fila['marca'].'_'.$fila['modelo'].'_color_'.$fila['color']);
 $pdf->folioCliente();
 $pdf->folioCliente2();
 $pdf->Output('Folio_'.$id_dispositivo.'_'.$fila['nombre'].'_'.'_'.$fila['marca'].'_'.$fila['modelo'].'_color_'.$fila['color'],'I');
+$listado = mysqli_query($enlace, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
+$num_filas = mysqli_num_rows($listado);
+if ($num_filas > 0) {
+    date_default_timezone_set('America/Mexico_City');
+    $FechaSalida = date('Y-m-d');
+    mysqli_query ($enlace, "UPDATE dispositivos SET  estatus='Entregado', fecha_salida='$FechaSalida' WHERE id_dispositivo='$id_dispositivo'");
 }
-
 ?>

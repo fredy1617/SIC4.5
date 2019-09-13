@@ -41,15 +41,15 @@ include('../php/cobrador.php');
   <table class="bordered centered highlight responsive-table">
     <thead>
       <tr>
+          <th>Dias</th>
           <th>Folio</th>
-          <th>Nombre</th>
-          <th>Telefono</th>
+          <th width="15%">Nombre</th>
           <th>Dispositivo</th>
           <th>Extras</th>
           <th>Falla</th>
-          <th>Fecha Entrada</th>
+          <th>Estatus</th>
           <th>Técnico</th>
-          <th>Salida</th>
+          <th>Atender</th>
       </tr>
     </thead>
     <tbody id="datos">

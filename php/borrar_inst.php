@@ -14,7 +14,7 @@ if ($tipo == "reporte") {
     ?>
   <script>    
      function recargar3() {
-    setTimeout("location.href='<?php echo $ruta; ?>'", 2000);
+    setTimeout("location.href='<?php echo $ruta; ?>'", 700);
   }
   </script>
   <?php

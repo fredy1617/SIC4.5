@@ -3,11 +3,10 @@
 
 	$Texto = $conn->real_escape_string($_POST['texto']);
 
-
 	//Variable vacía (para evitar los E_NOTICE)
 	$mensaje = "";
 
-	$sql = "SELECT * FROM dispositivos LIMIT 25";
+	$sql = "SELECT * FROM dispositivos LIMIT 50";
 
 	if ($Texto != "") {
 		$sql="SELECT * FROM dispositivos WHERE (nombre LIKE '%$Texto%' OR  id_dispositivo = '$Texto') LIMIT 25";
@@ -25,13 +24,6 @@
 		while($resultados = mysqli_fetch_array($consulta)) {
 
 			$id_dispositivo = $resultados['id_dispositivo'];
-			$nombre = $resultados['nombre'];
-			$telefono = $resultados['telefono'];
-			$marca = $resultados['marca'];
-			$falla = $resultados['falla'];
-			$fecha = $resultados['fecha'];
-			$estatus =$resultados['estatus'];
-			$observacion = $resultados['observaciones'];
 			if ($resultados['precio'] == 0) {
 				$total = $resultados['mano_obra']+$resultados['t_refacciones'];
 			}else{
@@ -41,14 +33,15 @@
 			$mensaje .= '			
 		          <tr>
 		            <td>'.$id_dispositivo.'</td>
-		            <td>'.$nombre.'</td>
-		            <td>'.$telefono.'</td>
-		            <td>'.$resultados['tipo'].' '.$marca.'</td>
-		            <td>'.$falla.'</td>
-		            <td>'.$observacion.'</td>
+		            <td>'.$resultados['nombre'].'</td>
+		            <td>'.$resultados['telefono'].'</td>
+		            <td>'.$resultados['tipo'].' '.$resultados['marca'].'</td>
+		            <td><b class = "blue-text">'.$resultados['estatus'].'</b></td> 
+		            <td>'.$resultados['falla'].'</td>
+		            <td>'.$resultados['observaciones'].'</td>
 		            <td>'.$total.'</td>
-		            <td>'.$fecha.'</td>
-		            <td>'.$estatus.'</td> 
+		            <td>'.$resultados['fecha'].'</td>
+		            <td>'.$resultados['fecha_salida'].'</td>
 		            <td><a onclick="regresa('.$id_dispositivo.');" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">reply</i></a></td>        
 		          </tr>';
 

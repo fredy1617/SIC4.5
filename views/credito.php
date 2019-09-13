@@ -100,7 +100,8 @@ if ($Saldo < 0) {
       <h5 class="hide-on-large-only">Abonar:</h5>
     </div>
     <div class="row">
-      <form class="col s12">        <div class="row col s12 m3 l3">
+      <form class="col s12">        
+        <div class="row col s12 m3 l3">
         <div class="input-field">
           <i class="material-icons prefix">payment</i>
           <input id="cantidad" type="number" class="validate" data-length="6" value="0" required>

@@ -108,14 +108,23 @@ class PDF extends FPDF{
                 $this->MultiCell(70,4,utf8_decode("$ ". $refaccion['cantidad'].'.00'),0,'R',true);
                 $sub=$sub+$refaccion['cantidad'];
             }
+            }$sql = mysqli_query($enlace, "SELECT * FROM pagos WHERE id_cliente = '$id_dispositivo' AND descripcion = 'Anticipo' AND tipo = 'Dispositivo'");
+            $Total_anti = 0;
+            if (mysqli_num_rows($sql)>0) {
+                            
+                while ($anticipo = mysqli_fetch_array($sql)) {
+                  $Total_anti += $anticipo['cantidad'];
+                }
             }
             if ($fila['precio'] == 0) {
                 $this->SetFont('Arial','B',10);
                 $this->MultiCell(70,4,utf8_decode("SUBTOTAL"),0,'L',true);
                 $this->MultiCell(70,4,utf8_decode("$ ".$fila['t_refacciones'].".00"),0,'R',true);
-                $Total=$fila['mano_obra']+$fila['t_refacciones'];
+                $Total=$fila['mano_obra']+$fila['t_refacciones']-$Total_anti;
                 $this->MultiCell(70,4,utf8_decode("Mano de Obra"),0,'L',true);
                 $this->MultiCell(70,4,utf8_decode("$ ".$fila['mano_obra'].".00"),0,'R',true);
+                $this->MultiCell(70,4,utf8_decode("Anticipó"),0,'L',true);
+                $this->MultiCell(70,4,utf8_decode("- $ ".$Total_anti.".00"),0,'R',true);
                 $this->SetFont('Arial','B',12);
                 $this->Ln(5);
                 $this->MultiCell(70,4,utf8_decode('TOTAL: $'.$Total.'.00'),0,'R',true);
@@ -127,9 +136,12 @@ class PDF extends FPDF{
                 $mano=$fila['precio']-$sub;
                 $this->MultiCell(70,4,utf8_decode("Mano de Obra"),0,'L',true);
                 $this->MultiCell(70,4,utf8_decode("$ ".$mano.".00"),0,'R',true);
+                $this->MultiCell(70,4,utf8_decode("Anticipó"),0,'L',true);
+                $this->MultiCell(70,4,utf8_decode("- $ ".$Total_anti.".00"),0,'R',true);
                 $this->SetFont('Arial','B',12);
                 $this->Ln(5);
-                $this->MultiCell(70,4,utf8_decode('TOTAL: $'.$fila['precio'].'.00'),0,'R',true);
+                $Total=$fila['precio']-$Total_anti;
+                $this->MultiCell(70,4,utf8_decode('TOTAL: $'.$Total.'.00'),0,'R',true);
                 $this->Ln(10);
             }
         $this->SetX(6);
@@ -251,14 +263,23 @@ class PDF extends FPDF{
                 $this->MultiCell(70,4,utf8_decode("$ ". $refaccion['cantidad'].'.00'),0,'R',true);
                 $sub=$sub+$refaccion['cantidad'];
             }
+            }$sql = mysqli_query($enlace, "SELECT * FROM pagos WHERE id_cliente = '$id_dispositivo' AND descripcion = 'Anticipo' AND tipo = 'Dispositivo'");
+            $Total_anti = 0;
+            if (mysqli_num_rows($sql)>0) {
+                            
+                while ($anticipo = mysqli_fetch_array($sql)) {
+                  $Total_anti += $anticipo['cantidad'];
+                }
             }
             if ($fila['precio'] == 0) {
                 $this->SetFont('Arial','B',10);
                 $this->MultiCell(70,4,utf8_decode("SUBTOTAL"),0,'L',true);
                 $this->MultiCell(70,4,utf8_decode("$ ".$fila['t_refacciones'].".00"),0,'R',true);
-                $Total=$fila['mano_obra']+$fila['t_refacciones'];
+                $Total=$fila['mano_obra']+$fila['t_refacciones']-$Total_anti;
                 $this->MultiCell(70,4,utf8_decode("Mano de Obra"),0,'L',true);
                 $this->MultiCell(70,4,utf8_decode("$ ".$fila['mano_obra'].".00"),0,'R',true);
+                $this->MultiCell(70,4,utf8_decode("Anticipó"),0,'L',true);
+                $this->MultiCell(70,4,utf8_decode("- $ ".$Total_anti.".00"),0,'R',true);
                 $this->SetFont('Arial','B',12);
                 $this->Ln(5);
                 $this->MultiCell(70,4,utf8_decode('TOTAL: $'.$Total.'.00'),0,'R',true);
@@ -270,9 +291,12 @@ class PDF extends FPDF{
                 $mano=$fila['precio']-$sub;
                 $this->MultiCell(70,4,utf8_decode("Mano de Obra"),0,'L',true);
                 $this->MultiCell(70,4,utf8_decode("$ ".$mano.".00"),0,'R',true);
+                $this->MultiCell(70,4,utf8_decode("Anticipó"),0,'L',true);
+                $this->MultiCell(70,4,utf8_decode("- $ ".$Total_anti.".00"),0,'R',true);
                 $this->SetFont('Arial','B',12);
                 $this->Ln(5);
-                $this->MultiCell(70,4,utf8_decode('TOTAL: $'.$fila['precio'].'.00'),0,'R',true);
+                $Total=$fila['precio']-$Total_anti;
+                $this->MultiCell(70,4,utf8_decode('TOTAL: $'.$Total.'.00'),0,'R',true);
                 $this->Ln(10);
             }
         $this->SetX(6);

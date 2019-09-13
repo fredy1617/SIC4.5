@@ -211,7 +211,7 @@ if (isset($_POST['id_cliente']) == false) {
                 <p>
                   <?php
                   $bandera = 1; 
-                  $sql_tecnico = mysqli_query($conn,"SELECT * FROM users WHERE area='Taller' OR area='Redes'");
+                  $sql_tecnico = mysqli_query($conn,"SELECT * FROM users WHERE area='Taller' OR area='Redes'  OR user_id = 49 OR user_id = 28 OR user_id = 25");
                   while($tecnico = mysqli_fetch_array($sql_tecnico)){
                     ?>
                     <div class="col s12 m6 l4">

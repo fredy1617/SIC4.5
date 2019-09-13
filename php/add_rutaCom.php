@@ -82,7 +82,7 @@ echo '<script>M.toast({html:"'.$mensaje.'", classes: "rounded"});</script>';
 ?>
 <script>
 	function ir(){
-		setTimeout("location.href='../views/ruta_comunidad.php'", 1500);
+		setTimeout("location.href='../views/ruta_comunidad.php'", 700);
 	}
 </script>
 <?php

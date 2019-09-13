@@ -5,14 +5,11 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
 $User = $conn->real_escape_string($_POST['valorUsuario']);
 
 if ($User ==  0) {
-  $usuarios = mysqli_query($conn, "SELECT * FROM users WHERE area='Redes' OR user_id = 49 OR user_id = 28");
-}else if ($User == 27) {
-  $usuarios = mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$User' OR user_id = 28 ");
-}else if ($User == 50) {
-  $usuarios = mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$User' OR user_id = 49");
-}else{
+  $usuarios = mysqli_query($conn, "SELECT * FROM users WHERE area='Redes' OR user_id = 49 OR user_id = 28 OR user_id = 25");
+}else {
   $usuarios = mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$User' ");
 }
+
 
 while($usuario = mysqli_fetch_array($usuarios)){
   $user=$usuario['user_name'];

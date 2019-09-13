@@ -50,14 +50,11 @@ include('../php/cobrador.php');
       <tr>
           <th>Folio</th>
           <th>Nombre</th>
-          <th>Telefono</th>
           <th>Dispositivo</th>
-          <th>Extras</th>          
           <th>Falla</th>
           <th>Observación</th>
           <th>Total</th>
-          <th>Fecha Entrada</th>
-          <th>Técnico</th>
+          <th>FechaSalida</th>
           <th>Salida</th>
           <th>Almacen</th>
       </tr>

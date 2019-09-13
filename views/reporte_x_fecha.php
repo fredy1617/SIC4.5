@@ -45,6 +45,9 @@ include('../php/cobrador.php');
                 <select id="usuario" class="browser-default"><br>
                     <option value="" selected>Seleccione un usuario</option>
                     <option value="0">Todos</option>
+                    <option value="25">Ulises</option>
+                    <option value="28">Luis</option>
+                    <option value="49">Alfredo</option>
                     <?php 
                     $sql_tecnico = mysqli_query($conn,"SELECT * FROM users WHERE area = 'Redes'");
                     while($tecnico = mysqli_fetch_array($sql_tecnico)){

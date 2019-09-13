@@ -6,7 +6,7 @@ $instalaciones = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM cli
 $reportes = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE (atendido != 1 OR atendido IS NULL OR (fecha_visita = '$Hoy'  AND atender_visita = 0)  OR (fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1))"));
 $tel = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM pagos WHERE Cotejado =1"));
 $pendientes = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM dispositivos WHERE estatus IN ('Cotizado','En Proceso','Pendiente') AND fecha > '2019-01-01'"));
-$listos = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM dispositivos WHERE estatus IN ('Listo (En Taller)','Listo (No Reparado)') AND fecha > '2019-01-01'"));
+$listos = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM dispositivos WHERE estatus IN ('Listo (En Taller)','Listo (No Reparado)', 'Listo') AND fecha > '2019-01-01'"));
 $almacen = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM dispositivos WHERE estatus = 'Almacen'"));
 $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE estatus = 0"));
 ?>
@@ -35,7 +35,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				<li><a class='dropdown-button' data-target='dropdown1'><i class="material-icons left">phonelink_setup</i>Servicio Técnico <i class="material-icons right">arrow_drop_down</i></a></li>
 				<ul id='dropdown1' class='dropdown-content'>
 				    <li><a href="form_entradas.php" class="black-text"><i class="material-icons">add</i>Nuevo Dispositivo </a></li>
-				    <li><a href="dispositivos.php" class="black-text"><i class="material-icons">phonelink</i>Dispositivos </a></li>
+				    <li><a href="dispositivos.php" class="black-text"><i class="material-icons">phonelink</i>Disp. En General </a></li>
 				    <li><a href="ver_almacen.php" class="black-text"><i class="material-icons">dashboard</i>Almacen <span class="new badge pink" data-badge-caption=""><?php echo $almacen['count(*)'];?></span> </a></li>
 				    <li><a href="listos.php" class="black-text"><i class="material-icons">assignment_turned_in</i>Listos <span class="new badge pink" data-badge-caption=""><?php echo $listos['count(*)'];?></span> </a></li>
 				    <li><a href="pendientes.php" class="black-text"><i class="material-icons">assignment_late</i>Pendientes <span class="new badge pink" data-badge-caption=""><?php echo $pendientes['count(*)'];?></span> </a></li>
@@ -112,7 +112,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 		      				  <span>
 		      					<ul>
 		      					  <li><a href="form_entrada.php"><i class="material-icons">add</i>Nuevo Dispositivo</a></li>
-			      				  <li><a href="dispositivos.php"><i class="material-icons">phonelink</i>Dispositivos</a></li>
+			      				  <li><a href="dispositivos.php"><i class="material-icons">phonelink</i>Disp. En General</a></li>
 				    			  <li><a href="ver_almacen.php"><i class="material-icons">dashboard</i>Almacen <span class="new badge pink" data-badge-caption=""><?php echo $almacen['count(*)'];?></span> </a></li>
 			      				  <li><a href="listos.php"><i class="material-icons">assignment_turned_in</i>Listos <span class="new badge pink" data-badge-caption=""><?php echo $listos['count(*)'];?></span> </a></li>
 						    	  <li><a href="pendientes.php"><i class="material-icons">assignment_late</i>Pendientes<span class="new badge pink" data-badge-caption=""><?php echo $pendientes['count(*)'];?></span></a></li>
@@ -184,7 +184,6 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 	<script>
     	$(document).ready(function() {
 	    
-	 	});
 	 	$('.dropdown-button').dropdown({
 	      	  inDuration: 500,
 	          outDuration: 500, constrainWidth: false, // Does not change width of dropdown to that of the activator
@@ -196,6 +195,8 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 	          hover: true,
 	          constrainWidth: false, // Does not change width of dropdown to that of the activator
 	          coverTrigger: false, 
+	    });
+	    $('tooltipped').tooltip();
 	    });
 		document.addEventListener('DOMContentLoaded', function(){
 			M.AutoInit();

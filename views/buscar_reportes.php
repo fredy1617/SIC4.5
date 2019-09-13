@@ -1,13 +1,6 @@
 <?php
   include ('../php/conexion.php');
-  $Texto = $conn->real_escape_string($_POST['texto']);
-
-  //Filtro anti-XSS
-  $caracteres_malos = array("<", ">", "\"", "'", "/", "<", ">", "'", "/");
-  $caracteres_buenos = array("& lt;", "& gt;", "& quot;", "& #x27;", "& #x2F;", "& #060;", "& #062;", "& #039;", "& #047;");
-
-  $Texto = str_replace($caracteres_malos, $caracteres_buenos, $Texto);
-  
+  $Texto = $conn->real_escape_string($_POST['texto']);  
 
   date_default_timezone_set('America/Mexico_City');
   $Hoy = date('Y-m-d');

@@ -2,28 +2,19 @@
 date_default_timezone_set('America/Mexico_City');
 include('../php/conexion.php');
 include('is_logged.php');
-include('../escpos/autoload.php'); //Nota: si renombraste la carpeta a algo diferente de "ticket" cambia el nombre en esta línea
-use Mike42\Escpos\Printer;
-use Mike42\Escpos\EscposImage;
-use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
-$Link = $_POST['valorLink'];
+
 $filtrarObservaciones = $_POST['valorObservaciones'];
-$filtrarPrecio = $_POST['valorManoObra'];
-$filtrarIdDispositivo = $_POST['valorIdDispositivo'];
-$filtrarTecnico = $_POST['valorTecnico'];
-$filtrarEstatus = $_POST['valorEstatus'];
-$Imprimir = $_POST['valorImprimir'];
 
 //Filtro anti-XSS
 $caracteres_malos = array("<", ">", "\"", "'", "/", "<", ">", "'", "/");
 $caracteres_buenos = array("& lt;", "& gt;", "& quot;", "& #x27;", "& #x2F;", "& #060;", "& #062;", "& #039;", "& #047;");
 
 $Observaciones = str_replace($caracteres_malos, $caracteres_buenos, $filtrarObservaciones);
-$ManoObra = str_replace($caracteres_malos, $caracteres_buenos, $filtrarPrecio);
-$IdDispositivo = str_replace($caracteres_malos, $caracteres_buenos, $filtrarIdDispositivo);
-$Tecnico = str_replace($caracteres_malos, $caracteres_buenos, $filtrarTecnico);
-$Estatus = str_replace($caracteres_malos, $caracteres_buenos, $filtrarEstatus);
-
+$ManoObra = $conn->real_escape_string($_POST['valorManoObra']);
+$IdDispositivo = $conn->real_escape_string($_POST['valorIdDispositivo']);
+$Link = $conn->real_escape_string($_POST['valorLink']);
+$Estatus = $conn->real_escape_string($_POST['valorEstatus']);
+$Tecnico = $_SESSION['user_id'];
 $Refacciones = $_POST['valorRefacciones'];
 $FechaSalida = date('Y-m-d');
 
@@ -55,15 +46,14 @@ if(mysqli_query($conn, $sql)){
 }
 
 ?>
-<div>
-    
+<div >
     <div class="row">
       <h2 class="hide-on-med-and-down">Salida</h2>
       <h4 class="hide-on-large-only">Salida</h4>
     </div>
     
-    	<?php       
-        $datos = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo = '$IdDispositivo'"));
+        <?php        
+        $datos = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo = $IdDispositivo"));
         ?>
         <ul class="collection">
             <li class="collection-item avatar">
@@ -85,109 +75,132 @@ if(mysqli_query($conn, $sql)){
                  }
                  ?>                 
                  <b>Contraseña: </b><?php echo $datos['contra'];?><br>
-                 <b>Falla: </b><?php echo $datos['falla'];?><br>
-              </p>
-              <a href="#!" class="primary-content"><span class="new badge red" data-badge-caption="<?php echo 'FECHA DE SALIDA: '.$datos['fecha_salida'];?>"></span></a>
-              <br><br>
-              <a href="#!" class="secondary-content"><span class="new badge green" data-badge-caption="<?php echo 'FECHA DE ENTRADA: '.$datos['fecha'];?>"></span></a>
-            </li>
-        </ul>
-        <?php
-        $id_user = $datos['tecnico'];
-        if($id_user==''){
-          $sql_usr[0] = 'Sin tecnico';
-        }else{
-          $sql_usr = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id=$id_user"));  
-        }        
-        ?>
-        <form class="col s12" action="../php/folioSalida.php" target="_blank" method="POST">
-          <div class="row">
-            <div class="input-field col s12">
-              <i class="material-icons prefix">insert_link</i>
-              <textarea id="link" class="materialize-textarea validate" data-length="150" ><?php echo $datos['link'];?></textarea>
-              <label for="link">Link de Mercado Libre:</label>
-            </div>
-          </div>
-          <div class="row">
-            <div class="input-field col s12">
-              <i class="material-icons prefix">comment</i>
-              <textarea id="observaciones" class="materialize-textarea validate" data-length="150" ><?php echo $datos['observaciones'];?></textarea>
-              <label for="observaciones">Observaciones:</label>
-            </div>
-          </div>
-          <div class="row">
-            <h4>Refacciones:</h4>
-            <div id="refa_borrar">
-              <table>
-                <thead>
-                  <th>#</th>
-                  <th>Refacción</th>
-                  <th>Precio</th>
-                  <th>Borrar</th>
-                </thead>
-                <tbody>
-                 
-                  <?php
-                  $sql = mysqli_query($conn, "SELECT * FROM refacciones WHERE id_dispositivo = '$IdDispositivo' ");
+                <?php 
+                 if ($datos['precio']==0) {
+                  $Tot = $datos['mano_obra']+$datos['t_refacciones'];
+                 }else{
+                  $Tot = $datos['precio'];
+                 }
+                  $sql = mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = '$IdDispositivo' AND descripcion = 'Anticipo' AND tipo = 'Dispositivo'");
+                  $Total_anti = 0;
                   if (mysqli_num_rows($sql)>0) {
-                    $aux= 0;
-                    while ($refas = mysqli_fetch_array($sql)) {
-                      $aux++;
-                      ?>
-                    <tr>
-                      <td><?php echo $aux; ?></td>
-                      <td><?php echo $refas['descripcion']; ?></td>
-                      <td>$<?php echo $refas['cantidad']; ?></td>
-                      <td><a onclick="borrar_refa(<?php echo $refas['id_refaccion']; ?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
+                    
+                    while ($anticipo = mysqli_fetch_array($sql)) {
 
-                    </tr>
-                      <?php
+                      $Total_anti += $anticipo['cantidad'];
                     }
                   }
-                  ?>
-                </tbody>
-              </table>
+                 $resto = $Tot-$Total_anti;
+                
+                 ?>
+                 <b>Total: </b><?php echo "$".$Tot;?><br>
+                 <b>Anticipo: </b><?php echo "$".$Total_anti;?><br>
+                 <b>Resta: </b><?php echo "$".$resto;?>
+                 <a href="#!" class="primary-content"><span class="new badge red" data-badge-caption="<?php echo 'FECHA DE SALIDA: '.$datos['fecha_salida'];?>"></span></a>
+              <br><br>
+              <a href="#!" class="secondary-content"><span class="new badge green" data-badge-caption="<?php echo 'FECHA DE ENTRADA: '.$datos['fecha'];?>"></span></a>
+                 <hr>
+                 <b>Falla: </b><?php echo $datos['falla'];?>
+              </p>
+              <br>              
+            </li>
+        </ul>
+        <div class="row">
+          <form class="col s12" action="../php/folioSalida.php" target="_blank" method="POST"><br>
+              <div class="input-field col s12 m6 l6">
+                <i class="material-icons prefix">insert_link</i>
+                <textarea id="link" class="materialize-textarea validate" data-length="150" ><?php echo $datos['link'];?></textarea>
+                <label for="link">Link del Articulo:</label>
+              </div> 
+              <div class="input-field col s12 m6 l6">
+                <i class="material-icons prefix">comment</i>
+                <textarea id="observaciones" class="materialize-textarea validate" data-length="150" ><?php echo $datos['observaciones'];?></textarea>
+                <label for="observaciones">Observaciones:</label>
+              </div> 
+            <div class="row">
+              <h4>Refacciones:</h4>
+              <div id="refa_borrar">
+                <table>
+                  <thead>
+                    <th>#</th>
+                    <th>Refacción</th>
+                    <th>Precio</th>
+                    <th>Borrar</th>
+                  </thead>
+                  <tbody>                 
+                    <?php
+                    $sql = mysqli_query($conn, "SELECT * FROM refacciones WHERE id_dispositivo = '$IdDispositivo' ");
+                    $Total = 0;
+                    if (mysqli_num_rows($sql)>0) {
+                      $aux= 0;
+                      while ($refas = mysqli_fetch_array($sql)) {
+                        $aux++;
+                        $Total += $refas['cantidad'];
+                        ?>
+                      <tr>
+                        <td><?php echo $aux; ?></td>
+                        <td><?php echo $refas['descripcion']; ?></td>
+                        <td>$<?php echo $refas['cantidad']; ?></td>
+                        <td><a onclick="borrar_refa(<?php echo $refas['id_refaccion']; ?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
+                      </tr>
+                        <?php
+                      }
+                    }else{
+                      echo "<h4 class = 'center'>No hay refacciones</h4>";
+                    }
+                    ?>
+                    <tr>
+                      <td></td>
+                      <td><b>SUBTOTAL:</b></td>
+                      <td>$<?php echo $Total; ?></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="button">
+               <button type="button" id="add_Desc" class="waves-effect waves-light btn pink right"><i class="material-icons right">add</i>Agregar</button>
+              </div>
             </div>
-            <div class="button">
-             <button type="button" id="add_Desc" class="waves-effect waves-light btn pink right"><i class="material-icons right">add</i>Agregar</button>
-            </div>
-          </div>
-          <div class="row">
-            <div class="input-field col s12 m4 l4">
-              <i class="material-icons prefix">monetization_on</i>
-              <input id="mano" type="number" class="validate" data-length="6" value="<?php  if($datos['precio'] > 0){ echo $datos['precio']; }else{ echo $datos['mano_obra'];}?>" required>
-              <label for="mano">Mano de Obra:</label>
-            </div>
-            <input id="id_dispositivo" type="hidden" class="validate" data-length="6" value="<?php echo $datos['id_dispositivo'];?>" required>
-            
-            <div class="input-field col l5 m5 s12">
-              <select id="estatus" class="browser-default">
-                <option value="<?php echo $datos['estatus'];?>" selected><?php echo $datos['estatus'];?></option>
-                <option value="Listo (En Taller)">Listo (En Taller)</option>
-              </select>
-            </div>
-             <input name="id_dispositivo" type="hidden" class="validate center" data-length="200" value="<?php echo $datos['id_dispositivo'];?>">
-             <button onclick="salida(1);" type="submit" class="waves-effect waves-light btn pink right tooltipped" data-position="bottom" data-tooltip="Guardar e imprimir"><i class="material-icons right">print</i>Ticket</button><br><br>
-             <a onclick="salida(0);" class="waves-effect waves-light btn pink right tooltipped" data-position="bottom" data-tooltip="Solo guardar"><i class="material-icons right">save</i>Guardar</a>
-            </div>            
-        </form>
-       
-    
-    <?php
-    mysqli_close($conn);
-    ?>
-    </div>
-    <script>
-  $(document).ready(function() {
-    $("#add_Desc").click(function(){
-        var contador = $("input[type='text']").length;
-
-        $(this).before('<div class="row"><div class= "col s12 m6 l6"><div class="input-field"><i class="material-icons prefix">comment</i><input type="text" id="Desc_'+ contador +'" name="Desc[]"/><label for="Desc_'+ contador +'">Descripción No.'+ contador +' :</label></div></div><div class="col s10 m4 l4"><div class="input-field"><i class="material-icons prefix">attach_money</i><input type="number" id="precio'+ contador +'" name="precio[]"/><label for="precio'+ contador +'">Preco No.'+ contador +' :</label></div></div><input id="numero'+ contador +'" value="'+ contador +'" type="hidden"><button type="button" class="delete_Desc btn-floating btn-tiny waves-effect waves-light pink "><i class="material-icons prefix">delete</i></button></div>');
-    });
-
-    $(document).on('click', '.delete_Desc', function(){
-        $(this).parent().remove();
-    });
-});
-</script>
-    <br><br><br>
+            <div class="row">
+              <div class="col s12 m3 l3">
+              <label><i class="material-icons">assignment_late</i> Estatus:</label>
+                <div class="input-field">
+                  <select id="estatus" class="browser-default">
+                    <option value="<?php echo $datos['estatus'];?>" selected><?php echo $datos['estatus'];?></option>
+                    <option value="Cotizado">Cotizado</option>
+                    <option value="En Proceso">En Proceso</option>
+                    <option value="Listo">Listo</option>
+                    <option value="Listo (No Reparado)">Listo (No Reparado)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="input-field col s12 m2 l2"><br>
+                  <i class="material-icons prefix">monetization_on</i>
+                  <input id="mano" type="number" class="validate" data-length="6" value="<?php  if($datos['precio'] > 0){ echo $datos['precio']; }else{ echo $datos['mano_obra'];}?>" required>
+                  <label for="mano">Mano de Obra:</label>
+                </div>
+                <div class="input-field col s12 m3 l3"><br>
+                  <h5><b>TOTAL: $<?php if($datos['precio'] > 0){ echo $datos['precio']; }else{ echo $datos['mano_obra']+$datos['t_refacciones'];}?></b></h5>
+                </div>
+                <div class="col s3 m2 l2">
+                  <p><br>
+                    <input type="checkbox" id="banco"/>
+                    <label for="banco">Banco</label>
+                  </p>
+                </div><br>
+                <div>
+                 <input name="id_dispositivo" id="id_dispositivo" type="hidden" class="validate center" data-length="200" value="<?php echo $datos['id_dispositivo'];?>"><br>
+                <a onclick="salida();" class="btn btn-floating pink  tooltipped" data-position="bottom" data-tooltip="GUARDAR"><i class="material-icons">save</i></a>
+                <button onclick="salida();" type="submit"  class="btn btn-floating pink waves-effect waves-light tooltipped" data-position="bottom" data-tooltip="GUARDAR e IMPRIMIR"><i class="material-icons">print</i></button>
+                
+                <a onclick="sacar();" class="btn btn-floating pink waves-effect waves-light tooltipped" data-position="bottom" data-tooltip="SALIDA"><i class="material-icons">exit_to_app</i></a>
+                </div>
+                <div id="sacar"></div>
+             </div>             
+          </form>
+        </div>
+        <?php
+        mysqli_close($conn);
+        ?>
+    <br><br>
+  </div>

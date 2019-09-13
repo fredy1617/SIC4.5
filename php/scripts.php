@@ -23,13 +23,6 @@ $('.button-collapse').sideNav({
 
 $('.modal').modal();
 
-$(document).ready(function(){
-    $('.tooltipped').tooltip({delay: 50});
-  });
-
-$(document).ready(function(){
-    $('ul.tabs').tabs();
-  });
 
  $(document).ready(function(){
     $('.slider').slider();
