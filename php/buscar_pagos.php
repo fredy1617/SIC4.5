@@ -3,15 +3,22 @@ include('../php/conexion.php');
 $ValorDe = $conn->real_escape_string($_POST['valorDe']);
 $ValorA = $conn->real_escape_string($_POST['valorA']);
 $Usuario = $conn->real_escape_string($_POST['valorUsuario']);
-
-$usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$Usuario'"));
-
-$total = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM pagos WHERE fecha>='$ValorDe' AND fecha<='$ValorA' AND id_user='$Usuario'"));
+$Tipo = $conn->real_escape_string($_POST['valorTipo']);
+if ($Usuario != "") {
+  $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$Usuario'"));
+  $total = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM pagos WHERE fecha>='$ValorDe' AND fecha<='$ValorA' AND id_user='$Usuario'"));
+  $sql_pagos = mysqli_query($conn, "SELECT * FROM pagos WHERE fecha>='$ValorDe' AND fecha<='$ValorA' AND id_user='$Usuario' ORDER BY id_pago DESC");
+  $head = $usuario['firstname'].' '.$usuario['lastname'].':  .  TOTAL = $'.$total['precio'];
+}else{
+  $total = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM pagos WHERE fecha>='$ValorDe' AND fecha<='$ValorA' AND tipo_cambio='$Tipo'"));
+  $head = $Tipo.':  .  TOTAL = $'.$total['precio'];
+  $sql_pagos = mysqli_query($conn, "SELECT * FROM pagos WHERE fecha>='$ValorDe' AND fecha<='$ValorA' AND tipo_cambio = '$Tipo' ORDER BY id_pago DESC");
+}
 ?>
 
 <div>
-<h4 class="right"><?php echo $usuario['firstname'].' '.$usuario['lastname'].': $'.$total['precio'];?></h4><br><br>
-<br><br><br>
+
+<h4 class="blue-text"><?php echo $head;?></h4><br>
   <table class="bordered highlight responsive-table">
     <thead>
       <tr>
@@ -21,18 +28,34 @@ $total = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio 
         <th>Tipo</th>
         <th>Descripción</th>
         <th>Fecha</th>
+        <?php
+        if ($Usuario != "") {
+        ?>
         <th>Tipo</th>
+        <?php
+        }else{
+        ?>
+        <th>Registró</th>
+        <?php
+        }
+        ?>
       </tr>
     </thead>
     <tbody>
 <?php
-$sql_pagos = "SELECT * FROM pagos WHERE fecha>='$ValorDe' AND fecha<='$ValorA' AND id_user='$Usuario' ORDER BY id_pago DESC";
-$resultado_pagos = mysqli_query($conn, $sql_pagos);
-$aux = mysqli_num_rows($resultado_pagos);
+$aux = mysqli_num_rows($sql_pagos);
 if($aux>0){
-while($pagos = mysqli_fetch_array($resultado_pagos)){
+while($pagos = mysqli_fetch_array($sql_pagos)){
   $id_cliente = $pagos['id_cliente'];
-  $cliente = mysqli_fetch_array(mysqli_query($conn,"SELECT nombre FROM clientes WHERE id_cliente = $id_cliente"));
+  $sql = mysqli_query($conn, "SELECT nombre FROM clientes WHERE id_cliente = $id_cliente");
+  
+  $filas = mysqli_num_rows($sql);
+  if ($filas == 0) {
+    $sql = mysqli_query($conn, "SELECT nombre FROM dispositivos WHERE id_dispositivo = $id_cliente"); 
+  }
+  $cliente= mysqli_fetch_array($sql);
+  $id_user = $pagos['id_user'];
+  $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$id_user'"));
   ?>
   <tr>
     <td><b><?php echo $id_cliente;?></b></td>
@@ -41,7 +64,17 @@ while($pagos = mysqli_fetch_array($resultado_pagos)){
     <td><?php echo $pagos['tipo'];?></td>
     <td><?php echo $pagos['descripcion'];?></td>
     <td><?php echo $pagos['fecha'];?></td>
+    <?php
+    if ($Usuario != "") {
+    ?>
     <td><?php echo $pagos['tipo_cambio'];?></td>
+    <?php
+    }else{
+    ?>
+    <td><?php echo $usuario['firstname'];?></td>
+    <?php
+    }
+    ?>
   </tr>
   <?php
   $aux--;

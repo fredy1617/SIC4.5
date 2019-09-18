@@ -108,8 +108,26 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
           </div>
          </div><br>
          <b>Comunidad: </b><?php echo $comunidad['nombre'];?><br>
-         <b>Fecha de Instalación: </b><?php echo $datos['fecha_instalacion'];?><br> 
-         <span class="new badge pink hide-on-med-and-up" data-badge-caption="ACTIVO"></span><br>
+         <b>Fecha de Instalación: </b><?php echo $datos['fecha_instalacion'];?><br>
+         <?php
+          $Pago = mysqli_fetch_array(mysqli_query($conn, "SELECT descripcion FROM pagos WHERE id_cliente = '$no_cliente'  AND tipo = 'Mensualidad' ORDER BY id_pago DESC LIMIT 1"));
+          //Separamos el string
+          $ver = explode(" ", $Pago['descripcion']);
+          $array =  array('ENERO' => '01','FEBRERO' => '02', 'MARZO' => '03','ABRIL' => '04', 'MAYO' => '05', 'JUNIO' => '06', 'JULIO' => '07', 'AGOSTO' => '08', 'SEPTIEMBRE' => '09', 'OCTUBRE' => '10', 'NOVIEMBRE' => '11',  'DICIEMBRE' => '12');
+          $fecha_pago = $array[$ver[0]].'-'.$ver[1];
+          date_default_timezone_set('America/Mexico_City');
+          $mes_actual = date('m-Y');
+          if ($fecha_pago >= $mes_actual) {
+            $color = "green";
+            $MSJ = "AL-CORRIENTE";
+          }else{
+            $color = "red darken-3";
+            $MSJ = "DEUDOR !";
+          }
+
+         ?>
+         
+         <a href="#!" class="secondary-content"><span class="new badge <?php echo $color;?>" data-badge-caption="<?php echo $MSJ;?>"></span></a>
 
       </p>
     </li>

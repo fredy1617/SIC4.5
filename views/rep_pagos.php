@@ -15,21 +15,39 @@
 <title>SIC | Reporte Pagos</title>
 
 <script>
-function buscar_pagos() {
+function buscar_pagos(tipo) {
+  entra = "Si";
+  if (tipo == 1) {
+    textoUsuario = "";
+    var textoDe = $("input#fecha_de2").val();
+    var textoA = $("input#fecha_a2").val();
+    var textoTipo = $("select#tipo").val();
+    if (textoTipo == "") {
+      M.toast({html:"Seleccione un tipo de cambio.", classes: "rounded"});  
+      entra = "No";    
+    }
+  }else{
+    textoTipo = "";
     var textoDe = $("input#fecha_de").val();
     var textoA = $("input#fecha_a").val();
     var textoUsuario = $("select#usuario").val();
     if (textoUsuario == "") {
-      Materialize.toast("Selecciona un usuario.", 4000, "rounded");
-    }else{
+      M.toast({html:"Seleccione un usuario.", classes: "rounded"});      
+      entra = "No";    
+    }    
+  }
+  if (entra == "No") {
+
+  }else{
       $.post("../php/buscar_pagos.php", {
           valorDe: textoDe,
           valorA: textoA,
-          valorUsuario: textoUsuario
+          valorUsuario: textoUsuario,
+          valorTipo: textoTipo
         }, function(mensaje) {
             $("#resultado_pagos").html(mensaje);
         }); 
-    }
+  }
 };
 </script>
 </head>
@@ -38,9 +56,19 @@ function buscar_pagos() {
 	<div class="container">
       <br>
     	<h3 class="hide-on-med-and-down">Reporte de pagos</h3>
-      <h5 class="hide-on-large-only">Reporte de pagos</h5>
-      <br><br>
-        <div class="row">
+      <h5 class="hide-on-large-only">Reporte de pagos</h5><br>
+      <!-- ----------------------------  TABs o MENU  ---------------------------------------->
+    <div class="row">
+      <div class="col s12">
+        <ul id="tabs-swipe-demo" class="tabs">
+          <li class="tab col s6"><a class="active black-text" href="#test-swipe-1">Por Usuarios</a></li>
+          <li class="tab col s6"><a class="black-text" href="#test-swipe-2">Por Tipo de Cambio</a></li>
+        </ul>
+      </div>
+      <br><br><br><br>
+      <!-- ----------------------------  FORMULARIO 1 Tabs  ---------------------------------------->
+        <div  id="test-swipe-1" class="col s12">
+          <div class="row">
             <div class="col s12 l4 m4">
                 <label for="fecha_de">De:</label>
                 <input id="fecha_de" type="date">    
@@ -52,7 +80,7 @@ function buscar_pagos() {
 
             <div class="input-field col s12 l4 m4">
               <select id="usuario" class="browser-default">
-                <option value="0" selected>Seleccione un usuario</option>
+                <option value="" selected>Seleccione un usuario</option>
                 <?php 
                 $sql_tecnico = mysqli_query($conn,"SELECT * FROM users ");
                 while($tecnico = mysqli_fetch_array($sql_tecnico)){
@@ -65,8 +93,34 @@ function buscar_pagos() {
             </div>
             <br><br><br>
             <div>
-                <button class="btn waves-light waves-effect right pink" onclick="buscar_pagos();"><i class="material-icons prefix">send</i></button>
+                <button class="btn waves-light waves-effect right pink" onclick="buscar_pagos(0);"><i class="material-icons prefix">send</i></button>
             </div>
+          </div>
+        </div>
+        <!-- ----------------------------  FORMULARIO 2 Tabs  ---------------------------------------->
+        <div  id="test-swipe-2" class="col s12">
+          <div class="row">
+            <div class="col s12 l4 m4">
+                <label for="fecha_de2">De:</label>
+                <input id="fecha_de2" type="date">    
+            </div>
+            <div class="col s12 l4 m4">
+                <label for="fecha_a2">A:</label>
+                <input id="fecha_a2"  type="date">
+            </div>
+
+            <div class="input-field col s12 l4 m4">
+              <select id="tipo" class="browser-default">
+                <option value="" selected>Seleccione un tipo:</option>
+                <option value="Banco">BANCO</option>
+                <option value="Efectivo">EFECTIVO</option>
+              </select>
+            </div>
+            <br><br><br>
+            <div>
+                <button class="btn waves-light waves-effect right pink" onclick="buscar_pagos(1);"><i class="material-icons prefix">send</i></button>
+            </div>
+          </div>
         </div>
     <div id="resultado_pagos">
     </div>        

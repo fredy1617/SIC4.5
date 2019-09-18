@@ -62,9 +62,15 @@ class PDF extends FPDF{
             }
             $this->MultiCell(60,4,utf8_decode('Atendió: '.$user['firstname'].' '.$user['lastname']),0,'L',true);
             $this->Ln(1);
-            $this->SetFont('Arial','B',10);
+            $this->SetFont('Arial','B',9);
             if ($tipo_pago == 'Mensualidad'){
-                $this->MultiCell(60,7,utf8_decode('GRACIAS. RECORDARLE QUE SU PRÓXIMO PAGO DEBERÁ SER ANTES DEL: '.$cliente['fecha_corte']),1,'C',true);
+                $this->MultiCell(60,7,utf8_decode('GRACIAS. RECORDARLE QUE SU PRÓXIMO PAGO DEBERÁ SER ANTES DEL: '.$cliente['fecha_corte'].
+                    '
+RECOMENDACIONES:
+1.- Contar con línea regulada "regulador de corriente".
+2.- No modificar orden del cableado.
+3.- No presionar botón de reset de los equipos.
+4.- En caso de falla comunicarse al 433 935 62 86.'),1,'C',true);
             }else{
                 $this->MultiCell(60,7,utf8_decode('GRACIAS POR SU PAGO; MÁS QUE TECNOLOGÍA SOMOS COMUNICACIÓN.'),1,'C',true);
             }

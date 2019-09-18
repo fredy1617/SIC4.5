@@ -13,8 +13,8 @@ $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE atendido = 1 OR atendid
 		if (tipo == 1) {
 			textoNombre = "";
 			textoTipo = "tecnico";
-			var textoDe = $("input#fecha_de").val();
-		    var textoA = $("input#fecha_a").val();
+			var textoDe = $("input#fecha_de1").val();
+		    var textoA = $("input#fecha_a1").val();
 		    var textoUsuario = $("select#usuario").val();
 		    if (textoUsuario == "") {
 	      		M.toast({html:"Selecciona un usuario.", classes: "rounded"});
@@ -60,12 +60,12 @@ $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE atendido = 1 OR atendid
 		<div  id="test-swipe-1" class="col s12">
 	        <div class="row">
 	            <div class="col s12 l4 m4">
-	                <label for="fecha_de">De:</label>
-	                <input id="fecha_de" type="date">    
+	                <label for="fecha_de1">De:</label>
+	                <input id="fecha_de1" type="date">    
 	            </div>
 	            <div class="col s12 l4 m4">
-	                <label for="fecha_a">A:</label>
-	                <input id="fecha_a"  type="date">
+	                <label for="fecha_a1">A:</label>
+	                <input id="fecha_a1"  type="date">
 	            </div>
 	            <div class="input-field col s12 l4 m4">
 	              <select id="usuario" class="browser-default">
