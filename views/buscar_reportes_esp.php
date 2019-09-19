@@ -4,18 +4,17 @@
 
   date_default_timezone_set('America/Mexico_City');
   $Hoy = date('Y-m-d');
-  $sql = "SELECT * FROM reportes  WHERE ((fecha_visita = '$Hoy'  AND atender_visita = 0) OR (fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR atendido != 1 OR atendido IS NULL) AND id_cliente < 10000 ORDER BY fecha";
+  $sql = "SELECT * FROM reportes  WHERE (atendido != 1 OR atendido IS NULL) AND id_cliente >= 10000 ORDER BY fecha";
   if ($Texto != "") {
-    $sql = "SELECT * FROM reportes  WHERE ((id_reporte = '$Texto' AND fecha_visita = '$Hoy'  AND atender_visita = 0) OR ( id_reporte = '$Texto' AND fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR (id_reporte = '$Texto' AND atendido != 1) OR  (id_reporte = '$Texto' AND atendido IS NULL)) AND id_cliente < 10000 ORDER BY fecha";
+    $sql = "SELECT * FROM reportes  WHERE (id_reporte = '$Texto' AND atendido IS NULL) AND id_cliente >= 10000 ORDER BY fecha";
     $clientes = mysqli_query($conn, "SELECT * FROM clientes WHERE nombre LIKE '%$Texto%' limit 1");
     if ((mysqli_num_rows($clientes)) == 1) {
       $cliente = mysqli_fetch_array($clientes);
       $id_cliente = $cliente['id_cliente'];
-      $sql = "SELECT * FROM reportes  WHERE (id_cliente = $id_cliente AND fecha_visita = '$Hoy'  AND atender_visita = 0 AND atendido != 1) OR (id_cliente = $id_cliente AND fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR (id_cliente = $id_cliente AND atendido != 1) OR  (id_cliente = $id_cliente AND atendido IS NULL) ORDER BY fecha";
+      $sql = "SELECT * FROM reportes  WHERE  ((id_cliente = $id_cliente AND atendido != 1) OR  (id_cliente = $id_cliente AND atendido IS NULL)) AND id_cliente >= 10000 ORDER BY fecha";
     }
   }
-  
-  $mensaje = '';   
+    
   $especiales = '';
     
     $consulta = mysqli_query($conn, $sql);
@@ -65,22 +64,7 @@
       if ($estatus== 1) { $color = "yellow darken-2";
       }elseif ($estatus == 2) { $color = "orange darken-4";
       }elseif ($estatus >= 3) { $color = "red accent-4"; }
-      if ($resultados['visita']==1) {
-        $color = "green";
-        $estatus = 0;
-        if ($resultados['fecha_visita']<$Hoy) {
-          $color = "red accent-4";
-          $estatus = "YA!";
-          $Tecnico = $resultados['tecnico'];
-          $nombreTecnico  = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM users WHERE user_id = '$Tecnico'"));
-          $Nombre = $nombreTecnico['firstname'];
-          
-          mysqli_query($conn,"UPDATE reportes SET descripcion = 'RETRASO DE VISITA NO ATENDIO: ".$Nombre." VISTAR URGENTEMENTE!'  WHERE id_reporte = $id_reporte");
-            $resultados = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte=$id_reporte"));  
-        }
-      }      
-      //Output
-      $mensaje .= '
+      $especiales .= '
                   <tr>
                     <td><span class="new badge '.$color.'" data-badge-caption="">'.$estatus.'</span></td>
                     <td><b>'.$id_reporte.'</b></td>
@@ -93,12 +77,12 @@
                     <td><br><form action="atender_reporte.php" method="post"><input type="hidden" name="id_reporte" value="'.$id_reporte.'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">send</i></button></form></td>
                     <td><a onclick="ruta('.$id_reporte.');" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></a></td>
                     <td><br><form action="editar_reporte.php" method="post"><input type="hidden" name="id_reporte" value="'.$id_reporte.'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>
-                  </tr>';  
+                  </tr>';
          
     }//Fin while $resultados
   } //Fin else $filas
 
-echo $mensaje;
+echo $especiales;
 mysqli_close($conn);
     ?>
               

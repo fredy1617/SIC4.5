@@ -49,6 +49,7 @@ if (isset($_POST['id_corte']) == false) {
 	    $detalles = mysqli_query($conn,  "SELECT * FROM detalles WHERE id_corte = $id_corte ORDER BY id_pago DESC");
 	    $aux = mysqli_num_rows($detalles);
 	    if($aux>0){
+	    $TotalEI = 0;
 	    while($pagos = mysqli_fetch_array($detalles)){
 	    	$id_pago = $pagos['id_pago'];
 
@@ -72,13 +73,14 @@ if (isset($_POST['id_corte']) == false) {
        		<td>$<?php echo $pagox1['cantidad'];?></td>
 	      </tr>
 	      <?php
+	      	$TotalEI += $pagox1['cantidad'];
 	    	}
 	    }
 	    ?>
 	      <tr>
 	      	<td></td><td></td><td></td><td></td>
 	      	<td><b>TOTAL:<b></td>
-	      	<td><b>$<?php echo $corte['cantidad'];?></b></td>
+	      	<td><b>$<?php echo $TotalEI;?></b></td>
 	      </tr>
 	    <?php
 	    }else{
@@ -106,6 +108,7 @@ if (isset($_POST['id_corte']) == false) {
 	  	$detalles = mysqli_query($conn,  "SELECT * FROM detalles WHERE id_corte = $id_corte ORDER BY id_pago DESC");
 	    $aux = mysqli_num_rows($detalles);
 	  	if ($aux > 0) {
+	  	$TotalBI = 0;
 	  	while ($pagos= mysqli_fetch_array($detalles)) {
 	  		$id_pago = $pagos['id_pago'];
 	  		$sql = mysqli_query($conn, "SELECT * FROM pagos WHERE id_pago = $id_pago AND tipo_cambio = 'Banco'AND tipo != 'Dispositivo'");
@@ -128,13 +131,14 @@ if (isset($_POST['id_corte']) == false) {
 		  		<td><?php echo $pago['cantidad']; ?></td>
 	  		</tr>
 	  	<?php
+	  	   $TotalBI += $pago['cantidad'];
 	  	   }
 	  	}
 	  	?>
 	  		<tr>
 	  			<td></td><td></td><td></td><td></td>
 	  			<td><b>TOTAL:</b></td>
-	  			<td><b>$<?php echo $corte['banco']; ?></b></td>
+	  			<td><b>$<?php echo $TotalBI; ?></b></td>
 	  		</tr>
 	  	<?php
 	  	}else{
@@ -162,6 +166,7 @@ if (isset($_POST['id_corte']) == false) {
 	    $detalles = mysqli_query($conn,  "SELECT * FROM detalles WHERE id_corte = $id_corte ORDER BY id_pago DESC");
 	    $aux = mysqli_num_rows($detalles);
 	    if($aux>0){
+	    $TotalEST = 0;
 	    while($pagos = mysqli_fetch_array($detalles)){
 	    	$id_pago = $pagos['id_pago'];
 
@@ -185,13 +190,14 @@ if (isset($_POST['id_corte']) == false) {
        		<td>$<?php echo $pagox1['cantidad'];?></td>
 	      </tr>
 	      <?php
+	      	$TotalEST += $pagox1['cantidad'];
 	    	}
 	    }
 	    ?>
 	      <tr>
 	      	<td></td><td></td><td></td><td></td>
 	      	<td><b>TOTAL:<b></td>
-	      	<td><b>$<?php echo $corte['cantidad'];?></b></td>
+	      	<td><b>$<?php echo $TotalEST;?></b></td>
 	      </tr>
 	    <?php
 	    }else{
@@ -219,6 +225,7 @@ if (isset($_POST['id_corte']) == false) {
 	  	$detalles = mysqli_query($conn,  "SELECT * FROM detalles WHERE id_corte = $id_corte ORDER BY id_pago DESC");
 	    $aux = mysqli_num_rows($detalles);
 	  	if ($aux > 0) {
+	  	$TotalBST = 0;
 	  	while ($pagos= mysqli_fetch_array($detalles)) {
 	  		$id_pago = $pagos['id_pago'];
 	  		$sql = mysqli_query($conn, "SELECT * FROM pagos WHERE id_pago = $id_pago AND tipo_cambio = 'Banco'AND tipo = 'Dispositivo'");
@@ -241,6 +248,7 @@ if (isset($_POST['id_corte']) == false) {
 		  		<td><?php echo $pago['cantidad']; ?></td>
 	  		</tr>
 	  	<?php
+	  		$TotalBST += $pago['cantidad'];
 	  	   }
 	  	}
 	  	?>
