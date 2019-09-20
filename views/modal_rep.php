@@ -2,7 +2,6 @@
 include('../php/conexion.php');
 date_default_timezone_set('America/Mexico_City');
 
-
 $Nombre = $conn->real_escape_string($_POST['valorNombre']);
 $Telefono = $conn->real_escape_string($_POST['valorTelefono']);
 $Direccion = $conn->real_escape_string($_POST['valorDireccion']);

@@ -16,7 +16,6 @@
   }
   
   $mensaje = '';   
-  $especiales = '';
     
     $consulta = mysqli_query($conn, $sql);
     //Obtiene la cantidad de filas que hay en la consulta

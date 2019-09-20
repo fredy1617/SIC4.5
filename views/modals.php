@@ -212,7 +212,7 @@ function recargar3() {
     <a class="modal-action modal-close waves-effect waves-green btn-flat" onclick="crear_ruta();recargar();">Crear<i class="material-icons right">done</i></a>
       <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancelar<i class="material-icons right">close</i></a>
     </div>
-  </div>
+</div>
 <!--.....Cierre de ventana modal para la creacion de ruta-->
 
 <!-- Modal Buscar dispositivos-->

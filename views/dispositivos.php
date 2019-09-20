@@ -21,11 +21,12 @@ include('fredyNav.php');
 	  $("#mostrar_pagos").html(mensaje);
 	  }); 
 	};
+
 </script>
 </head>
 <body onload="buscar();">
 	<div class="container">
-		<div class="row">
+		<div class="row" id="cambiarP">
 			<br><br>
 			<h3 class="hide-on-med-and-down col s12 m6 l6">Dispositivos:</h3>
       		<h5 class="hide-on-large-only col s12 m6 l6">Dispositivos:</h5>
