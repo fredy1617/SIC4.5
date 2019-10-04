@@ -10,7 +10,6 @@ if ($User ==  0) {
   $usuarios = mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$User' ");
 }
 
-
 while($usuario = mysqli_fetch_array($usuarios)){
   $user=$usuario['user_name'];
   $id_user = $usuario['user_id']
@@ -84,7 +83,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
 </table><br><br>
 
 <?php
-$sql = mysqli_query($conn, "SELECT * FROM reportes WHERE  fecha_solucion>='$ValorDe' AND fecha_solucion<='$ValorA'  AND atendido = 1 AND tecnico = '$id_user'");
+$sql = mysqli_query($conn, "SELECT * FROM reportes WHERE  fecha_solucion>='$ValorDe' AND fecha_solucion<='$ValorA'  AND atendido = 1 AND (tecnico = '$id_user' OR apoyo = '$id_user')");
 ?>
 <h4>Reportes</h4>
 <table class="bordered highlight responsive-table" width="100%">
@@ -93,10 +92,11 @@ $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE  fecha_solucion>='$Valo
             <th>Id. Reporte</th>
             <th>Id. Cliente</th>
             <th>Nombre Cliente</th>
+            <th>Comunidad</th>
             <th>Fecha Solución</th>
             <th>Hora</th>
             <th width="15%">Descripción</th>
-            <th>Técnico</th>
+            <th>Técnicos</th>
           </tr>
         </thead>
         <tbody>
@@ -105,16 +105,29 @@ $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE  fecha_solucion>='$Valo
         if($aux>0){ 
         while ($info = mysqli_fetch_array($sql)) {
           $id_cliente = $info['id_cliente'];
-          $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM clientes WHERE id_cliente=$id_cliente"));
+          $id_user = $info['tecnico'];
+          $tecnico = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_user"));
+          $tec = $tecnico['firstname'];
+          $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente"));
+          $id_comunidad = $cliente['lugar'];
+          $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad"));
+          if ($info['apoyo'] != 0) {
+            $id_apoyo = $info['apoyo'];
+            $A = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_apoyo"));
+            $Apoyo = ', Apoyo: '.$A['firstname'];
+          }else{
+            $Apoyo = '';
+          }
         ?>
           <tr>
             <td><?php echo $info['id_reporte']; ?></td>
             <td><?php echo $info['id_cliente']; ?></td>
             <td><?php echo $cliente['nombre']; ?></td>            
+            <td><?php echo $comunidad['nombre']; ?></td>            
             <td><?php echo $info['fecha_solucion']; ?></td>
             <td><?php echo $info['hora_atendido']; ?></td>
             <td><?php echo $info['descripcion']; ?></td>
-            <td><?php echo $user; ?></td>
+            <td><?php echo $tec.$Apoyo; ?></td>
           </tr>
         <?php
         $aux--;

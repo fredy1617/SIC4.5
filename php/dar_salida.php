@@ -48,11 +48,12 @@ if ($num_filas > 0) {
       a.href = "../php/Salida_SerTec.php?id=<?php echo $Id; ?>";
       a.click();
     };
-    imprimir();
+  
     function ir() {
-	  var a = document.createElement("a");
-	  a.href = "../views/dispositivos.php";
-	  a.click();
+	  var b = document.createElement("b");
+	  b.href = "../views/dispositivos.php";
+	  b.click();
 	};
+  imprimir();
 	ir();
   </script>

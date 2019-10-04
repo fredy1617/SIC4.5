@@ -14,6 +14,9 @@ include('fredyNav.php');
             $("#datos").html(mensaje);
         }); 
 	};
+	function eliminar_instalacion(id_cliente){
+	    M.toast({ html: 'No funciona.'+id_cliente, classes: 'rounded'}); 
+	  };
 </script>
 </head>
 <body onload="buscar();">
@@ -43,6 +46,7 @@ include('fredyNav.php');
 			        <th>Telefono</th>
 			        <th>Ip</th>
 			        <th>Editar</th>
+			        <th>Eliminar</th>
 			      </tr>
 			    </thead>
 			    <tbody id="datos">

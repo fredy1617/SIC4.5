@@ -21,10 +21,8 @@ $Tipo_Campio = $conn->real_escape_string($_POST['valorTipo_Cambio']);
 $Direccion = $conn->real_escape_string($_POST['valorDireccion']);
 $Referencia = $conn->real_escape_string($_POST['valorReferencia']);
 $Coordenada = $conn->real_escape_string($_POST['valorCoordenada']);
-
 $FechaInstalacion = date('Y-m-d');
-$Hora = date('h:i:s');
-
+$Hora = date('H:i:s');
 
 if (filter_var($IP, FILTER_VALIDATE_IP)) {
 	$sql_ip = "SELECT * FROM clientes WHERE ip='$IP'";
@@ -81,7 +79,6 @@ if (filter_var($IP, FILTER_VALIDATE_IP)) {
 		            $sql="UPDATE clientes SET ip='$IP', material='$Material', tecnico='$Tecnico', instalacion=1, fecha_instalacion='$FechaInstalacion', fecha_corte='$FechaInstalacion', hora_alta = '$Hora', coordenadas = '$Coordenada', referencia = '$Referencia', direccion = '$Direccion' WHERE id_cliente=$IdCliente";
 
 		        	if(mysqli_query($conn, $sql)){    
-
 			            $Descripcion = "Liquidación de Instalación";
 						$Tipo_t = "Liquidacion";
 		        		if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND descripcion = '$Descripcion' AND cantidad='$Liquidar'"))>0){
@@ -120,6 +117,5 @@ if (filter_var($IP, FILTER_VALIDATE_IP)) {
 }else{
 	echo '<script >M.toast({html:"Formato de IP incorrecto, por favor escriba una IP válida.", classes: "rounded"})</script>';
 }
-
 mysqli_close($conn);
 ?>

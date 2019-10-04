@@ -19,7 +19,6 @@
 	if ($filas == 0) {
 		$mensaje = "<script>M.toast({html: 'No se encontraron dispositivos.', classes: 'rounded'})</script>";
 	} else {
-
 		//La variable $resultado contiene el array que se genera en la consulta, así que obtenemos los datos y los mostramos en un bucle
 		while($resultados = mysqli_fetch_array($consulta)) {
 

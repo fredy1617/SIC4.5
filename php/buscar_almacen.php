@@ -27,7 +27,6 @@ if ($filas == 0) {
 		}else{
 			$total = $resultados['precio'];
 		}
-			
 		//Output
 			$mensaje .= '			
 		          <tr>

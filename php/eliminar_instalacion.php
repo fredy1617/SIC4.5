@@ -1,5 +1,11 @@
 <?php
 include('../php/conexion.php');
+include('../php/is_logged.php');
+include('../php/superAdmin.php');
+
+date_default_timezone_set('America/Mexico_City');
+$Fecha_Hoy = date('Y-m-d');
+
 $id_cliente = $conn->real_escape_string($_POST['valorIdCliente']);
 
 $cliente=mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM clientes WHERE id_cliente = $id_cliente"));
@@ -20,7 +26,7 @@ if ($si > 0) {
 		echo '<script>recargar()</script>';
 	}
 }else{
-	$sql = "INSERT INTO canceladas (id_cliente, nombre, telefono, direccion, referencia, lugar) VALUES ('$id_cliente', '$nombre', '$telefono', '$direccion', '$referencia','$lugar') ";
+	$sql = "INSERT INTO canceladas (id_cliente, nombre, telefono, direccion, referencia, lugar, fecha, motivo) VALUES ('$id_cliente', '$nombre', '$telefono', '$direccion', '$referencia','$lugar', '$Fecha_Hoy', 'Instalación no requerida (no instalada)') ";
 	if (mysqli_query($conn, $sql)) {
 		if (mysqli_query($conn, "DELETE FROM clientes WHERE id_cliente = $id_cliente")) {
 			echo "<script> M.toast({html: 'Se elimino la instalacion correctamente.', classes: 'rounded'});</script>";

@@ -26,7 +26,7 @@ $Referencia = $conn->real_escape_string($_POST['valorReferencia']);
 $Coordenada = $conn->real_escape_string($_POST['valorCoordenada']);
 
 $FechaInstalacion = date('Y-m-d');
-$Hora = date('h:i:s');
+$Hora = date('H:i:s');
 
 
 if (filter_var($IP, FILTER_VALIDATE_IP)) {

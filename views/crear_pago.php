@@ -19,7 +19,11 @@ if (isset($_POST['no_cliente']) == false) {
   <?php
 }else{
 $no_cliente = $_POST['no_cliente'];
-
+if (isset($_POST['resp']) == false) {
+  $respuesta = 'Ver';
+}else{
+  $respuesta = $_POST['resp'];
+}
 $AÑO = date('Y');
 
 $AÑO1 = strtotime('+1 year', strtotime($AÑO));
@@ -52,7 +56,7 @@ function borrar(IdPago){
           valorIdPago: IdPago,
           valorIdCliente: textoIdCliente
   }, function(mensaje) {
-  $("#mostrar_pagos").html(mensaje);
+  $("#tabla").html(mensaje);
   }); 
 }
 
@@ -109,7 +113,6 @@ function encender(){
 }
 
 function insert_pago(tipo) {  
-
   if(tipo == 1){
 
     textoTipo = "Mensualidad";
@@ -175,6 +178,8 @@ function insert_pago(tipo) {
   }
 
   var textoIdCliente = $("input#id_cliente").val();
+  var textoRespuesta = $("input#respuesta").val();
+
 
   if (textoCantidad == "" || textoCantidad ==0) {
       M.toast({html: 'El campo Cantidad se encuentra vacío o en 0.', classes: 'rounded'});
@@ -192,10 +197,13 @@ function insert_pago(tipo) {
           valorIdCliente: textoIdCliente,
           valorTipoTel: tipoPago,
           valorDescuento: textoDescuento,
-          valorHasta: textoHasta
+          valorHasta: textoHasta,
+          valorRespuesta: textoRespuesta
         }, function(mensaje) {
             $("#mostrar_pagos").html(mensaje);
-            $("#mostrar_pagos2").html(mesaje2);
+            $("#tabla").html(tabla);
+            $("#tabla1").html(tabla1);
+            $("#tabla2").html(tabla2);
         });
     }   
       }    
@@ -227,9 +235,9 @@ if ($deuda['suma'] == "") {
 }
 //SE HACE LA RESTA Y SI EL SALDO ES NEGATIVO CAMBIAMOS EL COLOR
 $Saldo = $abono['suma']-$deuda['suma'];
-$color = 'green';
+$color1 = 'green';
 if ($Saldo < 0) {
-  $color = 'red darken-2';
+  $color1 = 'red darken-2';
 }
 
 $Instalacion = $datos['fecha_instalacion'];
@@ -285,7 +293,7 @@ $Vence = date('Y-m-d', $nuevafecha);
           </div>
           <br>
          <hr>
-        <b>SALDO: </b> <span class="new badge <?php echo $color ?>" data-badge-caption="">$<?php echo $Saldo; ?><br>
+        <b>SALDO: </b> <span class="new badge <?php echo $color1 ?>" data-badge-caption="">$<?php echo $Saldo; ?><br>
       </p>
       <?php
       if(date('Y-m-d')<=$datos['fecha_corte']){
@@ -399,6 +407,7 @@ $Vence = date('Y-m-d', $nuevafecha);
       </div>      
       </div>
       <input id="id_cliente" value="<?php echo htmlentities($datos['id_cliente']);?>" type="hidden">
+      <input id="respuesta" value="<?php echo htmlentities($respuesta);?>" type="hidden">
       <input id="ultimo" value="<?php echo htmlentities($Pago['descripcion']);?>" type="hidden">
     </form>
     <a onclick="insert_pago(1);" class="waves-effect waves-light btn pink right "><i class="material-icons right">send</i>Registrar Pago</a>
@@ -407,7 +416,7 @@ $Vence = date('Y-m-d', $nuevafecha);
 
 <!-- ----------------------------  TABLA DE FORM 1  ---------------------------------------->
     <h4>Historial </h4>
-    <div id="mostrar_pagos">
+    <div id="tabla">
       <table class="bordered highlight responsive-table">
         <thead>
           <tr>
@@ -503,7 +512,7 @@ $Vence = date('Y-m-d', $nuevafecha);
       <br>
   <!-- ---------------------------- TABLA FORMULARIO 2  ---------------------------------------->
   <h4>Historial</h4>
-  <div id="mostrar_pagos2">
+  <div id="tabla1">
     <table class="bordered highlight responsive-table">
     <thead>
       <tr>
@@ -607,7 +616,7 @@ $Vence = date('Y-m-d', $nuevafecha);
     </div><br>
  <!-- ---------------------------- TABLA FORMULARIO 3  ---------------------------------------->
   <h4>Historial</h4>
-  <div id="mostrar_pagos">
+  <div id="tabla2">
     <table class="bordered highlight responsive-table">
     <thead>
       <tr>
@@ -657,6 +666,7 @@ $Vence = date('Y-m-d', $nuevafecha);
 </div>
 
 </div><!------------------- row de TAB o MENU  ---------------------------------------->
+  <div id="mostrar_pagos"></div>
 </div><!--------------------------  CONTAINER  ---------------------------------------->
 </body>
 <?php

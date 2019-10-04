@@ -29,6 +29,13 @@
       $id_reporte = $resultados['id_reporte'];
       $id_cliente = $resultados['id_cliente'];
       $id_user=$resultados['registro'];
+      if ($resultados['apoyo'] != 0) {
+        $id_apoyo = $resultados['apoyo'];
+        $A = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_apoyo"));
+        $Apoyo = ', Apoyo: '.$A['firstname'];
+      }else{
+        $Apoyo = '';
+      }
       if ($id_user == 0) {
         $Usuario = "Sistema";
       }else{
@@ -72,7 +79,7 @@
                     <td>'.$resultados['descripcion'].'</td>
                     <td>'.$resultados['fecha'].'</td>
                     <td>'.$comunidad['nombre'].'</td>
-                    <td>'.$tecnico1[1].'</td>
+                    <td>'.$tecnico1[1].$Apoyo.'</td>
                     <td>'.$Usuario.'</td>
                     <td><br><form action="atender_reporte.php" method="post"><input type="hidden" name="id_reporte" value="'.$id_reporte.'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">send</i></button></form></td>
                     <td><a onclick="ruta('.$id_reporte.');" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></a></td>

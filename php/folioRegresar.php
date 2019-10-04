@@ -3,19 +3,18 @@
 include("../fpdf/fpdf.php");
 include('is_logged.php');
 $pass='root';
+$id_dispositivo = $_GET['id'];
 //Incluimos el archivo de conexion a la base de datos
 class PDF extends FPDF{
     function folioCliente()
     {
         global $pass;
+        global $id_dispositivo;
         $enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
-        $rs = mysqli_query($enlace, "SELECT MAX(id_dispositivo) AS id FROM dispositivos");
-        $row = mysqli_fetch_row($rs);
-        $id = $row[0];
-        $listado = mysqli_query($enlace, "SELECT * FROM dispositivos WHERE id_dispositivo='$id'");
+        $listado = mysqli_query($enlace, "SELECT * FROM dispositivos WHERE id_dispositivo='$id_dispositivo'");
         $num_filas = mysqli_num_rows($listado);
         $fila = mysqli_fetch_array($listado);
-        $id_User = $fila['recibe'];
+        $id_User = $_SESSION['user_id'];
         $User = mysqli_fetch_array(mysqli_query($enlace, "SELECT * FROM users WHERE user_id = '$id_User'"));
             
         
@@ -90,12 +89,10 @@ class PDF extends FPDF{
     }
     function folioCliente2()
     {
-        global $pass;
+        global $pass;        
+        global $id_dispositivo;
         $enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
-        $rs = mysqli_query($enlace, "SELECT MAX(id_dispositivo) AS id FROM dispositivos");
-        $row = mysqli_fetch_row($rs);
-        $id = $row[0];
-        $listado = mysqli_query($enlace, "SELECT * FROM dispositivos WHERE id_dispositivo='$id'");
+        $listado = mysqli_query($enlace, "SELECT * FROM dispositivos WHERE id_dispositivo='$id_dispositivo'");
         $num_filas = mysqli_num_rows($listado);
         $fila = mysqli_fetch_array($listado);
         $id_User = $fila['recibe'];
@@ -175,11 +172,9 @@ class PDF extends FPDF{
     }
     }
 global $pass;
+global $id_dispositivo;
 $enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
-$rs = mysqli_query($enlace, "SELECT MAX(id_dispositivo) AS id FROM dispositivos");
-$row = mysqli_fetch_row($rs);
-$id = $row[0];
-$listado = mysqli_query($enlace, "SELECT * FROM dispositivos WHERE id_dispositivo='$id'");
+$listado = mysqli_query($enlace, "SELECT * FROM dispositivos WHERE id_dispositivo='$id_dispositivo'");
 $num_filas = mysqli_num_rows($listado);
 $fila = mysqli_fetch_array($listado);
 
@@ -189,5 +184,4 @@ $pdf->SetTitle('Folio_'.$fila['id_dispositivo'].'_'.$fila['nombre'].'_'.$fila['t
 $pdf->folioCliente();
 $pdf->folioCliente2();
 $pdf->Output('Folio_'.$fila['id_dispositivo'].'_'.$fila['nombre'].'_'.$fila['tipo'].'_'.$fila['marca'].'_'.$fila['modelo'],'I');
-
 ?>

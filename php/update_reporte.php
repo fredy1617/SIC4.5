@@ -7,8 +7,9 @@ $Solucion = $conn->real_escape_string($_POST['valorSolucion']);
 $Tecnico = $conn->real_escape_string($_POST['valorTecnico']);
 $Atendido = $conn->real_escape_string($_POST['valorAtendido']);
 $Fecha_visita = $conn->real_escape_string($_POST['valorFecha']);
+$Apoyo = $conn->real_escape_string($_POST['valorApoyo']);
 $FechaAtendido = date('Y-m-d');
-$Hora = date('h:i:s');
+$Hora = date('H:i:s');
 
 $IdCliente = $conn->real_escape_string($_POST['valorIdCliente']);
 $Nombre = $conn->real_escape_string($_POST ['valorNombre']);
@@ -47,14 +48,12 @@ if ($Fecha_visita != 0) {
 
 //Variable vacía (para evitar los E_NOTICE)
 $mensaje = "";
-
-	$sql = "UPDATE reportes SET falla = '$Falla', solucion = '$Solucion', tecnico = '$Tecnico', atendido = '$Atendido', atender_visita = '$Atender_Visita',  fecha_solucion = '$FechaAtendido'".$mas." ,hora_atendido = '$Hora' WHERE id_reporte = $IdReporte";
+	$sql = "UPDATE reportes SET falla = '$Falla', solucion = '$Solucion', tecnico = '$Tecnico', apoyo = '$Apoyo', atendido = '$Atendido', atender_visita = '$Atender_Visita',  fecha_solucion = '$FechaAtendido'".$mas." ,hora_atendido = '$Hora' WHERE id_reporte = $IdReporte";
 	if(mysqli_query($conn, $sql)){
 		$mensaje = '<script>M.toast({html:"Reporte actualizado correctamente.", classes: "rounded"})</script>';
 		echo '<script>
 				location.href="../views/reportes.php";
 			 </script>';
-					echo '<script>recargar_rep()</script>';
 	}else{
 		$mensaje = '<script>M.toast({html:"Ha ocurrido un error UPDATE.", classes: "rounded"})</script>';	
 	}

@@ -18,8 +18,8 @@ if($area['area']!="Administrador"){
 }else{
   $Pago = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM pagos WHERE id_pago=$IdPago"));
   if ($Pago['tipo_cambio'] == 'Credito') {
-    $id_deuda = $Pago['id_deuda'];
-    if ( mysqli_query($conn, "DELETE FROM deudas WHERE id_deuda = '$id_deuda'")) {
+    $Id_deuda = $Pago['id_deuda'];
+    if (mysqli_query($conn, "DELETE FROM deudas WHERE id_deuda = '$Id_deuda'")) {
       echo '<script >M.toast({html:"Deuda Borrada.", classes: "rounded"})</script>';   
     }
   }

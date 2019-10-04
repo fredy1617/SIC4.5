@@ -39,7 +39,7 @@ function encender(){
   $("#Orden").html(mensaje);
   }); 
 }
-function update_reporte() {
+function update_reporte(bandera) {
     var textoNombre = $("input#nombres").val();
     var textoTelefono = $("input#telefono").val();
     var textoDireccion = $("input#direccion").val();
@@ -53,6 +53,13 @@ function update_reporte() {
 
     entra = "Si";
     textoTecnico = <?php echo $tecnico;?>;
+    textoApoyo = 0;
+    for(var i=1;i<=bandera;i++){
+      if(document.getElementById('tecnico'+i).checked==true){
+        var textoApoyo = $("input#tecnico"+i).val();
+      }
+    }    
+
     if(document.getElementById('visita').checked==true){
       if (textoFecha == "") {
         entra = "No";
@@ -77,7 +84,8 @@ function update_reporte() {
           valorSolucion: textoSolucion,
           valorTecnico: textoTecnico,
           valorAtendido: textoAtendido,
-          valorFecha: textoFecha
+          valorFecha: textoFecha,
+          valorApoyo: textoApoyo
         }, function(mensaje) {
             $("#resultado_update_reporte").html(mensaje);
         });
@@ -190,6 +198,22 @@ if($resultado['tecnico']==''){
           <textarea id="solucion"  class="materialize-textarea validate" data-length="150" required><?php echo $resultado['solucion']; ?></textarea>
           <label for="solucion">Solución: </label>
         </div>
+        <label>APOYO (solo toma uno):</label>
+                <p>
+                  <?php
+                  $bandera = 1; 
+                  $sql_tecnico = mysqli_query($conn,"SELECT * FROM users WHERE area='Taller' OR area='Redes'  OR user_id = 49 OR user_id = 28 OR user_id = 25");
+                  while($tecnico = mysqli_fetch_array($sql_tecnico)){
+                    ?>
+                    <div class="col s12 m6 l4">
+                      <input type="checkbox" value="<?php echo $tecnico['user_id'];?>" id="tecnico<?php echo $bandera;?>"/>
+                      <label for="tecnico<?php echo $bandera;?>"><?php echo $bandera;?>.-<?php echo $tecnico['firstname'];?></label>
+                    </div>
+                    <?php
+                    $bandera++;
+                  }$bandera--;
+                  ?>
+                </p>
       </div>
       <!-- AQUI SE ENCUENTRA LA DOBLE COLUMNA EN ESCRITORIO.-->
       <div class="col s12 m6 l6">
@@ -221,11 +245,12 @@ if($resultado['tecnico']==''){
             <option value="Sí">Sí</option> 
           </select>
         </div>
+        <input id="id_cliente" value="<?php echo htmlentities($cliente['id_cliente']);?>" type="hidden"><br><br><br>
+        <a onclick="update_reporte(<?php echo $bandera;?>);" class="waves-effect waves-light btn pink right"><i class="material-icons right">send</i>ACTUALIZAR REPORTE</a>    
         </div>
         </div>
-        <input id="id_cliente" value="<?php echo htmlentities($cliente['id_cliente']);?>" type="hidden">
 </form>
-      <a onclick="update_reporte();" class="waves-effect waves-light btn pink right"><i class="material-icons right">send</i>ACTUALIZAR REPORTE</a>    
+      
   </div> 
 <br>
 <div class="row col s12">

@@ -59,7 +59,7 @@ class PDF extends FPDF{
         $this->MultiCell(70,4,utf8_decode('REGISTRÓ: '.$registro),0,'L',true);
         $this->Ln($salto);
         $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('TEL. SIC: 9356286'),0,'L',true);
+        $this->MultiCell(70,4,utf8_decode('TEL. SIC: 4339356286'),0,'L',true);
         $this->Ln($salto);
         $this->SetX(6);
         $this->MultiCell(70,4,utf8_decode('DISPOSITIVO: '.$fila['tipo'].' '.$fila['marca']),0,'L',true);
@@ -209,7 +209,7 @@ class PDF extends FPDF{
         $this->MultiCell(70,4,utf8_decode('REGISTRÓ: '.$registro),0,'L',true);
         $this->Ln($salto);
         $this->SetX(6);
-        $this->MultiCell(70,4,utf8_decode('TEL. SIC: 9356286'),0,'L',true);
+        $this->MultiCell(70,4,utf8_decode('TEL. SIC: 4339356286'),0,'L',true);
         $this->Ln($salto);
         $this->SetX(6);
         $this->MultiCell(70,4,utf8_decode('DISPOSITIVO: '.$fila['tipo'].' '.$fila['marca']),0,'L',true);

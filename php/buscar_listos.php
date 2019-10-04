@@ -43,7 +43,7 @@
 		            <td>'.$observacion.'</td>
 		            <td>'.$total.'</td>
 		            <td>'.$resultados['fecha_salida'].'</td>
-		            <td><form method="post" action="../views/salidas.php" target="blank"><input id="id_dispositivo" name="id_dispositivo" type="hidden" value="'. $id_dispositivo.'"><button class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">exit_to_app</i></button></form></td>
+		            <td><form method="post" action="../views/salidas.php"><input id="id_dispositivo" name="id_dispositivo" type="hidden" value="'. $id_dispositivo.'"><button class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">exit_to_app</i></button></form></td>
 		             <td><a onclick="almacen('.$id_dispositivo.');" class="btn btn-floating pink  waves-effect waves-light"><i class="material-icons">dashboard</i></a></td>
 		          </tr>';
 		        

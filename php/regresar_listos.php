@@ -14,7 +14,6 @@ $IdDispocitivo = $conn->real_escape_string($_POST['valorIdDispocitivo']);
 	function Mandar_Pendientes(){
 		var textoNota = $("input#Nota").val();
 	    var textoId = $("input#id").val();
-	    M.toast({html:"Que pedo", classes: "rounded"})
 	    $.post("../php/cambiarPendiente.php", {
 	          valorNota: textoNota,
 	          valorId: textoId, 
@@ -27,7 +26,7 @@ $IdDispocitivo = $conn->real_escape_string($_POST['valorIdDispocitivo']);
 <div id="regresarPendientes" class="modal modal-fixed-footer">
     <div class="modal-content">
         <h3 id="cambiarP">¿Estás seguro de regresar el Folio?</h3><br>
-      <p class="center"><b>Al regresear el folio ira directo a pendientes y se le agregara la descripcion que coloques aqui.</b></p><br><br>
+      <p class="center"><b>Al regresear el folio ira directo a pendientes y se le agregara la descripcion que coloques aqui:</b></p><br><br>
      <h5>Nota (¿Porque?):</h5> 
       <form>
       <div class="input-field col s12 m8 l8">

@@ -28,6 +28,13 @@
     while($resultados = mysqli_fetch_array($consulta)) {
       $id_reporte = $resultados['id_reporte'];
       $id_cliente = $resultados['id_cliente'];
+      if ($resultados['apoyo'] != 0) {
+        $id_apoyo = $resultados['apoyo'];
+        $A = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_apoyo"));
+        $Apoyo = ', Apoyo: '.$A['firstname'];
+      }else{
+        $Apoyo = '';
+      }
       $id_user=$resultados['registro'];
       if ($id_user == 0) {
         $Usuario = "Sistema";
@@ -48,7 +55,7 @@
         $tecnico1[1] = 'Sin tecnico';
       }else{
         $id_tecnico = $resultados['tecnico'];
-        $tecnico1 = mysqli_fetch_array(mysqli_query($conn, "SELECT user_id, user_name FROM users WHERE user_id=$id_tecnico"));  
+        $tecnico1 = mysqli_fetch_array(mysqli_query($conn, "SELECT user_id, firstname FROM users WHERE user_id=$id_tecnico"));  
       }
       $Estatus2= 0;
       if ($resultados['fecha']<$Hoy) {
@@ -87,7 +94,7 @@
                     <td>'.$resultados['descripcion'].'</td>
                     <td>'.$resultados['fecha'].'</td>
                     <td>'.$comunidad['nombre'].'</td>
-                    <td>'.$tecnico1[1].'</td>
+                    <td>'.$tecnico1[1].$Apoyo.'</td>
                     <td>'.$Usuario.'</td>
                     <td><br><form action="atender_reporte.php" method="post"><input type="hidden" name="id_reporte" value="'.$id_reporte.'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">send</i></button></form></td>
                     <td><a onclick="ruta('.$id_reporte.');" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></a></td>
