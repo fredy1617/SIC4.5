@@ -20,11 +20,12 @@ include('../php/superAdmin.php');
 						<th>Estatus</th>
 						<th>Id. Cliente</th>
 						<th>Nombre Cliente</th>
-						<th>Telefono</th>
-						<th>Comunidad</th>	
+						<th>Comunidad</th>
+						<th>Descripción</th>	
 						<th>Cantidad</th>
+						<th>Abono</th>
+						<th>Resta</th>
 						<th>Fecha</th>
-						<th>Descripción</th>
 						<th>Usuario</th>
 						<th>Ver</th>
 					</tr>
@@ -42,6 +43,17 @@ include('../php/superAdmin.php');
 				$total = 0;
 				while ( $resultados = mysqli_fetch_array($sql)) {
 					$id_cliente = $resultados['id_cliente'];
+					$deuda = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS suma FROM deudas WHERE id_cliente = $id_cliente AND liquidada = 1"));
+    				$abono = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS suma FROM pagos WHERE id_cliente = $id_cliente AND tipo = 'Abono'"));
+    				if ($deuda['suma'] == "") {
+				      $deuda['suma'] = 0;
+				    }
+				    if ($abono['suma'] == "") {
+				      $abono['suma'] = 0;
+				    }
+				    $poner = mysqli_fetch_array(mysqli_query($conn, "SELECT min(id_deuda) AS id FROM deudas WHERE id_cliente = $id_cliente AND liquidada = 0"));
+    				$tiene = $abono['suma']-$deuda['suma'];
+
 					$cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"));
 					$id_comunidad = $cliente['lugar'];
 					$Comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad = $id_comunidad"));	
@@ -60,27 +72,35 @@ include('../php/superAdmin.php');
 					if ($cantidad =='') {
 						$cantidad= 0;
 					}
-
+					if ($poner['id'] == $resultados['id_deuda']) {
+						$tiene = $tiene;
+					}else{
+						$tiene = 0;
+					}
+					$resta = $cantidad-$tiene;
 				?>
 					<tr>
 						<td><?php echo $cont; ?></td>
 						<td><span class="new badge <?php echo$color; ?>" data-badge-caption=""><?php echo $estatus; ?></span></td>
 						<td><?php echo $id_cliente; ?></td>
 						<td><?php echo $cliente['nombre']; ?></td>
-						<td><?php echo $cliente['telefono'] ?></td>
-						<td><?php echo $Comunidad['nombre']; ?></td>						
-						<td>$<?php echo $cantidad; ?></td>
+						<td><?php echo $Comunidad['nombre']; ?></td>		
+						<td><?php echo $resultados['descripcion']; ?></td>			
+						<td>$<?php echo $cantidad; ?></td>						
+						<td>$<?php echo $tiene; ?></td>
+						<td>$<?php echo $resta; ?></td>
 						<td><?php echo $resultados['fecha_deuda']; ?></td>
-						<td><?php echo $resultados['descripcion']; ?></td>
 						<td><?php echo $usuario['firstname']; ?></td>
 					<td><form method="post" action="../views/credito.php"><input id="no_cliente" name="no_cliente" type="hidden" value="<?php echo $id_cliente; ?>"><button class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">send</i></button></form></td>
 					</tr>
 				<?php
-					$total += $cantidad;
+					$total += $resta;
 				}
 					?>
 					<tr>
 						<td></td><td></td><td></td><td></td><td></td>
+						<td></td>
+						<td></td>
 						<td><b>TOTAL:</b></td><td><b> $<?php echo $total; ?></b></td>
 						<td></td><td></td><td></td><td></td>
 					</tr>
@@ -89,7 +109,7 @@ include('../php/superAdmin.php');
 				?>
 				</tbody>				
 		</table><br>
-		<div class="right"><br><a href="../php/imprimr_deudas.php" target="blank" class="waves-effect waves-light btn-small pink"><i class="material-icons right">print</i>Imprimir</a></div><br><br>
+		<div class="right"><br><a href="../php/imprimr_deudas.php" target="blank" class="waves-effect waves-light btn-small pink"><i class="material-icons right">print</i>Imprimir</a></div><br><br><br><br>
 
 	</div>
 </body>
