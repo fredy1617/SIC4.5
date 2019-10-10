@@ -4,7 +4,6 @@
 	<title>SIC | Clientes</title>
 <?php 
 include('fredyNav.php');
-
 #___________CHECK DE PROMESAS DE PAGO VENCIDAS______________
 include('../php/conexion.php');
 date_default_timezone_set('America/Mexico_City');
@@ -26,10 +25,8 @@ if (mysqli_num_rows($sql)>0) {
 		if ($Hasta <= $Hoy AND $Tipo = 'Mensualidad') {
 			#  CREA EL REPORTE.....
 			mysqli_query($conn,"INSERT INTO reportes (id_cliente, descripcion, fecha) VALUES ($IdCliente, 'Cortar servicio, INCUMPLIO EN SU PROMESA DE PAGO.', '$Hoy')");
-
 			#  BORRA EL PAGO.......
-			if (mysqli_query($conn, "DELETE FROM pagos WHERE id_pago = '$Id_Pago'")) {
-				
+			if (mysqli_query($conn, "DELETE FROM pagos WHERE id_pago = '$Id_Pago'")) {	
 				#  BORRAR LA DEUDA......
 				mysqli_query($conn, "DELETE FROM deudas WHERE id_deuda = '$Id_deuda'");	
 				#  RETRASAR LA FECHA DE CORTE
@@ -44,7 +41,6 @@ if (mysqli_num_rows($sql)>0) {
 <script >
 	function buscar() {
     var texto = $("input#busqueda").val();
-
 	$.post("../php/valida.php", {
           texto: texto,
         }, function(mensaje) {
@@ -59,7 +55,6 @@ if (mysqli_num_rows($sql)>0) {
 			<br><br>
 			<h3 class="hide-on-med-and-down col s12 m5 l5">Clientes:</h3>
       		<h5 class="hide-on-large-only col s12 m5 l5">Clientes:</h5>
-
       		<form class="col s12 m7 l7">
 		      <div class="row">
 		        <div class="input-field col s12">
