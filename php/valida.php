@@ -5,8 +5,7 @@
 	if ($Texto != "") {
 		$Com = explode("-", $Texto);
 		$SiIp = explode("*", $Texto);
-		if (count($Com)>1) {
-			//PRIMERO VERA SI ESTAMOS BUSCANDO UNA COMUNIDAD EN ESTE IF Y MOSTRARA TODOS LOS CLIENTES DE ESA COMUNIDAD
+		if (count($Com)>1) {			//PRIMERO VERA SI ESTAMOS BUSCANDO UNA COMUNIDAD EN ESTE IF Y MOSTRARA TODOS LOS CLIENTES DE ESA COMUNIDAD
 			$nombre = $Com[1];
 			$consulta = mysqli_query($conn, "SELECT * FROM comunidades WHERE nombre LIKE '%$nombre%' LIMIT 1");
 			$filas = mysqli_num_rows($consulta);
@@ -65,7 +64,7 @@
 		            <td><b>'.$nombre.'</b></td>
 		            <td><b>'.$servicio.'</b></td>
 		            <td>'.$lugar.'</td>
-		            <td><form method="post" action="../views/crear_pago.php"><input id="no_cliente" name="no_cliente" type="hidden" value="'.$no_cliente.'"><button class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">payment</i></button></form></td>
+		            <td><a class="btn-floating btn-tiny waves-effect waves-light pink modal-trigger" href="#" onclick="selCliente('.$no_cliente.')"><i class="material-icons">payment</i></a></td>
 		            <td><form method="post" action="../views/form_reportes.php"><input id="no_cliente" name="no_cliente" type="hidden" value="'.$no_cliente.'"><button class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">report_problem</i></button></form></td>
 		            <td><form method="post" action="../views/credito.php"><input id="no_cliente" name="no_cliente" type="hidden" value="'.$no_cliente.'"><button class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">credit_card</i></button></form></td>
 		          </tr>';     

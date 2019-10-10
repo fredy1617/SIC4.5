@@ -13,9 +13,7 @@ $IdCliente = $conn->real_escape_string($_POST['valorIdCliente']);
 $Descuento = $conn->real_escape_string($_POST['valorDescuento']);
 $Hasta = $conn->real_escape_string($_POST['valorHasta']);
 $Respuesta = $conn->real_escape_string($_POST['valorRespuesta']);
-$tabla = '';
-$tabla1 = '';
-$tabla2 = '';
+
 $entra = 'No';
 if ($Respuesta == 'Ver') {
     $sql_DEUDAS = mysqli_query($conn, "SELECT * FROM deudas WHERE liquidada = 0 AND id_cliente = '$IdCliente'");
@@ -71,7 +69,7 @@ if ($Respuesta == 'Ver') {
           $rol = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_user"));
           if ($rol['area'] == 'Administrador') {
           ?>
-          <form method="post" action="../views/crear_pago.php">
+          <form method="post" action="../views/pagos_internet.php">
             <input id="resp" name="resp" type="hidden" value="Si">
             <input id="no_cliente" name="no_cliente" type="hidden" value="<?php echo $IdCliente;?>">
             <button class="btn waves-effect red accent-4 waves-light" type="submit" name="action"><b>Registrar</b></button>
@@ -100,18 +98,7 @@ if ($entra == "Si") {
     $Descuento = 0;
   }
   $RegistrarCan = $Cantidad-$Descuento;
-
-  if ($Tipo == 'Mensualidad'){
-    $TelTipo = '';
-    $Cotejamiento = 0;
-  }elseif($Tipo == 'Otros Pagos'){
-    $TelTipo = '';
-    $Cotejamiento = 0;
-  }else {
-    $TelTipo = $conn->real_escape_string($_POST['valorTipoTel']);
-    $Tipo = $TelTipo;
-    $Cotejamiento = 1;
-  }
+  $Cotejamiento = 0;
   $fecha_corte = mysqli_fetch_array(mysqli_query($conn, 'SELECT * FROM clientes WHERE id_cliente='.$IdCliente));
   $Fecha_db = $fecha_corte['fecha_corte'];
   $Fecha_hoy = date('Y-m-d');
@@ -137,7 +124,6 @@ if ($entra == "Si") {
   $cambia_fecha = $FechaCorte;
 
   //Variable vacía (para evitar los E_NOTICE)
-
   $NDesc = explode(" ", $Descripcion);
   $ver = $NDesc[0].' '.$NDesc[1];
   $sql_ver = mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND descripcion like '%$ver%' AND tipo = 'Mensualidad'");
@@ -314,8 +300,5 @@ if ($entra == "Si") {
   </div>
 <?php
 }
-echo $tabla;
-echo $tabla1;
-echo $tabla2;
 mysqli_close($conn);
 ?>

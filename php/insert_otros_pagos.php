@@ -2,16 +2,12 @@
 session_start();
 include('../php/conexion.php');
 date_default_timezone_set('America/Mexico_City');
-$tabla2 = '';
-$Promo = $conn->real_escape_string($_POST['valorPromo']);
 $Tipo_Campio = $conn->real_escape_string($_POST['valorTipo_Campio']);
 $Tipo = $conn->real_escape_string($_POST['valorTipo']);
 $Cantidad = $conn->real_escape_string($_POST['valorCantidad']);
 $Descripcion = $conn->real_escape_string($_POST['valorDescripcion']);
 $IdCliente = $conn->real_escape_string($_POST['valorIdCliente']);
 $id_user = $_SESSION['user_id'];
-
-
 $Respuesta = $conn->real_escape_string($_POST['valorRespuesta']);
 $entra = 'No';
 if ($Respuesta == 'Ver') {
@@ -69,7 +65,7 @@ if ($Respuesta == 'Ver') {
           if ($rol['area'] == 'Administrador') {
             
           ?>
-          <form method="post" action="../views/crear_pago.php">
+          <form method="post" action="../views/otros_pagos.php">
             <input id="resp" name="resp" type="hidden" value="Si">
             <input id="no_cliente" name="no_cliente" type="hidden" value="<?php echo $IdCliente;?>">
             <button class="btn waves-effect red accent-4 waves-light" type="submit" name="action"><b>Registrar</b></button>
@@ -94,16 +90,11 @@ if ($Respuesta == 'Ver') {
 }
 
 if ($entra == "Si") {
-  if($Tipo == 'Otros Pagos'){
-    $TelTipo = '';
-    $Cotejamiento = 0;
-  }
-
+  $Cotejamiento = 0;
   $Fecha_hoy = date('Y-m-d');
-  $mensaje3 = "";
 
   if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND descripcion = '$Descripcion' AND cantidad='$Cantidad' AND fecha='$Fecha_hoy'"))>0){
-    $mensaje3 = '<script>M.toast({html:"Ya se encuentra un pago registrado con los mismos valores el día de hoy.", classes: "rounded"})</script>';
+    echo '<script>M.toast({html:"Ya se encuentra un pago registrado con los mismos valores el día de hoy.", classes: "rounded"})</script>';
   }else{
   $sql = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, tipo, id_user, corte, tipo_cambio, Cotejado) VALUES ($IdCliente, '$Descripcion', '$Cantidad', '$Fecha_hoy', '$Tipo', $id_user, 0, '$Tipo_Campio', '$Cotejamiento')";
   if ($Tipo_Campio == "Credito") {
@@ -116,7 +107,7 @@ if ($entra == "Si") {
   //o $consultaBusqueda sea igual a nombre + (espacio) + apellido
 
   if(mysqli_query($conn, $sql)){
-    $mensaje3 = '<script>M.toast({html:"El pago se dió de alta satisfcatoriamente.", classes: "rounded"})</script>';
+    echo '<script>M.toast({html:"El pago se dió de alta satisfcatoriamente.", classes: "rounded"})</script>';
     $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos WHERE id_cliente = $IdCliente"));            
     $id_pago = $ultimo['id'];
     ?>
@@ -129,12 +120,11 @@ if ($entra == "Si") {
     </script>
     <?php  
   }else{
-    $mensaje3 = '<script>M.toast({html:"Ha ocurrido un error.", classes: "rounded"})</script>';  
+    echo  '<script>M.toast({html:"Ha ocurrido un error.", classes: "rounded"})</script>';  
     }
   }
-  echo $mensaje3;
   ?>
-    <div id="tabla2">
+    <div id="mostrar_pagos">
       <table class="bordered highlight responsive-table">
       <thead>
         <tr>
@@ -172,7 +162,7 @@ if ($entra == "Si") {
         </tr>
       <?php
       $aux--;
-    }
+      }
       }else{
         echo "<center><b><h3>Este cliente aún no ha registrado pagos</h3></b></center>";
       }
@@ -182,6 +172,5 @@ if ($entra == "Si") {
     </div>
 <?php 
 }
-echo $tabla2;
 mysqli_close($conn);
 ?>

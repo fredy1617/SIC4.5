@@ -3,17 +3,12 @@ session_start();
 include('../php/conexion.php');
 date_default_timezone_set('America/Mexico_City');
 $id_user = $_SESSION['user_id'];
-
-$tabla1='';
-$Promo = $conn->real_escape_string($_POST['valorPromo']);
 $Tipo_Campio = $conn->real_escape_string($_POST['valorTipo_Campio']);
 $Cantidad = $conn->real_escape_string($_POST['valorCantidad']);
 $Descripcion = $conn->real_escape_string($_POST['valorDescripcion']);
 $IdCliente = $conn->real_escape_string($_POST['valorIdCliente']);
-$TelTipo = $conn->real_escape_string($_POST['valorTipoTel']);
-$Tipo = $TelTipo;
+$Tipo = $conn->real_escape_string($_POST['valorTipoTel']);
 $Cotejamiento = 1;
-
 $Respuesta = $conn->real_escape_string($_POST['valorRespuesta']);
 $entra = 'No';
 if ($Respuesta == 'Ver') {
@@ -68,10 +63,9 @@ if ($Respuesta == 'Ver') {
         <div class="modal-footer row">
           <?php 
           $rol = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_user"));
-          if ($rol['area'] == 'Administrador') {
-            
+          if ($rol['area'] == 'Administrador') {            
           ?>
-          <form method="post" action="../views/crear_pago.php">
+          <form method="post" action="../views/pagos_telefono.php">
             <input id="resp" name="resp" type="hidden" value="Si">
             <input id="no_cliente" name="no_cliente" type="hidden" value="<?php echo $IdCliente;?>">
             <button class="btn waves-effect red accent-4 waves-light" type="submit" name="action"><b>Registrar</b></button>
@@ -97,7 +91,6 @@ if ($Respuesta == 'Ver') {
 
 if ($entra == "Si") {
   $Fecha_hoy = date('Y-m-d');
-
   if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND descripcion = '$Descripcion' AND cantidad='$Cantidad' AND fecha='$Fecha_hoy'"))>0){
     echo '<script>M.toast({html:"Ya se encuentra un pago registrado con los mismos valores el día de hoy.", classes: "rounded"})</script>';
   }else{
@@ -129,7 +122,7 @@ if ($entra == "Si") {
     }
   }
    ?>
-    <div id="tabla1">
+    <div id="mostrar_pagos">
       <table class="bordered highlight responsive-table">
       <thead>
         <tr>
@@ -190,7 +183,6 @@ if ($entra == "Si") {
     </table>
     </div>
 <?php
-echo $tabla1; 
 }
 mysqli_close($conn);
 ?>

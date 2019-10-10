@@ -25,7 +25,8 @@ if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $
     $abono = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS suma FROM pagos WHERE id_cliente = $IdCliente AND tipo = 'Abono'"));
     if ($deuda['suma'] == "") {
       $deuda['suma'] = 0;
-    }elseif ($abono['suma'] == "") {
+    }
+    if ($abono['suma'] == "") {
       $abono['suma'] = 0;
     }
     $Resta = $abono['suma']-$deuda['suma'];
