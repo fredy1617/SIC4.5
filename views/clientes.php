@@ -47,12 +47,20 @@ if (mysqli_num_rows($sql)>0) {
             $("#datos").html(mensaje);
         }); 
 	};
+	function selCliente(id_cliente){
+	$.post("../views/modal_pagos.php", {
+          valorIdCliente: id_cliente,
+        }, function(mensaje) {
+            $("#Continuar").html(mensaje);
+        });
+	};
 </script>
 </head>
 <body onload="buscar();">
 	<div class="container">
 		<div class="row">
 			<br><br>
+			<div id="Continuar"></div>
 			<h3 class="hide-on-med-and-down col s12 m5 l5">Clientes:</h3>
       		<h5 class="hide-on-large-only col s12 m5 l5">Clientes:</h5>
       		<form class="col s12 m7 l7">
