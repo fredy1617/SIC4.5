@@ -8,6 +8,8 @@ if ($tipo == "reporte") {
   $ruta = "../views/instalaciones.php";
 }elseif ($tipo == "comunidad") {
   $ruta = "../views/ruta_comunidad.php";
+}elseif ($tipo == "mantenimiento") {
+  $ruta = "../views/mantenimiento.php";
 }
   if(mysqli_query($conn, "DELETE FROM `tmp_reportes` WHERE `tmp_reportes`.`id_reporte` = $IdReporte")){
     echo '<script >M.toast({html:"Reporte Borrado de la Ruta.", classes: "rounded"})</script>';

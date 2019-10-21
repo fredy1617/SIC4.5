@@ -8,8 +8,8 @@ $Comunidad = $conn->real_escape_string($_POST['valorComunidad']);
 $Descripcion = $conn->real_escape_string($_POST['valorDescripcion']);
 $Referencia = $conn->real_escape_string($_POST['valorReferencia']);
 $Usuario = $conn->real_escape_string($_POST['valorUsuario']);
+$Mantenimiento = $conn->real_escape_string($_POST['valorMantenimiento']);
 $Registro = date('Y-m-d');
-
 //Variable vacía (para evitar los E_NOTICE)
 $mensaje = "";
 	if (isset($Nombres)) {
@@ -19,23 +19,36 @@ $mensaje = "";
 	 		$mensaje = '<script >M.toast({html:"Ya se encuentra un cliente con los mismos datos registrados.", classes: "rounded"})</script>';
 	 	}else{
 			//o $consultaBusqueda sea igual a nombre + (espacio) + apellido
-			$sql = "INSERT INTO especiales (nombre, telefono, lugar, referencia, usuario) 
-				VALUES('$Nombres', '$Telefono', '$Comunidad',  '$Referencia','$Usuario')";
+			$sql = "INSERT INTO especiales (nombre, telefono, lugar, referencia, usuario, mantenimiento) 
+				VALUES('$Nombres', '$Telefono', '$Comunidad',  '$Referencia','$Usuario', '$Mantenimiento')";
 			if(mysqli_query($conn, $sql)){
 				$mensaje = '<script >M.toast({html:"Se registro el cliente especial satisfactoriamente.", classes: "rounded"})</script>';
 				$ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_cliente) AS id FROM especiales"));            
         		$IdCliente = $ultimo['id'];
-        		echo $IdCliente;
-        		$Descripcion2= "'Reporte Especial: ".$Descripcion."'";
-				$sql = "INSERT INTO reportes (id_cliente, descripcion, fecha) VALUES ($IdCliente, ".$Descripcion2.", '$Registro')";
+        		if ($Mantenimiento == 1) {
+        		    $Descripcion2= "'Mantenimiento: ".$Descripcion."'";
+        		    $ir	= "<script>ir2()</script>";
+        		}else{
+        			$Descripcion2= "'Reporte Especial: ".$Descripcion."'";
+        		    $ir	= "<script>ir1()</script>";
+        		}
+				$sql = "INSERT INTO reportes (id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, ".$Descripcion2.", '$Registro', '$Usuario')";
 				if(mysqli_query($conn, $sql)){
 					?>
 				  <script>
+				  	function ir1(){
 					  var a = document.createElement("a");
-					    a.href = "../views/reportes.php";
-					    a.click();   
+					    a.href = "../views/reportes_especiales.php";
+					    a.click();
+					};
+					function ir2(){
+					  var a = document.createElement("a");
+					    a.href = "../views/mantenimiento.php";
+					    a.click();
+					} ;   
 				  </script>
 				  <?php
+				  echo $ir;
 				}else{
 					$mensaje = '<script>M.toast(html:"Ha ocurrido un error.", classes: "rounded")</script>';	
 				}

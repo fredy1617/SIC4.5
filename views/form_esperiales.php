@@ -17,6 +17,11 @@ function insert_cliente() {
     var textoCerca = $("textarea#cercas").val();    
     var textoEsp = $("textarea#especificacion").val();
     var textoUsuario = $("select#usuario").val();
+    if (document.getElementById('Mantenimiento').checked==true) {
+	    textoMantenimiento = 1;
+	}else{
+	    textoMantenimiento = 0; 
+	}
   
     if (textoNombres == "") {
       M.toast({html: 'El campo Nombre(s) se encuentra vacío.', classes: 'rounded'});
@@ -46,6 +51,7 @@ function insert_cliente() {
           valorDescripcion: textoDescripcion,
           valorReferencia: 'Casa de color: '+textoColor+', Cercas de '+textoCerca+' ('+textoEsp+')',
           valorUsuario: textoUsuario,
+          valorMantenimiento: textoMantenimiento,
         }, function(mensaje) {
             $("#reporte_especial").html(mensaje);
         }); 
@@ -101,7 +107,8 @@ function insert_cliente() {
 	            ?>
 	          </select>
 		        </div>
-		        <div class="input-field row">
+		        <div class="row">
+		        <div class="input-field row col s12 m7 l7">
 		          <i class="col s1"> <br></i>
 		          <select id="usuario" class="browser-default col s10" required>
 		            <option value="0" selected >Usuario</option>
@@ -116,7 +123,13 @@ function insert_cliente() {
 		            ?>
 		          </select>
 		        </div>
-		        <div class="input-field">
+		        <div class="col s12 m4 l4 row">
+		            <br>
+		            <input type="checkbox" id="Mantenimiento"  />
+		            <label for="Mantenimiento">Mantenimiento</label>
+		        </div>
+		    	</div>
+		        <div class="input-field row">
 		          <i class="material-icons prefix">comment</i>
 		          <textarea id="descripcion" class="
 		         materialize-textarea validate" data-length="100" required></textarea>

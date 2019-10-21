@@ -4,8 +4,8 @@ include('../php/conexion.php');
 $Hoy = date('Y-m-d');
 $instalaciones = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes WHERE instalacion IS NULL"));
 $reportes = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE ((fecha_visita = '$Hoy'  AND atender_visita = 0) OR (fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR atendido != 1 OR atendido IS NULL) AND id_cliente < 10000"));
-$reportesEsp = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE ((fecha_visita = '$Hoy'  AND atender_visita = 0) OR (fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR atendido != 1 OR atendido IS NULL) AND id_cliente > 10000"));
-"SELECT * FROM reportes  WHERE (fecha_visita = '$Hoy'  AND atender_visita = 0) OR (fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR atendido != 1 OR atendido IS NULL  ORDER BY fecha";
+$reportesEsp = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE ((fecha_visita = '$Hoy'  AND atender_visita = 0) OR (fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR atendido != 1 OR atendido IS NULL) AND id_cliente > 10000 AND descripcion LIKE 'Reporte Especial:%'"));
+$Mantenimiento = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE ((fecha_visita = '$Hoy'  AND atender_visita = 0) OR (fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR atendido != 1 OR atendido IS NULL) AND id_cliente > 10000 AND descripcion LIKE 'Mantenimiento:%'"));
 $tel = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM pagos WHERE Cotejado =1"));
 $pendientes = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM dispositivos WHERE estatus IN ('Cotizado','En Proceso','Pendiente') AND fecha > '2019-01-01'"));
 $listos = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM dispositivos WHERE estatus IN ('Listo (En Taller)','Listo (No Reparado)', 'Listo') AND fecha > '2019-01-01'"));
@@ -52,6 +52,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    <li><a href="../views/instalaciones.php" class="black-text"><i class="material-icons">list</i>Instalaciones <span class=" new badge pink" data-badge-caption=""><?php echo $instalaciones['count(*)']?></span></a></li>
 				    <li><a href="reportes.php" class="black-text"><i class="material-icons">perm_scan_wifi</i>Reportes <span class="new badge pink" data-badge-caption=""><?php echo $reportes['count(*)'];?></span></a></li>			    
 				    <li><a href="reportes_especiales.php" class="black-text"><i class="material-icons">verified_user</i>Reportes Esp. <span class="new badge pink" data-badge-caption=""><?php echo $reportesEsp['count(*)'];?></span></a></li>			    
+				    <li><a href="mantenimiento.php" class="black-text"><i class="material-icons">verified_user</i>Mantenimiento <span class="new badge pink" data-badge-caption=""><?php echo $Mantenimiento['count(*)'];?></span></a></li>			    
 				    <li><a href="tel.php" class="black-text"><i class="material-icons">phone</i>Teléfono <span class=" new badge pink" data-badge-caption=""><?php echo $tel['count(*)'];?></span></a></li>
 				    <li><a href="menu_rutas.php" class="black-text"><i class="material-icons">near_me</i>Rutas <span class=" new badge pink" data-badge-caption=""><?php echo $rutas['count(*)'];?></span></a></li>
 				    <!-- -->
@@ -141,6 +142,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 			      				  <li><a href="../views/instalaciones.php"><i class="material-icons">list</i>Instalaciones <span class="new badge pink" data-badge-caption=""><?php echo $instalaciones['count(*)'];?></span></a></li>
 						    	  <li><a href="reportes.php"><i class="material-icons">perm_scan_wifi</i>Reportes <span class=" new badge pink" data-badge-caption=""><?php echo $reportes['count(*)'];?></span></a></li>
 						    	  <li><a href="reportes_especiales.php"><i class="material-icons">verified_user</i>Reportes Esp.<span class=" new badge pink" data-badge-caption=""><?php echo $reportesEsp['count(*)'];?></span></a></li>
+						    	  <li><a href="mantenimiento.php"><i class="material-icons">verified_user</i>Mantenimiento<span class=" new badge pink" data-badge-caption=""><?php echo $Mantenimiento['count(*)'];?></span></a></li>
 						    	  <li><a href="tel.php"><i class="material-icons">phone</i>Teléfono <span class=" new badge pink" data-badge-caption=""><?php echo $tel['count(*)'];?></span></a></li>
 						    	  <li><a href="menu_rutas.php" class="black-text"><i class="material-icons">near_me</i>Rutas <span class=" new badge pink" data-badge-caption=""><?php echo $rutas['count(*)'];?></span></a></li>
 						    	  <li><a href="clientes.php"><i class="material-icons">people</i>Clientes</a></li>
