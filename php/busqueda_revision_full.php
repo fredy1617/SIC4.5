@@ -16,7 +16,7 @@
 				$id_servidor = $comunidad['servidor'];
 				$Servidor = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM servidores WHERE id_servidor = '$id_servidor'"));
 				$id_cliente = $cliente['id_cliente'];
-				$pago = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = '$id_cliente' AND tipo = 'Mensualidad' Order by fecha"));
+				$pago = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = '$id_cliente' AND tipo = 'Mensualidad' Order by  fecha DESC"));
 		?>
 			<tr>
 				<td><?php echo $id_cliente; ?></td>
