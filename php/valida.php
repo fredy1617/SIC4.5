@@ -52,7 +52,11 @@
 			$sql_comunidad = mysqli_fetch_array(mysqli_query($conn,"SELECT nombre FROM comunidades WHERE id_comunidad = $id_comunidad"));
 			$no_cliente = $resultados['id_cliente'];
 			$nombre = $resultados['nombre'];
-			$servicio = $resultados['servicio'];
+			if ($no_cliente > 10000) {
+				$servicio = 'Internet';
+			}else{
+				$servicio = $resultados['servicio'];
+			}
 			$lugar = $sql_comunidad['nombre'];
 			$telefono = $resultados['telefono'];
 			$ip = $resultados['ip'];
