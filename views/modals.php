@@ -120,19 +120,22 @@ function buscar_clientes() {
 };
 
 function recargar() {
-    setTimeout("location.href='instalaciones.php'", 5000);
+    setTimeout("location.href='instalaciones.php'", 1000);
   }
 function recargar2() {
-    setTimeout("location.href='admin_clientes.php'", 5000);
+    setTimeout("location.href='admin_clientes.php'", 1000);
   }
 function recargar3() {
-    setTimeout("location.href='../views/tel.php'", 5000);
+    setTimeout("location.href='../views/tel.php'", 800);
+  }
+function recargar10() {
+    setTimeout("location.href='../views/cortes_telefono.php'", 800);
   }
 
   function recargar_corte() {
     var textoClave = $("input#clave").val();
     if (textoClave == "dinero$ic") {
-      setTimeout("location.href='cortes_pagos.php'", 5000);
+      setTimeout("location.href='cortes_pagos.php'", 1000);
       var a = document.createElement("a");
         a.target = "_blank";
         a.href = "../php/corte_pago.php";
@@ -144,7 +147,7 @@ function recargar3() {
   }
 
   function admin() {
-    setTimeout("location.href='home.php'", 5000);
+    setTimeout("location.href='home.php'", 1000);
   }
 </script>
 <!--Termina Script Buscar clientes-->

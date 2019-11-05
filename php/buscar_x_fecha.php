@@ -108,7 +108,12 @@ $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE  fecha_solucion>='$Valo
           $id_user = $info['tecnico'];
           $tecnico = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_user"));
           $tec = $tecnico['firstname'];
-          $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente"));
+          $sql2 = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente");
+          $filas = mysqli_num_rows($sql2);
+          if ($filas == 0) {
+            $sql2 = mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente");
+          }
+          $cliente = mysqli_fetch_array($sql2);
           $id_comunidad = $cliente['lugar'];
           $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad"));
           if ($info['apoyo'] != 0) {

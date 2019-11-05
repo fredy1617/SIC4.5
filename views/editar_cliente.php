@@ -6,13 +6,7 @@ include('fredyNav.php');
 include('../php/conexion.php');
 include('../php/cobrador.php');
 ?>
-<style type="text/css">
-  .select-dropdown{
-    overflow-y: auto !important;
-}
-</style>
 <script>
- 
 function update_cliente() {
     var textoIdCliente = $("input#id_cliente").val();
     var textoNombres = $("input#nombres").val();
@@ -20,11 +14,14 @@ function update_cliente() {
     var textoComunidad = $("select#comunidad").val();
     var textoDireccion = $("input#direccion").val();
     var textoFechaCorte = $("input#fecha_corte").val();
+    var textoFechaSus = $("input#fecha_sus").val();
+    var textoFechaCT = $("input#fecha_corteT").val();
     var textoReferencia = $("input#referencia").val();
     var textoPaquete = $("select#paquete").val();
     var textoIP = $("input#ip").val();
     var textoTipo = $("select#tipo").val();
     var textoCoordenada = $("input#coordenada").val();
+    var textoExtencion = $("input#tel_servicio").val();
 
     Entra = "Si";
     if (document.getElementById('IntyTel').checked==true) {
@@ -66,9 +63,12 @@ function update_cliente() {
           valorPaquete: textoPaquete,
           valorIP: textoIP,
           valorFechaCorte: textoFechaCorte,
+          valorFechaSus: textoFechaSus,
+          valorFechaCT: textoFechaCT,
           valorTipo: textoTipo,
           valorServicio: textoServicio,
-          valorCoordenada: textoCoordenada
+          valorCoordenada: textoCoordenada,
+          valorExtencion: textoExtencion
         }, function(mensaje) {
             $("#resultado_update_cliente").html(mensaje);
         }); 
@@ -194,8 +194,14 @@ $paquete_cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM paquete
           <input id="direccion" type="text" class="validate" data-length="100" value="<?php echo $cliente['direccion'];?>" required>
           <label for="direccion">Direccion:</label>
         </div>
+        <div class="input-field">
+          <i class="material-icons prefix">event_available</i>
+          <input id="fecha_sus" type="date" class="validate" value="<?php echo $cliente['fecha_instalacion'];?>" required>
+          <label for="fecha_sus">Fecha de Suscripción:</label>
+        </div>
       </div>
-      <!-- AQUI SE ENCUENTRA LA DOBLE COLUMNA EN ESCRITORIO.-->
+
+<!--------- AQUI SE ENCUENTRA LA DOBLE COLUMNA EN ESCRITORIO.----------->
       <div class="col s12 m6 l6">
         <div class="input-field">
           <i class="material-icons prefix">comment</i>
@@ -209,10 +215,15 @@ $paquete_cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM paquete
         </div>
       <div class="row">
         <div class="col s12"><br>
-        <div class="input-field">
+        <div class="input-field col s12 m6 l6">
               <i class="material-icons prefix">add_location</i>
               <input id="coordenada" type="text" class="validate" data-length="15" required value="<?php echo $cliente['coordenadas'];?>">
               <label for="coordenada">Coordenada:</label>
+            </div>
+            <div class="input-field col s12 m6 l6">
+              <i class="material-icons prefix">phone</i>
+              <input id="tel_servicio" type="text" class="validate" data-length="15" required value="<?php echo $cliente['tel_servicio'];?>">
+              <label for="tel_servicio">Telefono Servicio:</label>
             </div>
       </div>
       </div>
@@ -226,30 +237,32 @@ $paquete_cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM paquete
           </p>
         </div>
         <div class="input-fiel col s12 m7 l7" id="content" style="display: none;"><br>
-             <select id="tipo" class="browser-default" required>
+          <select id="tipo" class="browser-default" required>
             <option value="<?php echo $id; ?>" selected><?php echo $valor; ?></option>
             <option value="0">Prepago</option> 
             <option value="1">Contrato</option>   
           </select>
-            </div>
+        </div>
         </div><br>
         <div class="input-field">
           <i class="material-icons prefix">date_range</i>
           <input id="fecha_corte" type="date" class="validate" value="<?php echo $cliente['fecha_corte'];?>" required>
-          <label for="fecha_corte">Fecha de Corte:</label>
+          <label for="fecha_corte">Fecha de Corte Internet:</label>
+        </div>
+        <div class="input-field">
+          <i class="material-icons prefix">event</i>
+          <input id="fecha_corteT" type="date" class="validate" value="<?php echo $cliente['corte_tel'];?>" required>
+          <label for="fecha_corteT">Fecha de Corte Telefono:</label>
         </div>
       </div>
     </div>
 </form>
       <a onclick="update_cliente();" class="waves-effect waves-light btn pink right"><i class="material-icons right">send</i>ACTUALIZAR CAMBIOS</a>
-    
   </div> 
 </div>
 <br>
 </body>
-<?php
-}
-?>
+<?php } ?>
 <script>
    function showContent() {
         element = document.getElementById("content");
@@ -259,7 +272,6 @@ $paquete_cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM paquete
         else {
             element.style.display='none';
         }
-        
     };
 </script>
 </main>

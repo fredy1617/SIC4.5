@@ -71,6 +71,8 @@
       if ($estatus== 1) { $color = "yellow darken-2";
       }elseif ($estatus == 2) { $color = "orange darken-4";
       }elseif ($estatus >= 3) { $color = "red accent-4"; }
+      if ($cliente['mantenimiento'] == 0) {
+      
       $especiales .= '
                   <tr>
                     <td><span class="new badge '.$color.'" data-badge-caption="">'.$estatus.'</span></td>
@@ -85,6 +87,7 @@
                     <td><a onclick="ruta('.$id_reporte.');" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></a></td>
                     <td><br><form action="editar_reporte.php" method="post"><input type="hidden" name="id_reporte" value="'.$id_reporte.'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>
                   </tr>';
+      }
          
     }//Fin while $resultados
   } //Fin else $filas

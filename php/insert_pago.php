@@ -194,7 +194,7 @@ if ($entra == "Si") {
         </p>
       </div>
       <div class="modal-footer">
-        <form method="post" action="../views/crear_pago.php"><input id="no_cliente" name="no_cliente" type="hidden" value="<?php echo $IdCliente ?>"><button class="btn waves-effect red accent-2 waves-light" type="submit" name="action">
+        <form method="post" action="../views/pagos_internet.php"><input id="no_cliente" name="no_cliente" type="hidden" value="<?php echo $IdCliente ?>"><button class="btn waves-effect red accent-2 waves-light" type="submit" name="action">
         <b>Aceptar</b>
         </button></form>
       </div>

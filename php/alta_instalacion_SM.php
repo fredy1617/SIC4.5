@@ -24,7 +24,7 @@ $Tipo_Campio = $conn->real_escape_string($_POST['valorTipo_Cambio']);
 $Direccion = $conn->real_escape_string($_POST['valorDireccion']);
 $Referencia = $conn->real_escape_string($_POST['valorReferencia']);
 $Coordenada = $conn->real_escape_string($_POST['valorCoordenada']);
-
+$Extencion = $conn->real_escape_string($_POST['valorExtencion']);
 $FechaInstalacion = date('Y-m-d');
 $Hora = date('H:i:s');
 
@@ -49,7 +49,7 @@ if (filter_var($IP, FILTER_VALIDATE_IP)) {
 
 		$nombre_completo = $id_paquete1['nombre'];
 		//////// configura tus datos		
-		            $sql="UPDATE clientes SET ip='$IP', material='$Material', tecnico='$Tecnico', instalacion=1, fecha_instalacion='$FechaInstalacion', fecha_corte='$FechaInstalacion', hora_alta = '$Hora', coordenadas = '$Coordenada', referencia = '$Referencia', direccion = '$Direccion' WHERE id_cliente=$IdCliente";
+		            $sql="UPDATE clientes SET ip='$IP', material='$Material', tecnico='$Tecnico', instalacion=1, fecha_instalacion='$FechaInstalacion', fecha_corte='$FechaInstalacion', hora_alta = '$Hora', coordenadas = '$Coordenada', referencia = '$Referencia', direccion = '$Direccion', tel_servicio = '$Extencion' WHERE id_cliente=$IdCliente";
 		            
 		        	if(mysqli_query($conn,$sql)){
 		        		$Descripcion = "Liquidación de Instalación";

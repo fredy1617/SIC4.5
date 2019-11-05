@@ -43,9 +43,10 @@ function borrar(IdPago){
   }); 
 };
 function insert_pago() {    
-  var textoCantidad = $("input#cantidad2").val();
-  var textoDescripcion = $("input#descripcion2").val();
+  var textoCantidad = $("input#cantidad").val();
   var tipoPago = $("select#selectTipo").val();
+  var textoMes = $("select#mes").val();
+
 
   if(document.getElementById('banco_tel').checked==true){
     textoTipo_Campio = "Banco";
@@ -54,18 +55,26 @@ function insert_pago() {
   }else{
     textoTipo_Campio = "Efectivo"; 
   }
-
+  entra = 'Si';
+  if (tipoPago == 'Mes-Tel') {
+    if (textoMes == 0) {
+      entra = 'No';
+    }
+  }
   var textoIdCliente = $("input#id_cliente").val();
   var textoRespuesta = $("input#respuesta").val();
 
-  if (textoCantidad == "" || textoCantidad ==0) {
+  if (tipoPago == "") { 
+    M.toast({html: 'No se ha seleccionado un tipo de pago.', classes: 'rounded'});
+  }else if (textoCantidad == "" || textoCantidad ==0) {
       M.toast({html: 'El campo Cantidad se encuentra vacío o en 0.', classes: 'rounded'});
-  }else if (tipoPago == "") { M.toast({html: 'No se ha seleccionado un tipo de pago.', classes: 'rounded'});
+  }else  if (entra == 'No') {
+      M.toast({html: 'Seleccione un mes.', classes: 'rounded'});
   }else{
       $.post("../php/insert_pago_tel.php" , { 
           valorTipo_Campio:textoTipo_Campio,
           valorCantidad: textoCantidad,
-          valorDescripcion: textoDescripcion,
+          valorMes: textoMes,
           valorIdCliente: textoIdCliente,
           valorTipoTel: tipoPago,
           valorRespuesta: textoRespuesta
@@ -110,10 +119,22 @@ if ($Saldo < 0) {
       <span class="title"><b>No. Cliente: </b><?php echo $datos['id_cliente'];?></span>
       <p><b>Nombre(s): </b><?php echo $datos['nombre'];?><br>
         <b>Telefono: </b><?php echo $datos['telefono'];?><br>
+        <b>Extención: </b><?php echo $datos['tel_servicio'];?><br>
          <b>Comunidad: </b><?php echo $comunidad['nombre'];?><br>
          <b>Dirección: </b><?php echo $datos['direccion'];?><br>
          <b>Referencia: </b><?php echo $datos['referencia'];?><br>
          <b>Observación: </b><?php echo $datos['descripcion']; ?><br>
+         <b>Fecha de suscripción: </b><?php echo $datos['fecha_instalacion']; ?><br>
+         <?php
+         if ($datos['tel_cortado'] == 0) {
+           $estado = "ACTIVO";
+           $col = "green";
+         }else{
+           $estado = "CORTADO";
+           $col = "red";
+         }
+         ?>
+         <b>Fecha de Corte: </b><?php echo $datos['corte_tel']; ?> - <b class="<?php echo $col;?>-text"><?php echo $estado;?></b><br>
          <hr>
          <b>SALDO: </b> <span class="new badge <?php echo $color1 ?>" data-badge-caption="">$<?php echo $Saldo; ?><br>
       </p>
@@ -128,41 +149,50 @@ if ($Saldo < 0) {
     <div id="test-swipe-2" class="col s12">
       <div class="row">
       <form class=" col s12">
-      <div class="row">
-        <div class="col s12 m3 l3">
+      <br><br>
+          <div class="input-field col s12 m3 l3">
+            <select id="selectTipo" required>
+              <option value="" selected>Tipo de pago:</option>
+              <option value="Mes-Tel">Mensualidad</option>
+              <option value="Min-extra">Minutos extra</option>
+            </select>
+          </div>
+          <div class="input-field col s5 m3 l3">
+          <i class="material-icons prefix">payment</i>
+          <input id="cantidad" type="number" class="validate" data-length="6" required>
+          <label for="cantidad">Cantidad: </label>
+        </div>
+        <div class="row col s7 m3 l3"><br>
+          <select id="mes" class="browser-default">
+            <option value="0" selected>Seleccione Mes</option>
+            <option value="ENERO">Enero</option>
+            <option value="FEBRERO">Febrero</option>
+            <option value="MARZO">Marzo</option>
+            <option value="ABRIL">Abril</option>
+            <option value="MAYO">Mayo</option>
+            <option value="JUNIO">Junio</option>
+            <option value="JULIO">Julio</option>
+            <option value="AGOSTO">Agosto</option>
+            <option value="SEPTIEMBRE">Septiembre</option>
+            <option value="OCTUBRE">Octubre</option>
+            <option value="NOVIEMBRE">Noviembre</option>
+            <option value="DICIEMBRE">Diciembre</option>
+          </select>
+        </div>  
+        <div class="col s6 m2 l2">
           <p>
             <br>
             <input type="checkbox" id="banco_tel"/>
             <label for="banco_tel">Banco</label>
           </p>
         </div>
-        <div class="col s12 m3 l3">
+        <div class="col s6 m2 l2">
           <p>
             <br>
             <input type="checkbox" id="credito_tel"/>
             <label for="credito_tel">Credito</label>
           </p>
-        </div>
-      </div>
-      <br><br>
-          <div class="input-field col s12 m4 l4">
-            <select id="selectTipo" required>
-              <option value="" selected>Seleccione el tipo de pago</option>
-              <option value="Mes-Tel">Mensualidad</option>
-              <option value="Min-extra">Minutos extra</option>
-            </select>
-          </div>
-          <div class="input-field col s12 m4 l4">
-          <i class="material-icons prefix">payment</i>
-          <input id="cantidad2" type="number" class="validate" data-length="6" required>
-          <label for="cantidad2">Cantidad: </label>
-        </div>
-        <div class="input-field col s12 m4 l4">
-          <i class="material-icons prefix">description</i>
-          <input id="descripcion2" type="text" class="validate" value="Pago de teléfono " data-length="20">
-          <label for="descripcion2">Descripción (opcional):</label>
-        </div>
-     
+        </div>   
       </form>
       </div>
       <input id="id_cliente" value="<?php echo htmlentities($datos['id_cliente']);?>" type="hidden">
@@ -182,7 +212,6 @@ if ($Saldo < 0) {
         <th>Usuario</th>
         <th>Fecha</th>
         <th>Cotejado</th>
-        <th>Corte</th>
         <th>Imprimir</th>
         <th>Borrar</th>
       </tr>
@@ -210,12 +239,8 @@ if ($Saldo < 0) {
           }else if ($pagos['Cotejado'] == 2) {
             $imagen = "listo.PNG";
             echo "<td><img src='../img/$imagen'</td>";
-          }else{  echo "<td>N/A</td>";  }
-        if($pagos['tipo']== 'Mes-Tel'){
-           $cortem = $pagos['Corte_tel'];
-        }else{  $cortem= 'N/A';  }  
+          }else{  echo "<td>N/A</td>";  } 
         ?>
-        <td><?php echo $cortem;?></td>
         <td><a onclick="imprimir(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a>
         </td>
         <td><a onclick="borrar(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a>

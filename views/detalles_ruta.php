@@ -67,7 +67,7 @@ $ruta = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM rutas WHERE id_rut
     if ($ruta['estatus'] == 0) {
 ?>
 <div class="row">
-<!-- ----------------------------  TABs o MENU  ---------------------------------------->
+<!---------------------------  TABs o MENU  -------------------------------------->
 	<div class="row">
 	    <div class="col s12">
 	    <ul id="tabs-swipe-demo" class="tabs">
@@ -75,7 +75,7 @@ $ruta = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM rutas WHERE id_rut
 	      <li class="tab col s6"><a class="black-text" href="#test-swipe-2">Reportes</a></li>
 	    </ul>
 </div>
-<!-- ----------------------------  FORMULARIO 1 Tabs  ---------------------------------------->
+<!-------------------------  FORMULARIO 1 Tabs  ---------------------------------->
 <div  id="test-swipe-1" class="col s12">
 	  <div class="row" >
 		  <h3 class="hide-on-med-and-down">Instalaciones Pendientes</h3>

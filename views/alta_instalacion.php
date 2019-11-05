@@ -26,6 +26,7 @@ function alta_instalacion_SM(bandera) {
     var textoDireccion = $("input#direccion").val();
     var textoReferencia = $("input#referencia").val();
     var textoCoordenada = $("input#coordenada").val();
+    var textoExtencion = $("input#tel_servicio").val();
 
     if(document.getElementById('credito').checked==true){
       textoTipo_cambio   = "Credito";
@@ -50,7 +51,8 @@ function alta_instalacion_SM(bandera) {
           valorTipo_Cambio: textoTipo_cambio,
           valorDireccion: textoDireccion,
           valorReferencia: textoReferencia,
-          valorCoordenada: textoCoordenada
+          valorCoordenada: textoCoordenada,
+          valorExtencion: textoExtencion
         }, function(mensaje) {
             $("#resultado_cliente").html(mensaje);
         }); 
@@ -73,6 +75,7 @@ function alta_instalacion(bandera) {
     var textoDireccion = $("input#direccion").val();
     var textoReferencia = $("input#referencia").val();
     var textoCoordenada = $("input#coordenada").val();
+    var textoExtencion = $("input#tel_servicio").val();
 
     if(document.getElementById('credito').checked==true){
       textoTipo_cambio   = "Credito";
@@ -96,6 +99,7 @@ function alta_instalacion(bandera) {
           valorTipo_Cambio: textoTipo_cambio,
           valorDireccion: textoDireccion,
           valorReferencia: textoReferencia,
+          valorExtencion: textoExtencion,
           valorCoordenada: textoCoordenada
         }, function(mensaje) {
             $("#resultado_cliente").html(mensaje);
@@ -202,10 +206,15 @@ if (isset($_POST['id_cliente']) == false) {
             </div>
             </div>
             <input id="id_cliente" type="hidden" class="validate" data-length="200" value="<?php echo $datos['id_cliente'];?>" required>
-            <div class="input-field">
+            <div class="input-field col s12 m6 l6">
               <i class="material-icons prefix">add_location</i>
               <input id="coordenada" type="text" class="validate" data-length="15" required>
               <label for="coordenada">Coordenada:</label>
+            </div>
+            <div class="input-field col s12 m6 l6">
+              <i class="material-icons prefix">phone</i>
+              <input id="tel_servicio" type="text" class="validate" data-length="15" required>
+              <label for="tel_servicio">Telefono Servicio:</label>
             </div><br>
             <label>Técnicos:</label>
                 <p>

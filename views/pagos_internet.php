@@ -129,6 +129,10 @@ function insert_pago() {
         textoDescripcion = textoMes+" "+<?php echo $AÑO1; ?>;
       }else if (textoUltimo == "DICIEMBRE "+<?php echo $AÑO; ?>+" + RECARGO" ) {
         textoDescripcion = textoMes+" "+<?php echo $AÑO1; ?>;
+      }else if (textoUltimo == "DICIEMBRE  "+<?php echo $AÑO; ?>) {
+        textoDescripcion = textoMes+" "+<?php echo $AÑO1; ?>;
+      }else if (textoUltimo == "DICIEMBRE  "+<?php echo $AÑO; ?>+" + RECARGO" ) {
+        textoDescripcion = textoMes+" "+<?php echo $AÑO1; ?>;
       }
 
       if (document.getElementById('recargo').checked==true) {

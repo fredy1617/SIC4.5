@@ -6,10 +6,25 @@
 include('fredyNav.php');
 ?>
 <script>
+function llenar(){
+  if(document.getElementById('Mantenimiento').checked==true){
+    M.toast({html: 'Mantenimiento seleccionado...', classes: 'rounded'});    
+    document.fomulario.nombres.value = "Servicios";
+    document.fomulario.apellido_P.value = "Integrales";
+    document.fomulario.apellido_M.value = "de Computación";
+    document.fomulario.telefono.value = "4339256286";
+  }else{
+    M.toast({html:"Se quito Mantenimiento...", classes: "rounded"});
+    document.fomulario.nombres.value = "";
+    document.fomulario.apellido_P.value = "";
+    document.fomulario.telefono.value = "";
+    document.fomulario.apellido_M.value = "";
+  } 
+};
 function insert_cliente() {
     var textoNombres = $("input#nombres").val();
-    var textoAM = $("input#apellido-M").val();
-    var textoAP = $("input#apellido-P").val();
+    var textoAM = $("input#apellido_M").val();
+    var textoAP = $("input#apellido_P").val();
     var textoTelefono = $("input#telefono").val();
     var textoComunidad = $("select#comunidad").val();
     var textoDescripcion = $("textarea#descripcion").val();
@@ -69,21 +84,20 @@ function insert_cliente() {
 	  <div id="reporte_especial">
 	  </div>
 	   <div class="row">
-	    <form class="col s12">
+	    <form class="col s12" name="fomulario">
 	      <div class="row">
 	        <div class="input-field col s12 m4 l4">
 	          <i class="material-icons prefix">account_circle</i>
 	          <input id="nombres" type="text" class="validate" data-length="30" required>
 	          <label for="nombres">Nombre:</label>
 	        </div> 
-
 	        <div class="input-field col s12 m4 l4">
-	          <input id="apellido-P" type="text" class="validate" data-length="30" required>
-	          <label for="apellido-P">Apellido Paterno:</label>
+	          <input id="apellido_P" type="text" class="validate" data-length="30" required>
+	          <label for="apellido_P">Apellido Paterno:</label>
 	        </div>
 	        <div class="input-field col s12 m4 l4">
-	          <input id="apellido-M" type="text" class="validate" data-length="30" required>
-	          <label for="apellido-M ">Apellido Materno:</label>
+	          <input id="apellido_M" type="text" class="validate" data-length="30" required>
+	          <label for="apellido_M ">Apellido Materno:</label>
 	        </div>  
 	        <div class="col s12 m6 l6">
 	        <br>
@@ -125,7 +139,7 @@ function insert_cliente() {
 		        </div>
 		        <div class="col s12 m4 l4 row">
 		            <br>
-		            <input type="checkbox" id="Mantenimiento"  />
+		            <input type="checkbox" id="Mantenimiento" name="Mantenimiento"  onclick="llenar()" />
 		            <label for="Mantenimiento">Mantenimiento</label>
 		        </div>
 		    	</div>

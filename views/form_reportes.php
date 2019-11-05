@@ -112,23 +112,34 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
          <?php
           $Pago = mysqli_fetch_array(mysqli_query($conn, "SELECT descripcion FROM pagos WHERE id_cliente = '$no_cliente'  AND tipo = 'Mensualidad' ORDER BY id_pago DESC LIMIT 1"));
           //Separamos el string
-          $ver = explode(" ", $Pago['descripcion']);
-          $array =  array('ENERO' => '01','FEBRERO' => '02', 'MARZO' => '03','ABRIL' => '04', 'MAYO' => '05', 'JUNIO' => '06', 'JULIO' => '07', 'AGOSTO' => '08', 'SEPTIEMBRE' => '09', 'OCTUBRE' => '10', 'NOVIEMBRE' => '11',  'DICIEMBRE' => '12');
-          $fecha_pago = $array[$ver[0]].'-'.$ver[1];
           date_default_timezone_set('America/Mexico_City');
           $mes_actual = date('m-Y');
-          if ($fecha_pago >= $mes_actual) {
-            $color = "green";
-            $MSJ = "AL-CORRIENTE";
-          }else{
-            $color = "red darken-3";
-            $MSJ = "DEUDOR !";
-          }
-
+          $Fecha_Hoy = date('Y-m-d');
+          if ($Pago != "") {
+            $ver = explode(" ", $Pago['descripcion']);
+            $array =  array('ENERO' => '01','FEBRERO' => '02', 'MARZO' => '03','ABRIL' => '04', 'MAYO' => '05', 'JUNIO' => '06', 'JULIO' => '07', 'AGOSTO' => '08', 'SEPTIEMBRE' => '09', 'OCTUBRE' => '10', 'NOVIEMBRE' => '11',  'DICIEMBRE' => '12');
+            $fecha_pago = $array[$ver[0]].'-'.$ver[1];
+            if ($fecha_pago >= $mes_actual) {
+              $color = "green";
+              $MSJ = "AL-CORRIENTE";
+            }else{
+              $color = "red darken-3";
+              $MSJ = "DEUDOR !";
+            }
          ?>
-         
          <a href="#!" class="secondary-content"><span class="new badge <?php echo $color;?>" data-badge-caption="<?php echo $MSJ;?>"></span></a>
-
+         <?php
+         }
+         if ($datos['tel_cortado'] == 0) {
+           $estado = "ACTIVO";
+           $col = "green";
+         }else{
+           $estado = "CORTADO";
+           $col = "red";
+         }
+         ?>
+         <b>Extención:  <?php echo $datos['tel_servicio'];?></b><br>
+         <b>Telefono:  <a class="<?php echo $col;?>-text"><?php echo $estado;?></a></b><br>
       </p>
     </li>
   </ul>
