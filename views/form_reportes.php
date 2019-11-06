@@ -130,6 +130,7 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
          <a href="#!" class="secondary-content"><span class="new badge <?php echo $color;?>" data-badge-caption="<?php echo $MSJ;?>"></span></a>
          <?php
          }
+         if ($datos['id_cliente'] < 10000) {
          if ($datos['tel_cortado'] == 0) {
            $estado = "ACTIVO";
            $col = "green";
@@ -140,6 +141,7 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
          ?>
          <b>Extención:  <?php echo $datos['tel_servicio'];?></b><br>
          <b>Telefono:  <a class="<?php echo $col;?>-text"><?php echo $estado;?></a></b><br>
+          <?php } ?>
       </p>
     </li>
   </ul>
