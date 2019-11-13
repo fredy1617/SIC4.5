@@ -46,7 +46,7 @@ if (isset($consultaBusqueda)) {
 		            <td>'.$telefono.'</td>
 		            <td>'.$ip.'</td>
 		            <td><form method="post" action="../views/editar_cliente.php"><input id="no_cliente" name="no_cliente" type="hidden" value="'.$no_cliente.'"><button class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>
-		            <td><a onclick="eliminar_instalacion('.$no_cliente.')" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
+		            <td><a onclick="verificar_eliminar('.$no_cliente.')" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
 		          </tr>';     
 
 		}//Fin while $resultados

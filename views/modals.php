@@ -120,10 +120,10 @@ function buscar_clientes() {
 };
 
 function recargar() {
-    setTimeout("location.href='instalaciones.php'", 1000);
+    setTimeout("location.href='instalaciones.php'", 800);
   }
 function recargar2() {
-    setTimeout("location.href='admin_clientes.php'", 1000);
+    setTimeout("location.href='admin_clientes.php'", 800);
   }
 function recargar3() {
     setTimeout("location.href='../views/tel.php'", 800);

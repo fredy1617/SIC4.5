@@ -14,13 +14,19 @@ include('fredyNav.php');
             $("#datos").html(mensaje);
         }); 
 	};
-	function eliminar_instalacion(id_cliente){
-	    M.toast({ html: 'No funciona.'+id_cliente, classes: 'rounded'}); 
+	valorIdCliente
+	function verificar_eliminar(id_cliente){	    
+		$.post("../php/verificar_eliminar.php", {
+          valorIdCliente: id_cliente,
+        }, function(mensaje) {
+            $("#Continuar").html(mensaje);
+        }); 
 	  };
 </script>
 </head>
 <body onload="buscar();">
 	<div class="container">
+		<div id="Continuar"></div>
 		<div class="row">
 			<br><br>
 			<h3 class="hide-on-med-and-down col s12 m6 l6">Clientes:</h3>

@@ -27,6 +27,7 @@
   function eliminar_instalacion(id_cliente){
     $.post("../php/eliminar_instalacion.php", { 
             valorIdCliente: id_cliente,
+            valorInstalada: "No"
     }, function(mensaje) {
     $("#cliente_borrado").html(mensaje);
     }); 
