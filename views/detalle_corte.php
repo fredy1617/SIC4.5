@@ -13,13 +13,21 @@ if (isset($_POST['id_corte']) == false) {
 	<script>
 	  function atras(){
 		M.toast({html: "Regresando a total cortes...", classes "rounded"});
-		setTimeout("location.href='total_cortes.php'", 1000);
+		setTimeout("location.href='total_cortes.php'", 800);
 	  }
 	  atras();
 	</script>
 	<?php
 }else{
 ?>
+<script>
+	function imprimir(id_corte){ 
+      var a = document.createElement("a");
+        a.target = "_blank";
+        a.href = "../php/reimprimir_corte.php?id="+id_corte;
+        a.click();
+    };
+</script>
 <body>
   <div class="container">
 	  <?php 
@@ -255,7 +263,7 @@ if (isset($_POST['id_corte']) == false) {
 	  		<tr>
 	  			<td></td><td></td><td></td><td></td>
 	  			<td><b>TOTAL:</b></td>
-	  			<td><b>$<?php echo $corte['banco']; ?></b></td>
+	  			<td><b>$<?php echo $TotalBST; ?></b></td>
 	  		</tr>
 	  	<?php
 	  	}else{
@@ -263,7 +271,8 @@ if (isset($_POST['id_corte']) == false) {
 	  	}  ?>
 	  	</tbody>
 	  </table>
-	</div>
+	</div>	
+  <a class="waves-effect waves-light btn pink right" onclick="imprimir(<?php echo $id_corte; ?>);">Imprimir<i class="material-icons right">print</i></a><br><br><br>
   </div>
 </body>
 <?php
