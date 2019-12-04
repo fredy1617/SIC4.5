@@ -12,6 +12,7 @@ $Descripcion = $conn->real_escape_string($_POST['valorDescripcion']);
 $IdCliente = $conn->real_escape_string($_POST['valorIdCliente']);
 $Descuento = $conn->real_escape_string($_POST['valorDescuento']);
 $Hasta = $conn->real_escape_string($_POST['valorHasta']);
+$ReferenciaB = $conn->real_escape_string($_POST['valorRef']);
 $Respuesta = $conn->real_escape_string($_POST['valorRespuesta']);
 
 $entra = 'No';
@@ -213,10 +214,16 @@ if ($entra == "Si") {
     $sql = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, tipo, id_user, corte, tipo_cambio, id_deuda, Cotejado) VALUES ($IdCliente, '$Descripcion', '$RegistrarCan', '$Fecha_hoy', '$Tipo', $id_user, 0, '$Tipo_Campio', $id_deuda, '$Cotejamiento')";
   }
    
-  //o $consultaBusqueda sea igual a nombre + (espacio) + apellido
+  //SE INSERTA EL PAGO -----------
 
   if(mysqli_query($conn, $sql)){
     echo '<script>M.toast({html:"El pago se dió de alta satisfcatoriamente.", classes: "rounded"})</script>';
+    // Si el pago es de banco guardar la referencia....
+    if ($Tipo_Campio == 'Banco' AND $ReferenciaB != '') {
+      $ultimoPago =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos WHERE id_cliente = $IdCliente"));            
+      $id_pago = $ultimoPago['id'];
+      mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion) VALUES ('$id_pago', '$ReferenciaB')");
+    }
     $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $IdCliente"));
     if($cliente['fecha_corte']<$FechaCorte){
         mysqli_query($conn, "UPDATE clientes SET fecha_corte='$FechaCorte' WHERE id_cliente='$IdCliente'");
