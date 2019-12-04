@@ -12,7 +12,7 @@ if (isset($_POST['no_cliente']) == false) {
   <script>    
     function atras() {
       M.toast({html: "Regresando a clientes.", classes: "rounded"})
-      setTimeout("location.href='clientes.php'", 1000);
+      setTimeout("location.href='clientes.php'", 800);
     };
     atras();
   </script>
@@ -110,6 +110,7 @@ function insert_pago() {
     var textoUltimo = $("input#ultimo").val();
     var textoDescuento = $("input#descuento").val();
     var textoHasta = $("input#hasta").val();
+    var textoRef = $("input#ref").val();
     //Todo esto solo para agregar la descripcion automatica
     textoDescripcion = textoMes+" "+<?php echo $AÑO; ?>;
       if (document.getElementById('todos').checked==true) {
@@ -175,6 +176,7 @@ function insert_pago() {
             valorIdCliente: textoIdCliente,
             valorDescuento: textoDescuento,
             valorHasta: textoHasta,
+            valorRef: textoRef,
             valorRespuesta: textoRespuesta
           }, function(mensaje) {
               $("#mostrar_pagos").html(mensaje);
@@ -185,6 +187,7 @@ function insert_pago() {
 <main>
 <body>
 <?php
+
 $sql = "SELECT * FROM clientes WHERE id_cliente=$no_cliente";
 $datos = mysqli_fetch_array(mysqli_query($conn, $sql));
 //Sacamos la mensualidad
@@ -211,6 +214,21 @@ if ($Saldo < 0) {
 $Instalacion = $datos['fecha_instalacion'];
 $nuevafecha = strtotime('+6 months', strtotime($Instalacion));
 $Vence = date('Y-m-d', $nuevafecha);
+//VER CUANTOS DIAS HAN PASADO DESDE EL ULTIMO CORTE SOLO SI LA FECHA DE CORTE ES MENOR A HOY
+$Descuento = 0;
+$corteInt = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM int_cortes ORDER BY id DESC LIMIT 1"));
+if ($datos['fecha_corte'] < $Fecha_Hoy ) {
+  
+  $date1 = new DateTime($Fecha_Hoy);
+  $date2 = new DateTime($corteInt['fecha']);
+        //Le restamos a la fecha date1-date2
+  $diff = $date1->diff($date2);
+  $Dias_pasaron= $diff->days;
+  if ($Dias_pasaron < 25) {
+     $xDia = $mensualidad['mensualidad']/30;
+     $Descuento = $Dias_pasaron*$xDia;
+  }
+}
 ?>
 <div class="container">
   <h3 class="hide-on-med-and-down">Realizando pago del cliente:</h3>
@@ -227,6 +245,7 @@ $Vence = date('Y-m-d', $nuevafecha);
          <b>Dirección: </b><?php echo $datos['direccion'];?><br>
          <b>Referencia: </b><?php echo $datos['referencia'];?><br>
          <b>Fecha Corte: </b><span id="corte"><?php echo $datos['fecha_corte'];?></span><br>
+         <b>Fecha Corte Mensual: <?php echo $corteInt['fecha'];?></b><br>
          <b>Fecha de Instalación: </b><?php echo $Instalacion;?><br>
          <?php
          $color = "green";
@@ -287,7 +306,7 @@ $Vence = date('Y-m-d', $nuevafecha);
             <label for="todos">Promoción anual</label>
           </p>
         </div>
-        <div class="col s6 m3 l3">
+        <div class="col s6 m2 l2">
           <p>
             <br>
             <input type="checkbox" onclick="resto_dias();" id="resto"/>
@@ -302,13 +321,19 @@ $Vence = date('Y-m-d', $nuevafecha);
           </p>
         </div>
         <div class="col s6 m2 l2">
+          <div class="input-field">
+            <input id="ref" type="text" class="validate" data-length="15" required value="">
+            <label for="ref">Referencia:</label>
+          </div>
+        </div>
+        <div class="col s6 m2 l2">
           <p>
             <br>
             <input type="checkbox" id="credito"/>
             <label for="credito">Credito</label>
           </p>
         </div>
-        <div class="col s6 m3 l3" >
+        <div class="col s6 m2 l2" >
               <label for="hasta">Fecha de Promesa:</label>
               <input id="hasta" type="date">    
         </div>
@@ -356,7 +381,7 @@ $Vence = date('Y-m-d', $nuevafecha);
       <div class="row col s12 m3 l3">
         <div class="input-field">
           <i class="material-icons prefix">money_off</i>
-          <input id="descuento" type="number" class="validate" data-length="6" required value="0">
+          <input id="descuento" type="number" class="validate" data-length="6" required value="<?php echo $Descuento;?>">
           <label for="descuento">Descuento ($ 0.00):</label>
         </div>
       </div>      

@@ -31,7 +31,12 @@ if ($Usuario != "") {
         <?php
         if ($Usuario != "") {
         ?>
-        <th>Tipo</th>
+        <th>Cambio</th>
+        <?php
+        }elseif ($Tipo == 'Banco') {
+        ?>
+        <th>Referencia</th>        
+        <th>Registró</th>
         <?php
         }else{
         ?>
@@ -56,6 +61,17 @@ while($pagos = mysqli_fetch_array($sql_pagos)){
   $cliente= mysqli_fetch_array($sql);
   $id_user = $pagos['id_user'];
   $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$id_user'"));
+  if ($pagos['tipo_cambio'] == 'Banco') {
+    $id = $pagos['id_pago'];
+    $sqlR = mysqli_query($conn, "SELECT * FROM referencias WHERE id_pago = $id");  
+    $filas2 = mysqli_num_rows($sqlR);
+    if ($filas2 == 0) {
+      $refe = "Sin";
+    }else{
+      $referecia = mysqli_fetch_array($sqlR);
+      $refe = $referecia['descripcion'];
+    }
+  }
   ?>
   <tr>
     <td><b><?php echo $id_cliente;?></b></td>
@@ -67,7 +83,12 @@ while($pagos = mysqli_fetch_array($sql_pagos)){
     <?php
     if ($Usuario != "") {
     ?>
-    <td><?php echo $pagos['tipo_cambio'];?></td>
+    <td><?php echo $pagos['tipo_cambio'];?><br><?php echo $refe;?></td>
+    <?php
+    }elseif ($Tipo == 'Banco') {
+     ?>
+    <td><?php echo $refe;?></td>
+    <td><?php echo $usuario['firstname'];?></td>
     <?php
     }else{
     ?>
@@ -80,7 +101,7 @@ while($pagos = mysqli_fetch_array($sql_pagos)){
   $aux--;
 }
 }else{
-  echo "<center><b><h5>Este usuario aún no ha registrado pagos</h5></b></center>";
+  echo "<center><b><h5>No hay pagos registrados en esta fecha</h5></b></center>";
 }
 ?>
 <?php 
