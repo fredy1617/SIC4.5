@@ -83,7 +83,7 @@ while($pagos = mysqli_fetch_array($sql_pagos)){
     <?php
     if ($Usuario != "") {
     ?>
-    <td><?php echo $pagos['tipo_cambio'];?><br><?php echo $refe;?></td>
+    <td><?php echo $pagos['tipo_cambio'];?><br><?php if ($pagos['tipo_cambio'] == 'Banco') { echo $refe; } ?></td>
     <?php
     }elseif ($Tipo == 'Banco') {
      ?>

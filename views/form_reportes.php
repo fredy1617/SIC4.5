@@ -127,7 +127,6 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
               $color = "red darken-3";
               $MSJ = "DEUDOR !";
             }
-            echo $fecha_pago." -- ".$mes_actual;
          ?>
          <a href="#!" class="secondary-content"><span class="new badge <?php echo $color;?>" data-badge-caption="<?php echo $MSJ;?>"></span></a>
          <?php
