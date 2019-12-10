@@ -22,10 +22,9 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
       <!--Let browser know website is optimized for mobile-->
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	  <link rel="shortcut icon" href="../img/logo.jpg" type="image/jpg" />
-      
       <style rel="stylesheet">
 		.dropdown-content{  overflow: visible;	}
-	</style>
+	  </style>
 	<div class="navbar-fixed">
 	<nav class="indigo darken-4">
 		<div class="nav-wrapper container">
@@ -41,12 +40,12 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    <li><a href="ver_almacen.php" class="black-text"><i class="material-icons">dashboard</i>Almacen <span class="new badge pink" data-badge-caption=""><?php echo $almacen['count(*)'];?></span> </a></li>
 				    <li><a href="listos.php" class="black-text"><i class="material-icons">assignment_turned_in</i>Listos <span class="new badge pink" data-badge-caption=""><?php echo $listos['count(*)'];?></span> </a></li>
 				    <li><a href="pendientes.php" class="black-text"><i class="material-icons">assignment_late</i>Pendientes <span class="new badge pink" data-badge-caption=""><?php echo $pendientes['count(*)'];?></span> </a></li>
-				    <li><a href="reporte_pagos_ST.php" class="black-text"><i class="material-icons">list</i>Reporte Pagos</a></li>				    			    
+				    <li><a href="reporte_pagos_ST.php" class="black-text"><i class="material-icons">list</i>Reporte Pagos</a></li>
+				    <li><a href="rep_refacciones.php" class="black-text"><i class="material-icons">list</i>Rep. Refacciones</a></li>    			 
  				 </ul>
 				<li><a class='dropdown-button' data-target='dropdown2'><i class="material-icons left">language</i>Redes<span class=" new badge pink" data-badge-caption=""><?php echo $instalaciones['count(*)']+$reportes['count(*)']+$tel['count(*)']+$rutas['count(*)'];?></span><i class="material-icons right">arrow_drop_down</i></a></li>
-
 				<ul id='dropdown2' class='dropdown-content'>
-				    <li><a href="../views/form_instalacion.php" class="black-text"><i class="material-icons">add</i>Nueva Instalación</a></li>				    
+				    <li><a href="../views/form_instalacion.php" class="black-text"><i class="material-icons">add</i>Nueva Instalación</a></li>    
 					<li><a href="form_esperiales.php" class="black-text"><i class="material-icons">add_circle_outline</i>Nuevo Rep. Especial</a></li>
 					 <li><a href="clientes.php" class="black-text"><i class="material-icons">people</i>Clientes </a></li>
 				    <li><a href="../views/instalaciones.php" class="black-text"><i class="material-icons">list</i>Instalaciones <span class=" new badge pink" data-badge-caption=""><?php echo $instalaciones['count(*)']?></span></a></li>
@@ -54,8 +53,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    <li><a href="reportes_especiales.php" class="black-text"><i class="material-icons">verified_user</i>Reportes Esp. <span class="new badge pink" data-badge-caption=""><?php echo $reportesEsp['count(*)'];?></span></a></li>			    
 				    <li><a href="mantenimiento.php" class="black-text"><i class="material-icons">verified_user</i>Mantenimiento <span class="new badge pink" data-badge-caption=""><?php echo $Mantenimiento['count(*)'];?></span></a></li>			    
 				    <li><a href="tel.php" class="black-text"><i class="material-icons">phone</i>Teléfono <span class=" new badge pink" data-badge-caption=""><?php echo $tel['count(*)'];?></span></a></li>
-				    <li><a href="menu_rutas.php" class="black-text"><i class="material-icons">near_me</i>Rutas <span class=" new badge pink" data-badge-caption=""><?php echo $rutas['count(*)'];?></span></a></li>
-				    <!-- -->
+				    <li><a href="menu_rutas.php" class="black-text"><i class="material-icons">near_me</i>Rutas<span class="new badge pink" data-badge-caption=""><?php echo $rutas['count(*)'];?></span></a></li>
 				    <li><a class='dropdown-btn1 black-text' data-target='sub-dropdown1'><i class="material-icons left">add_box</i> MAS <i class="material-icons right">chevron_right</i></a></li>
 				    <ul id='sub-dropdown1' class='dropdown-content'>
 				    	<li><a href="paquetes.php" class="black-text"><i class="material-icons">import_export</i>Paquetes </a></li>   
@@ -75,15 +73,11 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    	<li><a href="rep_pagos.php" class="black-text"><i class="material-icons">report</i>Reporte Pagos </a></li>
 				    	<li><a href="reportes_atendidos.php" class="black-text"><i class="material-icons">done</i>Reportes Atendidos </a></li>
 				    	<li><a href="rep_instalaciones.php" class="black-text"><i class="material-icons">format_list_numbered</i>Rep. Instalaciones</a></li>
-				    	<li><a href="reporte_deudas.php" class="black-text"><i class="material-icons">list</i>Reporte Deudas</a></li>
-				    	<li><a href="rep_refacciones.php" class="black-text"><i class="material-icons">list</i>Rep. Refacciones</a></li>
+				    	<li><a href="reporte_deudas.php" class="black-text"><i class="material-icons">list</i>Reporte Deudas</a></li>    	
 				    </ul>
-				    <!--<li><a href="rep_pagos.php" class="black-text"><i class="material-icons">report</i>Reporte Pagos </a></li>-->
 				    <li><a href="historial_cortes.php" class="black-text"><i class="material-icons">content_cut</i>Historial de Cortes </a></li>
-				    <!--<li><a href="rep_instalaciones.php" class="black-text"><i class="material-icons">format_list_numbered</i>Reporte Instalaciones</a></li>-->
 				    <li><a href="reporte_x_fecha.php" class="black-text"><i class="material-icons">assignment_turned_in</i>Trabajos Realizados</a></li>
 				    <li><a href="en_cajas.php" class="black-text"><i class="material-icons">monetization_on</i>En Cajas</a></li>
-				    <!--<li><a href="reporte_deudas.php" class="black-text"><i class="material-icons">list</i>Reporte Deudas</a></li>-->
 				    <li><a href="total_cortes.php" class="black-text"><i class="material-icons">money_off</i>Total Cortes</a></li>
 				    <li><a href="CORTES_FULL.php" class="black-text"><i class="material-icons left">signal_wifi_off</i>Cortes Full</a></li>	
  				 </ul>
@@ -109,8 +103,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 	</div>
 	<ul class="sidenav indigo lighten-5" id="menu-responsive" style="width: 270px;">
 				<h2>Menú</h2>
-    			<li><div class="divider"></div></li>
-    			<br>
+    			<li><div class="divider"></div></li><br>
 				<li>
 	    			<ul class="collapsible collapsible-accordion">
 	    				<li>
@@ -123,6 +116,8 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    			  <li><a href="ver_almacen.php"><i class="material-icons">dashboard</i>Almacen <span class="new badge pink" data-badge-caption=""><?php echo $almacen['count(*)'];?></span> </a></li>
 			      				  <li><a href="listos.php"><i class="material-icons">assignment_turned_in</i>Listos <span class="new badge pink" data-badge-caption=""><?php echo $listos['count(*)'];?></span> </a></li>
 						    	  <li><a href="pendientes.php"><i class="material-icons">assignment_late</i>Pendientes<span class="new badge pink" data-badge-caption=""><?php echo $pendientes['count(*)'];?></span></a></li>
+						    	  <li><a href="reporte_pagos_ST.php"><i class="material-icons">list</i>Reporte Pagos</a></li>
+						    	  <li><a href="rep_refacciones.php"><i class="material-icons">list</i>Reporte Refacciones</a></li>
 					    		</ul>
 					          </span>
 		      			  </div>    			
@@ -142,7 +137,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 			      				  <li><a href="../views/instalaciones.php"><i class="material-icons">list</i>Instalaciones <span class="new badge pink" data-badge-caption=""><?php echo $instalaciones['count(*)'];?></span></a></li>
 						    	  <li><a href="reportes.php"><i class="material-icons">perm_scan_wifi</i>Reportes <span class=" new badge pink" data-badge-caption=""><?php echo $reportes['count(*)'];?></span></a></li>
 						    	  <li><a href="reportes_especiales.php"><i class="material-icons">verified_user</i>Reportes Esp.<span class=" new badge pink" data-badge-caption=""><?php echo $reportesEsp['count(*)'];?></span></a></li>
-						    	  <li><a href="mantenimiento.php"><i class="material-icons">verified_user</i>Mantenimiento<span class=" new badge pink" data-badge-caption=""><?php echo $Mantenimiento['count(*)'];?></span></a></li>
+						    	  <li><a href="mantenimiento.php"><i class="material-icons">verified_user</i>Mantenimiento<span class="new badge pink" data-badge-caption=""><?php echo $Mantenimiento['count(*)'];?></span></a></li>
 						    	  <li><a href="tel.php"><i class="material-icons">phone</i>Teléfono <span class=" new badge pink" data-badge-caption=""><?php echo $tel['count(*)'];?></span></a></li>
 						    	  <li><a href="menu_rutas.php" class="black-text"><i class="material-icons">near_me</i>Rutas <span class=" new badge pink" data-badge-caption=""><?php echo $rutas['count(*)'];?></span></a></li>
 						    	  <li><a href="clientes.php"><i class="material-icons">people</i>Clientes</a></li>
@@ -191,8 +186,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 	<!--JavaScript at end of body for optimized loading-->
     <script type="text/javascript" src="js/materialize.min.js"></script>
 	<script>
-    	$(document).ready(function() {
-	    
+    	$(document).ready(function() {	    
 	 	$('.dropdown-button').dropdown({
 	      	  inDuration: 500,
 	          outDuration: 500, constrainWidth: false, // Does not change width of dropdown to that of the activator
