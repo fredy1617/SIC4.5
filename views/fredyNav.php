@@ -58,7 +58,8 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    <ul id='sub-dropdown1' class='dropdown-content'>
 				    	<li><a href="paquetes.php" class="black-text"><i class="material-icons">import_export</i>Paquetes </a></li>   
 				    	<li><a href="comunidades.php" class="black-text"><i class="material-icons">business</i>Comunidades </a></li>
-				    	<li><a href="servidores.php" class="black-text"><i class="material-icons">router</i>Servidores </a></li> 				    
+				    	<li><a href="servidores.php" class="black-text"><i class="material-icons">router</i>Servidores </a></li>
+				    	<li><a href="centrales.php" class="black-text"><i class="material-icons">satellite</i>Centrales </a></li>
 				    	<li><a href="fichas.php" class="black-text"><i class="material-icons">tap_and_play</i>Fichas </a></li>
 				    </ul>	    
  				 </ul>
@@ -140,10 +141,10 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 						    	  <li><a href="mantenimiento.php"><i class="material-icons">verified_user</i>Mantenimiento<span class="new badge pink" data-badge-caption=""><?php echo $Mantenimiento['count(*)'];?></span></a></li>
 						    	  <li><a href="tel.php"><i class="material-icons">phone</i>Teléfono <span class=" new badge pink" data-badge-caption=""><?php echo $tel['count(*)'];?></span></a></li>
 						    	  <li><a href="menu_rutas.php" class="black-text"><i class="material-icons">near_me</i>Rutas <span class=" new badge pink" data-badge-caption=""><?php echo $rutas['count(*)'];?></span></a></li>
-						    	  <li><a href="clientes.php"><i class="material-icons">people</i>Clientes</a></li>
 						    	  <li><a href="paquetes.php"><i class="material-icons">import_export</i>Paquetes</a></li>
 						    	  <li><a href="comunidades.php"><i class="material-icons">business</i>Comunidades</a></li>
-						    	  <li><a href="servidores.php"><i class="material-icons">router</i>Servidores</a></li>  				    
+						    	  <li><a href="servidores.php"><i class="material-icons">router</i>Servidores</a></li>
+				    			  <li><a href="centrales.php"><i class="material-icons">satellite</i>Centrales </a></li>
 				    			  <li><a href="fichas.php"><i class="material-icons">tap_and_play</i>Fichas </a></li>
 					    		</ul>
 					          </span>

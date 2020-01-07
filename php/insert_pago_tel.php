@@ -132,7 +132,7 @@ if ($Respuesta == 'Ver') {
 
 if ($entra == "Si") {
   $Fecha_hoy = date('Y-m-d');
-  if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND descripcion = '$Descripcion' AND cantidad='$Cantidad' ".$MASS))>0){
+  if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND descripcion = '$Descripcion' AND cantidad='$Cantidad' AND AND tipo IN ('Min-extra', 'Mes-Tel') ".$MASS))>0){
     echo '<script>M.toast({html:"Ya se encuentra un pago registrado con los mismos valores.", classes: "rounded"})</script>';
   }else{
   //o $consultaBusqueda sea igual a nombre + (espacio) + apellido
