@@ -24,21 +24,6 @@ if (isset($_POST['resp']) == false) {
 }else{
   $respuesta = $_POST['resp'];
 }
-$AÑO = date('Y');
-$AÑO1 = strtotime('+1 year', strtotime($AÑO));
-$AÑO1 = date('Y', $AÑO1);
-$Pago = mysqli_fetch_array(mysqli_query($conn, "SELECT descripcion FROM pagos WHERE id_cliente = '$no_cliente'  AND tipo = 'Mensualidad' ORDER BY id_pago DESC LIMIT 1"));
-//AQUI COLOCAMOS EL MISMO AÑO EN CASO DE SER ENERO MAS
-$ver = explode(" ", $Pago['descripcion']);
-$MAS = false;
-if (count($ver)>1) {
-  $UltimoAño= (int) $ver[1];
-  if ($UltimoAño>$AÑO) {
-    $AÑO1 = strtotime('+2 year', strtotime($AÑO));
-    $MAS = date('Y', $AÑO1);
-    $AÑO = $ver[1];
-  }
-}
 ?>
 <script>   
 function imprimir(id_pago){
@@ -107,34 +92,13 @@ function insert_pago() {
     textoTipo = "Mensualidad";
     var textoCantidad = $("input#cantidad").val();
     var textoMes = $("select#mes").val();
-    var textoUltimo = $("input#ultimo").val();
+    var textoAño = $("select#año").val();
     var textoDescuento = $("input#descuento").val();
     var textoHasta = $("input#hasta").val();
     var textoRef = $("input#ref").val();
     //Todo esto solo para agregar la descripcion automatica
-    textoDescripcion = textoMes+" "+<?php echo $AÑO; ?>;
-      if (document.getElementById('todos').checked==true) {
-        <?php
-        $ANUAL = $AÑO1;
-        if ($MAS) {
-          $ANUAL = strtotime('+2 years', strtotime($AÑO));
-          $ANUAL = date('Y', $ANUAL);
-        }
-        ?>
-         textoDescripcion = textoMes+" "+<?php echo $ANUAL; ?>;
-      }else if (textoUltimo == textoDescripcion){
-          if(document.getElementById('todos').checked==true){
-            textoDescripcion = textoMes+" "+<?php echo $AÑO1; ?>;
-          }
-      }else if (textoUltimo == "DICIEMBRE "+<?php echo $AÑO; ?>) {
-        textoDescripcion = textoMes+" "+<?php echo $AÑO1; ?>;
-      }else if (textoUltimo == "DICIEMBRE "+<?php echo $AÑO; ?>+" + RECARGO" ) {
-        textoDescripcion = textoMes+" "+<?php echo $AÑO1; ?>;
-      }else if (textoUltimo == "DICIEMBRE  "+<?php echo $AÑO; ?>) {
-        textoDescripcion = textoMes+" "+<?php echo $AÑO1; ?>;
-      }else if (textoUltimo == "DICIEMBRE  "+<?php echo $AÑO; ?>+" + RECARGO" ) {
-        textoDescripcion = textoMes+" "+<?php echo $AÑO1; ?>;
-      }
+    textoDescripcion = textoMes+" "+textoAño;
+      
 
       if (document.getElementById('recargo').checked==true) {
         var Mensualidad = parseInt(textoCantidad);
@@ -166,6 +130,8 @@ function insert_pago() {
         M.toast({html: 'El campo Cantidad se encuentra vacío o en 0.', classes: 'rounded'});
     }else if (textoMes == 0) {
         M.toast({html: 'Seleccione un mes.', classes: 'rounded'});
+    }else if (textoAño == 0) {
+        M.toast({html: 'Seleccione un año.', classes: 'rounded'});
     }else {
         $.post("../php/insert_pago.php" , { 
             valorPromo: textoPromo,
@@ -218,13 +184,16 @@ $Vence = date('Y-m-d', $nuevafecha);
 $Descuento = 0;
 $corteInt = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM int_cortes ORDER BY id DESC LIMIT 1"));
 if ($datos['fecha_corte'] < $Fecha_Hoy ) {
-  
+  $mesA = date('Y-m');
+  $ver = explode("-", $corteInt['fecha']);
+  $mesC = $ver[0].'-'.$ver[1];
   $date1 = new DateTime($Fecha_Hoy);
   $date2 = new DateTime($corteInt['fecha']);
-        //Le restamos a la fecha date1-date2
+
+  //Le restamos a la fecha date1-date2
   $diff = $date1->diff($date2);
   $Dias_pasaron= $diff->days;
-  if ($Dias_pasaron < 25) {
+  if ($mesA == $mesC) {
      $xDia = $mensualidad['mensualidad']/30;
      $Descuento = $Dias_pasaron*$xDia;
   }
@@ -348,7 +317,7 @@ if ($datos['fecha_corte'] < $Fecha_Hoy ) {
           <label for="cantidad">Cantidad (Mensualidad  de $<?php echo $mensualidad['mensualidad'];?>.00):</label>
         </div>
       </div>
-      <div class="row col s8 m3 l3"><br>
+      <div class="row col s8 m2 l2"><br>
         <select id="mes" class="browser-default">
           <option value="0" selected>Seleccione Mes</option>
           <option value="ENERO">Enero</option>
@@ -365,6 +334,15 @@ if ($datos['fecha_corte'] < $Fecha_Hoy ) {
           <option value="DICIEMBRE">Diciembre</option>
         </select>
       </div>
+      <div class="row col s8 m2 l2"><br>
+        <select id="año" class="browser-default">
+          <option value="0" selected>Seleccione Año</option>
+          <option value="2019">2019</option>
+          <option value="2020">2020</option>
+          <option value="2021">2021</option>
+          <option value="2022">2022</option>
+        </select>
+      </div>
       <div class="col s4 m2 l2">
           <p>
             <br>
@@ -378,7 +356,7 @@ if ($datos['fecha_corte'] < $Fecha_Hoy ) {
             <label for="recargo">Recargo</label>
           </p>
       </div>
-      <div class="row col s12 m3 l3">
+      <div class="row col s12 m2 l2">
         <div class="input-field">
           <i class="material-icons prefix">money_off</i>
           <input id="descuento" type="number" class="validate" data-length="6" required value="<?php echo $Descuento;?>">
@@ -388,7 +366,6 @@ if ($datos['fecha_corte'] < $Fecha_Hoy ) {
       </div>
       <input id="id_cliente" value="<?php echo htmlentities($datos['id_cliente']);?>" type="hidden">
       <input id="respuesta" value="<?php echo htmlentities($respuesta);?>" type="hidden">
-      <input id="ultimo" value="<?php echo htmlentities($Pago['descripcion']);?>" type="hidden">
     </form>
     <a onclick="insert_pago();" class="waves-effect waves-light btn pink right "><i class="material-icons right">send</i>Registrar Pago</a>
     </div>
@@ -405,20 +382,21 @@ if ($datos['fecha_corte'] < $Fecha_Hoy ) {
             <th>Descripción</th>
             <th>Usuario</th>
             <th>Fecha</th>
+            <th>Cambio</th>
             <th>Imprimir</th>
             <th>Borrar</th>
           </tr>
         </thead>
       <tbody>
       <?php
-      $sql_pagos = "SELECT * FROM pagos WHERE id_cliente = ".$datos['id_cliente']." && tipo = 'Mensualidad' ORDER BY id_pago DESC";
+      $sql_pagos = "SELECT * FROM pagos WHERE id_cliente = ".$datos['id_cliente']."  ORDER BY id_pago DESC";
       $resultado_pagos = mysqli_query($conn, $sql_pagos);
       $aux = mysqli_num_rows($resultado_pagos);
       if($aux>0){
       while($pagos = mysqli_fetch_array($resultado_pagos)){
         $id_user = $pagos['id_user'];
         $user = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id = '$id_user'"));
-      ?>
+      ?> 
       <tr>
         <td><b><?php echo $aux;?></b></td>
         <td>$<?php echo $pagos['cantidad'];?></td>
@@ -426,6 +404,7 @@ if ($datos['fecha_corte'] < $Fecha_Hoy ) {
         <td><?php echo $pagos['descripcion'];?></td>
         <td><?php echo $user['user_name'];?></td>
         <td><?php echo $pagos['fecha'];?></td>
+        <td><?php echo $pagos['tipo_cambio']; ?></td>
         <td><a onclick="imprimir(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a>
         </td>
         <td><a onclick="borrar(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a>
