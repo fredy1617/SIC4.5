@@ -186,14 +186,16 @@ $corteInt = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM int_cortes ORDE
 if ($datos['fecha_corte'] < $Fecha_Hoy ) {
   $mesA = date('Y-m');
   $ver = explode("-", $corteInt['fecha']);
+  $ver2 = explode("-", $datos['fecha_corte']);
   $mesC = $ver[0].'-'.$ver[1];
+  $mesF = $ver2[0].'-'.$ver2[1];
   $date1 = new DateTime($Fecha_Hoy);
   $date2 = new DateTime($corteInt['fecha']);
 
   //Le restamos a la fecha date1-date2
   $diff = $date1->diff($date2);
   $Dias_pasaron= $diff->days;
-  if ($mesA == $mesC) {
+  if ($mesA == $mesC and $mesA == $mesF) {
      $xDia = $mensualidad['mensualidad']/30;
      $Descuento = $Dias_pasaron*$xDia;
   }

@@ -17,16 +17,16 @@
 
 class routeros_api
 {
-    var $debug = false;      // Show debug information
-    var $error_no;           // Variable for storing connection error number, if any
-    var $error_str;          // Variable for storing connection error text, if any
-    var $attempts = 5;       // Connection attempt count
-    var $connected = false;  // Connection state
-    var $delay = 3;          // Delay between connection attempts in seconds
-    //var $port = 8728;        // Port to connect to
-    var $timeout = 3;        // Connection attempt timeout and data read timeout
-    var $socket;             // Variable for storing socket resource
-    
+    var $debug     = false; //  Show debug information
+    var $connected = false; //  Connection state
+     //  Port to connect to (default 8729 for ssl)
+    var $ssl       = false; //  Connect using SSL (must enable api-ssl in IP/Services)
+    var $timeout   = 3;     //  Connection attempt timeout and data read timeout
+    var $attempts  = 5;     //  Connection attempt count
+    var $delay     = 3;     //  Delay between connection attempts in seconds
+    var $socket;            //  Variable for storing socket resource
+    var $error_no;          //  Variable for storing connection error number, if any
+    var $error_str;         //  Variable for storing connection error text, if any
     /**
      * Print text for debug purposes
      *
@@ -80,21 +80,36 @@ class routeros_api
     {
         for ($ATTEMPT = 1; $ATTEMPT <= $this->attempts; $ATTEMPT++) {
             $this->connected = false;
-            $this->debug('Connection attempt #' . $ATTEMPT . ' to ' . $ip . ':' . $port . '...');
-            if ($this->socket = @fsockopen($ip, $port, $this->error_no, $this->error_str, $this->timeout)) {
+            $PROTOCOL = ($this->ssl ? 'ssl://' : '' );
+            $context = stream_context_create(array('ssl' => array('ciphers' => 'ADH:ALL', 'verify_peer' => false, 'verify_peer_name' => false)));
+            $this->debug('Connection attempt #' . $ATTEMPT . ' to ' . $PROTOCOL . $ip . ':' . $port . '...');
+            $this->socket = @stream_socket_client($PROTOCOL . $ip.':'. $port, $this->error_no, $this->error_str, $this->timeout, STREAM_CLIENT_CONNECT,$context);
+            if ($this->socket) {
                 socket_set_timeout($this->socket, $this->timeout);
-                $this->write('/login');
+                $this->write('/login', false);
+                $this->write('=name=' . $login, false);
+                $this->write('=password=' . $password);
                 $RESPONSE = $this->read(false);
-                if ($RESPONSE[0] == '!done') {
-                    if (preg_match_all('/[^=]+/i', $RESPONSE[1], $MATCHES)) {
-                        if ($MATCHES[0][0] == 'ret' && strlen($MATCHES[0][1]) == 32) {
-                            $this->write('/login', false);
-                            $this->write('=name=' . $login, false);
-                            $this->write('=response=00' . md5(chr(0) . $password . pack('H*', $MATCHES[0][1])));
-                            $RESPONSE = $this->read(false);
-                            if ($RESPONSE[0] == '!done') {
-                                $this->connected = true;
-                                break;
+                if (isset($RESPONSE[0])) {
+                    if ($RESPONSE[0] == '!done') {
+                        if (!isset($RESPONSE[1])) {
+                            // Login method post-v6.43
+                            $this->connected = true;
+                            break;
+                        } else {
+                            // Login method pre-v6.43
+                            $MATCHES = array();
+                            if (preg_match_all('/[^=]+/i', $RESPONSE[1], $MATCHES)) {
+                                if ($MATCHES[0][0] == 'ret' && strlen($MATCHES[0][1]) == 32) {
+                                    $this->write('/login', false);
+                                    $this->write('=name=' . $login, false);
+                                    $this->write('=response=00' . md5(chr(0) . $password . pack('H*', $MATCHES[0][1])));
+                                    $RESPONSE = $this->read(false);
+                                    if (isset($RESPONSE[0]) && $RESPONSE[0] == '!done') {
+                                        $this->connected = true;
+                                        break;
+                                    }
+                                }
                             }
                         }
                     }
@@ -103,13 +118,13 @@ class routeros_api
             }
             sleep($this->delay);
         }
-        if ($this->connected)
+        if ($this->connected) {
             $this->debug('Connected...');
-        else
+        } else {
             $this->debug('Error...');
+        }
         return $this->connected;
     }
-	
 	
     /**
      * Disconnect from RouterOS

@@ -4,20 +4,20 @@
 <?php
   include('fredyNav.php');
   include ('../php/conexion.php');
+
+$tecnico = $_SESSION['user_name'];
 ?>
 <title>SIC | Alta Instalaciones</title>
 <script>
 function alta_instalacion_SM(bandera) {
-    var textoTecnicos = '';
+    textoTecnico = '<?php echo $tecnico;?>';
+    textoApoyo = 0;
     for(var i=1;i<=bandera;i++){
       if(document.getElementById('tecnico'+i).checked==true){
-        var textoCheck = $("input#tecnico"+i).val();
-        textoTecnicos = textoTecnicos+textoCheck+', ';
+        var textoApoyo = $("input#tecnico"+i).val();
       }
-    }
-
-    textoTecnicos = textoTecnicos.slice(0, -2);
-
+    } 
+    textoTecnicos = textoTecnico+', '+textoApoyo;
     var textoIP = $("input#ip").val();
     var textoMaterial = $("textarea#material").val();    
     var textoObservacion = $("textarea#observacion").val();
@@ -60,14 +60,14 @@ function alta_instalacion_SM(bandera) {
 };
 
 function alta_instalacion(bandera) {
-    var textoTecnicos = '';
+    textoTecnico = <?php echo $tecnico;?>;
+    textoApoyo = 0;
     for(var i=1;i<=bandera;i++){
       if(document.getElementById('tecnico'+i).checked==true){
-        var textoCheck = $("input#tecnico"+i).val();
-        textoTecnicos = textoTecnicos+textoCheck+', ';
+        var textoApoyo = $("input#tecnico"+i).val();
       }
-    }
-    textoTecnicos = textoTecnicos.slice(0, -2);
+    } 
+    textoTecnicos = textoTecnico+', '+textoApoyo;
     var textoIP = $("input#ip").val();
     var textoMaterial = $("textarea#material").val();
     var textoIdCliente = $("input#id_cliente").val();
@@ -216,7 +216,7 @@ if (isset($_POST['id_cliente']) == false) {
               <input id="tel_servicio" type="text" class="validate" data-length="15" required>
               <label for="tel_servicio">Telefono Servicio:</label>
             </div><br>
-            <label>Técnicos:</label>
+            <label>APOYO (solo toma uno):</label>
                 <p>
                   <?php
                   $bandera = 1; 
