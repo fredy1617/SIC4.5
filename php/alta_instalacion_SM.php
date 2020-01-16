@@ -5,7 +5,6 @@ include_once('../API/api_mt_include2.php');
 include('is_logged.php');
 
 $IP = $_POST['valorIP'];
-$filtrarMaterial = $_POST['valorMaterial'];
 $filtrarObservacion = $_POST['valorObservacion'];
 $filtrarIdCliente = $_POST['valorIdCliente'];
 $filtrarTecnico = $_POST['valorTecnicos'];
@@ -14,7 +13,6 @@ $filtrarTecnico = $_POST['valorTecnicos'];
 $caracteres_malos = array("<", ">", "\"", "'", "/", "<", ">", "'", "/");
 $caracteres_buenos = array("& lt;", "& gt;", "& quot;", "& #x27;", "& #x2F;", "& #060;", "& #062;", "& #039;", "& #047;");
 $id_user = $_SESSION['user_id'];
-$Material = str_replace($caracteres_malos, $caracteres_buenos, $filtrarMaterial);
 $Observacion = str_replace($caracteres_malos, $caracteres_buenos, $filtrarObservacion);
 $IdCliente = str_replace($caracteres_malos, $caracteres_buenos, $filtrarIdCliente);
 $Tecnico = str_replace($caracteres_malos, $caracteres_buenos, $filtrarTecnico);
@@ -27,8 +25,16 @@ $Coordenada = $conn->real_escape_string($_POST['valorCoordenada']);
 $Extencion = $conn->real_escape_string($_POST['valorExtencion']);
 $FechaInstalacion = date('Y-m-d');
 $Hora = date('H:i:s');
+#--- MATERIALES ---
+$Antena = $conn->real_escape_string($_POST['valorAntena']);
+$Router = $conn->real_escape_string($_POST['valorRouter']);
+$Cable = $conn->real_escape_string($_POST['valorCable']);
+$Tubos = $conn->real_escape_string($_POST['valorTubos']);
+$Bobina = $conn->real_escape_string($_POST['valorBobina']);
+$Extras = $conn->real_escape_string($_POST['valorExtras']);
 
-
+#---MATERIAL----     
+						
 if (filter_var($IP, FILTER_VALIDATE_IP)) {
 	$sql_ip = "SELECT * FROM clientes WHERE ip='$IP'";
 	if(mysqli_num_rows(mysqli_query($conn, $sql_ip))>0){
@@ -70,8 +76,15 @@ if (filter_var($IP, FILTER_VALIDATE_IP)) {
 								echo '<script>M.toast({html:"El pago se dió de alta satisfcatoriamente.", classes: "rounded"})</script>';
 							}
 						}
-						}                     
-			            echo '<script>M.toast({html:"Cliente registrado.", classes: "rounded"})</script>';
+						}     
+						$Sql_Mat = "INSERT INTO materiales(antena, router, cable, tubos, extras, bobina, fecha, usuarios) VALUES('$Antena', '$Router', '$Cable', '$Tubos', '$Extras', '$Bobina', '$FechaInstalacion', '$Tecnico')";
+						if(mysqli_query($conn, $Sql_Mat)){
+							$Mas = 'y Material';	
+						}else{
+							echo '<script>M.toast({html:"Ocurrio un error Material.", classes: "rounded"})</script>';
+						}
+
+			            echo '<script>M.toast({html:"Cliente '.$Mas.' registrado.", classes: "rounded"})</script>';
 			            echo '<script>M.toast({html:"Favor de dar de alta en el servidor al cliente.", classes: "rounded"})</script>';
 			            //echo '<script>function recargar() {
 							 //   setTimeout("location.href="../views/instalaciones.php"", 1000);

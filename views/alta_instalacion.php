@@ -9,7 +9,7 @@ $tecnico = $_SESSION['user_name'];
 ?>
 <title>SIC | Alta Instalaciones</title>
 <script>
-function alta_instalacion_SM(bandera) {
+function alta_instalacion_SM(bandera, contador) {
     textoTecnico = '<?php echo $tecnico;?>';
     textoApoyo = 0;
     for(var i=1;i<=bandera;i++){
@@ -18,8 +18,10 @@ function alta_instalacion_SM(bandera) {
       }
     } 
     textoTecnicos = textoTecnico+', '+textoApoyo;
-    var textoIP = $("input#ip").val();
-    var textoMaterial = $("textarea#material").val();    
+    if (textoApoyo == 0) {
+      textoTecnicos = textoTecnico
+    }
+    var textoIP = $("input#ip").val();    
     var textoObservacion = $("textarea#observacion").val();
     var textoIdCliente = $("input#id_cliente").val();
     var textoLiquidar = $("input#liquidar").val();
@@ -28,22 +30,59 @@ function alta_instalacion_SM(bandera) {
     var textoCoordenada = $("input#coordenada").val();
     var textoExtencion = $("input#tel_servicio").val();
 
+    var textoAntena = $("input#antena").val();
+    var textoRouter = $("input#router").val();
+    var textoCable = $("input#cable").val();
+    var textoTubos = $("input#tubos").val();
+    var textoOtros = $("input#mas").val();
+
+    if(document.getElementById('bobina').checked==true){
+      textoBobina   = 1;
+    }else{
+      textoBobina = 0;
+    }
     if(document.getElementById('credito').checked==true){
       textoTipo_cambio   = "Credito";
     }else{
       textoTipo_cambio = "Efectivo";
     }
+    var textoExtras = '';
+    for(var j=1;j<=contador;j++){
+      if(document.getElementById('extra'+j).checked==true){
+        var textoCheck = $("input#extra"+j).val();
+        textoExtras = textoExtras+textoCheck+', ';
+      }
+    } 
+    textoExtras = textoExtras.slice(0, -2);
+
+    if(document.getElementById('otros').checked==true){
+      if (textoExtras == '') {
+        textoExtras = textoOtros;
+      }else{
+        textoExtras = textoExtras+', '+textoOtros;
+      }
+      Entra = 'No';
+    }else{
+      Entra = 'Si';
+    }
 
     if (textoIP == "") {
       M.toast({html:"El campo IP se encuentra vacío.", classes: "rounded"});
-    }else if(textoMaterial == ""){
-      M.toast({html:"El campo Material se encuentra vacío.", classes: "rounded"});
     }else if(textoTecnicos == ''){
       M.toast({html:"Seleccione un técnico por favor.", classes: "rounded"});
-    }else {
+    }else if(textoAntena == ''){
+      M.toast({html:"Ingrese un tipo de antena.", classes: "rounded"});
+    }else if(textoCable == '' || textoCable == 0){
+      M.toast({html:"Ingrese la cantidad de cables que utilizo.", classes: "rounded"});
+    }else if(textoTubos == '' || textoTubos == 0){
+      M.toast({html:"Ingresa la cantidad de tubos que utilizo.", classes: "rounded"});
+    }else if(textoRouter == ''){
+      M.toast({html:"Ingresa un tipo de router.", classes: "rounded"});
+    }else if(textoOtros == '' && Entra == 'No'){
+      M.toast({html:"Ingrese que otros materiales utilizo.", classes: "rounded"});
+    }else{
       $.post("../php/alta_instalacion_SM.php", {
           valorIP: textoIP,
-          valorMaterial: textoMaterial,
           valorObservacion: textoObservacion,
           valorIdCliente: textoIdCliente,
           valorTecnicos: textoTecnicos,
@@ -52,15 +91,21 @@ function alta_instalacion_SM(bandera) {
           valorDireccion: textoDireccion,
           valorReferencia: textoReferencia,
           valorCoordenada: textoCoordenada,
-          valorExtencion: textoExtencion
+          valorExtencion: textoExtencion,
+          valorAntena: textoAntena,
+          valorRouter: textoRouter,
+          valorCable: textoCable,
+          valorTubos: textoTubos,
+          valorBobina: textoBobina,
+          valorExtras: textoExtras
         }, function(mensaje) {
             $("#resultado_cliente").html(mensaje);
         }); 
     }
 };
 
-function alta_instalacion(bandera) {
-    textoTecnico = <?php echo $tecnico;?>;
+function alta_instalacion(bandera, contador) {
+    textoTecnico = '<?php echo $tecnico;?>';
     textoApoyo = 0;
     for(var i=1;i<=bandera;i++){
       if(document.getElementById('tecnico'+i).checked==true){
@@ -68,8 +113,11 @@ function alta_instalacion(bandera) {
       }
     } 
     textoTecnicos = textoTecnico+', '+textoApoyo;
-    var textoIP = $("input#ip").val();
-    var textoMaterial = $("textarea#material").val();
+    if (textoApoyo == 0) {
+      textoTecnicos = textoTecnico
+    }
+    var textoIP = $("input#ip").val();    
+    var textoObservacion = $("textarea#observacion").val();
     var textoIdCliente = $("input#id_cliente").val();
     var textoLiquidar = $("input#liquidar").val();
     var textoDireccion = $("input#direccion").val();
@@ -77,30 +125,74 @@ function alta_instalacion(bandera) {
     var textoCoordenada = $("input#coordenada").val();
     var textoExtencion = $("input#tel_servicio").val();
 
+    var textoAntena = $("input#antena").val();
+    var textoRouter = $("input#router").val();
+    var textoCable = $("input#cable").val();
+    var textoTubos = $("input#tubos").val();
+    var textoOtros = $("input#mas").val();
+
+    if(document.getElementById('bobina').checked==true){
+      textoBobina   = 1;
+    }else{
+      textoBobina = 0;
+    }
     if(document.getElementById('credito').checked==true){
       textoTipo_cambio   = "Credito";
     }else{
       textoTipo_cambio = "Efectivo";
     }
+    var textoExtras = '';
+    for(var j=1;j<=contador;j++){
+      if(document.getElementById('extra'+j).checked==true){
+        var textoCheck = $("input#extra"+j).val();
+        textoExtras = textoExtras+textoCheck+', ';
+      }
+    } 
+    textoExtras = textoExtras.slice(0, -2);
+
+    if(document.getElementById('otros').checked==true){
+      if (textoExtras == '') {
+        textoExtras = textoOtros;
+      }else{
+        textoExtras = textoExtras+', '+textoOtros;
+      }
+      Entra = 'No';
+    }else{
+      Entra = 'Si';
+    }
 
     if (textoIP == "") {
       M.toast({html:"El campo IP se encuentra vacío.", classes: "rounded"});
-    }else if(textoMaterial == ""){
-      M.toast({html:"El campo Material se encuentra vacío.", classes: "rounded"});
     }else if(textoTecnicos == ''){
       M.toast({html:"Seleccione un técnico por favor.", classes: "rounded"});
-    }else {
+    }else if(textoAntena == ''){
+      M.toast({html:"Ingrese un tipo de antena.", classes: "rounded"});
+    }else if(textoCable == '' || textoCable == 0){
+      M.toast({html:"Ingrese la cantidad de cables que utilizo.", classes: "rounded"});
+    }else if(textoTubos == '' || textoTubos == 0){
+      M.toast({html:"Ingresa la cantidad de tubos que utilizo.", classes: "rounded"});
+    }else if(textoRouter == ''){
+      M.toast({html:"Ingresa un tipo de router.", classes: "rounded"});
+    }else if(textoOtros == '' && Entra == 'No'){
+      M.toast({html:"Ingrese que otros materiales utilizo.", classes: "rounded"});
+    }else{
       $.post("../php/alta_instalacion.php", {
           valorIP: textoIP,
-          valorMaterial: textoMaterial,
+          valorObservacion: textoObservacion,
           valorIdCliente: textoIdCliente,
           valorTecnicos: textoTecnicos,
           valorLiquidar : textoLiquidar,
           valorTipo_Cambio: textoTipo_cambio,
           valorDireccion: textoDireccion,
           valorReferencia: textoReferencia,
+          valorCoordenada: textoCoordenada,
           valorExtencion: textoExtencion,
-          valorCoordenada: textoCoordenada
+          valorAntena: textoAntena,
+          valorRouter: textoRouter,
+          valorCable: textoCable,
+          valorTubos: textoTubos,
+          valorBobina: textoBobina,
+          valorExtras: textoExtras
         }, function(mensaje) {
             $("#resultado_cliente").html(mensaje);
         }); 
@@ -178,15 +270,16 @@ if (isset($_POST['id_cliente']) == false) {
               <label for="ip">IP:</label>
             </div>
             <div class="input-field">
-              <i class="material-icons prefix">work</i>
-              <textarea id="material" class="materialize-textarea validate" data-length="150" required></textarea>
-              <label for="material">Material:</label>
+              <i class="material-icons prefix">add_location</i>
+              <input id="coordenada" type="text" class="validate" data-length="15" required>
+              <label for="coordenada">Coordenada:</label>
             </div>
             <div class="input-field">
               <i class="material-icons prefix">comment</i>
               <textarea id="observacion" class="materialize-textarea validate" data-length="150" required></textarea>
               <label for="observacion">Observacion Tecnica:</label>
             </div>
+            <h5 class="hide-on-med-and-down">Material:</h5>
             
             </div>
             <!-- AQUI SE ENCUENTRA LA DOBLE COLUMNA EN ESCRITORIO.-->
@@ -206,12 +299,8 @@ if (isset($_POST['id_cliente']) == false) {
             </div>
             </div>
             <input id="id_cliente" type="hidden" class="validate" data-length="200" value="<?php echo $datos['id_cliente'];?>" required>
-            <div class="input-field col s12 m6 l6">
-              <i class="material-icons prefix">add_location</i>
-              <input id="coordenada" type="text" class="validate" data-length="15" required>
-              <label for="coordenada">Coordenada:</label>
-            </div>
-            <div class="input-field col s12 m6 l6">
+            
+            <div class="input-field">
               <i class="material-icons prefix">phone</i>
               <input id="tel_servicio" type="text" class="validate" data-length="15" required>
               <label for="tel_servicio">Telefono Servicio:</label>
@@ -234,12 +323,78 @@ if (isset($_POST['id_cliente']) == false) {
                 </p>
               </div>
               </div>
+              <div class="row">
+                <div class="col s12 m6 l6">
+                  <div class="row">
+                  <div class="input-field col s7 m8 l8">
+                    <i class="material-icons prefix">satellite</i>
+                    <input id="antena" type="text" class="validate" data-length="15" required>
+                    <label for="antena">Antena (ej: Lite Beam M5):</label>
+                  </div>
+                  <div class="col s5 m4 l4">
+                    <p>
+                      <br>
+                      <input type="checkbox" id="bobina"/>
+                      <label for="bobina">Bobina Nueva</label>
+                    </p>
+                  </div>
+                  </div>
+                  <div class="input-field">
+                    <i class="material-icons prefix">router</i>
+                    <input id="router" type="text" class="validate" data-length="15" required>
+                    <label for="router">Router (ej: Tp-Link):</label>
+                  </div>
+                  <div class="row">
+                    <div class="col s4 m3 l3">
+                    <p>
+                      <br>
+                      <input type="checkbox" id="otros"/>
+                      <label for="otros">Otros</label>
+                    </p>
+                  </div>
+                  <div class="input-field col s8 m9 l9">
+                    <input id="mas" type="text" class="validate" data-length="15" required>
+                    <label for="mas">¿Cuales? (ej: Torre, Clavos, etc.):</label>
+                  </div>
+                  </div>
+                </div>
+                
+                <!-- AQUI SE ENCUENTRA LA DOBLE COLUMNA EN ESCRITORIO.-->
+                <div class="col s12 m6 l6">
+                  <div class="input-field col s12 m6 l6">
+                    <i class="material-icons prefix">settings_input_hdmi</i>
+                    <input id="cable" type="number" class="validate" data-length="15" required>
+                    <label for="cable">Cable Red (metros):</label>
+                  </div>
+                  <div class="input-field col s12 m6 l6">
+                    <i class="material-icons prefix">priority_high</i>
+                    <input id="tubos" type="number" class="validate" data-length="15" required>
+                    <label for="tubos">Tubos (piezas):</label>
+                  </div>
+                  <label>Extras:</label>
+                  <p>
+                    <?php
+                    $contador = 1; 
+                    $ven = array("Alambre","Taquetes","Pijas", "Tornillos","Grapas","Cinta");
+                      while ($contador < count($ven)) {
+                      ?>
+                      <div class="col s12 m6 l4">
+                        <input type="checkbox" value="<?php echo $ven[$contador];?>" id="extra<?php echo $contador;?>"/>
+                        <label for="extra<?php echo $contador;?>"><?php echo $ven[$contador];?></label>
+                      </div>
+                      <?php
+                      $contador++;
+                    }$contador--;
+                    ?>
+                  </p>
+                </div>
+              </div>
         </form>
-        </div><br><br>
+        </div>
         <div class="row">
-          <a onclick="alta_instalacion(<?php echo $bandera;?>);" class="waves-effect waves-light btn pink right"><i class="material-icons right">send</i>ALTA SERVIDOR</a>
+          <a onclick="alta_instalacion(<?php echo $bandera;?>, <?php echo $contador;?>);" class="waves-effect waves-light btn pink right"><i class="material-icons right">send</i>ALTA SERVIDOR</a>
           <br><br>
-          <a onclick="alta_instalacion_SM(<?php echo $bandera;?>);" class="waves-effect waves-light btn pink right"><i class="material-icons right">send</i> ALTA MANUAL. </a>          
+          <a onclick="alta_instalacion_SM(<?php echo $bandera;?>, <?php echo $contador;?>);" class="waves-effect waves-light btn pink right"><i class="material-icons right">send</i> ALTA MANUAL. </a>          
         </div>
     </div>
     <?php

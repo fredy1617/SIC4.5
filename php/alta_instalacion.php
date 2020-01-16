@@ -3,7 +3,6 @@ date_default_timezone_set('America/Mexico_City');
 include('../php/conexion.php');
 include_once('../API/api_mt_include2.php');
 $IP = $_POST['valorIP'];
-$filtrarMaterial = $_POST['valorMaterial'];
 $filtrarIdCliente = $_POST['valorIdCliente'];
 $filtrarTecnico = $_POST['valorTecnicos'];
 
@@ -13,7 +12,6 @@ $caracteres_buenos = array("& lt;", "& gt;", "& quot;", "& #x27;", "& #x2F;", "&
 
 $id_user = $_SESSION['user_id'];
 
-$Material = str_replace($caracteres_malos, $caracteres_buenos, $filtrarMaterial);
 $IdCliente = str_replace($caracteres_malos, $caracteres_buenos, $filtrarIdCliente);
 $Tecnico = str_replace($caracteres_malos, $caracteres_buenos, $filtrarTecnico);
 $Liquidar = $conn->real_escape_string($_POST['valorLiquidar']);
@@ -24,6 +22,13 @@ $Coordenada = $conn->real_escape_string($_POST['valorCoordenada']);
 $Extencion = $conn->real_escape_string($_POST['valorExtencion']);
 $FechaInstalacion = date('Y-m-d');
 $Hora = date('H:i:s');
+#--- MATERIALES ---
+$Antena = $conn->real_escape_string($_POST['valorAntena']);
+$Router = $conn->real_escape_string($_POST['valorRouter']);
+$Cable = $conn->real_escape_string($_POST['valorCable']);
+$Tubos = $conn->real_escape_string($_POST['valorTubos']);
+$Bobina = $conn->real_escape_string($_POST['valorBobina']);
+$Extras = $conn->real_escape_string($_POST['valorExtras']);
 
 if (filter_var($IP, FILTER_VALIDATE_IP)) {
 	$sql_ip = "SELECT * FROM clientes WHERE ip='$IP'";
@@ -99,8 +104,14 @@ if (filter_var($IP, FILTER_VALIDATE_IP)) {
 							}
 						}
 						}                     
-			            echo '<script>M.toast({html:"Cliente registrado.", classes: "rounded"})</script>';
-			            echo '<script>M.toast({html:"Favor de dar de alta en el servidor al cliente.", classes: "rounded"})</script>';
+			            $Sql_Mat = "INSERT INTO materiales(antena, router, cable, tubos, extras, bobina, fecha, usuarios) VALUES('$Antena', '$Router', '$Cable', '$Tubos', '$Extras', '$Bobina', '$FechaInstalacion', '$Tecnico')";
+						if(mysqli_query($conn, $Sql_Mat)){
+							$Mas = 'y Material';	
+						}else{
+							echo '<script>M.toast({html:"Ocurrio un error Material.", classes: "rounded"})</script>';
+						}
+
+			            echo '<script>M.toast({html:"Cliente '.$Mas.' registrado.", classes: "rounded"})</script>';
 			            //echo '<script>function recargar() {
 							 //   setTimeout("location.href="../views/instalaciones.php"", 1000);
 							 // }</script>';
