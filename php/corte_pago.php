@@ -13,7 +13,7 @@
             $enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
             
             $cobrador = mysqli_query($enlace, "SELECT * FROM users WHERE user_id = $id_user");
-
+            $Todos_Pagos = mysqli_fetch_array(mysqli_query($enlace,"SELECT count(*) FROM pagos WHERE id_user=$id_user AND corte = 0"));
             $sql_total = mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo'");
             $total = mysqli_fetch_array($sql_total);
             $totalbanco = mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco'"));
@@ -135,7 +135,7 @@
             $this->SetFont('Arial','B',13);
             $this->Ln(8);
             $total_EST=  mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo' AND tipo = 'Dispositivo'"));            
-            $this->MultiCell(65,4,utf8_decode('TOTAL: $'.$total_EST['precio'].'.00'),0,'R',true);
+            $this->MultiCell(65,4,utf8_decode('Total de Pagos: $'.$total_EST['precio'].'.00'),0,'R',true);
             $this->Ln(10);
         }
             //---------------BANCO-------------------------------------------
@@ -164,6 +164,8 @@
             $this->MultiCell(65,4,utf8_decode('TOTAL: $'.$totalbancoST['precio'].'.00'),0,'R',true);
             $this->Ln(10);
             }
+            $this->MultiCell(65,4,utf8_decode('Total de Pagos: '.$Todos_Pagos['count(*)']),0,'R',true);
+            $this->Ln(10);
 
             $this->SetFont('Arial','',11);
             $this->Cell(60,4,'Servicios Integrales de Computacion ',0,0,'C',true);

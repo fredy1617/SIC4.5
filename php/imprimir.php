@@ -33,7 +33,7 @@ class PDF extends FPDF{
             $this->Ln(5);
             $this->MultiCell(60,4,utf8_decode('Nombre:'.$cliente['nombre']),0,'L',true);
             $this->Ln(1);
-            $this->MultiCell(60,4,utf8_decode('Descripción: ').$fila['descripcion'],0,'L',true);
+            $this->MultiCell(60,4,utf8_decode('Descripción: '.$fila['descripcion']),0,'L',true);
             $this->Ln(1);
             $this->Cell(20,4,utf8_decode('Cantidad: $'.$fila['cantidad'].'.00'),0,0,'L',true);
             if ($id_user == 47) {
