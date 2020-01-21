@@ -33,6 +33,11 @@ function update_cliente() {
     }else if(document.getElementById('Telefonia').checked==true){
       textoServicio = "Telefonia";
     }
+    if(document.getElementById('terminos').checked==true){
+      textoTerminos = 1;
+    }else{
+      textoTerminos = 0;
+    }
 
     if (textoNombres == "") {
       M.toast({html: "El campo Nombre(s) se encuentra vacío.", classes: "rounded"});
@@ -68,6 +73,7 @@ function update_cliente() {
           valorTipo: textoTipo,
           valorServicio: textoServicio,
           valorCoordenada: textoCoordenada,
+          valorTerminos: textoTerminos,
           valorExtencion: textoExtencion
         }, function(mensaje) {
             $("#resultado_update_cliente").html(mensaje);
@@ -208,10 +214,17 @@ $paquete_cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM paquete
           <input id="referencia" type="text" class="validate" data-length="150" required value="<?php echo $cliente['referencia'];?>">
           <label for="referencia">Referencia:</label>
         </div>
-        <div class="input-field">
+        <div class="input-field col s12 m6 l6">
           <i class="material-icons prefix">edit</i>
           <input id="ip" type="text" class="validate" data-length="15" value="<?php echo $cliente['ip'];?>" required>
           <label for="ip">IP:</label>
+        </div>
+        <div class="col s12 m6 l6">
+          <p>
+            <br>
+            <input type="checkbox" <?php if ($cliente['t_c'] == 1) { echo "checked"; }else{ echo ""; }?> id="terminos"/>
+            <label for="terminos">Terminos y Condiciones</label>
+          </p>
         </div>
       <div class="row">
         <div class="col s12"><br>
