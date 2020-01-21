@@ -4,7 +4,6 @@
 <?php
   include('fredyNav.php');
   include ('../php/conexion.php');
-
 $tecnico = $_SESSION['user_name'];
 ?>
 <title>SIC | Alta Instalaciones</title>
@@ -305,7 +304,7 @@ if (isset($_POST['id_cliente']) == false) {
               <input id="tel_servicio" type="text" class="validate" data-length="15" required>
               <label for="tel_servicio">Telefono Servicio:</label>
             </div><br>
-            <label>APOYO (solo toma uno):</label>
+            <label>APOYO (solo seleccionar uno):</label>
                 <p>
                   <?php
                   $bandera = 1; 

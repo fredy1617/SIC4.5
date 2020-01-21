@@ -151,14 +151,28 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
     <div class="col s12">
       <form class="col s12" name="formMensualidad">
       <br>
+      <div class="input-field row">
+          <i class="col s1"> <br></i>
+          <select id="paquete" class="browser-default col s6" required>
+            <option value="0" selected >Opciones:</option>
+            <option value="0" >No tiene internet</option>
+            <option value="0" >Internet intermitente</option>
+            <option value="0" >Internet lento</option>
+          </select>
+      </div>
       <div class="row">
         <div class="col s1">
           <br>
         </div>
-        <div class="input-field col s12 m10 l10">
-          <i class="material-icons prefix">description</i>
-          <textarea id="descripcion" class="materialize-textarea validate" data-length="200"></textarea>
-          <label for="descripcion">Descripción de Reporte:</label>
+        <div class="col s3 m2 l2">
+          <p><br>
+            <input type="checkbox" id="otros"/>
+            <label for="otros">Otra Opción</label>
+          </p>
+        </div>
+        <div class="input-field col s8 m8 l8">
+            <input id="mas" type="text" class="validate" data-length="100" required>
+            <label for="mas">Especifica (ej: Cambiar contraseña a 12345678, etc.):</label>
         </div>
       </div>
       <input id="id_cliente" value="<?php echo htmlentities($datos['id_cliente']);?>" type="hidden">
