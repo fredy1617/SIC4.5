@@ -9,12 +9,13 @@ $Modelo = $conn->real_escape_string($_POST['valorModelo']);
 $IP = $conn->real_escape_string($_POST['valorIP']);
 $Instalacion = $conn->real_escape_string($_POST['valorInstalacion']);
 $Descripcion = $conn->real_escape_string($_POST['valorDescripcion']);
+$Modificacion = $conn->real_escape_string($_POST['valorModificacion']);
 $IdCentral = $conn->real_escape_string($_POST['valorIdCentral']);
 
 if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM equipos WHERE nombre='$Nombre' AND marca='$Marca' AND modelo='$Modelo' AND ip='$IP' AND fecha_instalacion='$Instalacion' AND descripcion='$Descripcion' AND id_central='$IdCentral'"))>0){
 	echo '<script >M.toast({html:"Y se encuentra registrado un equipo con los mismos valores.", classes: "rounded"})</script>';
 }else{
-	$sql = "INSERT INTO equipos (nombre, marca, modelo, ip, fecha_instalacion, descripcion, status, usuario, id_central) VALUES('$Nombre', '$Marca', '$Modelo', '$IP', '$Instalacion', 'Activo', '$Descripcion', '$id_user', '$IdCentral')";
+	$sql = "INSERT INTO equipos (nombre, marca, modelo, ip, fecha_instalacion, modificacion, descripcion, status, usuario, id_central) VALUES('$Nombre', '$Marca', '$Modelo', '$IP', '$Instalacion', '$Modificacion', '$Descripcion', 'Activo', '$id_user', '$IdCentral')";
 	if (mysqli_query($conn, $sql)) {
 		echo '<script >M.toast({html:"El equipo se dio de alta satisfactoriamente.", classes: "rounded"})</script>';
 	}else{
@@ -32,6 +33,7 @@ if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM equipos WHERE nombre='$Nom
               <th>IP</th>
               <th>Descripción</th>
               <th>Fecha</th>
+              <th>Modificacion</th>
               <th>Estatus</th>
               <th>Razon</th>
               <th>Registró</th>
@@ -57,6 +59,7 @@ if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM equipos WHERE nombre='$Nom
               <td><?php echo $Equipo['ip'];?></td>
               <td><?php echo $Equipo['descripcion'];?></td>
               <td><?php echo $Equipo['fecha_instalacion'];?></td>
+              <td><?php echo $Equipo['modificacion'];?></td>
               <td><?php echo $Equipo['status'];?></td>
               <td><?php echo $Equipo['razon'];?></td>
               <td><?php echo $user['user_name'];?></td>

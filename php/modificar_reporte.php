@@ -15,7 +15,7 @@ if (mysqli_query($conn,"UPDATE reportes SET descripcion = '$Descripcion', fecha 
 	$IdCliente = $Cliente['id_cliente'];
 	mysqli_query($conn,"UPDATE clientes SET referencia='$Referencia' WHERE id_cliente=$IdCliente ");
 
-	echo '<script type="text/javascript">M.toast({html:"El reporte fue actualizado correctamente.", classes: "rounded"})</script>';
+	echo '<script>M.toast({html:"El reporte fue actualizado correctamente.", classes: "rounded"})</script>';
 	?>
 	<script>    
 	    var a = document.createElement("a");

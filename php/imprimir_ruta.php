@@ -44,7 +44,7 @@ class PDF extends FPDF{
             $this->MultiCell(194,4, utf8_decode('PAQUETE: (Subida/Bajada/Mensualidad)'.$paquete['subida']."/".$paquete['bajada']."/$".$paquete['mensualidad'].".00"),0,'L',false);
             $this->MultiCell(194,4, utf8_decode('REGISTRO: '.$listado['fecha_registro']),0,'L',false);
             $this->MultiCell(180,1, utf8_decode('
-                -------------------------------------------------------------------------------------------------------------------------------------------'),0,'L',false);
+                -------------------------------------------------------------------------------------------------------------------------------------------------'),0,'L',false);
 
 
 
@@ -84,12 +84,23 @@ class PDF extends FPDF{
             $this->MultiCell(194,4, utf8_decode('DESCRIPCIÓN DEL REPORTE: '.$reporte['descripcion']),0,'L',false);
             $this->MultiCell(194,4, utf8_decode('FECHA DE REPORTE: '.$reporte['fecha']),0,'L',false);
             $this->MultiCell(180,1, utf8_decode('
-                -------------------------------------------------------------------------------------------------------------------------------------------'),0,'L',false);
+                -------------------------------------------------------------------------------------------------------------------------------------------------'),0,'L',false);
 
 
         }
-
-
+        $this->Ln(12);
+        $this->SetX(19);
+        $this->SetFont('Arial','B',10);
+        $rep_ruta = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reporte_rutas WHERE id_ruta = $id_ruta"));
+        $ruta = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM rutas WHERE id_ruta = $id_ruta"));
+        if ($rep_ruta['bobina'] == 1 AND $rep_ruta['vale'] == 1){
+            $this->MultiCell(154,15,utf8_decode('1.- OTORGAR BOBINA NUEVA PARA LA RUTA ('.$id_ruta.') A NOMBRE DE: '.$ruta['tecnicos'].'
+2.- OTORGAR VALE DE GASOLINA PARA LA RUTA ('.$id_ruta.') EN EL VEHICULO: '.$rep_ruta['vehiculo']),1,'C',false);
+        }else if ($rep_ruta['bobina'] == 1) {
+            $this->MultiCell(154,10,utf8_decode('1.- OTORGAR BOBINA NUEVA PARA LA RUTA ('.$id_ruta.') A NOMBRE DE: '.$ruta['tecnicos']),1,'C',false);
+        }else if ($rep_ruta['vale'] == 1) {
+            $this->MultiCell(154,10,utf8_decode('1.- OTORGAR VALE DE GASOLINA PARA LA RUTA ('.$id_ruta.') EN EL VEHICULO: '.$rep_ruta['vehiculo']),1,'C',false);
+        }
 
         mysqli_close($conn);
 

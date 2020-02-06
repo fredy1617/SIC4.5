@@ -1,16 +1,19 @@
 <?php 
 include('../php/conexion.php');
 $id_Reporte = $conn->real_escape_string($_POST['valorIdReporte']);
-$mensaje = '';
 
 $sql_buscar = mysqli_query($conn, "SELECT * FROM tmp_reportes WHERE id_reporte = '$id_Reporte'");
-
-if(mysqli_num_rows($sql_buscar)>0){
-	echo '<script>M.toast({html:"Ya se encuentra este reporte en ruta.", classes: "rounded"})</script>';
+$EnCampo = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = '$id_Reporte'"));
+if ($EnCampo['campo']==0) {
+    echo '<script>M.toast({html:"No se puede agregar a ruta porque no selecciono < En campo >.", classes: "rounded"})</script>';
 }else{
-	if(mysqli_query($conn, "INSERT INTO tmp_reportes (id_reporte) VALUES ('$id_Reporte')")){
-		echo '<script>M.toast({html:"Reporte agregado correctamente a la ruta.", classes: "rounded"})</script>';
-	}	
+    if(mysqli_num_rows($sql_buscar)>0){
+    	echo '<script>M.toast({html:"Ya se encuentra este reporte en ruta.", classes: "rounded"})</script>';
+    }else{
+    	if(mysqli_query($conn, "INSERT INTO tmp_reportes (id_reporte) VALUES ('$id_Reporte')")){
+    		echo '<script>M.toast({html:"Reporte agregado correctamente a la ruta.", classes: "rounded"})</script>';
+    	}	
+    }
 }
 ?>
 <table class="bordered highlight responsive-table">

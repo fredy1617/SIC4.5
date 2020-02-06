@@ -2,6 +2,11 @@
     //Incluimos la libreria fpdf
     include("../fpdf/fpdf.php");
     include('is_logged.php');
+    function sendMessage($id, $msj, $website){
+        $url = $website.'/sendMessage?chat_id='.$id.'&parse_mode=HTML&text='.urlencode($msj);
+        file_get_contents($url);
+    }
+
     $pass="root";
     $id_user = $_SESSION['user_id'];
     //Incluimos el archivo de conexion a la base de datos
@@ -10,9 +15,12 @@
         {
             global $id_user;
             global $pass;
+            $bot_Token = '918836101:AAGGaH2MIoTjqdhOmRs_34G1Yjgx5VkwgFI';
+            $id_Chat2 = '1080437366';
+            $website = 'https://api.telegram.org/bot'.$bot_Token;
             $enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
             
-            $cobrador = mysqli_query($enlace, "SELECT * FROM users WHERE user_id = $id_user");
+            $cobrador = mysqli_fetch_array(mysqli_query($enlace, "SELECT * FROM users WHERE user_id = $id_user"));
             $Todos_Pagos = mysqli_fetch_array(mysqli_query($enlace,"SELECT count(*) FROM pagos WHERE id_user=$id_user AND corte = 0"));
             $sql_total = mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo'");
             $total = mysqli_fetch_array($sql_total);
@@ -24,15 +32,19 @@
 
             //Insertar corte.....
             if ($cantidad != "" OR $banco != "") {
+                if ($banco == "") {
+                    $banco = 0;
+                }else if ($cantidad == "") {
+                    $cantidad = 0;
+                }
                 mysqli_query($enlace,"INSERT INTO cortes(usuario, fecha, cantidad, banco) VALUES ($id_user, '$Fecha_hoy', '$cantidad', '$banco')");
+                $Mensaje = 'Se hizo un corte en el sistema el dia: '.$Fecha_hoy.' del usuario: <b>"'.$cobrador['user_name'].'"</b> con las cantidades totales de: <b>banco = $'.$banco.', efectivo = $'.$cantidad.'</b>.';
+                sendMessage($id_Chat2, $Mensaje, $website);
+
             }
-            if ($cobrador->num_rows > 0){
-              while ($row = $cobrador->fetch_assoc()){
-                $nombre_cobrador = $row['firstname'].' '.$row['lastname'];
-              }
-            } else{
-                $nombre_cobrador = "";
-            }   
+            
+            $nombre_cobrador = $cobrador['firstname'].' '.$cobrador['lastname'];
+              
             $ultimo =  mysqli_fetch_array(mysqli_query($enlace, "SELECT MAX(id_corte) AS id FROM cortes WHERE usuario=$id_user"));           
             $corte = $ultimo['id'];
             // Colores de los bordes, fondo y texto
