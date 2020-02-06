@@ -12,9 +12,10 @@ $IP = $conn->real_escape_string($_POST['valorIP']);
 $Descripcion = $conn->real_escape_string($_POST['valorDescripcion']);
 $Status = $conn->real_escape_string($_POST['valorEstatus']);
 $Razon = $conn->real_escape_string($_POST ['valorRazon']);
+$Modificacion = $conn->real_escape_string($_POST['valorModificacion']);
 $IdCentral = $conn->real_escape_string($_POST ['valorIdCentral']);
  
-$sql2= "UPDATE equipos SET nombre = '$Nombre', marca = '$Marca', modelo = '$Modelo', ip='$IP', descripcion='$Descripcion', status='$Status', razon='$Razon', usuario='$id_user' WHERE id=$IdEquipo ";
+$sql2= "UPDATE equipos SET nombre = '$Nombre', marca = '$Marca', modelo = '$Modelo', ip='$IP', descripcion='$Descripcion', status='$Status', modificacion = '$Modificacion', razon='$Razon', usuario='$id_user' WHERE id=$IdEquipo ";
 if (mysqli_query($conn, $sql2)) {
   echo  '<script>M.toast({html:"Información actualizada.", classes: "rounded"})</script>';
 }else{
