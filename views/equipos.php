@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>SIC | Realizar Pago</title>
+  <title>SIC | Equipos Central</title>
 </head>
 <?php 
 include('fredyNav.php');
@@ -28,6 +28,7 @@ function insert_equipo() {
     var textoIP = $("input#ip").val();
     var textoDescripcion = $("textarea#descripcion").val();
     var textoInstalacion = $("input#instalacion").val();
+    var textoModificacion = $("input#modificacion").val();
     var textoIdCentral = $("input#id_central").val();
 
     if (textoNombre == "") {
@@ -48,6 +49,7 @@ function insert_equipo() {
             valorIP: textoIP,
             valorInstalacion: textoInstalacion,
             valorDescripcion: textoDescripcion,
+            valorModificacion: textoModificacion,
             valorIdCentral: textoIdCentral
           }, function(mensaje) {
               $("#mostrar_equipos").html(mensaje);
@@ -64,8 +66,8 @@ $id_comunidad = $datos['comunidad'];
 $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunidades WHERE id_comunidad='$id_comunidad'"));
 ?>
 <div class="container">
-  <h3 class="hide-on-med-and-down">Realizando pago de central:</h3>
-  <h5 class="hide-on-large-only">Realizando pago de central:</h5>
+  <h3 class="hide-on-med-and-down">Registrar equipos de la central:</h3>
+  <h5 class="hide-on-large-only">Registrar equipos de la central:</h5>
   <ul class="collection">
     <li class="collection-item avatar">
       <img src="../img/cliente.png" alt="" class="circle">
@@ -74,7 +76,9 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
          <b>Telefono: </b><?php echo $datos['telefono'];?><br>
          <b>Comunidad: </b><?php echo $comunidad['nombre'];?><br>
          <b>Dirección: </b><?php echo $datos['direccion'];?><br>
-         <b>Fecha Vencimineto de Renta: </b><?php echo $datos['vencimiento_renta'];?><br><br>
+         <b>Coordenada: </b><?php echo $datos['coordenadas'];?><br>
+         <b>Fecha Vencimineto de Renta: </b><?php echo $datos['vencimiento_renta'];?><br>
+         <b>Descripcion General: </b><?php echo $datos['descripcion_gral'];?><br>
       </p>
     </li>
   </ul> 
@@ -113,10 +117,14 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
            materialize-textarea validate" data-length="250" required ></textarea>
             <label for="descripcion">Descripción: (ej: Puerto 1 conectada a la antena 3, La torre tiene paneles solares de 25v con regulador, etc.)</label>
           </div>
-          <div class="col s12 l6 m6">
+          <div class="col s6 l3 m3">
                 <label for="instalacion">Fecha Instalación:</label>
                 <input id="instalacion" type="date" >    
-            </div>
+          </div>
+          <div class="col s6 l3 m3">
+                <label for="modificacion">Ultima Modificación:</label>
+                <input id="modificacion" type="date" >    
+          </div>
           <input id="id_central" value="<?php echo htmlentities($datos['id']);?>" type="hidden">
         </form>
         <a onclick="insert_equipo();" class="waves-effect waves-light btn pink right "><i class="material-icons right">send</i>Registrar equipo</a><br>
@@ -132,6 +140,7 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
               <th>IP</th>
               <th>Descripción</th>
               <th>Fecha</th>
+              <th>Modificacion</th>
               <th>Estatus</th>
               <th>Razon</th>
               <th>Registró</th>
@@ -157,6 +166,7 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
               <td><?php echo $Equipo['ip'];?></td>
               <td><?php echo $Equipo['descripcion'];?></td>
               <td><?php echo $Equipo['fecha_instalacion'];?></td>
+              <td><?php echo $Equipo['modificacion'];?></td>
               <td><?php echo $Equipo['status'];?></td>
               <td><?php echo $Equipo['razon'];?></td>
               <td><?php echo $user['user_name'];?></td>

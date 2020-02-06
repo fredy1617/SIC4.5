@@ -12,6 +12,7 @@ function insert_central() {
     var textoAP = $("input#apellido-P").val();
     var textoTelefono = $("input#telefono").val();
     var textoComunidad = $("select#comunidad").val();
+    var textoDescripcion = $("textarea#descripcion").val();
     var textoDireccion = $("textarea#direccion").val();
     var textoCoordenada = $("input#coordenadas").val();
 
@@ -33,7 +34,8 @@ function insert_central() {
           valorTelefono: textoTelefono,
           valorComunidad: textoComunidad,
           valorDireccion: textoDireccion,
-          valorCoordenada: textoCoordenada
+          valorDescripcion: textoDescripcion,
+          valorCoordenada: textoCoordenada,
         }, function(mensaje) {
             $("#resultado_central").html(mensaje);
         }); 
@@ -76,9 +78,13 @@ function insert_central() {
         </div>               
         <div class="input-field">
           <i class="material-icons prefix">location_on</i>
-          <textarea id="direccion" class="
-         materialize-textarea validate" data-length="100" required></textarea>
+          <textarea id="direccion" class="materialize-textarea validate" data-length="100" required></textarea>
           <label for="direccion">Direccion:</label>
+        </div>
+        <div class="input-field">
+          <i class="material-icons prefix">edit</i>
+          <textarea id="descripcion" class="materialize-textarea validate" data-length="100" required></textarea>
+          <label for="descripcion">Descripcion General (ej: Cuenta con solares de 250W):</label>
         </div>
       </div>
          <!-- AQUI SE ENCUENTRA LA DOBLE COLUMNA EN ESCRITORIO.-->

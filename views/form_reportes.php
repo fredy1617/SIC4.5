@@ -5,17 +5,75 @@
 include('fredyNav.php');
 ?>
 <script>
+  function showContent() {
+    element = document.getElementById("content");
+    element2 = document.getElementById("content2");
+    var textoReporte = $("select#reporte").val();
+
+    if (textoReporte == 'Cambio De Domicilio') {
+      element.style.display='block';
+    }
+    else {
+      element.style.display='none';
+    }
+    if (textoReporte == 'Cambio De Contraseña') {
+      element2.style.display='block';
+    }
+    else {
+      element2.style.display='none';
+    }
+        
+  };
   function verificar_reporte() {  
     var textoNombre = $("input#nombres").val();
     var textoTelefono = $("input#telefono").val();
     var textoDireccion = $("input#direccion").val();
     var textoReferencia = $("input#referencia").val();
     var textoCoordenadas = $("input#coordenadas").val();
-    var textoDescripcion = $("textarea#descripcion").val();
+    var textoReporte = $("select#reporte").val();
     var textoIdCliente = $("input#id_cliente").val();
 
-    if(textoDescripcion==""){
-      M.toast({html:"El campo descripción no puede estar vacío.", classes: "rounded"})
+    if (textoReporte == 'Cambio De Domicilio') {
+      var textoCambio = $("input#cambio").val();
+      if (textoCambio == '') {
+        No = 'No';
+        text = 'Colocar el domicilio nuevo.';
+      }else{
+        No = 'Si';
+        textoDescripcion = textoReporte+': '+textoCambio;
+      }
+    }else if (textoReporte == 'Cambio De Contraseña') {
+      var textoCambio = $("input#cambio2").val();
+      if (textoCambio.length < 8) {
+        No = 'No';
+        text = 'La Contraseña debe de ser minimo de 8 caracteres.';
+      }else{
+        No = 'Si';
+        textoDescripcion = textoReporte+' A: '+textoCambio;
+      }
+    }else{
+      No ='Si';
+      textoDescripcion = textoReporte;
+    }
+
+    if(document.getElementById('otros').checked==true){
+      textoMas = $("input#mas").val();
+      if (textoMas == '') {
+        Entra = 'No';
+      }else{
+        Entra = 'Si';
+        textoDescripcion = textoMas;
+      }
+    }else{
+      Entra = 'Si';
+    }
+
+    if(document.getElementById('otros').checked==false && textoReporte == 0){
+      M.toast({html:"Elige una opcion de reporte.", classes: "rounded"})
+    }else if(Entra == "No"){
+      M.toast({html:"Especifique el reporte !", classes: "rounded"})
+    }else if(No == "No"){
+      M.toast({html:""+text, classes: "rounded"})
     }else{
       $.post("modal_rep.php", {
           valorNombre: textoNombre,
@@ -111,10 +169,11 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
          <b>Fecha de Instalación: </b><?php echo $datos['fecha_instalacion'];?><br>
          <?php
           $Pago = mysqli_fetch_array(mysqli_query($conn, "SELECT descripcion FROM pagos WHERE id_cliente = '$no_cliente'  AND tipo = 'Mensualidad' ORDER BY id_pago DESC LIMIT 1"));
-          //Separamos el string
+          //Separamos el stringv
+          if ($datos['servicio'] == 'Internet y Telefonia' OR $datos['servicio'] == 'Internet') {
           date_default_timezone_set('America/Mexico_City');
           $mes_actual = date('Y-m');
-          $Fecha_Hoy = date('Y-m-d');
+
           if ($Pago != "") {
             $ver = explode(" ", $Pago['descripcion']);
             $array =  array('ENERO' => '01','FEBRERO' => '02', 'MARZO' => '03','ABRIL' => '04', 'MAYO' => '05', 'JUNIO' => '06', 'JULIO' => '07', 'AGOSTO' => '08', 'SEPTIEMBRE' => '09', 'OCTUBRE' => '10', 'NOVIEMBRE' => '11',  'DICIEMBRE' => '12');
@@ -131,6 +190,7 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
          <a href="#!" class="secondary-content"><span class="new badge <?php echo $color;?>" data-badge-caption="<?php echo $MSJ;?>"></span></a>
          <?php
          }
+        }
          if ($datos['id_cliente'] < 10000) {
          if ($datos['tel_cortado'] == 0) {
            $estado = "ACTIVO";
@@ -153,12 +213,22 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
       <br>
       <div class="input-field row">
           <i class="col s1"> <br></i>
-          <select id="paquete" class="browser-default col s6" required>
+          <select id="reporte" class="browser-default col s12 m4 l4" required onchange="javascript:showContent()">
             <option value="0" selected >Opciones:</option>
-            <option value="0" >No tiene internet</option>
-            <option value="0" >Internet intermitente</option>
-            <option value="0" >Internet lento</option>
+            <option value="No Tiene Internet" >No Tiene Internet</option>
+            <option value="Internet Intermitente" >Internet Intermitente</option>
+            <option value="Internet Lento" >Internet Lento</option>
+            <option value="Cambio De Domicilio" >Cambio De Domicilio</option>
+            <option value="Cambio De Contraseña" >Cambio De Contraseña</option>
           </select>
+          <div class="input-field col s12 m6 l6" id="content" style="display: none;">
+            <input id="cambio" type="text" class="validate" data-length="100" required>
+            <label for="cambio">Referencia (Casa de color blanco, dos pisos cercas de la iglesia):</label>
+        </div>
+        <div class="input-field col s10 m5 l5" id="content2" style="display: none;">
+            <input id="cambio2" type="text" class="validate" data-length="100" required>
+            <label for="cambio2">Contraseña (Minimos 8 caracteres):</label>
+        </div>
       </div>
       <div class="row">
         <div class="col s1">
@@ -172,7 +242,7 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
         </div>
         <div class="input-field col s8 m8 l8">
             <input id="mas" type="text" class="validate" data-length="100" required>
-            <label for="mas">Especifica (ej: Cambiar contraseña a 12345678, etc.):</label>
+            <label for="mas">Especifica (ej: Revicion de camaras, Aumentar paquete, etc.):</label>
         </div>
       </div>
       <input id="id_cliente" value="<?php echo htmlentities($datos['id_cliente']);?>" type="hidden">

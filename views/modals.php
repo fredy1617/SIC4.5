@@ -2,11 +2,28 @@
 <script>
    function crear_ruta(){
     var textoTecnicos = $("input#tecnicos").val();
+    var textoVehiculo = $("input#vehiculo").val();
+    if(document.getElementById('bobina').checked==true){
+      textoBonina = 1;
+    }else{
+      textoBonina = 0;
+    }
+    if(document.getElementById('vale').checked==true){
+      textoVale = 1;
+    }else{
+      textoVale = 0;
+    }
+
     if (textoTecnicos == "") {
       M.toast({html:"El campo Tecnico(s) no puede ir vacío.", classes: "rounded"});
+    }else if (textoVehiculo == "") {
+      M.toast({html:"El campo Vehiculo(s) no puede ir vacío.", classes: "rounded"});
     }else{
     $.post("../php/crear_ruta.php", {
           valorTecnicos: textoTecnicos,
+          valorVehiculo: textoVehiculo,
+          valorBobina: textoBonina,
+          valorVale: textoVale
         }, function(mensaje) {
             $("#resultado_ruta").html(mensaje);
     });}
@@ -201,13 +218,31 @@ function recargar10() {
 <div id="rutamodal" class="modal modal-fixed-footer">
     <div class="modal-content">
         <h3 id="resultado_ruta">¿Estás seguro de crear la ruta?</h3><br>
-      <p class="center"><b>Al crear la ruta se mostrará un PDF en una nueva pestaña y se crear la ruta.</b></p><br><br>
+      <p class="center"><b>Al crear la ruta se mostrará un PDF en una nueva pestaña y se crear la ruta.</b></p><br>
      <h5>Tecnico(s) que ira(n) a la ruta:</h5> 
-      <form>
-      <div class="input-field col s12 m8 l8">
+      <form class="row">
+      <div class="input-field col s10 m7 l7">
           <i class="material-icons prefix">people</i>
           <input id="tecnicos" type="text" class="validate" data-length="30" required>
           <label for="tecnicos">Tecnico(s): Ej. (Marcos, Ulix980, Muro)</label>
+      </div>
+      <div class="col s5 m4 l4">
+        <p><br>
+          <input type="checkbox" id="bobina"/>
+          <label for="bobina">Bobina Nueva</label>
+        </p>
+      </div>
+      <form class="row">
+      <div class="input-field col s10 m7 l7">
+          <i class="material-icons prefix">directions_car</i>
+          <input id="vehiculo" type="text" class="validate" data-length="30" required>
+          <label for="vehiculo">Vehiculo(s): </label>
+      </div>
+      <div class="col s5 m4 l4">
+        <p><br>
+          <input type="checkbox" id="vale"/>
+          <label for="vale">Vale de Gasolina</label>
+        </p>
       </div>
       </form>
     </div>

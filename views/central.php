@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>SIC | Realizar Pago</title>
+  <title>SIC | Pagos Central</title>
 </head>
 <?php 
 include('fredyNav.php');
@@ -99,8 +99,8 @@ $id_comunidad = $datos['comunidad'];
 $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunidades WHERE id_comunidad='$id_comunidad'"));
 ?>
 <div class="container">
-  <h3 class="hide-on-med-and-down">Realizando pago de central:</h3>
-  <h5 class="hide-on-large-only">Realizando pago de central:</h5>
+  <h3 class="hide-on-med-and-down">Realizando pago de la central:</h3>
+  <h5 class="hide-on-large-only">Realizando pago de la central:</h5>
   <ul class="collection">
     <li class="collection-item avatar">
       <img src="../img/cliente.png" alt="" class="circle">
@@ -109,7 +109,10 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
          <b>Telefono: </b><?php echo $datos['telefono'];?><br>
          <b>Comunidad: </b><?php echo $comunidad['nombre'];?><br>
          <b>Dirección: </b><?php echo $datos['direccion'];?><br>
-         <b>Fecha Vencimineto de Renta: </b><?php echo $datos['vencimiento_renta'];?><br><br>
+         <b>Coordenada: </b><?php echo $datos['coordenadas'];?><br>
+         <b>Fecha Vencimineto de Renta: </b><?php echo $datos['vencimiento_renta'];?><br>
+         <b>Descripcion General: </b><?php echo $datos['descripcion_gral'];?><br>
+         <br>
       </p>
     </li>
   </ul> 

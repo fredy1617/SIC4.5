@@ -27,6 +27,7 @@ function update_central(IdCentral) {
     var textoTelefono = $("input#telefono").val();
     var textoComunidad = $("select#comunidad").val();
     var textoDireccion = $("textarea#direccion").val();
+    var textoDescripcion = $("textarea#descripcion").val();
     var textoCoordenada = $("input#coordenadas").val();
 
     if (textoNombres == "") {
@@ -44,6 +45,7 @@ function update_central(IdCentral) {
           valorTelefono: textoTelefono,
           valorComunidad: textoComunidad,
           valorDireccion: textoDireccion,
+          valorDescripcion: textoDescripcion,
           valorCoordenada: textoCoordenada
         }, function(mensaje) {
             $("#resultado_central").html(mensaje);
@@ -89,7 +91,7 @@ function update_central(IdCentral) {
           <i class="material-icons prefix">location_on</i>
           <input id="coordenadas" type="text" class="validate" data-length="6" value="<?php echo $central['coordenadas'];?>" required value="0">
           <label for="coordenadas">Coordenadas:</label>
-        </div><br>
+        </div>
         <div class="input-field row">
           <i class="col s1"> <br></i>
           <select id="comunidad" class="browser-default col s11" required>
@@ -104,6 +106,11 @@ function update_central(IdCentral) {
                 } 
             ?>
           </select>
+        </div>
+        <div class="input-field">
+          <i class="material-icons prefix">edit</i>
+          <textarea id="descripcion" class="materialize-textarea validate" data-length="100" required><?php echo $central['descripcion_gral'];?></textarea>
+          <label for="descripcion">Descripcion General (ej: Cuenta con solares de 250W):</label>
         </div>
       </div>
       </div>

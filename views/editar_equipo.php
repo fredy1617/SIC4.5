@@ -28,6 +28,7 @@ function update_equipo(id_equipo) {
     var textoIP = $("input#ip").val();
     var textoDescripcion = $("textarea#descripcion").val();
     var textoEstatus = $("select#status").val();
+    var textoModificacion = $("input#modificacion").val();
     var textoRazon = $("input#razon").val();
     var textoIdCentral = $("input#id_central").val();
     Entra = "Si";
@@ -54,6 +55,7 @@ function update_equipo(id_equipo) {
             valorDescripcion: textoDescripcion,
             valorEstatus: textoEstatus,
             valorRazon: textoRazon,
+            valorModificacion: textoModificacion,
             valorIdEquipo: id_equipo,
             valorIdCentral: textoIdCentral
           }, function(mensaje) {
@@ -103,13 +105,19 @@ $datos = mysqli_fetch_array(mysqli_query($conn, $sql));
            materialize-textarea validate" data-length="250" required ><?php echo $datos['descripcion']; ?></textarea>
             <label for="descripcion">Descripción: (ej: Puerto 1 conectada a la antena 3, La torre tiene paneles solares de 25v con regulador, etc.)</label>
           </div>
+            <div class="col s6 l3 m3">
             <label> Estatus:</label>
-            <select id="status" class="browser-default col s12 m6 l6" required>
+            <select id="status" class="browser-default" required>
               <option value="<?php echo $datos['status']; ?>" selected><?php echo $datos['status']; ?></option>
               <option value="Dañado">Dañado</option>
               <option value="Almacen">Almacen</option>
               <option value="Activo">Activo</option>
             </select>
+          </div>
+            <div class="col s6 l3 m3">
+                <label for="modificacion">Ultima Modificación:</label>
+                <input id="modificacion" type="date" value="<?php echo $datos['modificacion']; ?>">    
+          </div>
           <div class="input-field col s12 m6 l6">
             <i class="material-icons prefix">help</i>
             <input id="razon" type="text" class="validate" data-length="100" required value="<?php echo $datos['razon']; ?>">
