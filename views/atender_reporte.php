@@ -39,7 +39,7 @@ function encender(){
   $("#Orden").html(mensaje);
   }); 
 }
-function update_reporte(bandera) {
+function update_reporte(bandera, contador) {
     var textoNombre = $("input#nombres").val();
     var textoTelefono = $("input#telefono").val();
     var textoDireccion = $("input#direccion").val();
@@ -58,8 +58,54 @@ function update_reporte(bandera) {
       if(document.getElementById('tecnico'+i).checked==true){
         var textoApoyo = $("input#tecnico"+i).val();
       }
-    }    
+    }  
+    Campo_var = <?php echo $resultado['campo'];?>;
+    if (Campo_var == 1) {
+        var textoAntena = $("input#antena").val();
+        var textoRouter = $("input#router").val();
+        var textoCable = $("input#cable").val();
+        var textoTubos = $("input#tubos").val();
+        var textoOtros = $("input#mas").val();
 
+        if(document.getElementById('bobina').checked==true){
+          textoBobina   = 1;
+        }else{ textoBobina = 0; } 
+
+        if(document.getElementById('reemplazo').checked==true){
+          textoTipo = 'Reemplazo';
+        }else{ textoTipo = 'Nuevo'; } 
+
+        var textoExtras = '';
+        for(var j=1;j<=contador;j++){
+          if(document.getElementById('extra'+j).checked==true){
+            var textoCheck = $("input#extra"+j).val();
+            textoExtras = textoExtras+textoCheck+', ';
+          }
+        } 
+        textoExtras = textoExtras.slice(0, -2);
+
+        if(document.getElementById('otros').checked==true){
+          if (textoExtras == '') {
+            textoExtras = textoOtros;
+          }else{
+            textoExtras = textoExtras+', '+textoOtros;
+          }
+        }
+    }else{
+        textoAntena = '';
+        textoRouter = '';
+        textoCable = '';
+        textoTubos = '';
+        textoBobina = '';
+        textoExtras = '';
+        textoTipo = '';
+    }
+
+    if(document.getElementById('campo').checked==true){
+      textoCampo = 1;
+    }else{
+      textoCampo = 0;
+    }
     if(document.getElementById('visita').checked==true){
       if (textoFecha == "") {
         entra = "No";
@@ -85,7 +131,15 @@ function update_reporte(bandera) {
           valorTecnico: textoTecnico,
           valorAtendido: textoAtendido,
           valorFecha: textoFecha,
-          valorApoyo: textoApoyo
+          valorCampo: textoCampo,
+          valorApoyo: textoApoyo,
+          valorAntena: textoAntena,
+          valorRouter: textoRouter,
+          valorCable: textoCable,
+          valorTubos: textoTubos,
+          valorBobina: textoBobina,
+          valorExtras: textoExtras,
+          valorTipo: textoTipo
         }, function(mensaje) {
             $("#resultado_update_reporte").html(mensaje);
         });
@@ -154,7 +208,6 @@ if($resultado['tecnico']==''){
               </div>
 
                  <b>Comunidad: </b><?php echo $comunidad['nombre'];?><br>
-                 
                  <b>IP: </b><a href="http://<?php echo $cliente['ip'];?>" target="_blank"><?php echo $cliente['ip'];?></a><br>
                   <!-- Switch -->
                  <?php 
@@ -237,7 +290,7 @@ if($resultado['tecnico']==''){
               <label for="fecha_visita">Fecha visita:</label>
               <input id="fecha_visita" type="date">    
           </div><br><br>
-        <div class="input-field row"><br><br>
+        <div class="input-field row col s12 m6 l6"><br><br>
           <i class="col s1"> <br></i>
           <select id="atendido" class="browser-default col s10" required>
             <option selected disabled="">¿Listo?</option>
@@ -245,11 +298,94 @@ if($resultado['tecnico']==''){
             <option value="Sí">Sí</option> 
           </select>
         </div>
-        <input id="id_cliente" value="<?php echo htmlentities($cliente['id_cliente']);?>" type="hidden"><br><br><br>
-        <a onclick="update_reporte(<?php echo $bandera;?>);" class="waves-effect waves-light btn pink right"><i class="material-icons right">send</i>ACTUALIZAR REPORTE</a>    
+        <div class="col s12 m6 l6">
+          <p><br><br><br>
+            <input type="checkbox" id="campo" <?php if ($resultado['campo'] ==1) {
+              echo 'checked'; }else{ echo ''; } ?> />
+            <label for="campo">En Campo</label>
+          </p>
+        </div><br><br>
+        <div class="row col s12"><br><br><br> 
+        <h4 class="hide-on-med-and-down">Material:</h4>
+        </div>   
         </div>
         </div>
-</form>
+        <div class="row">
+          <?php 
+          $contador = 1;
+          if ($resultado['campo'] ==1) { ?>
+                <div class="col s12 m6 l6">
+                  <div class="row">
+                  <div class="input-field col s7 m8 l8">
+                    <i class="material-icons prefix">satellite</i>
+                    <input id="antena" type="text" class="validate" data-length="15" required>
+                    <label for="antena">Antena (ej: Lite Beam M5):</label>
+                  </div>
+                  <div class="col s5 m4 l4">
+                    <p>
+                      <br>
+                      <input type="checkbox" id="bobina"/>
+                      <label for="bobina">Bobina Nueva</label>
+                    </p>
+                  </div>
+                  </div>
+                  <div class="input-field">
+                    <i class="material-icons prefix">router</i>
+                    <input id="router" type="text" class="validate" data-length="15" required>
+                    <label for="router">Router (ej: Tp-Link):</label>
+                  </div>
+                  <div class="row">
+                    <div class="col s4 m3 l3">
+                    <p>
+                      <br>
+                      <input type="checkbox" id="otros"/>
+                      <label for="otros">Otros</label>
+                    </p>
+                  </div>
+                  <div class="input-field col s8 m9 l9">
+                    <input id="mas" type="text" class="validate" data-length="15" required>
+                    <label for="mas">¿Cuales? (ej: 3 Camaras, 1 Grabador, etc.):</label>
+                  </div>
+                  </div>
+                </div>
+                
+                <!-- AQUI SE ENCUENTRA LA DOBLE COLUMNA EN ESCRITORIO.-->
+                <div class="col s12 m6 l6">
+                  <div class="input-field col s12 m6 l6">
+                    <i class="material-icons prefix">settings_input_hdmi</i>
+                    <input id="cable" type="number" class="validate" data-length="15" required>
+                    <label for="cable">Cable Red (metros):</label>
+                  </div>
+                  <div class="input-field col s12 m6 l6">
+                    <i class="material-icons prefix">priority_high</i>
+                    <input id="tubos" type="number" class="validate" data-length="15" required>
+                    <label for="tubos">Tubos (piezas):</label>
+                  </div>
+                  <label>Extras:</label>
+                  <p>
+                    <?php 
+                    $ven = array("Alambre","Taquetes","Pijas", "Tornillos","Grapas","Cinta","Clavos");
+                      while ($contador < count($ven)) {
+                      ?>
+                      <div class="col s12 m6 l4">
+                        <input type="checkbox" value="<?php echo $ven[$contador];?>" id="extra<?php echo $contador;?>"/>
+                        <label for="extra<?php echo $contador;?>"><?php echo $ven[$contador];?></label>
+                      </div>
+                      <?php
+                      $contador++;
+                    }$contador--;
+                    ?>
+                  </p>
+                  <div class="col s12"><br><br>
+                    <input type="checkbox" id="reemplazo"/>
+                    <label for="reemplazo">Reemplazo</label><br><br>
+                  </div>
+                </div> 
+              <?php } ?>  
+                <input id="id_cliente" value="<?php echo htmlentities($cliente['id_cliente']);?>" type="hidden"><br><br><br>
+                <a onclick="update_reporte(<?php echo $bandera;?>, <?php echo $contador;?>);" class="waves-effect waves-light btn pink right"><i class="material-icons right">send</i>ACTUALIZAR REPORTE</a> 
+        </div>       
+    </form>
       
   </div> 
 <br>
