@@ -103,7 +103,7 @@ function insert_pago() {
       if (document.getElementById('recargo').checked==true) {
         var Mensualidad = parseInt(textoCantidad);
         textoCantidad = Mensualidad+50;
-        textoDescripcion = textoDescripcion+ " + RECARGO";
+        textoDescripcion = textoDescripcion+ " + RECARGO (Reconexion o Pago Tardio)";
       }
       if (textoDescuento != 0) {
         textoDescripcion = textoDescripcion+" - Descuento: $"+textoDescuento;

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>SIC | Ruta</title>
+	<title>SIC | Activos</title>
 
 <?php
 include('fredyNav.php');
