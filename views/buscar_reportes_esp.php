@@ -29,6 +29,11 @@
       $id_reporte = $resultados['id_reporte'];
       $id_cliente = $resultados['id_cliente'];
       $id_user=$resultados['registro'];
+      if ($resultados['campo'] == 1) {
+        $EnCampo = 'En Campo';
+      }else{
+        $EnCampo = '';
+      }
       if ($resultados['apoyo'] != 0) {
         $id_apoyo = $resultados['apoyo'];
         $A = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_apoyo"));
@@ -75,7 +80,7 @@
       
       $especiales .= '
                   <tr>
-                    <td><span class="new badge '.$color.'" data-badge-caption="">'.$estatus.'</span></td>
+                    <td><span class="new badge '.$color.'" data-badge-caption="">'.$estatus.'</span>'.$EnCampo.'</td>
                     <td><b>'.$id_reporte.'</b></td>
                     <td><a class="tooltipped" data-position="top" data-tooltip=" Telefono: '.$cliente['telefono'].'  Comunidad: '.$comunidad['nombre'].'">'.$cliente['nombre'].'</a></td>
                     <td>'.$resultados['descripcion'].'</td>

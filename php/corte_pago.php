@@ -16,6 +16,7 @@
             global $id_user;
             global $pass;
             $bot_Token = '918836101:AAGGaH2MIoTjqdhOmRs_34G1Yjgx5VkwgFI';
+            $id_Chat = '1087049979';
             $id_Chat2 = '1080437366';
             $website = 'https://api.telegram.org/bot'.$bot_Token;
             $enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
@@ -39,7 +40,7 @@
                 }
                 mysqli_query($enlace,"INSERT INTO cortes(usuario, fecha, cantidad, banco) VALUES ($id_user, '$Fecha_hoy', '$cantidad', '$banco')");
                 $Mensaje = 'Se hizo un corte en el sistema el dia: '.$Fecha_hoy.' del usuario: <b>"'.$cobrador['user_name'].'"</b> con las cantidades totales de: <b>banco = $'.$banco.', efectivo = $'.$cantidad.'</b>.';
-                sendMessage($id_Chat2, $Mensaje, $website);
+                sendMessage($id_Chat, $Mensaje, $website);
 
             }
             

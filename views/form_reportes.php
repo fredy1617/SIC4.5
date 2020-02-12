@@ -72,6 +72,8 @@ include('fredyNav.php');
       M.toast({html:"Elige una opcion de reporte.", classes: "rounded"})
     }else if(Entra == "No"){
       M.toast({html:"Especifique el reporte !", classes: "rounded"})
+    }else if((textoTelefono.length) < 10){
+      M.toast({html:"Ingrese un numero de Telefono valido", classes: "rounded"})
     }else if(No == "No"){
       M.toast({html:""+text, classes: "rounded"})
     }else{
@@ -191,6 +193,7 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
          <?php
          }
         }
+        if ($datos['servicio'] == 'Internet y Telefonia' OR $datos['servicio'] == 'Telefonia') {
          if ($datos['id_cliente'] < 10000) {
          if ($datos['tel_cortado'] == 0) {
            $estado = "ACTIVO";
@@ -202,7 +205,8 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
          ?>
          <b>Extención:  <?php echo $datos['tel_servicio'];?></b><br>
          <b>Telefono:  <a class="<?php echo $col;?>-text"><?php echo $estado;?></a></b><br>
-          <?php } ?>
+          <?php } 
+        }?>
       </p>
     </li>
   </ul>

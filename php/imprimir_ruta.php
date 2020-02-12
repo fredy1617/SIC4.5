@@ -85,8 +85,6 @@ class PDF extends FPDF{
             $this->MultiCell(194,4, utf8_decode('FECHA DE REPORTE: '.$reporte['fecha']),0,'L',false);
             $this->MultiCell(180,1, utf8_decode('
                 -------------------------------------------------------------------------------------------------------------------------------------------------'),0,'L',false);
-
-
         }
         $this->Ln(12);
         $this->SetX(19);

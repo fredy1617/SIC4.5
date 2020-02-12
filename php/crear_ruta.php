@@ -1,6 +1,5 @@
 <?php
 include('../php/conexion.php');
-include('../views/bot.php');
 date_default_timezone_set('America/Mexico_City');
 
 $Tecnicos = $conn->real_escape_string($_POST['valorTecnicos']);
@@ -17,8 +16,6 @@ if (mysqli_query($conn, "INSERT INTO rutas(fecha, tecnicos) VALUES ('$Fecha', '$
     $ultima_ruta = $ultimo['id'];
 	//GUARDAR REPORTE DE RUTA
 	mysqli_query($conn, "INSERT INTO reporte_rutas(id_ruta, vehiculo, bobina, vale) VALUES ('$ultima_ruta', '$Vehiculo', '$Bobina', '$Vale')");
-   sendMessage($id_Chat, 'Hola desde el sistema', $website);
-
 
 	//modificar pendientes y reportes agregar id_ruta
     mysqli_query($conn, "UPDATE tmp_pendientes SET ruta_inst = $ultima_ruta WHERE ruta_inst=0");

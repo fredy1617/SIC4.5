@@ -1,54 +1,53 @@
-<!--Inicia Script de dispositivos-->
+<script>
+   function consulta(){
+<?php
+include ('../php/conexion.php');
+$rep = mysqli_query($conn, "SELECT * FROM tmp_reportes WHERE ruta = 0");
+$inst = mysqli_query($conn, "SELECT id_cliente FROM tmp_pendientes WHERE ruta_inst = 0");
+
+if(mysqli_num_rows($rep) == 0 AND mysqli_num_rows($inst) == 0){
+  $No = 0;
+}else{
+  $No = 1;
+}
+?>
+}
+</script>
 <script>
    function crear_ruta(){
-    var textoTecnicos = $("input#tecnicos").val();
-    var textoVehiculo = $("input#vehiculo").val();
-    if(document.getElementById('bobina').checked==true){
-      textoBonina = 1;
+    Entra = <?php echo $No; ?>;
+    if (Entra == 0) {
+        M.toast({html:"Agrege una Reporte o una Instalacion para poder crear la ruta.", classes: "rounded"});
     }else{
-      textoBonina = 0;
-    }
-    if(document.getElementById('vale').checked==true){
-      textoVale = 1;
-    }else{
-      textoVale = 0;
-    }
+      var textoTecnicos = $("input#tecnicos").val();
+      var textoVehiculo = $("input#vehiculo").val();
+      if(document.getElementById('bobina').checked==true){
+        textoBonina = 1;
+      }else{
+        textoBonina = 0;
+      }
+      if(document.getElementById('vale').checked==true){
+        textoVale = 1;
+      }else{
+        textoVale = 0;
+      }
 
-    if (textoTecnicos == "") {
-      M.toast({html:"El campo Tecnico(s) no puede ir vacío.", classes: "rounded"});
-    }else if (textoVehiculo == "") {
-      M.toast({html:"El campo Vehiculo(s) no puede ir vacío.", classes: "rounded"});
-    }else{
-    $.post("../php/crear_ruta.php", {
-          valorTecnicos: textoTecnicos,
-          valorVehiculo: textoVehiculo,
-          valorBobina: textoBonina,
-          valorVale: textoVale
-        }, function(mensaje) {
-            $("#resultado_ruta").html(mensaje);
-    });}
+      if (textoTecnicos == "") {
+        M.toast({html:"El campo Tecnico(s) no puede ir vacío.", classes: "rounded"});
+      }else if (textoVehiculo == "") {
+        M.toast({html:"El campo Vehiculo(s) no puede ir vacío.", classes: "rounded"});
+      }else{
+        $.post("../php/crear_ruta.php", {
+              valorTecnicos: textoTecnicos,
+              valorVehiculo: textoVehiculo,
+              valorBobina: textoBonina,
+              valorVale: textoVale
+            }, function(mensaje) {
+                $("#resultado_ruta").html(mensaje);
+        });
+      }
+    }
   };
-  function PulsarTeclaFolio(){
-    tecla = event.keyCode;
- 
-    if(tecla==32){
-      buscar_folio()
-    }else if(tecla==65){
-      buscar_folio()
-    }else if(tecla==69){
-      buscar_folio()
-    }else if(tecla==73){
-      buscar_folio()
-    }else if(tecla==79){
-      buscar_folio()
-    }else if(tecla==85){
-      buscar_folio()
-    }else if(tecla>=48 && tecla<=57){
-      buscar_folio()
-    }else if(tecla>=96 && tecla<=105){
-      buscar_folio();
-    }  
-}
 
   function buscar_folio() {
     var textoBusqueda = $("input#buscar_dispositivo").val();
@@ -63,78 +62,8 @@
 </script>
 <!--Termina script dispositivos-->
 
-<!--Script Buscar clientes redes-->
-<script>
-
-function PulsarTeclaRedes(){
-    tecla = event.keyCode;
- 
-    if(tecla==32){
-      buscar_clientes_redes();
-    }else if(tecla==65){
-      buscar_clientes_redes();
-    }else if(tecla==69){
-      buscar_clientes_redes();
-    }else if(tecla==73){
-      buscar_clientes_redes();
-    }else if(tecla==79){
-      buscar_clientes_redes();
-    }else if(tecla==85){
-      buscar_clientes_redes();
-    }else if(tecla>=48 && tecla<=57){
-      buscar_clientes_redes();
-    }else if(tecla>=96 && tecla<=105){
-      buscar_clientes_redes();
-    }  
-}
-
-function buscar_clientes_redes() {
-    var textoBusqueda = $("input#buscar_cliente_redes").val();
-    if (textoBusqueda != "") {
-        $.post("../php/buscar_cliente_redes.php", {valorBusqueda: textoBusqueda}, function(mensaje) {
-            $("#resultado_clientes_redes").html(mensaje);
-        }); 
-    } else { 
-        ("#resultado_clientes_redes").html('No se encontraron clientes.');
-  };
-};
-</script>
-<!--Termina Script Buscar clientes redes-->
-
 <!--Script Buscar clientes-->
 <script>
-function PulsarTecla(){
-    tecla = event.keyCode;
- 
-    if(tecla==32){
-      buscar_clientes();
-    }else if(tecla==65){
-      buscar_clientes();
-    }else if(tecla==69){
-      buscar_clientes();
-    }else if(tecla==73){
-      buscar_clientes();
-    }else if(tecla==79){
-      buscar_clientes();
-    }else if(tecla==85){
-      buscar_clientes();
-    }else if(tecla>=48 && tecla<=57){
-      buscar_clientes();
-    }else if(tecla>=96 && tecla<=105){
-      buscar_clientes();
-    }
-}
-
-function buscar_clientes() {
-    var textoBusqueda = $("input#buscar_cliente").val();
-    if (textoBusqueda != "") {
-        $.post("../php/buscar_cliente.php", {valorBusqueda: textoBusqueda}, function(mensaje) {
-            $("#resultado_clientes").html(mensaje);
-        }); 
-    } else { 
-        ("#resultado_clientes").html('No se encontraron clientes.');
-  };
-};
 
 function recargar() {
     setTimeout("location.href='instalaciones.php'", 800);
@@ -247,7 +176,7 @@ function recargar10() {
       </form>
     </div>
     <div class="modal-footer container">
-    <a class="modal-action modal-close waves-effect waves-green btn-flat" onclick="crear_ruta();recargar();">Crear<i class="material-icons right">done</i></a>
+    <a class="modal-action modal-close waves-effect waves-green btn-flat" onclick="consulta();crear_ruta();recargar();">Crear<i class="material-icons right">done</i></a>
       <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancelar<i class="material-icons right">close</i></a>
     </div>
 </div>
