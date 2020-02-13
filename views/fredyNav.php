@@ -81,6 +81,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    <li><a href="en_cajas.php" class="black-text"><i class="material-icons">monetization_on</i>En Cajas</a></li>
 				    <li><a href="total_cortes.php" class="black-text"><i class="material-icons">money_off</i>Total Cortes</a></li>
 				    <li><a href="CORTES_FULL.php" class="black-text"><i class="material-icons left">signal_wifi_off</i>Cortes Full</a></li>	
+				    <li><a href="activos.php" class="black-text"><i class="material-icons left">import_export</i>Acivos</a></li>	
  				 </ul>
  				 <li><a class='dropdown-button' data-target='dropdown4'><?php echo $_SESSION['user_name'];?> <i class="material-icons right">arrow_drop_down</i></a></li>
 				<ul id='dropdown4' class='dropdown-content'>
@@ -172,6 +173,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 								    <li><a href="reporte_deudas.php"><i class="material-icons">list</i>Reporte Deudas</a></li>
 								    <li><a href="total_cortes.php"><i class="material-icons">money_off</i>Total Cortes</a></li>
 						    	 	<li><a href="CORTES_FULL.php"><i class="material-icons">signal_wifi_off</i>Cortes Full</a></li>
+						    	 	<li><a href="Activos.php"><i class="material-icons">import_export</i>Activos</a></li>
 				 				</ul>
 					          </span>
 		      			  </div>    			
