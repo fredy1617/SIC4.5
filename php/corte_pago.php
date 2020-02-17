@@ -22,7 +22,7 @@
             $enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
             
             $cobrador = mysqli_fetch_array(mysqli_query($enlace, "SELECT * FROM users WHERE user_id = $id_user"));
-            $Todos_Pagos = mysqli_fetch_array(mysqli_query($enlace,"SELECT count(*) FROM pagos WHERE id_user=$id_user AND corte = 0"));
+            $Todos_Pagos = mysqli_fetch_array(mysqli_query($enlace,"SELECT count(*) FROM pagos WHERE id_user=$id_user AND corte = 0" ));
             $sql_total = mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo'");
             $total = mysqli_fetch_array($sql_total);
             $totalbanco = mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco'"));
@@ -118,6 +118,34 @@
             $this->MultiCell(65,4,utf8_decode('TOTAL: $'.$totalbancoI['precio'].'.00'),0,'R',true);
             $this->Ln(10);
             }
+
+
+            //---------------CREDITO-------------------------------------------
+
+            $sql_creditoI = mysqli_query($enlace, "SELECT * FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Credito' AND tipo != 'Dispositivo'");
+            $filas = mysqli_num_rows($sql_creditoI);
+            if ($filas > 0) {
+
+            $this->SetFont('Arial','B',12);
+            $this->Cell(20,4,'Credito: ',0,0,'C',true);
+            $this->Ln(5);
+            $this->SetFont('Arial','',11);
+            
+            while($fila = mysqli_fetch_array($sql_creditoI)){
+                //insertar pagos de corte...
+                $id_pago = $fila['id_pago'];
+                mysqli_query($enlace,"INSERT INTO detalles(id_corte, id_pago) VALUES ($corte, $id_pago )");
+                $this->SetX(6);
+                $this->MultiCell(70,4,utf8_decode("Cliente: # " .$fila['id_cliente'].'; '.$fila['descripcion']),0,'L',true);
+                $this->MultiCell(70,4,utf8_decode("$ ". $fila['cantidad'].'.00'),0,'R',true);
+                $this->Ln(5);
+            }
+            $this->SetFont('Arial','B',13);
+            $this->Ln(8);
+            $total_CI=  mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Credito' AND tipo != 'Dispositivo'"));
+            $this->MultiCell(65,4,utf8_decode('TOTAL: - $'.$total_CI['precio'].'.00'),0,'R',true);
+            $this->Ln(10);
+        }
 
             $this->SetFont('Arial','B',14); 
 

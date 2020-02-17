@@ -153,7 +153,63 @@ if (isset($_POST['id_corte']) == false) {
 	  		echo "<center><h5>Este usuario aún no ha registrado pagos</h5></center>";
 	  	}  ?>
 	  	</tbody>
-	  </table>
+	  </table><br>
+	  <h5 class="blue-text"><b>Credito:</b></h5>
+	  
+	  <table class="bordered  highlight responsive-table">
+	  	<thead>
+	  		<tr>
+	  			<th>Id Pago</th>
+		  		<th>Cliente</th>
+		  		<th>Descripción</th>
+		  		<th>Tipo</th>
+		  		<th>Fecha</th>
+		  		<th>Cantidad</th>
+	  		</tr>
+	  	</thead>
+	  	<tbody>
+	  	<?php
+	  	$detalles = mysqli_query($conn,  "SELECT * FROM detalles WHERE id_corte = $id_corte ORDER BY id_pago DESC");
+	    $aux = mysqli_num_rows($detalles);
+	  	if ($aux > 0) {
+	  	$TotalBI = 0;
+	  	while ($pagos= mysqli_fetch_array($detalles)) {
+	  		$id_pago = $pagos['id_pago'];
+	  		$sql = mysqli_query($conn, "SELECT * FROM pagos WHERE id_pago = $id_pago AND tipo_cambio = 'Credito'AND tipo != 'Dispositivo'");
+	  		$filas = mysqli_num_rows($sql);
+	  		if ($filas > 0) {
+	  		$pago = mysqli_fetch_array($sql);
+	  		$id_cliente = $pago['id_cliente'];
+	  		$sql2 = mysqli_query($conn,  "SELECT nombre FROM clientes WHERE id_cliente = $id_cliente");
+	    	if (mysqli_num_rows($sql2)==0) {
+	    		$sql2 = mysqli_query($conn,  "SELECT nombre FROM dispositivos WHERE id_dispositivo = $id_cliente");
+	    	}
+	    	$cliente = mysqli_fetch_array($sql2);
+	  	?>	
+	  		<tr>
+		  		<td><?php echo $pago['id_pago'];?></td>
+		  		<td><?php echo $cliente['nombre']; ?></td>
+		  		<td><?php echo $pago['descripcion']; ?></td>
+		  		<td><?php echo $pago['tipo']; ?></td>
+		  		<td><?php echo $pago['fecha']; ?></td>
+		  		<td><?php echo $pago['cantidad']; ?></td>
+	  		</tr>
+	  	<?php
+	  	   $TotalBI += $pago['cantidad'];
+	  	   }
+	  	}
+	  	?>
+	  		<tr>
+	  			<td></td><td></td><td></td><td></td>
+	  			<td><b>TOTAL:</b></td>
+	  			<td><b>- $<?php echo $TotalBI; ?></b></td>
+	  		</tr>
+	  	<?php
+	  	}else{
+	  		echo "<center><h5>Este usuario aún no ha registrado pagos</h5></center>";
+	  	}  ?>
+	  	</tbody>
+	  </table><br>
 	</div><br><br>
 	<h4 class="row"><b><< Servicio Técnico >></b></h4>
 	<div class="row">
