@@ -40,7 +40,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
         $fecha_instalacion = $instalaciones['fecha_instalacion'];
         $hora_alta = $instalaciones['hora_alta'];
         #BUSACAR E IMPRIMIR REPORTES DE MISMO O MENOR FECHA Y MENOR O MISMA HORA
-        $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE  (fecha_solucion>='$DIA'  AND atendido = 1 AND (tecnico = '$id_user' OR apoyo = '$id_user')) AND hora_atendido <= '$hora_alta' ORDER BY hora_atendido");
+        $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE  (fecha_solucion = '$DIA'  AND atendido = 1 AND (tecnico = '$id_user' OR apoyo = '$id_user')) AND hora_atendido <= '$hora_alta' ORDER BY hora_atendido");
         if(mysqli_num_rows($sql) > 0){ 
         while ($info = mysqli_fetch_array($sql)) {
           $id_cliente = $info['id_cliente'];
@@ -91,7 +91,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
         <?php
         if ($aux == 0) {
           #BUSACAR E IMPRIMIR REPORTES MAYOR FECHA Y MAYOR HORA QUE LA ULTIMA INSTALACION
-          $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE  (fecha_solucion>='$DIA'  AND atendido = 1 AND (tecnico = '$id_user' OR apoyo = '$id_user'))  AND hora_atendido > '$hora_alta' ORDER BY hora_atendido");
+          $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE  (fecha_solucion = '$DIA'  AND atendido = 1 AND (tecnico = '$id_user' OR apoyo = '$id_user'))  AND hora_atendido > '$hora_alta' ORDER BY hora_atendido");
           if(mysqli_num_rows($sql) > 0){ 
           while ($info = mysqli_fetch_array($sql)) {
             $id_cliente = $info['id_cliente'];
@@ -128,7 +128,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
       }
       }else{
         #SI NO HAY INSTALACIONES BUSCAR REPORTES
-        $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE  fecha_solucion>='$DIA'  AND atendido = 1 AND (tecnico = '$id_user' OR apoyo = '$id_user') ORDER BY hora_atendido");
+        $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE  fecha_solucion = '$DIA'  AND atendido = 1 AND (tecnico = '$id_user' OR apoyo = '$id_user') ORDER BY hora_atendido");
         if(mysqli_num_rows($sql) > 0){ 
         while ($info = mysqli_fetch_array($sql)) {
           $id_cliente = $info['id_cliente'];
