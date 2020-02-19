@@ -35,13 +35,14 @@ while($usuario = mysqli_fetch_array($usuarios)){
       $resultado_instalaciones = mysqli_query($conn,"SELECT * FROM clientes WHERE fecha_instalacion = '$DIA' AND  tecnico LIKE '%$user%' ORDER BY hora_alta");
       $aux = mysqli_num_rows($resultado_instalaciones);
       if($aux > 0){
+      $iniciar = 0;
       while($instalaciones = mysqli_fetch_array($resultado_instalaciones)){
         $aux --;
-        $fecha_instalacion = $instalaciones['fecha_instalacion'];
         $hora_alta = $instalaciones['hora_alta'];
         #BUSACAR E IMPRIMIR REPORTES DE MISMO O MENOR FECHA Y MENOR O MISMA HORA
-        $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE  (fecha_solucion = '$DIA'  AND atendido = 1 AND (tecnico = '$id_user' OR apoyo = '$id_user')) AND hora_atendido <= '$hora_alta' ORDER BY hora_atendido");
+        $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE  (fecha_solucion = '$DIA'  AND atendido = 1 AND (tecnico = '$id_user' OR apoyo = '$id_user')) AND hora_atendido < '$hora_alta' ORDER BY hora_atendido LIMIT $iniciar, 100");
         if(mysqli_num_rows($sql) > 0){ 
+        $iniciar = $iniciar+mysqli_num_rows($sql);
         while ($info = mysqli_fetch_array($sql)) {
           $id_cliente = $info['id_cliente'];
           $id_user = $info['tecnico'];
@@ -113,7 +114,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
             <tr>
               <td><?php echo $info['id_cliente']; ?></td>
               <td><?php echo $cliente['nombre']; ?></td>            
-              <td><b>Reporte</b></td>            
+              <td><b>Reporte U</b></td>            
               <td><?php echo $comunidad['nombre']; ?></td>            
               <td><?php echo $info['fecha_solucion']; ?></td>
               <td><?php echo $info['hora_atendido']; ?></td>
