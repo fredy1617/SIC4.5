@@ -1,7 +1,6 @@
 <?php
 include('../php/conexion.php');
-$ValorDe = $conn->real_escape_string($_POST['valorDe']);
-$ValorA = $conn->real_escape_string($_POST['valorA']);
+$DIA = $conn->real_escape_string($_POST['valorDia']);
 $User = $conn->real_escape_string($_POST['valorUsuario']);
 
 if ($User ==  0) {
@@ -16,101 +15,39 @@ while($usuario = mysqli_fetch_array($usuarios)){
 ?>
 <br><br>
 <h3 class="center">TECNICO: <?php echo $usuario['firstname']; ?></h3>
-<h4>Instalaciones</h4>
+<h4>Trabajo: </h4>
 <table class="bordered highlight responsive-table">
     <thead>
       <tr>
         <th>#</th>
         <th>Nombre</th>
+        <th>Tipo</th>
         <th>Comunidad</th>
         <th>Fecha</th>
         <th>Hora</th>
+        <th>Descripcion</th>
         <th>Técnicos</th>
-        <th>Se Pago</th>
+        <th>Zona</th>
       </tr>
     </thead>
     <tbody>
       <?php
-      $resultado_instalaciones = mysqli_query($conn,"SELECT * FROM clientes WHERE fecha_instalacion>='$ValorDe' AND fecha_instalacion<='$ValorA' AND  tecnico LIKE '%$user%' ORDER BY fecha_instalacion");
+      $resultado_instalaciones = mysqli_query($conn,"SELECT * FROM clientes WHERE fecha_instalacion = '$DIA' AND  tecnico LIKE '%$user%' ORDER BY hora_alta");
       $aux = mysqli_num_rows($resultado_instalaciones);
-      if($aux>0){
+      if($aux > 0){
       while($instalaciones = mysqli_fetch_array($resultado_instalaciones)){
-        $id_comunidad = $instalaciones['lugar'];
-        $comunidad = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM comunidades WHERE id_comunidad = '$id_comunidad'"));
-        $id_cliente = $instalaciones['id_cliente'];
-        $Total = $instalaciones['total'];
-        $Anticipo = mysqli_query($conn,"SELECT * FROM pagos WHERE id_cliente = '$id_cliente' AND tipo = 'Anticipo'");
-        $Entra = "No";
-        $Estatus = "Revisar";
-        if (mysqli_num_rows($Anticipo)>0) {
-          $Pago = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM pagos WHERE id_cliente = '$id_cliente' AND tipo = 'Anticipo'"));
-          $Anti = $Pago['cantidad'];
-          if ($Anti == $Total) {
-            $Estatus = "Oficina";
-          }else{
-            $Entra = "Si";
-          }
-        }else{
-          $Entra = "Si";
-        }
-        if ($Entra == "Si") {
-          $Liquido = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM pagos WHERE id_cliente = '$id_cliente' AND tipo = 'Liquidacion'"));
-          $Tipo_Cambio = $Liquido['tipo_cambio'];
-          if ($Tipo_Cambio == "Efectivo") {
-            $Estatus = "Domicilio";
-          }else if ($Tipo_Cambio == "Credito") {
-            $Estatus =$Tipo_Cambio;
-          }
-        }
-        ?>
-        <tr>
-          <td><b><?php echo $id_cliente;?></b></td>
-          <td><?php echo $instalaciones['nombre'];?></td>
-          <td><?php echo $comunidad['nombre'];?></td>
-          <td><?php echo $instalaciones['fecha_instalacion'];?></td>
-          <td><?php echo $instalaciones['hora_alta']; ?></td>
-          <td><?php echo $instalaciones['tecnico'];?></td>
-          <td><?php echo $Estatus; ?></td>
-        </tr>
-      <?php
-        $aux--;
-      }
-      }else{
-        echo "<center><b><h5>No se encontraron instalaciones</h5></b></center>";
-      }
-      ?>       
-    </tbody>
-</table><br><br>
-
-<?php
-$sql = mysqli_query($conn, "SELECT * FROM reportes WHERE  fecha_solucion>='$ValorDe' AND fecha_solucion<='$ValorA'  AND atendido = 1 AND (tecnico = '$id_user' OR apoyo = '$id_user')");
-?>
-<h4>Reportes</h4>
-<table class="bordered highlight responsive-table" width="100%">
-        <thead>
-          <tr>
-            <th>Id. Reporte</th>
-            <th>Id. Cliente</th>
-            <th>Nombre Cliente</th>
-            <th>Comunidad</th>
-            <th>Fecha Solución</th>
-            <th>Hora</th>
-            <th width="15%">Descripción</th>
-            <th>Técnicos</th>
-          </tr>
-        </thead>
-        <tbody>
-        <?php
-        $aux = mysqli_num_rows($sql);
-        if($aux>0){ 
+        $aux --;
+        $fecha_instalacion = $instalaciones['fecha_instalacion'];
+        $hora_alta = $instalaciones['hora_alta'];
+        #BUSACAR E IMPRIMIR REPORTES DE MISMO O MENOR FECHA Y MENOR O MISMA HORA
+        $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE  (fecha_solucion>='$DIA'  AND atendido = 1 AND (tecnico = '$id_user' OR apoyo = '$id_user')) AND hora_atendido <= '$hora_alta' ORDER BY hora_atendido");
+        if(mysqli_num_rows($sql) > 0){ 
         while ($info = mysqli_fetch_array($sql)) {
           $id_cliente = $info['id_cliente'];
           $id_user = $info['tecnico'];
           $tecnico = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_user"));
-          $tec = $tecnico['firstname'];
           $sql2 = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente");
-          $filas = mysqli_num_rows($sql2);
-          if ($filas == 0) {
+          if (mysqli_num_rows($sql2) == 0) {
             $sql2 = mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente");
           }
           $cliente = mysqli_fetch_array($sql2);
@@ -120,29 +57,116 @@ $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE  fecha_solucion>='$Valo
             $id_apoyo = $info['apoyo'];
             $A = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_apoyo"));
             $Apoyo = ', Apoyo: '.$A['firstname'];
-          }else{
-            $Apoyo = '';
-          }
-        ?>
+          }else{ $Apoyo = ''; }
+          ?>
           <tr>
-            <td><?php echo $info['id_reporte']; ?></td>
             <td><?php echo $info['id_cliente']; ?></td>
             <td><?php echo $cliente['nombre']; ?></td>            
+            <td><b>Reporte</b></td>            
             <td><?php echo $comunidad['nombre']; ?></td>            
             <td><?php echo $info['fecha_solucion']; ?></td>
             <td><?php echo $info['hora_atendido']; ?></td>
             <td><?php echo $info['descripcion']; ?></td>
-            <td><?php echo $tec.$Apoyo; ?></td>
+            <td><?php echo $tecnico['firstname'].$Apoyo; ?></td>
+            <td><?php echo ($info['campo'] == 1) ? "Campo":"Oficina"; ?></td>
           </tr>
         <?php
-        $aux--;
+        }
+        }
+        #IMPRIMIR LA INSTALACION
+        $id_comunidad = $instalaciones['lugar'];        
+        $comunidad = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM comunidades WHERE id_comunidad = '$id_comunidad'"));
+        ?>
+        <tr>
+          <td><?php echo $instalaciones['id_cliente'];?></td>
+          <td><?php echo $instalaciones['nombre'];?></td>
+          <td><b>Instalacion</b></td>
+          <td><?php echo $comunidad['nombre'];?></td>
+          <td><?php echo $instalaciones['fecha_instalacion'];?></td>
+          <td><?php echo $instalaciones['hora_alta']; ?></td>
+          <td>Instalacion</td>
+          <td><?php echo $instalaciones['tecnico'];?></td>
+          <td>Campo</td>
+        </tr>
+        <?php
+        if ($aux == 0) {
+          #BUSACAR E IMPRIMIR REPORTES MAYOR FECHA Y MAYOR HORA QUE LA ULTIMA INSTALACION
+          $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE  (fecha_solucion>='$DIA'  AND atendido = 1 AND (tecnico = '$id_user' OR apoyo = '$id_user'))  AND hora_atendido > '$hora_alta' ORDER BY hora_atendido");
+          if(mysqli_num_rows($sql) > 0){ 
+          while ($info = mysqli_fetch_array($sql)) {
+            $id_cliente = $info['id_cliente'];
+            $id_user = $info['tecnico'];
+            $tecnico = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_user"));
+            $sql2 = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente");
+            if (mysqli_num_rows($sql2) == 0) {
+              $sql2 = mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente");
+            }
+            $cliente = mysqli_fetch_array($sql2);
+            $id_comunidad = $cliente['lugar'];
+            $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad"));
+            if ($info['apoyo'] != 0) {
+              $id_apoyo = $info['apoyo'];
+              $A = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_apoyo"));
+              $Apoyo = ', Apoyo: '.$A['firstname'];
+            }else{ $Apoyo = ''; }
+            ?>
+            <tr>
+              <td><?php echo $info['id_cliente']; ?></td>
+              <td><?php echo $cliente['nombre']; ?></td>            
+              <td><b>Reporte</b></td>            
+              <td><?php echo $comunidad['nombre']; ?></td>            
+              <td><?php echo $info['fecha_solucion']; ?></td>
+              <td><?php echo $info['hora_atendido']; ?></td>
+              <td><?php echo $info['descripcion']; ?></td>
+              <td><?php echo $tecnico['firstname'].$Apoyo; ?></td>
+              <td><?php echo ($info['campo'] == 1) ? "Campo":"Oficina"; ?></td>
+            </tr>
+          <?php
+          }
+          }
+        }
+      }
+      }else{
+        #SI NO HAY INSTALACIONES BUSCAR REPORTES
+        $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE  fecha_solucion>='$DIA'  AND atendido = 1 AND (tecnico = '$id_user' OR apoyo = '$id_user') ORDER BY hora_atendido");
+        if(mysqli_num_rows($sql) > 0){ 
+        while ($info = mysqli_fetch_array($sql)) {
+          $id_cliente = $info['id_cliente'];
+          $id_user = $info['tecnico'];
+          $tecnico = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_user"));
+          $sql2 = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente");
+          if (mysqli_num_rows($sql2) == 0) {
+            $sql2 = mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente");
+          }
+          $cliente = mysqli_fetch_array($sql2);
+          $id_comunidad = $cliente['lugar'];
+          $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad"));
+          if ($info['apoyo'] != 0) {
+            $id_apoyo = $info['apoyo'];
+            $A = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_apoyo"));
+            $Apoyo = ', Apoyo: '.$A['firstname'];
+          }else{ $Apoyo = ''; }
+          ?>
+          <tr>
+            <td><?php echo $info['id_cliente']; ?></td>
+            <td><?php echo $cliente['nombre']; ?></td>            
+            <td><b>Reporte</b></td>            
+            <td><?php echo $comunidad['nombre']; ?></td>            
+            <td><?php echo $info['fecha_solucion']; ?></td>
+            <td><?php echo $info['hora_atendido']; ?></td>
+            <td><?php echo $info['descripcion']; ?></td>
+            <td><?php echo $tecnico['firstname'].$Apoyo; ?></td>
+            <td><?php echo ($info['campo'] == 1) ? "Campo":"Oficina"; ?></td>
+          </tr>
+        <?php
         }
         }else{
-          echo "<center><b><h5>No se encontraron reportes</h5></b></center>";
+          echo "<center><b><h5>No se encontro trabajo realizado para este usuario</h5></b></center>";
         }
-        ?>
-        </tbody>        
-</table><br><br><br>
+      }
+      ?>
+    </tbody>
+</table>
 <?php
 }
 mysqli_close($conn);
