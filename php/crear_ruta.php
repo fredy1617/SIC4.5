@@ -2,14 +2,15 @@
 include('../php/conexion.php');
 date_default_timezone_set('America/Mexico_City');
 
-$Tecnicos = $conn->real_escape_string($_POST['valorTecnicos']);
+$Responsable = $conn->real_escape_string($_POST['valorResponsable']);
+$Acompañante = $conn->real_escape_string($_POST['valorAcompañante']);
 $Vehiculo = $conn->real_escape_string($_POST['valorVehiculo']);
 $Bobina = $conn->real_escape_string($_POST['valorBobina']);
 $Vale = $conn->real_escape_string($_POST['valorVale']);
 $Fecha = date('Y-m-d'); 
-$aux= mysqli_num_rows(mysqli_query($conn, "SELECT * FROM rutas WHERE fecha = '$Fecha' AND estatus = 0 AND tecnicos='$Tecnicos' "));
+$aux= mysqli_num_rows(mysqli_query($conn, "SELECT * FROM rutas WHERE fecha = '$Fecha' AND estatus = 0 AND responsable='$Responsable' "));
 if($aux<=0 or $aux==null){
-if (mysqli_query($conn, "INSERT INTO rutas(fecha, tecnicos) VALUES ('$Fecha', '$Tecnicos')")) {
+if (mysqli_query($conn, "INSERT INTO rutas(fecha, responsable, acompanante) VALUES ('$Fecha', '$Responsable', '$Acompañante')")) {
 	echo '<script>M.toast({html : "Se creo la ruta correctamente.", classes: "rounded"})</script>';
 	$ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_ruta) AS id FROM rutas WHERE estatus=0"));            
 

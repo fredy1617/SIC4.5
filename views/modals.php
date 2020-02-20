@@ -19,7 +19,8 @@ if(mysqli_num_rows($rep) == 0 AND mysqli_num_rows($inst) == 0){
     if (Entra == 0) {
         M.toast({html:"Agrege una Reporte o una Instalacion para poder crear la ruta.", classes: "rounded"});
     }else{
-      var textoTecnicos = $("input#tecnicos").val();
+      var textoResponsable = $("select#responsable").val();
+      var textoAcompañante = $("input#acompañante").val();
       var textoVehiculo = $("input#vehiculo").val();
       if(document.getElementById('bobina').checked==true){
         textoBonina = 1;
@@ -32,13 +33,14 @@ if(mysqli_num_rows($rep) == 0 AND mysqli_num_rows($inst) == 0){
         textoVale = 0;
       }
 
-      if (textoTecnicos == "") {
-        M.toast({html:"El campo Tecnico(s) no puede ir vacío.", classes: "rounded"});
+      if (textoResponsable == 0) {
+        M.toast({html:"Selecciones un responsable de ruta.", classes: "rounded"});
       }else if (textoVehiculo == "") {
         M.toast({html:"El campo Vehiculo(s) no puede ir vacío.", classes: "rounded"});
       }else{
         $.post("../php/crear_ruta.php", {
-              valorTecnicos: textoTecnicos,
+              valorResponsable: textoResponsable,
+              valorAcompañante: textoAcompañante,
               valorVehiculo: textoVehiculo,
               valorBobina: textoBonina,
               valorVale: textoVale
@@ -150,19 +152,31 @@ function recargar10() {
       <p class="center"><b>Al crear la ruta se mostrará un PDF en una nueva pestaña y se crear la ruta.</b></p><br>
      <h5>Tecnico(s) que ira(n) a la ruta:</h5> 
       <form class="row">
-      <div class="input-field col s10 m7 l7">
-          <i class="material-icons prefix">people</i>
-          <input id="tecnicos" type="text" class="validate" data-length="30" required>
-          <label for="tecnicos">Tecnico(s): Ej. (Marcos, Ulix980, Muro)</label>
+      <div class="input-field col s6 m3 l3">
+          <select id="responsable" class="browser-default">
+            <option value="0" selected>Responsable:</option>
+            <option value="MARCOS">MARCOS</option>
+            <option value="RUBEN">RUBEN</option>
+            <option value="ULISES">ULISES</option>
+            <option value="LUIS">LUIS</option>
+            <option value="ALFREDO">ALFREDO</option>
+            <option value="MIGUEL">MIGUEL</option>
+            <option value="ESDRAS">ESDRAS</option>
+          </select>
       </div>
-      <div class="col s5 m4 l4">
+      <div class="input-field col s6 m6 l6">
+          <i class="material-icons prefix">people</i>
+          <input id="acompañante" type="text" class="validate" data-length="30" required>
+          <label for="acompañante">Acompañante(s): Ej. (MARCOS, MIGUEL)</label>
+      </div>
+      <div class="col s5 m3 l3">
         <p><br>
           <input type="checkbox" id="bobina"/>
           <label for="bobina">Bobina Nueva</label>
         </p>
       </div>
       <form class="row">
-      <div class="input-field col s10 m7 l7">
+      <div class="input-field col s10 m6 l6">
           <i class="material-icons prefix">directions_car</i>
           <input id="vehiculo" type="text" class="validate" data-length="30" required>
           <label for="vehiculo">Vehiculo(s): </label>

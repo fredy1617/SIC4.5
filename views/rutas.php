@@ -18,7 +18,7 @@ include('../php/cobrador.php');
   			  <th>Ruta No.</th>
 	          <th>Fecha</th>
 	          <th>Estatus</th>
-	          <th>Tecnicos</th>
+	          <th>Ing(s)</th>
 	          <th>Detalles</th>  				
   			</thead>
   			<tbody>
@@ -40,7 +40,7 @@ include('../php/cobrador.php');
   			  <td><?php echo $ruta['id_ruta']; ?></td>
   			  <td><?php echo $ruta['fecha']; ?></td>
   			  <td><?php echo $Estatus; ?></td>
-  			  <td><?php echo $ruta['tecnicos']; ?></td>
+  			  <td><?php echo $ruta['responsable']; ?>, <?php echo $ruta['acompanante']; ?></td>
   			  <td>
   			  <form method="post" action="../views/detalles_ruta.php"><input id="id_ruta" name="id_ruta" type="hidden" value="<?php echo $ruta['id_ruta']; ?>"><button class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></button></form></td>
   			</tr>

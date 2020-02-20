@@ -123,14 +123,13 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades W
 $id_paquete = $cliente['paquete'];
 $paquete_cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM paquetes WHERE id_paquete='$id_paquete'"));
 ?>
-
   <br><h3 class="hide-on-med-and-down">Editar cliente No. <?php echo $cliente['id_cliente'];?></h3>
   <h5 class="hide-on-large-only">Editar cliente No. <?php echo $cliente['id_cliente']; ?></h5><br><br>
   <div id="resultado_update_cliente">
   </div>
    <div class="row">
     <form class="col s12">
-    <input id="id_cliente" type="hidden" class="validate" data-length="200" value="<?php echo $cliente['id_cliente'];?>" required>
+    <input id="id_cliente" type="hidden" class="validate" data-length="200" value="<?php echo $cliente['id_cliente'];?>">
       <div class="row">
         <div class="col s12 m6 l6">
         <div class="input-field">

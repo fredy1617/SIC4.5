@@ -40,9 +40,6 @@ include('../php/cobrador.php');
 		$instalacion = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM tmp_pendientes AS Pen JOIN clientes AS Cli ON Pen.id_cliente = Cli.id_cliente WHERE ruta_inst = $id_ruta and instalacion = 1"));
 		$reporte = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM tmp_reportes  AS TRep JOIN reportes AS Rep ON TRep.id_reporte = Rep.id_reporte WHERE ruta = $id_ruta and atendido = 1 OR atendido !=  NULL"));
 		$Avance = $instalacion['count(*)']+$reporte['count(*)'];
-		$Texto = $ruta['tecnicos'];
-		$Tecnicos = explode(",", $Texto);
-		$n=count($Tecnicos);
 		$fecha_ruta=$ruta['fecha'];
 		$mas_dias = strtotime('+1 day', strtotime($fecha_ruta));
 		$dosdias = date('Y-m-d', $mas_dias);
@@ -92,11 +89,10 @@ include('../php/cobrador.php');
 		          <p>
 		          	<b>Estatus:</b><br>
 		          	<?php echo $Estatus; ?>
-		          	<b>Tecnicos:</b>
+		          	<b>Ing(s):</b>
 		           	<ul>
-		           		<?php foreach ($Tecnicos as $tecnico){?>
-		          		<li class="red-text darken-2"><?php echo $tecnico; ?></li>
-		          		<?php }?>
+		          		<li class="red-text darken-2"><?php echo $ruta['responsable']; ?></li>
+		          		<li class="red-text darken-2"><?php echo $ruta['acompanante']; ?></li>
 		          	</ul>
 		          	<span class="new badge pink" data-badge-caption=""><?php echo $fecha_ruta; ?></span>
 		          </p>
