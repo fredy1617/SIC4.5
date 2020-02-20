@@ -27,7 +27,9 @@ class PDF extends FPDF{
             $this->SetFont('Arial','B',13);
             $this->SetY(30);
             $this->Cell(90,4,'Fecha: '.$fila['fecha'],0,0,'C',true);
-            $this->SetFont('Arial','',10);
+            $this->SetFont('Arial','B',10);
+            $this->Ln(5);
+            $this->Cell(20,4,utf8_decode('Folio: '.$id_pago),0,0,'L',true);$this->SetFont('Arial','',10);
             $this->Ln(5);
             $this->Cell(20,4,utf8_decode('No. Cliente: '.$fila['id_cliente']),0,0,'L',true);
             $this->Ln(5);
@@ -67,9 +69,16 @@ class PDF extends FPDF{
             $this->MultiCell(60,4,utf8_decode('Atendió: '.$user['firstname'].' '.$user['lastname']),0,'L',true);
             $this->Ln(1);
             $this->SetFont('Arial','B',9);
-            if ($tipo_pago == 'Mensualidad'){
+            if ($tipo_pago == 'Mensualidad' ){
                 $this->MultiCell(60,7,utf8_decode('GRACIAS. RECORDARLE QUE SU PRÓXIMO PAGO DEBERÁ SER ANTES DEL: '.$cliente['fecha_corte'].
                     '
+RECOMENDACIONES:
+1.- Contar con línea regulada "regulador de corriente".
+2.- No modificar orden del cableado.
+3.- No presionar botón de reset de los equipos.
+4.- En caso de falla comunicarse al 433 935 62 86.'),1,'C',true);
+            }else if ($tipo_pago == 'Reporte' OR $tipo_pago == 'Liquidacion') {
+                $this->MultiCell(60,7,utf8_decode('GRACIAS POR SU PAGO.
 RECOMENDACIONES:
 1.- Contar con línea regulada "regulador de corriente".
 2.- No modificar orden del cableado.
