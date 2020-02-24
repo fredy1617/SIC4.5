@@ -71,9 +71,9 @@ function alta_instalacion_SM(bandera, contador) {
       M.toast({html:"Seleccione un técnico por favor.", classes: "rounded"});
     }else if(textoAntena == ''){
       M.toast({html:"Ingrese un tipo de antena.", classes: "rounded"});
-    }else if(textoCable == '' || textoCable == 0){
-      M.toast({html:"Ingrese la cantidad de cables que utilizo.", classes: "rounded"});
-    }else if(textoTubos == '' || textoTubos == 0){
+    }else if(textoCable == '' || textoCable <= 0){
+      M.toast({html:"Ingrese la cantidad de metros de cable que utilizo.", classes: "rounded"});
+    }else if(textoTubos == '' || textoTubos < 0){
       M.toast({html:"Ingresa la cantidad de tubos que utilizo.", classes: "rounded"});
     }else if(textoRouter == ''){
       M.toast({html:"Ingresa un tipo de router.", classes: "rounded"});
@@ -129,12 +129,6 @@ function alta_instalacion(bandera, contador) {
     var textoCable = $("input#cable").val();
     var textoTubos = $("input#tubos").val();
     var textoOtros = $("input#mas").val();
-
-    if(document.getElementById('bobina').checked==true){
-      textoBobina   = 1;
-    }else{
-      textoBobina = 0;
-    }
     if(document.getElementById('credito').checked==true){
       textoTipo_cambio   = "Credito";
     }else{
@@ -190,7 +184,6 @@ function alta_instalacion(bandera, contador) {
           valorRouter: textoRouter,
           valorCable: textoCable,
           valorTubos: textoTubos,
-          valorBobina: textoBobina,
           valorExtras: textoExtras
         }, function(mensaje) {
             $("#resultado_cliente").html(mensaje);
@@ -325,17 +318,10 @@ if (isset($_POST['id_cliente']) == false) {
               <div class="row">
                 <div class="col s12 m6 l6">
                   <div class="row">
-                  <div class="input-field col s7 m8 l8">
+                  <div class="input-field col s12 m12 l12">
                     <i class="material-icons prefix">satellite</i>
                     <input id="antena" type="text" class="validate" data-length="15" required>
                     <label for="antena">Antena (ej: Lite Beam M5):</label>
-                  </div>
-                  <div class="col s5 m4 l4">
-                    <p>
-                      <br>
-                      <input type="checkbox" id="bobina"/>
-                      <label for="bobina">Bobina Nueva</label>
-                    </p>
                   </div>
                   </div>
                   <div class="input-field">
@@ -374,7 +360,8 @@ if (isset($_POST['id_cliente']) == false) {
                   <p>
                     <?php
                     $contador = 1; 
-                    $ven = array("Alambre","Taquetes","Pijas", "Tornillos","Grapas","Cinta");
+                    $ven = array("Alambre","Taquetes","Conectores", "Tornillos","Grapas","Cinta","Clavos");
+
                       while ($contador < count($ven)) {
                       ?>
                       <div class="col s12 m6 l4">

@@ -42,11 +42,10 @@
           $aux ++;
           $id_cliente = $pagos['id_cliente'];
           $sql = mysqli_query($conn, "SELECT nombre FROM clientes WHERE id_cliente = $id_cliente");
-          $filas = mysqli_num_rows($sql);
-          if ($filas == 0) {
-            $sql = mysqli_query($conn, "SELECT nombre FROM dispositivos WHERE id_dispositivo = $id_cliente"); 
-          }
           $cliente= mysqli_fetch_array($sql);
+          if ($cliente['nombre'] == '') {
+            $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente = $id_cliente"));
+          }
             ?>
             <tr>
               <th><?php echo $aux; ?></th> 
@@ -92,12 +91,10 @@
           $aux ++;
           $id_cliente = $pagos['id_cliente'];
           $sql = mysqli_query($conn, "SELECT nombre FROM clientes WHERE id_cliente = $id_cliente");
-          $filas = mysqli_num_rows($sql);
-          if ($filas == 0) {
-            $sql = mysqli_query($conn, "SELECT nombre FROM dispositivos WHERE id_dispositivo = $id_cliente"); 
-          }
           $cliente= mysqli_fetch_array($sql);
-          
+          if ($cliente['nombre'] == '') {
+            $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente = $id_cliente"));
+          }
             ?>
             <tr>
               <th><?php echo $aux; ?></th> 
@@ -145,12 +142,10 @@
           $aux ++;
           $id_cliente = $pagos['id_cliente'];
           $sql = mysqli_query($conn, "SELECT nombre FROM clientes WHERE id_cliente = $id_cliente");
-          $filas = mysqli_num_rows($sql);
-          if ($filas == 0) {
-            $sql = mysqli_query($conn, "SELECT nombre FROM dispositivos WHERE id_dispositivo = $id_cliente"); 
-          }
           $cliente= mysqli_fetch_array($sql);
-          
+          if ($cliente['nombre'] == '') {
+            $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente = $id_cliente"));
+          }
             ?>
             <tr>
               <th><?php echo $aux; ?></th> 
@@ -199,11 +194,7 @@
          while($pagos = mysqli_fetch_array($sql_pagos)){
           $aux ++;
           $id_cliente = $pagos['id_cliente'];
-          $sql = mysqli_query($conn, "SELECT nombre FROM clientes WHERE id_cliente = $id_cliente");
-          $filas = mysqli_num_rows($sql);
-          if ($filas == 0) {
-            $sql = mysqli_query($conn, "SELECT nombre FROM dispositivos WHERE id_dispositivo = $id_cliente"); 
-          }
+          $sql = mysqli_query($conn, "SELECT nombre FROM dispositivos WHERE id_dispositivo = $id_cliente"); 
           $cliente= mysqli_fetch_array($sql);
             ?>
             <tr>
@@ -249,11 +240,7 @@
           while($pagos = mysqli_fetch_array($sql_banco)){
           $aux ++;
           $id_cliente = $pagos['id_cliente'];
-          $sql = mysqli_query($conn, "SELECT nombre FROM clientes WHERE id_cliente = $id_cliente");
-          $filas = mysqli_num_rows($sql);
-          if ($filas == 0) {
-            $sql = mysqli_query($conn, "SELECT nombre FROM dispositivos WHERE id_dispositivo = $id_cliente"); 
-          }
+          $sql = mysqli_query($conn, "SELECT nombre FROM dispositivos WHERE id_dispositivo = $id_cliente"); 
           $cliente= mysqli_fetch_array($sql);
           
             ?>

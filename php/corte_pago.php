@@ -26,20 +26,26 @@
             $sql_total = mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo'");
             $total = mysqli_fetch_array($sql_total);
             $totalbanco = mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco'"));
+            $totalcredito = mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Credito'"));
             date_default_timezone_set('America/Mexico_City');
             $Fecha_hoy = date('Y-m-d');
             $cantidad=$total['precio'];
             $banco = $totalbanco['precio'];
+            $credito = $totalcredito['precio'];
 
             //Insertar corte.....
-            if ($cantidad != "" OR $banco != "") {
+            if ($cantidad != "" OR $banco != "" OR $credito != "") {
                 if ($banco == "") {
                     $banco = 0;
-                }else if ($cantidad == "") {
+                }
+                if ($cantidad == "") {
                     $cantidad = 0;
                 }
+                if ($credito == "") {
+                    $credito = 0;
+                }
                 mysqli_query($enlace,"INSERT INTO cortes(usuario, fecha, cantidad, banco) VALUES ($id_user, '$Fecha_hoy', '$cantidad', '$banco')");
-                $Mensaje = 'Se hizo un corte en el sistema el dia: '.$Fecha_hoy.' del usuario: <b>"'.$cobrador['user_name'].'"</b> con las cantidades totales de: <b>banco = $'.$banco.', efectivo = $'.$cantidad.'</b>.';
+                $Mensaje = 'Se hizo un corte en el sistema el dia: '.$Fecha_hoy.' del usuario: <b>"'.$cobrador['user_name'].'"</b> con las cantidades totales de: <b>banco = $'.$banco.', efectivo = $'.$cantidad.', credito = $'.$credito.'</b>.';
                 sendMessage($id_Chat, $Mensaje, $website);
 
             }
@@ -176,7 +182,7 @@
             $this->SetFont('Arial','B',13);
             $this->Ln(8);
             $total_EST=  mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo' AND tipo = 'Dispositivo'"));            
-            $this->MultiCell(65,4,utf8_decode('Total de Pagos: $'.$total_EST['precio'].'.00'),0,'R',true);
+            $this->MultiCell(65,4,utf8_decode('TOTAL: $'.$total_EST['precio'].'.00'),0,'R',true);
             $this->Ln(10);
         }
             //---------------BANCO-------------------------------------------
@@ -210,6 +216,20 @@
 
             $this->SetFont('Arial','',11);
             $this->Cell(60,4,'Servicios Integrales de Computacion ',0,0,'C',true);
+            $this->SetFont('Arial','B',12);
+            $this->Ln(15);
+            if ($cantidad > 0) {
+              $this->MultiCell(65,4,utf8_decode('TOTAL EFECTIVO: $'.$cantidad.'.00'),0,'L',true);
+              $this->Ln(3);
+            }
+            if ($banco > 0) {
+              $this->MultiCell(65,4,utf8_decode('TOTAL BANCO: $'.$banco.'.00'),0,'L',true);
+              $this->Ln(3);
+            }
+            if ($credito > 0) {
+              $this->MultiCell(65,4,utf8_decode('TOTAL CREDITO: $'.$credito.'.00'),0,'L',true);
+              $this->Ln(3);
+            }   
 
             mysqli_query($enlace,"UPDATE pagos SET corte=1 WHERE id_user=$id_user");
             mysqli_close($enlace);

@@ -66,10 +66,8 @@ function update_reporte(bandera, contador) {
         var textoCable = $("input#cable").val();
         var textoTubos = $("input#tubos").val();
         var textoOtros = $("input#mas").val();
-
-        if(document.getElementById('bobina').checked==true){
-          textoBobina   = 1;
-        }else{ textoBobina = 0; } 
+        var textoCosto = $("input#costo").val();
+        var textoManoObra = $("input#mano_obra").val();
 
         if(document.getElementById('reemplazo').checked==true){
           textoTipo = 'Reemplazo';
@@ -99,6 +97,8 @@ function update_reporte(bandera, contador) {
         textoBobina = '';
         textoExtras = '';
         textoTipo = '';
+        textoCosto = '';
+        textoManoObra = '';
     }
 
     if(document.getElementById('campo').checked==true){
@@ -130,6 +130,7 @@ function update_reporte(bandera, contador) {
           valorSolucion: textoSolucion,
           valorTecnico: textoTecnico,
           valorAtendido: textoAtendido,
+          valorManoObra: textoManoObra,
           valorFecha: textoFecha,
           valorCampo: textoCampo,
           valorApoyo: textoApoyo,
@@ -137,9 +138,9 @@ function update_reporte(bandera, contador) {
           valorRouter: textoRouter,
           valorCable: textoCable,
           valorTubos: textoTubos,
-          valorBobina: textoBobina,
           valorExtras: textoExtras,
-          valorTipo: textoTipo
+          valorTipo: textoTipo,
+          valorCosto: textoCosto
         }, function(mensaje) {
             $("#resultado_update_reporte").html(mensaje);
         });
@@ -316,17 +317,15 @@ if($resultado['tecnico']==''){
           if ($resultado['campo'] ==1) { ?>
                 <div class="col s12 m6 l6">
                   <div class="row">
-                  <div class="input-field col s7 m8 l8">
+                  <div class="input-field col s12 m6 l6">
                     <i class="material-icons prefix">satellite</i>
                     <input id="antena" type="text" class="validate" data-length="15" required>
                     <label for="antena">Antena (ej: Lite Beam M5):</label>
                   </div>
-                  <div class="col s5 m4 l4">
-                    <p>
-                      <br>
-                      <input type="checkbox" id="bobina"/>
-                      <label for="bobina">Bobina Nueva</label>
-                    </p>
+                  <div class="input-field col s12 m6 l6">
+                    <i class="material-icons prefix">pan_tool</i>
+                    <input id="mano_obra" type="text" class="validate" data-length="15" required>
+                    <label for="mano_obra">Mano de obra:</label>
                   </div>
                   </div>
                   <div class="input-field">
@@ -364,7 +363,7 @@ if($resultado['tecnico']==''){
                   <label>Extras:</label>
                   <p>
                     <?php 
-                    $ven = array("Alambre","Taquetes","Pijas", "Tornillos","Grapas","Cinta","Clavos");
+                    $ven = array("Alambre","Taquetes","Conectores", "Tornillos","Grapas","Cinta","Clavos");
                       while ($contador < count($ven)) {
                       ?>
                       <div class="col s12 m6 l4">
@@ -376,11 +375,16 @@ if($resultado['tecnico']==''){
                     }$contador--;
                     ?>
                   </p>
-                  <div class="col s12"><br><br>
+                  <div class="col s12 m5 l5"><br><br>
                     <input type="checkbox" id="reemplazo"/>
                     <label for="reemplazo">Reemplazo</label><br><br>
                   </div>
-                </div> 
+                  <div class="input-field col s12 m7 l7">
+                    <i class="material-icons prefix">attach_money</i>
+                    <input id="costo" type="number" class="validate" data-length="15" required>
+                    <label for="costo">Costo del servicio ($0.00):</label>
+                  </div>
+                </div>
               <?php } ?>  
                 <input id="id_cliente" value="<?php echo htmlentities($cliente['id_cliente']);?>" type="hidden"><br><br><br>
                 <a onclick="update_reporte(<?php echo $bandera;?>, <?php echo $contador;?>);" class="waves-effect waves-light btn pink right"><i class="material-icons right">send</i>ACTUALIZAR REPORTE</a> 

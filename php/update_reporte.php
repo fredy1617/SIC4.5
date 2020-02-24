@@ -33,9 +33,12 @@ $Antena = $conn->real_escape_string($_POST['valorAntena']);
 $Router = $conn->real_escape_string($_POST['valorRouter']);
 $Cable = $conn->real_escape_string($_POST['valorCable']);
 $Tubos = $conn->real_escape_string($_POST['valorTubos']);
-$Bobina = $conn->real_escape_string($_POST['valorBobina']);
+$ManoObra = $conn->real_escape_string($_POST['valorManoObra']);
 $Extras = $conn->real_escape_string($_POST['valorExtras']);
 $Tipo = $conn->real_escape_string($_POST['valorTipo']);
+
+#------------COSTO DEL SERVICIO--------------
+$Costo = $conn->real_escape_string($_POST['valorCosto']);
   
 $sql2= "UPDATE clientes SET nombre = '$Nombre', telefono = '$Telefono', direccion = '$Direccion', referencia='$Referencia' WHERE id_cliente=$IdCliente ";
 if (mysqli_query($conn, $sql2)) {
@@ -69,11 +72,53 @@ $mensaje = "";
 	$sql = "UPDATE reportes SET falla = '$Falla', solucion = '$Solucion', tecnico = '$Tecnico', apoyo = '$Apoyo', atendido = '$Atendido', atender_visita = '$Atender_Visita',  fecha_solucion = '$FechaAtendido'".$mas." ,hora_atendido = '$Hora', campo = '$Campo' WHERE id_reporte = $IdReporte";
 	if(mysqli_query($conn, $sql)){
 		$mensaje = '<script>M.toast({html:"Reporte actualizado correctamente.", classes: "rounded"})</script>';
-		if ($resultado['campo'] == 1 AND $Campo == 1) {
-			if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM materiales WHERE id_cliente='$IdCliente' AND antena='$Antena' AND router='$Router' AND cable='$Cable' AND tubos='$Tubos' AND extras='$Extras' AND bobina='$Bobina' AND fecha='$FechaAtendido' AND usuarios='$Tecnicos' AND tipo='$Tipo'"))>0){
+		if ($resultado['campo'] == 1 AND $Campo == 1 AND $Atendido == 1) {
+			if ($Costo != '' OR $Costo > 0) {
+				# Insertar pago e imprimir ticket
+				$Mat = '';
+				if ($ManoObra != '') { $Mano = 'MANO DE OBRA ('.$ManoObra.')'; }
+				if ($Antena != '') { $Mat.= $Antena.', '; }
+				if ($Router != '') { $Mat.= $Router.', '; }
+				if ($Cable > 0) { $Mat.= $Cable.' m de Cable,'; }
+				if ($Tubos > 0) { $Mat.= $Tubos.' Tubo(s), '; }
+				if ($Extras != '') { $Mat.= $Extras; }
+				if ($Mat != '') {
+					$Material = 'MATERIAL('.$Mat.')';
+				}
+				$Descripcion = $Mano.'; '.$Material;
+				$sql = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, tipo, id_user, corte, tipo_cambio) VALUES ($IdCliente, '$Descripcion', '$Costo', '$FechaAtendido', 'Reporte', $Tecnico, 0, 'Efectivo')";
+				if(mysqli_query($conn, $sql)){
+					echo '<script>M.toast({html:"El pago se dió de alta satisfcatoriamente.", classes: "rounded"})</script>';
+					$ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos WHERE id_cliente = $IdCliente"));           
+					$id_pago = $ultimo['id'];
+					?>
+					<script>
+					id_pago = <?php echo $id_pago; ?>;
+					var a = document.createElement("a");
+					    a.target = "_blank";
+						a.href = "../php/imprimir.php?IdPago="+id_pago;
+						a.click();
+					</script>
+   					<?php 
+				}else{
+					echo '<script>M.toast({html:"Ocurrio un error en el pago.", classes: "rounded"})</script>';
+				}
+			}else{
+				#Imprimir ticket
+				?>
+				<script>
+					IdCliente = <?php echo $IdCliente; ?>;
+					var a = document.createElement("a");
+					    a.target = "_blank";
+						a.href = "../php/ticket0.php?Id="+IdCliente;
+						a.click();
+				</script>
+   				<?php 
+			}
+			if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM materiales WHERE id_cliente='$IdCliente' AND antena='$Antena' AND router='$Router' AND cable='$Cable' AND tubos='$Tubos' AND extras='$Extras' AND fecha='$FechaAtendido' AND usuarios='$Tecnicos' AND tipo='$Tipo'"))>0){
 	 			echo '<script >M.toast({html:"Ya se encuentran valores similares registrados el dia de hoy.", classes: "rounded"})</script>';
 			}else{
-				$Sql_Mat = "INSERT INTO materiales(id_cliente, antena, router, cable, tubos, extras, bobina, fecha, usuarios, tipo) VALUES('$IdCliente','$Antena', '$Router', '$Cable', '$Tubos', '$Extras', '$Bobina', '$FechaAtendido', '$Tecnicos', '$Tipo')";
+				$Sql_Mat = "INSERT INTO materiales(id_cliente, antena, router, cable, tubos, extras, fecha, usuarios, tipo) VALUES('$IdCliente','$Antena', '$Router', '$Cable', '$Tubos', '$Extras', '$FechaAtendido', '$Tecnicos', '$Tipo')";
 				if(mysqli_query($conn, $Sql_Mat)){
 					echo '<script>M.toast({html:"Material insertado.", classes: "rounded"})</script>';	
 				}else{

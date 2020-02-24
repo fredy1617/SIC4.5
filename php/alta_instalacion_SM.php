@@ -28,7 +28,7 @@ $Antena = $conn->real_escape_string($_POST['valorAntena']);
 $Router = $conn->real_escape_string($_POST['valorRouter']);
 $Cable = $conn->real_escape_string($_POST['valorCable']);
 $Tubos = $conn->real_escape_string($_POST['valorTubos']);
-$Bobina = $conn->real_escape_string($_POST['valorBobina']);
+$Bobina = '';
 $Extras = $conn->real_escape_string($_POST['valorExtras']);
 
 #---MATERIAL----     

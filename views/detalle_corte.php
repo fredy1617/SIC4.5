@@ -67,10 +67,10 @@ if (isset($_POST['id_corte']) == false) {
 	    	$pagox1 = mysqli_fetch_array($sql);
 	    	$id_cliente = $pagox1['id_cliente'];
 	    	$sql2 = mysqli_query($conn,  "SELECT nombre FROM clientes WHERE id_cliente = $id_cliente");
-	    	if (mysqli_num_rows($sql2)==0) {
-	    		$sql2 = mysqli_query($conn,  "SELECT nombre FROM dispositivos WHERE id_dispositivo = $id_cliente");
-	    	}
 	    	$cliente = mysqli_fetch_array($sql2);
+		    if ($cliente['nombre'] == '') {
+	            $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente = $id_cliente"));
+	        }
 	      ?>
 	      <tr>
 	        <td><?php echo $pagox1['id_pago'];?></td>
@@ -125,10 +125,10 @@ if (isset($_POST['id_corte']) == false) {
 	  		$pago = mysqli_fetch_array($sql);
 	  		$id_cliente = $pago['id_cliente'];
 	  		$sql2 = mysqli_query($conn,  "SELECT nombre FROM clientes WHERE id_cliente = $id_cliente");
-	    	if (mysqli_num_rows($sql2)==0) {
-	    		$sql2 = mysqli_query($conn,  "SELECT nombre FROM dispositivos WHERE id_dispositivo = $id_cliente");
-	    	}
 	    	$cliente = mysqli_fetch_array($sql2);
+	    	if ($cliente['nombre'] == '') {
+	            $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente = $id_cliente"));
+	        }
 	  	?>	
 	  		<tr>
 		  		<td><?php echo $pago['id_pago'];?></td>
@@ -181,10 +181,10 @@ if (isset($_POST['id_corte']) == false) {
 	  		$pago = mysqli_fetch_array($sql);
 	  		$id_cliente = $pago['id_cliente'];
 	  		$sql2 = mysqli_query($conn,  "SELECT nombre FROM clientes WHERE id_cliente = $id_cliente");
-	    	if (mysqli_num_rows($sql2)==0) {
-	    		$sql2 = mysqli_query($conn,  "SELECT nombre FROM dispositivos WHERE id_dispositivo = $id_cliente");
-	    	}
 	    	$cliente = mysqli_fetch_array($sql2);
+	    	if ($cliente['nombre'] == '') {
+	            $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente = $id_cliente"));
+	        }
 	  	?>	
 	  		<tr>
 		  		<td><?php echo $pago['id_pago'];?></td>
@@ -239,10 +239,7 @@ if (isset($_POST['id_corte']) == false) {
 	    	if ($fila > 0) {
 	    	$pagox1 = mysqli_fetch_array($sql);
 	    	$id_cliente = $pagox1['id_cliente'];
-	    	$sql2 = mysqli_query($conn,  "SELECT nombre FROM clientes WHERE id_cliente = $id_cliente");
-	    	if (mysqli_num_rows($sql2)==0) {
-	    		$sql2 = mysqli_query($conn,  "SELECT nombre FROM dispositivos WHERE id_dispositivo = $id_cliente");
-	    	}
+	    	$sql2 = mysqli_query($conn,  "SELECT nombre FROM dispositivos WHERE id_dispositivo = $id_cliente");
 	    	$cliente = mysqli_fetch_array($sql2);
 	      ?>
 	      <tr>
@@ -297,10 +294,7 @@ if (isset($_POST['id_corte']) == false) {
 	  		if ($filas > 0) {
 	  		$pago = mysqli_fetch_array($sql);
 	  		$id_cliente = $pago['id_cliente'];
-	  		$sql2 = mysqli_query($conn,  "SELECT nombre FROM clientes WHERE id_cliente = $id_cliente");
-	    	if (mysqli_num_rows($sql2)==0) {
-	    		$sql2 = mysqli_query($conn,  "SELECT nombre FROM dispositivos WHERE id_dispositivo = $id_cliente");
-	    	}
+	    	$sql2 = mysqli_query($conn,  "SELECT nombre FROM dispositivos WHERE id_dispositivo = $id_cliente");
 	    	$cliente = mysqli_fetch_array($sql2);
 	  	?>	
 	  		<tr>
