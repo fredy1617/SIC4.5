@@ -83,9 +83,9 @@ if (filter_var($IP, FILTER_VALIDATE_IP)) {
 		            $READ = $API->read(false);
 		            $ARRAY = $API->parse_response($READ);  
 		            $sql="UPDATE clientes SET ip='$IP', material='$Material', tecnico='$Tecnico', instalacion=1, fecha_instalacion='$FechaInstalacion', fecha_corte='$FechaInstalacion', hora_alta = '$Hora', coordenadas = '$Coordenada', referencia = '$Referencia', direccion = '$Direccion', tel_servicio = '$Extencion' WHERE id_cliente=$IdCliente";
-
-		        	if(mysqli_query($conn, $sql)){    
-			            $Descripcion = "Liquidación de Instalación";
+		            
+		        	if(mysqli_query($conn,$sql)){
+		        		$Descripcion = "Liquidación de Instalación";
 						$Tipo_t = "Liquidacion";
 		        		if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND descripcion = '$Descripcion' AND cantidad='$Liquidar'"))>0){
 							echo '<script>M.toast({html:"Ya se encuentra un pago registrado con los mismos valores.", classes: "rounded"})</script>';
@@ -101,10 +101,21 @@ if (filter_var($IP, FILTER_VALIDATE_IP)) {
 							}
 							if(mysqli_query($conn, $sql)){
 								echo '<script>M.toast({html:"El pago se dió de alta satisfcatoriamente.", classes: "rounded"})</script>';
+								$ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos WHERE id_cliente = $IdCliente"));            
+							    $id_pago = $ultimo['id'];
+							    ?>
+							    <script>
+							    id_pago = <?php echo $id_pago; ?>;
+							    var a = document.createElement("a");
+							        a.target = "_blank";
+							        a.href = "../php/imprimir.php?IdPago="+id_pago;
+							        a.click();
+							    </script>
+   								<?php 
 							}
 						}
-						}                     
-			            $Sql_Mat = "INSERT INTO materiales(id_cliente, antena, router, cable, tubos, extras, bobina, fecha, usuarios, tipo) VALUES('$IdCliente','$Antena', '$Router', '$Cable', '$Tubos', '$Extras', '$Bobina', '$FechaInstalacion', '$Tecnico', 'Nuevo')";
+						}     
+						$Sql_Mat = "INSERT INTO materiales(id_cliente, antena, router, cable, tubos, extras, bobina, fecha, usuarios, tipo) VALUES('$IdCliente','$Antena', '$Router', '$Cable', '$Tubos', '$Extras', '$Bobina', '$FechaInstalacion', '$Tecnico', 'Nuevo')";
 						if(mysqli_query($conn, $Sql_Mat)){
 							$Mas = 'y Material';	
 						}else{
