@@ -22,6 +22,7 @@ if(mysqli_num_rows($rep) == 0 AND mysqli_num_rows($inst) == 0){
       var textoResponsable = $("select#responsable").val();
       var textoAcompañante = $("input#acompañante").val();
       var textoVehiculo = $("input#vehiculo").val();
+      var textoMaterial = $("textarea#material").val();
       if(document.getElementById('bobina').checked==true){
         textoBonina = 1;
       }else{
@@ -42,6 +43,7 @@ if(mysqli_num_rows($rep) == 0 AND mysqli_num_rows($inst) == 0){
               valorResponsable: textoResponsable,
               valorAcompañante: textoAcompañante,
               valorVehiculo: textoVehiculo,
+              valorMaterial: textoMaterial,
               valorBobina: textoBonina,
               valorVale: textoVale
             }, function(mensaje) {
@@ -148,8 +150,8 @@ function recargar10() {
 <!--Ventana modal para la creación de la ruta-->
 <div id="rutamodal" class="modal modal-fixed-footer">
     <div class="modal-content">
-        <h3 id="resultado_ruta">¿Estás seguro de crear la ruta?</h3><br>
-      <p class="center"><b>Al crear la ruta se mostrará un PDF en una nueva pestaña y se crear la ruta.</b></p><br>
+        <h3 id="resultado_ruta">¿Estás seguro de crear la ruta?</h3>
+      <p class="center red-text"><b>Al crear la ruta se mostrará un PDF en una nueva pestaña y se crear la ruta.</b></p><br>
      <h5>Tecnico(s) que ira(n) a la ruta:</h5> 
       <form class="row">
       <div class="input-field col s6 m3 l3">
@@ -161,7 +163,6 @@ function recargar10() {
             <option value="LUIS">LUIS</option>
             <option value="ALFREDO">ALFREDO</option>
             <option value="MIGUEL">MIGUEL</option>
-            <option value="ESDRAS">ESDRAS</option>
           </select>
       </div>
       <div class="input-field col s6 m6 l6">
@@ -175,18 +176,22 @@ function recargar10() {
           <label for="bobina">Bobina Nueva</label>
         </p>
       </div>
-      <form class="row">
-      <div class="input-field col s10 m6 l6">
+      <div class="input-field col s10 m4 l4">
           <i class="material-icons prefix">directions_car</i>
           <input id="vehiculo" type="text" class="validate" data-length="30" required>
           <label for="vehiculo">Vehiculo(s): </label>
       </div>
-      <div class="col s5 m4 l4">
+      <div class="col s7 m3 l3">
         <p><br>
           <input type="checkbox" id="vale"/>
           <label for="vale">Vale de Gasolina</label>
         </p>
       </div>
+      <div class="input-field col s10 m5 l5">
+          <textarea id="material" class="
+         materialize-textarea validate" data-length="100" required></textarea>
+          <label for="material">Material (1 Antena, 1 Router)</label>
+        </div>
       </form>
     </div>
     <div class="modal-footer container">

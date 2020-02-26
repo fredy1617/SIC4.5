@@ -89,32 +89,34 @@ class PDF extends FPDF{
         $this->SetFont('Arial','B',10);
         $rep_ruta = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reporte_rutas WHERE id_ruta = $ultima_ruta"));
         $ruta = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM rutas WHERE id_ruta = $ultima_ruta"));
+        if ($ruta['material'] != ''){
+            $MATERIAL = 'MATERIAL:
+'.$ruta['material'].'
+';
+}else{
+    $MATERIAL = '';
+}
         if ($rep_ruta['bobina'] == 1 AND $rep_ruta['vale'] == 1){
-            $this->MultiCell(154,15,utf8_decode('1.- OTORGAR BOBINA NUEVA PARA LA RUTA ('.$ultima_ruta.') A NOMBRE DE: '.$ruta['responsable'].'
+            $this->MultiCell(155,10,utf8_decode($MATERIAL.'1.- OTORGAR BOBINA NUEVA PARA LA RUTA ('.$ultima_ruta.') A NOMBRE DE: '.$ruta['responsable'].'
 2.- OTORGAR VALE DE GASOLINA PARA LA RUTA ('.$ultima_ruta.') EN EL VEHICULO: '.$rep_ruta['vehiculo'].'
-   ____________________________
+  _____________________________
 RESPONSABLE DE RUTA: '.$ruta['responsable']),1,'C',false);
         }else if ($rep_ruta['bobina'] == 1) {
-            $this->MultiCell(154,10,utf8_decode('1.- OTORGAR BOBINA NUEVA PARA LA RUTA ('.$ultima_ruta.') A NOMBRE DE: '.$ruta['responsable'].'
-   ____________________________
+            $this->MultiCell(155,10,utf8_decode($MATERIAL.'1.- OTORGAR BOBINA NUEVA PARA LA RUTA ('.$ultima_ruta.') A NOMBRE DE: '.$ruta['responsable'].'
+  _____________________________
 RESPONSABLE DE RUTA: '.$ruta['responsable']),1,'C',false);
         }else if ($rep_ruta['vale'] == 1) {
-            $this->MultiCell(154,10,utf8_decode('1.- OTORGAR VALE DE GASOLINA PARA LA RUTA ('.$ultima_ruta.') EN EL VEHICULO: '.$rep_ruta['vehiculo'].'
-   ____________________________
+            $this->MultiCell(155,10,utf8_decode($MATERIAL.'1.- OTORGAR VALE DE GASOLINA PARA LA RUTA ('.$ultima_ruta.') EN EL VEHICULO: '.$rep_ruta['vehiculo'].'
+  _____________________________
 RESPONSABLE DE RUTA: '.$ruta['responsable']),1,'C',false);
         }else{
-            $this->MultiCell(154,10,utf8_decode('
-   ____________________________
+            $this->MultiCell(155,10,utf8_decode($MATERIAL.'
+  _____________________________
 RESPONSABLE DE RUTA: '.$ruta['responsable']),1,'C',false);
-
         }
-
         mysqli_close($conn);
-
     }
-
     function footer(){
-
     }
 }
 

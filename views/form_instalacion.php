@@ -18,8 +18,7 @@ include('../php/cobrador.php');
         }
         else {
             element.style.display='none';
-        }
-        
+        }   
     };
 function insert_cliente() {
     var textoNombres = $("input#nombres").val();
