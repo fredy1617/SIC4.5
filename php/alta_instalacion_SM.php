@@ -86,13 +86,12 @@ if (filter_var($IP, FILTER_VALIDATE_IP)) {
 							}
 						}
 						}     
-						$Sql_Mat = "INSERT INTO materiales(id_cliente, antena, router, cable, tubos, extras, bobina, fecha, usuarios, tipo) VALUES('$IdCliente','$Antena', '$Router', '$Cable', '$Tubos', '$Extras', '$Bobina', '$FechaInstalacion', '$Tecnico', 'Nuevo')";
+						$Sql_Mat = "INSERT INTO materiales(id_cliente, antena, router, cable, tubos, extras, bobina, fecha, usuarios, tipo, es) VALUES('$IdCliente','$Antena', '$Router', '$Cable', '$Tubos', '$Extras', '$Bobina', '$FechaInstalacion', '$Tecnico', 'Nuevo', 'Instalacion')";
 						if(mysqli_query($conn, $Sql_Mat)){
 							$Mas = 'y Material';	
 						}else{
 							echo '<script>M.toast({html:"Ocurrio un error Material.", classes: "rounded"})</script>';
 						}
-
 			            echo '<script>M.toast({html:"Cliente '.$Mas.' registrado.", classes: "rounded"})</script>';
 			            echo '<script>M.toast({html:"Favor de dar de alta en el servidor al cliente.", classes: "rounded"})</script>';
 			            //echo '<script>function recargar() {

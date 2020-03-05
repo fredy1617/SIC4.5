@@ -115,7 +115,7 @@ if (filter_var($IP, FILTER_VALIDATE_IP)) {
 							}
 						}
 						}     
-						$Sql_Mat = "INSERT INTO materiales(id_cliente, antena, router, cable, tubos, extras, bobina, fecha, usuarios, tipo) VALUES('$IdCliente','$Antena', '$Router', '$Cable', '$Tubos', '$Extras', '$Bobina', '$FechaInstalacion', '$Tecnico', 'Nuevo')";
+						$Sql_Mat = "INSERT INTO materiales(id_cliente, antena, router, cable, tubos, extras, bobina, fecha, usuarios, tipo, es) VALUES('$IdCliente','$Antena', '$Router', '$Cable', '$Tubos', '$Extras', '$Bobina', '$FechaInstalacion', '$Tecnico', 'Nuevo', 'Instalacion')";
 						if(mysqli_query($conn, $Sql_Mat)){
 							$Mas = 'y Material';	
 						}else{

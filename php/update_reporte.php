@@ -118,7 +118,12 @@ $mensaje = "";
 			if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM materiales WHERE id_cliente='$IdCliente' AND antena='$Antena' AND router='$Router' AND cable='$Cable' AND tubos='$Tubos' AND extras='$Extras' AND fecha='$FechaAtendido' AND usuarios='$Tecnicos' AND tipo='$Tipo'"))>0){
 	 			echo '<script >M.toast({html:"Ya se encuentran valores similares registrados el dia de hoy.", classes: "rounded"})</script>';
 			}else{
-				$Sql_Mat = "INSERT INTO materiales(id_cliente, antena, router, cable, tubos, extras, fecha, usuarios, tipo) VALUES('$IdCliente','$Antena', '$Router', '$Cable', '$Tubos', '$Extras', '$FechaAtendido', '$Tecnicos', '$Tipo')";
+				if ($IdCliente > 10000) {
+					$Es = 'Especial o Mantenimiento';
+				}else{
+					$Es = 'Reporte';
+				}
+				$Sql_Mat = "INSERT INTO materiales(id_cliente, antena, router, cable, tubos, extras, fecha, usuarios, tipo, es) VALUES('$IdCliente','$Antena', '$Router', '$Cable', '$Tubos', '$Extras', '$FechaAtendido', '$Tecnicos', '$Tipo', '$Es')";
 				if(mysqli_query($conn, $Sql_Mat)){
 					echo '<script>M.toast({html:"Material insertado.", classes: "rounded"})</script>';	
 				}else{

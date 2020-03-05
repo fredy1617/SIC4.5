@@ -6,7 +6,7 @@ include('fredyNav.php');
 include('../php/conexion.php');
 ?>
 <script>
-function update_reporte() {
+function update_cotejo_tel() {
     var textoAtendido = $("select#atendido").val();
     var id_Pago = $("input#id_pago").val();    
     if (textoAtendido == "") {
@@ -95,7 +95,7 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
             <option value="2">Registrado en Adaptix</option>
           </select>
         </div><br><br>
-      <a onclick="update_reporte();" class="waves-effect waves-light btn pink right col l3 m3 s8"><i class="material-icons right">send</i>COTEJAR PAGO</a>
+      <a onclick="update_cotejo_tel();" class="waves-effect waves-light btn pink right col l3 m3 s8"><i class="material-icons right">send</i>COTEJAR PAGO</a>
     </form>
   </div> 
 </div>

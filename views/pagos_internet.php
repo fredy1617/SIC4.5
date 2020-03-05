@@ -198,6 +198,7 @@ if ($datos['fecha_corte'] < $Fecha_Hoy ) {
   if ($mesA == $mesC and $mesA == $mesF) {
      $xDia = $mensualidad['mensualidad']/30;
      $Descuento = $Dias_pasaron*$xDia;
+     $Descuento = round($Descuento, 0, PHP_ROUND_HALF_DOWN);
   }
 }
 ?>
@@ -398,27 +399,27 @@ if ($datos['fecha_corte'] < $Fecha_Hoy ) {
       while($pagos = mysqli_fetch_array($resultado_pagos)){
         $id_user = $pagos['id_user'];
         $user = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id = '$id_user'"));
-      ?> 
-      <tr>
-        <td><b><?php echo $aux;?></b></td>
-        <td>$<?php echo $pagos['cantidad'];?></td>
-        <td><?php echo $pagos['tipo'];?></td>
-        <td><?php echo $pagos['descripcion'];?></td>
-        <td><?php echo $user['user_name'];?></td>
-        <td><?php echo $pagos['fecha'];?></td>
-        <td><?php echo $pagos['tipo_cambio']; ?></td>
-        <td><a onclick="imprimir(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a>
-        </td>
-        <td><a onclick="borrar(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a>
-        </td>
-      </tr>
-      <?php
-      $aux--;
+        ?> 
+        <tr>
+          <td><b><?php echo $aux;?></b></td>
+          <td>$<?php echo $pagos['cantidad'];?></td>
+          <td><?php echo $pagos['tipo'];?></td>
+          <td><?php echo $pagos['descripcion'];?></td>
+          <td><?php echo $user['user_name'];?></td>
+          <td><?php echo $pagos['fecha'];?></td>
+          <td><?php echo $pagos['tipo_cambio']; ?></td>
+          <td><a onclick="imprimir(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a>
+          </td>
+          <td><a onclick="borrar(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a>
+          </td>
+        </tr>
+        <?php
+        $aux--;
       }//Fin while
       }else{
       echo "<center><b><h3>Este cliente aún no ha registrado pagos</h3></b></center>";
-    }
-    ?> 
+      }
+      ?> 
     </tbody>
   </table>    
   </div>
