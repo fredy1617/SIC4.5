@@ -75,6 +75,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    	<li><a href="reportes_atendidos.php" class="black-text"><i class="material-icons">done</i>Reportes Atendidos </a></li>
 				    	<li><a href="rep_instalaciones.php" class="black-text"><i class="material-icons">format_list_numbered</i>Rep. Instalaciones</a></li>
 				    	<li><a href="reporte_deudas.php" class="black-text"><i class="material-icons">list</i>Reporte Deudas</a></li>    	
+				    	<li><a href="reporte_material.php" class="black-text"><i class="material-icons">router</i>Reporte Material</a></li>    	
 				    </ul>
 				    <li><a href="historial_cortes.php" class="black-text"><i class="material-icons">content_cut</i>Historial de Cortes </a></li>
 				    <li><a href="reporte_x_fecha.php" class="black-text"><i class="material-icons">assignment_turned_in</i>Trabajos Realizados</a></li>
@@ -168,6 +169,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 								     <li><a href="historial_cortes.php"><i class="material-icons">content_cut</i>Historial Cortes </a></li>
 								    <li><a href="rep_instalaciones.php"><i class="material-icons">format_list_numbered</i>Reporte Instalaciones</a></li>
 								    <li><a href="reportes_atendidos.php"><i class="material-icons">done</i>Reportes Atendidos</a></li>
+				    				<li><a href="reporte_material.php"><i class="material-icons">router</i>Reporte Material</a></li>  	
 								    <li><a href="reporte_x_fecha.php"><i class="material-icons">assignment_turned_in</i>Trabajo Realizado</a></li>
 								    <li><a href="en_cajas.php"><i class="material-icons">monetization_on</i>En Cajas</a></li>
 								    <li><a href="reporte_deudas.php"><i class="material-icons">list</i>Reporte Deudas</a></li>
