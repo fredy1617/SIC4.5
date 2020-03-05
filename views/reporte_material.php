@@ -41,7 +41,7 @@
                 <select id="usuario" class="browser-default">
                   <option value="" selected>Seleccione un usuario</option>
                   <?php 
-                  $sql_usuario = mysqli_query($conn,"SELECT * FROM users WHERE area != 'Cobrador'");
+                  $sql_usuario = mysqli_query($conn,"SELECT * FROM users WHERE area != 'Cobrador' AND area != 'Oficina' AND user_id != 10 AND user_id != 56 AND user_id != 61 AND user_id != 62  AND user_id != 54");
                   while($usuario = mysqli_fetch_array($sql_usuario)){
                     ?>
                       <option value="<?php echo $usuario['user_name'];?>"><?php echo $usuario['user_name'];?></option>
