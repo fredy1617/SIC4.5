@@ -11,7 +11,7 @@ if ($User ==  0) {
 
 while($usuario = mysqli_fetch_array($usuarios)){
   $user=$usuario['user_name'];
-  $id_user = $usuario['user_id']
+  $id_user = $usuario['user_id'];
 ?>
 <br><br>
 <h3 class="center">TECNICO: <?php echo $usuario['firstname']; ?></h3>
@@ -172,6 +172,46 @@ while($usuario = mysqli_fetch_array($usuarios)){
     </tbody>
 </table>
 <?php
+    #CHECAMOS SI HAY REPORTES EN ESTA COMUNIDAD
+    $Cotejos = mysqli_query($conn, "SELECT * FROM pagos INNER JOIN fecha_cotejo ON pagos.id_pago = fecha_cotejo.id_pago WHERE pagos.Cotejado = 2 AND fecha_cotejo.fecha = '$DIA' ORDER BY fecha_cotejo.hora");
+    if(mysqli_num_rows($Cotejos) > 0){
+      ?>
+      <h5>Cotejos: </h5>
+      <table class="bordered highlight responsive-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Descripcion</th>
+            <th>Zona</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          while ($info = mysqli_fetch_array($Cotejos)) {
+          $id_cliente = $info['id_cliente'];
+          $sql2 = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente");
+          $cliente = mysqli_fetch_array($sql2);
+          ?>
+          <tr>
+            <td><?php echo $info['id_cliente']; ?></td>
+            <td><?php echo $cliente['nombre']; ?></td>            
+            <td><b>Cotejo Telefono</b></td>                       
+            <td><?php echo $info['fecha']; ?></td>
+            <td><?php echo $info['hora']; ?></td>
+            <td><?php echo $info['tipo']; ?> (<?php echo $info['descripcion']; ?>)</td>
+            <td>Oficina</td>
+          </tr>
+        <?php
+        }
+        ?> 
+        </tbody>
+      </table>
+      <?php
+    }
 }
 mysqli_close($conn);
 ?>
