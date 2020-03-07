@@ -170,6 +170,7 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
          <b>Comunidad: </b><?php echo $comunidad['nombre'];?><br>
          <b>Fecha de Instalación: </b><?php echo $datos['fecha_instalacion'];?><br>
          <?php
+         if ($datos['id_cliente'] < 10000) {
           $Pago = mysqli_fetch_array(mysqli_query($conn, "SELECT descripcion FROM pagos WHERE id_cliente = '$no_cliente'  AND tipo = 'Mensualidad' ORDER BY id_pago DESC LIMIT 1"));
           //Separamos el stringv
           if ($datos['servicio'] == 'Internet y Telefonia' OR $datos['servicio'] == 'Internet') {
@@ -194,7 +195,6 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
          }
         }
         if ($datos['servicio'] == 'Internet y Telefonia' OR $datos['servicio'] == 'Telefonia') {
-         if ($datos['id_cliente'] < 10000) {
          if ($datos['tel_cortado'] == 0) {
            $estado = "ACTIVO";
            $col = "green";
@@ -205,8 +205,9 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
          ?>
          <b>Extención:  <?php echo $datos['tel_servicio'];?></b><br>
          <b>Telefono:  <a class="<?php echo $col;?>-text"><?php echo $estado;?></a></b><br>
-          <?php } 
-        }?>
+          <?php  
+        }
+      }?>
       </p>
     </li>
   </ul>

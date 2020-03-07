@@ -15,6 +15,7 @@ $CostoTotal = $conn->real_escape_string($_POST['valorCostoTotal']);
 $Tipo_Campio = $conn->real_escape_string($_POST['valorTipo']);
 $Servicio = $conn->real_escape_string($_POST['valorServicio']);
 $Fecha_hoy = date('Y-m-d');
+$Hora = date('H:i:s');
 
 $user = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$id_user'"));
 $Usuario = $user['firstname'];
@@ -27,8 +28,8 @@ if($Anticipo > $CostoTotal){
 	 		echo '<script >M.toast({html:"Ya se encuentra un cliente con los mismos datos registrados.", classes: "rounded"})</script>';
 	 	}else{
 	 		if ($Servicio == "Telefonia") {				
-				$sql = "INSERT INTO clientes (nombre, telefono, lugar, direccion, referencia, total, dejo, paquete, fecha_registro, registro, servicio) 
-				VALUES('$Nombres', '$Telefono', '$Comunidad', '$Direccion', '$Referencia', '$CostoTotal', '$Anticipo', '$Paquete', '$Fecha_hoy','$Usuario','$Servicio')";
+				$sql = "INSERT INTO clientes (nombre, telefono, lugar, direccion, referencia, total, dejo, paquete, fecha_registro, hora_registro, registro, servicio) 
+				VALUES('$Nombres', '$Telefono', '$Comunidad', '$Direccion', '$Referencia', '$CostoTotal', '$Anticipo', '$Paquete', '$Fecha_hoy', '$Hora','$Usuario','$Servicio')";
 			}else{
 				$TipoInt = $conn->real_escape_string($_POST['valorTipoInst']);
 				$Contrato = 0;
@@ -37,8 +38,8 @@ if($Anticipo > $CostoTotal){
 					$Contrato = 1;
 					$Prepago = 0;
 				}
-				$sql = "INSERT INTO clientes (nombre, telefono, lugar, direccion, referencia, total, dejo, paquete, fecha_registro, registro, servicio, contrato, Prepago) 
-				VALUES('$Nombres', '$Telefono', '$Comunidad', '$Direccion', '$Referencia', '$CostoTotal', '$Anticipo', '$Paquete', '$Fecha_hoy','$Usuario','$Servicio', '$Contrato', '$Prepago')";
+				$sql = "INSERT INTO clientes (nombre, telefono, lugar, direccion, referencia, total, dejo, paquete, fecha_registro, hora_registro, registro, servicio, contrato, Prepago) 
+				VALUES('$Nombres', '$Telefono', '$Comunidad', '$Direccion', '$Referencia', '$CostoTotal', '$Anticipo', '$Paquete', '$Fecha_hoy', '$Hora','$Usuario','$Servicio', '$Contrato', '$Prepago')";
 			}
 	 		
 			if(mysqli_query($conn, $sql)){

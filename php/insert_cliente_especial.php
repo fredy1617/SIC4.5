@@ -10,6 +10,7 @@ $Referencia = $conn->real_escape_string($_POST['valorReferencia']);
 $Usuario = $conn->real_escape_string($_POST['valorUsuario']);
 $Mantenimiento = $conn->real_escape_string($_POST['valorMantenimiento']);
 $Registro = date('Y-m-d');
+$Hora = date('H:i:s');
 //Variable vacía (para evitar los E_NOTICE)
 $mensaje = "";
 	if (isset($Nombres)) {
@@ -32,7 +33,7 @@ $mensaje = "";
         			$Descripcion2= "'Reporte Especial: ".$Descripcion."'";
         		    $ir	= "<script>ir1()</script>";
         		}
-				$sql = "INSERT INTO reportes (id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, ".$Descripcion2.", '$Registro', '$Usuario')";
+				$sql = "INSERT INTO reportes (id_cliente, descripcion, fecha, hora_registro, registro) VALUES ($IdCliente, ".$Descripcion2.", '$Registro', '$Hora', '$Usuario')";
 				if(mysqli_query($conn, $sql)){
 					?>
 				  <script>

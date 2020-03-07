@@ -11,6 +11,7 @@ $Coordenadas = $conn->real_escape_string($_POST['valorCoordenada']);
 $Descripcion = $conn->real_escape_string($_POST['valorDescripcion']);
 $IdCliente = $conn->real_escape_string($_POST['valorIdCliente']);
 $Fecha = date('Y-m-d');
+$Hora = date('H:i:s');
 $id_user = $_SESSION['user_id'];
 
   
@@ -19,7 +20,7 @@ if (mysqli_query($conn, $sql2)) {
   echo  '<script>M.toast({html:"Información actualizada.", classes: "rounded"})</script>';
 }
 //o $consultaBusqueda sea igual a nombre + (espacio) + apellido
-$sql = "INSERT INTO reportes (id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, '$Descripcion', '$Fecha', $id_user)";
+$sql = "INSERT INTO reportes (id_cliente, descripcion, fecha, hora_registro, registro) VALUES ($IdCliente, '$Descripcion', '$Fecha', '$Hora', $id_user)";
 if(mysqli_query($conn, $sql)){
 	?>
   <script>    
