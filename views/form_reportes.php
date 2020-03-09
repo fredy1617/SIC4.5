@@ -63,6 +63,13 @@ include('fredyNav.php');
       }else{
         Entra = 'Si';
         textoDescripcion = textoMas;
+        if (textoIdCliente >= 10000) {
+          if(document.getElementById('mantenimiento').checked==true){
+          textoDescripcion = 'Mantenimiento: '+textoMas;
+          }else if(document.getElementById('especial').checked==true){
+            textoDescripcion = 'Reporte Especial: '+textoMas;
+          }
+        }
       }
     }else{
       Entra = 'Si';
@@ -236,19 +243,37 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
         </div>
       </div>
       <div class="row">
+        <?php if ($datos['id_cliente']<10000) {
+        ?>
         <div class="col s1">
           <br>
         </div>
+        <?php } ?>
         <div class="col s3 m2 l2">
           <p><br>
             <input type="checkbox" id="otros"/>
             <label for="otros">Otra Opción</label>
           </p>
         </div>
-        <div class="input-field col s8 m8 l8">
+        <div class="input-field col s8 m6 l6">
             <input id="mas" type="text" class="validate" data-length="100" required>
             <label for="mas">Especifica (ej: Revicion de camaras, Aumentar paquete, etc.):</label>
         </div>
+        <?php if ($datos['id_cliente']>=10000) {
+        ?>
+        <div class="col s4 m2 l2">
+          <p><br>
+            <input type="checkbox" id="mantenimiento"/>
+            <label for="mantenimiento">Mantenimiento</label>
+          </p>
+        </div>
+        <div class="col s4 m2 l2">
+          <p><br>
+            <input type="checkbox" id="especial"/>
+            <label for="especial">Especial</label>
+          </p>
+        </div>
+      <?php } ?>
       </div>
       <input id="id_cliente" value="<?php echo htmlentities($datos['id_cliente']);?>" type="hidden">
     </form>

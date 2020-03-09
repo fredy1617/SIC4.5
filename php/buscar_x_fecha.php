@@ -12,10 +12,14 @@ if ($User ==  0) {
 while($usuario = mysqli_fetch_array($usuarios)){
   $user=$usuario['user_name'];
   $id_user = $usuario['user_id'];
+  $instalaciones = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes WHERE fecha_instalacion = '$DIA' AND  tecnico LIKE '%$user%'"));
+  $Reportes_Oficina = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE (fecha_solucion = '$DIA'  AND ((campo = 0 AND atendido = 1) OR (atendido = 2 AND campo = 1)) AND (tecnico = '$id_user' OR apoyo = '$id_user'))"));
+  $Reportes_Campo = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE (fecha_solucion = '$DIA'  AND (campo = 1 AND atendido = 1) AND (tecnico = '$id_user' OR apoyo = '$id_user'))"));
 ?>
 <br><br>
 <h3 class="center">TECNICO: <?php echo $usuario['firstname']; ?></h3>
 <h4>Trabajo: </h4>
+<h5 class="indigo-text">Instalaciones (<?php echo $instalaciones['count(*)']; ?>) <--> Reportes Ofician (<?php echo $Reportes_Oficina['count(*)']; ?>) <--> Reportes Campo (<?php echo $Reportes_Campo['count(*)']; ?>) </h5>
 <table class="bordered highlight responsive-table">
     <thead>
       <tr>
@@ -23,8 +27,9 @@ while($usuario = mysqli_fetch_array($usuarios)){
         <th>Nombre</th>
         <th>Tipo</th>
         <th>Comunidad</th>
+        <th>Hora Registro</th>
         <th>Fecha</th>
-        <th>Hora</th>
+        <th>Hora Termino</th>
         <th>Falla</th>
         <th>Solucion</th>
         <th>Técnicos</th>
@@ -65,12 +70,13 @@ while($usuario = mysqli_fetch_array($usuarios)){
             <td><?php echo $cliente['nombre']; ?></td>            
             <td><b>Reporte</b></td>            
             <td><?php echo $comunidad['nombre']; ?></td>            
+            <td><?php echo $info['hora_registro']; ?></td>
             <td><?php echo $info['fecha_solucion']; ?></td>
             <td><?php echo $info['hora_atendido']; ?></td>
             <td><?php echo $info['falla']; ?></td>
             <td><?php echo ($info['atendido'] == 2) ? "Ser reviso en oficina y se envio a campo":$info['solucion']; ?></td>
             <td><?php echo $tecnico['firstname'].$Apoyo; ?></td>
-            <td><?php echo ($info['campo'] == 1) ? "Campo":"Oficina"; ?></td>
+            <td><?php echo ($info['campo'] == 1 AND $info['atendido'] == 1) ? "Campo":"Oficina"; ?></td>
           </tr>
         <?php
         }
@@ -84,6 +90,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
           <td><?php echo $instalaciones['nombre'];?></td>
           <td><b>Instalacion</b></td>
           <td><?php echo $comunidad['nombre'];?></td>
+          <td><?php echo $info['hora_registro']; ?></td>
           <td><?php echo $instalaciones['fecha_instalacion'];?></td>
           <td><?php echo $instalaciones['hora_alta']; ?></td>
           <td>Instalacion</td>
@@ -118,12 +125,13 @@ while($usuario = mysqli_fetch_array($usuarios)){
               <td><?php echo $cliente['nombre']; ?></td>            
               <td><b>Reporte</b></td>            
               <td><?php echo $comunidad['nombre']; ?></td>            
+              <td><?php echo $info['hora_registro']; ?></td>
               <td><?php echo $info['fecha_solucion']; ?></td>
               <td><?php echo $info['hora_atendido']; ?></td>
               <td><?php echo $info['falla']; ?></td>
               <td><?php echo ($info['atendido'] == 2) ? "Ser reviso en oficina y se envio a campo":$info['solucion']; ?></td>
               <td><?php echo $tecnico['firstname'].$Apoyo; ?></td>
-              <td><?php echo ($info['campo'] == 1) ? "Campo":"Oficina"; ?></td>
+              <td><?php echo ($info['campo'] == 1 AND $info['atendido'] == 1) ? "Campo":"Oficina"; ?></td>
             </tr>
           <?php
           }
@@ -155,12 +163,13 @@ while($usuario = mysqli_fetch_array($usuarios)){
             <td><?php echo $cliente['nombre']; ?></td>            
             <td><b>Reporte</b></td>            
             <td><?php echo $comunidad['nombre']; ?></td>            
+            <td><?php echo $info['hora_registro']; ?></td>
             <td><?php echo $info['fecha_solucion']; ?></td>
             <td><?php echo $info['hora_atendido']; ?></td>
             <td><?php echo $info['falla']; ?></td>
             <td><?php echo ($info['atendido'] == 2) ? "Ser reviso en oficina y se envio a campo":$info['solucion']; ?></td>
             <td><?php echo $tecnico['firstname'].$Apoyo; ?></td>
-            <td><?php echo ($info['campo'] == 1) ? "Campo":"Oficina"; ?></td>
+            <td><?php echo ($info['campo'] == 1 AND $info['atendido'] == 1) ? "Campo":"Oficina"; ?></td>
           </tr>
         <?php
         }
