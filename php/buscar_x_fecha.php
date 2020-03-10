@@ -182,7 +182,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
 </table>
 <?php
     #CHECAMOS SI HAY REPORTES EN ESTA COMUNIDAD
-    $Cotejos = mysqli_query($conn, "SELECT * FROM pagos INNER JOIN fecha_cotejo ON pagos.id_pago = fecha_cotejo.id_pago WHERE pagos.Cotejado = 2 AND fecha_cotejo.fecha = '$DIA' ORDER BY fecha_cotejo.hora");
+    $Cotejos = mysqli_query($conn, "SELECT * FROM pagos INNER JOIN fecha_cotejo ON pagos.id_pago = fecha_cotejo.id_pago WHERE pagos.Cotejado = 2 AND fecha_cotejo.fecha = '$DIA' AND fecha_cotejo.usuario = '$id_user' ORDER BY fecha_cotejo.hora");
     if(mysqli_num_rows($Cotejos) > 0){
       ?>
       <h5>Cotejos: </h5>
@@ -195,6 +195,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
             <th>Fecha</th>
             <th>Hora</th>
             <th>Descripcion</th>
+            <th>Registo</th>
             <th>Zona</th>
           </tr>
         </thead>
@@ -202,8 +203,10 @@ while($usuario = mysqli_fetch_array($usuarios)){
           <?php
           while ($info = mysqli_fetch_array($Cotejos)) {
           $id_cliente = $info['id_cliente'];
+          $usuario = $info['usuario'];
           $sql2 = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente");
           $cliente = mysqli_fetch_array($sql2);
+          $user = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$usuario"));
           ?>
           <tr>
             <td><?php echo $info['id_cliente']; ?></td>
@@ -212,6 +215,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
             <td><?php echo $info['fecha']; ?></td>
             <td><?php echo $info['hora']; ?></td>
             <td><?php echo $info['tipo']; ?> (<?php echo $info['descripcion']; ?>)</td>
+            <td><?php echo $user['firstname']; ?></td>
             <td>Oficina</td>
           </tr>
         <?php
