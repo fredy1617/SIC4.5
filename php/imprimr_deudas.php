@@ -3,11 +3,8 @@ include('../fpdf/fpdf.php');
 include('../php/conexion.php');
 
 class PDF extends FPDF{
-   //Cabecera de página
-   function Header(){
-
-    }
-
+    //Cabecera de página
+    function Header(){ }
     function body(){
         global $conn;
         global $listado;
@@ -20,7 +17,11 @@ class PDF extends FPDF{
         $this->SetFont('Arial','B',10);
         while($resultados = mysqli_fetch_array($sql)){
             $id_cliente = $resultados['id_cliente'];
-            $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"));
+            $cosnulta = mysqli_query($conn,"SELECT * FROM clientes WHERE id_cliente=$id_cliente");
+            if (mysqli_num_rows($cosnulta)<=0) {
+                $cosnulta = mysqli_query($conn,"SELECT * FROM especiales WHERE id_cliente=$id_cliente");
+            } 
+            $cliente = mysqli_fetch_array($cosnulta);
             $id_comunidad = $cliente['lugar'];
             $Comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad = $id_comunidad"));   
             $id_usuario = $resultados['usuario'];
@@ -34,20 +35,11 @@ class PDF extends FPDF{
 
             $this->MultiCell(180,1, utf8_decode('
                 -------------------------------------------------------------------------------------------------------------------------------------------'),0,'L',false);
-
             $this->Ln(3);
-
         }
-        
-
-
         mysqli_close($conn);
-
     }
-
-    function footer(){
-
-    }
+    function footer(){ }
 }
 
 //Creación del objeto de la clase heredada

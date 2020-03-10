@@ -19,7 +19,11 @@
             $fila = mysqli_fetch_array(mysqli_query($enlace, "SELECT * FROM pagos WHERE id_pago=$id_max"));
             $id_cliente = $fila['id_cliente'];
             $tipo_pago = $fila['tipo'];
-            $cliente = mysqli_fetch_array(mysqli_query($enlace, "SELECT * FROM clientes WHERE id_cliente=$id_cliente"));
+            $sql = mysqli_query($enlace, "SELECT * FROM clientes WHERE id_cliente=$id_cliente");
+            if (mysqli_num_rows($sql)<=0) {
+                $sql = mysqli_query($enlace,"SELECT * FROM especiales WHERE id_cliente=$id_cliente");
+            } 
+            $cliente = mysqli_fetch_array($sql);
 
             // Colores de los bordes, fondo y texto
             $this->SetFillColor(255,255,255);

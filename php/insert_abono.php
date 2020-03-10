@@ -78,8 +78,11 @@ if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $
 ?>
   <?php 
   $no_cliente = $IdCliente;
-  $sql = "SELECT * FROM clientes WHERE id_cliente=$no_cliente";
-  $datos = mysqli_fetch_array(mysqli_query($conn, $sql));
+  $sql = mysqli_query($conn,"SELECT * FROM clientes WHERE id_cliente=$no_cliente");
+  if (mysqli_num_rows($sql)<=0) {
+    $sql = mysqli_query($conn,"SELECT * FROM especiales WHERE id_cliente=$no_cliente");
+  } 
+  $datos = mysqli_fetch_array($sql);
   $id_comunidad = $datos['lugar'];
   $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad = $id_comunidad"));
 

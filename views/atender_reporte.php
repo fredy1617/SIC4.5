@@ -89,6 +89,11 @@ function update_reporte(bandera, contador) {
             textoExtras = textoExtras+', '+textoOtros;
           }
         }
+        if(document.getElementById('credito').checked==true){
+          textoTipo_cambio   = "Credito";
+        }else{
+          textoTipo_cambio = "Efectivo";
+        }
     }else{
         textoAntena = '';
         textoRouter = '';
@@ -99,6 +104,8 @@ function update_reporte(bandera, contador) {
         textoTipo = '';
         textoCosto = '';
         textoManoObra = '';
+        textoTipo_cambio = '';
+
     }
 
     if(document.getElementById('campo').checked==true){
@@ -106,6 +113,7 @@ function update_reporte(bandera, contador) {
     }else{
       textoCampo = 0;
     }
+
     if(document.getElementById('visita').checked==true){
       if (textoFecha == "") {
         entra = "No";
@@ -140,6 +148,7 @@ function update_reporte(bandera, contador) {
           valorTubos: textoTubos,
           valorExtras: textoExtras,
           valorTipo: textoTipo,
+          valorTipo_Cambio: textoTipo_cambio,
           valorCosto: textoCosto
         }, function(mensaje) {
             $("#resultado_update_reporte").html(mensaje);
@@ -375,15 +384,22 @@ if($resultado['tecnico']==''){
                     }$contador--;
                     ?>
                   </p>
-                  <div class="col s12 m5 l5"><br><br>
+                  <div class="col s12 m3 l3"><br><br>
                     <input type="checkbox" id="reemplazo"/>
                     <label for="reemplazo">Reemplazo</label><br><br>
                   </div>
-                  <div class="input-field col s12 m7 l7">
+                  <div class="input-field col s12 m6 l6">
                     <i class="material-icons prefix">attach_money</i>
                     <input id="costo" type="number" class="validate" data-length="15" required>
-                    <label for="costo">Costo del servicio ($0.00):</label>
+                    <label for="costo">Costo Servicio $0.00:</label>
                   </div>
+                  <div class="col s4 m3 l3">
+                  <p>
+                    <br>
+                    <input type="checkbox" id="credito"/>
+                    <label for="credito">Credito</label>
+                  </p>
+            </div>
                 </div>
               <?php } ?>  
                 <input id="id_cliente" value="<?php echo htmlentities($cliente['id_cliente']);?>" type="hidden"><br><br><br>

@@ -53,8 +53,11 @@ include('../php/superAdmin.php');
 				    }
 				    $poner = mysqli_fetch_array(mysqli_query($conn, "SELECT min(id_deuda) AS id FROM deudas WHERE id_cliente = $id_cliente AND liquidada = 0"));
     				$tiene = $abono['suma']-$deuda['suma'];
-
-					$cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"));
+					$cosnulta = mysqli_query($conn,"SELECT * FROM clientes WHERE id_cliente=$id_cliente");
+				    if (mysqli_num_rows($cosnulta)<=0) {
+				      $cosnulta = mysqli_query($conn,"SELECT * FROM especiales WHERE id_cliente=$id_cliente");
+				    } 
+				    $cliente = mysqli_fetch_array($cosnulta);
 					$id_comunidad = $cliente['lugar'];
 					$Comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad = $id_comunidad"));	
 					$id_usuario = $resultados['usuario'];

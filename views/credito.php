@@ -53,8 +53,11 @@ $no_cliente = $_POST['no_cliente'];
 <body>
 	<div class="container" id="mostrar_abonos">
   <?php 
-  $sql = "SELECT * FROM clientes WHERE id_cliente=$no_cliente";
-  $datos = mysqli_fetch_array(mysqli_query($conn, $sql));
+  $sql = mysqli_query($conn,"SELECT * FROM clientes WHERE id_cliente=$no_cliente");
+  if (mysqli_num_rows($sql)<=0) {
+    $sql = mysqli_query($conn,"SELECT * FROM especiales WHERE id_cliente=$no_cliente");
+  } 
+  $datos = mysqli_fetch_array($sql);
   $id_comunidad = $datos['lugar'];
   $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad = $id_comunidad"));
 
