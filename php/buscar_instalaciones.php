@@ -65,8 +65,17 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
           <td><?php echo $Estatus; ?></td>
         </tr>
         <?php
+        $Total += $instalaciones['total'];
         $aux--;
       }
+      ?>
+        <tr> 
+          <td></td><td></td><td></td>
+          <td><b>TOTAL =</b></td>
+          <td><b>$<?php echo $Total ?></b></td>
+          <td></td><td></td><td></td><td></td>
+        </tr>
+        <?php
       }else{
         echo "<center><b><h5>No se encontraron instalaciones</h5></b></center>";
       }
