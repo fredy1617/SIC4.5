@@ -24,6 +24,7 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
       $resultado_instalaciones = mysqli_query($conn, $sql_instalaciones);
       $aux = mysqli_num_rows($resultado_instalaciones);
       if($aux>0){
+      $TotalI = 0;
       while($instalaciones = mysqli_fetch_array($resultado_instalaciones)){
         $id_comunidad = $instalaciones['lugar'];
         $comunidad = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM comunidades WHERE id_comunidad = '$id_comunidad'"));
@@ -65,14 +66,14 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
           <td><?php echo $Estatus; ?></td>
         </tr>
         <?php
-        $Total += $instalaciones['total'];
+        $TotalI += $instalaciones['total'];
         $aux--;
       }
       ?>
         <tr> 
           <td></td><td></td><td></td>
           <td><b>TOTAL =</b></td>
-          <td><b>$<?php echo $Total ?></b></td>
+          <td><b>$<?php echo $TotalI ?></b></td>
           <td></td><td></td><td></td><td></td>
         </tr>
         <?php
