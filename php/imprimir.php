@@ -16,9 +16,10 @@ class PDF extends FPDF{
 		$user = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$id_user"));
 		$id_cliente = $fila['id_cliente'];
 		$tipo_pago = $fila['tipo'];
-		$cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"));
-        if ($cliente['nombre'] == '') {
+        if ((mysqli_num_rows(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"))) == 0) {
             $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente = $id_cliente"));
+        }else{
+            $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"));
         }
 		 // Colores de los bordes, fondo y texto
             $this->SetFillColor(255,255,255);

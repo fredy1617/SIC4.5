@@ -245,13 +245,14 @@ echo $especiales;
               }else{
                 while ($tmp = mysqli_fetch_array($sql_tmp)) {
                     $id_reporte = $tmp['id_reporte'];
-                    $sql = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $id_reporte")); 
-                    $id = $sql['id_reporte'];
-                    $Descripcion = $sql['descripcion'];
-                    if ($sql['id_cliente'] == ''){
+                    if ((mysqli_num_rows(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $id_reporte"))) == 0){
                       $sql = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM orden_servicios WHERE id = $id_reporte")); 
                       $id = $sql['id'];
                       $Descripcion = ($sql['trabajo'] == '')? $sql['solicitud']: $sql['trabajo'];  
+                    }else{
+                      $sql = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $id_reporte")); 
+                      $id = $sql['id_reporte'];
+                     $Descripcion = $sql['descripcion'];
                     }
                     $id_cliente = $sql['id_cliente'];
                     $ver = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente");

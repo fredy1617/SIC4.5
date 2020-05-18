@@ -52,7 +52,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 					 <li><a href="clientes.php" class="black-text"><i class="material-icons">people</i>Clientes </a></li>
 				    <li><a href="../views/instalaciones.php" class="black-text"><i class="material-icons">list</i>Instalaciones <span class=" new badge pink" data-badge-caption=""><?php echo $instalaciones['count(*)']?></span></a></li>
 				    <li><a href="reportes.php" class="black-text"><i class="material-icons">perm_scan_wifi</i>Reportes <span class="new badge pink" data-badge-caption=""><?php echo $reportes['count(*)'];?></span></a></li>			    
-				    <li><a href="ordenes_servicio.php" class="black-text"><i class="material-icons">assignment</i>Orden Servicio<span class="new badge pink" data-badge-caption=""><?php echo $reportesEsp['count(*)']+$Ordenes['count(*)']+$Ordenes['count(*)'];?></span></a></li>
+				    <li><a href="ordenes_servicio.php" class="black-text"><i class="material-icons">assignment</i>Orden Servicio<span class="new badge pink" data-badge-caption=""><?php echo $reportesEsp['count(*)']+$Ordenes['count(*)'];?></span></a></li>
 				    <li><a class='dropdown-btn1 black-text' data-target='sub-dropdown4'><i class="material-icons left">assignment_ind</i> Facturacion <i class="material-icons right">chevron_right</i></a></li>
 				    <ul id='sub-dropdown4' class='dropdown-content'>
 				    	<li><a href="facturar_p.php" class="black-text"><i class="material-icons">assignment_late</i>Pendientes </a></li>   

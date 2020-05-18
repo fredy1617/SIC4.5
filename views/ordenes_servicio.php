@@ -79,7 +79,7 @@ include ('../php/cobrador.php');
           <?php
           date_default_timezone_set('America/Mexico_City');
           $Hoy = date('Y-m-d');
-          $consulta = mysqli_query($conn,"SELECT * FROM reportes  WHERE  (atendido != 1 OR atendido IS NULL) AND id_cliente >= 10000 AND descripcion LIKE 'Reporte Especial:%' ORDER BY fecha ");
+          $consulta = mysqli_query($conn,"SELECT * FROM reportes  WHERE  ((fecha_visita = '$Hoy'  AND atender_visita = 0) OR (fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR atendido != 1 OR atendido IS NULL) AND id_cliente > 10000 AND descripcion LIKE 'Reporte Especial:%' ORDER BY fecha ");
           //Obtiene la cantidad de filas que hay en la consulta
           $filas = mysqli_num_rows($consulta);
           //Si no existe ninguna fila que sea igual a $consultaBusqueda, entonces mostramos el siguiente mensaje
@@ -319,14 +319,15 @@ include ('../php/cobrador.php');
                   echo "<h5 class = 'center'>No hay reportes en ruta</h5>";
               }else{
                 while ($tmp = mysqli_fetch_array($sql_tmp)) {
-                    $id_reporte = $tmp['id_reporte'];
-                    $sql = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $id_reporte")); 
-                    $id = $sql['id_reporte'];
-                    $Descripcion = $sql['descripcion'];
-                    if ($sql['id_cliente'] == ''){
+                    $id_reporte = $tmp['id_reporte'];                    
+                    if ((mysqli_num_rows(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $id_reporte"))) == 0){
                       $sql = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM orden_servicios WHERE id = $id_reporte")); 
                       $id = $sql['id'];
                       $Descripcion = ($sql['trabajo'] == '')? $sql['solicitud']: $sql['trabajo'];  
+                    }else{
+                      $sql = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $id_reporte")); 
+                      $id = $sql['id_reporte'];
+                     $Descripcion = $sql['descripcion'];
                     }
                     $id_cliente = $sql['id_cliente'];
                     $ver = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente");

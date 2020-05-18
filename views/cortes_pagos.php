@@ -41,10 +41,10 @@
          while($pagos = mysqli_fetch_array($sql_pagos)){
           $aux ++;
           $id_cliente = $pagos['id_cliente'];
-          $sql = mysqli_query($conn, "SELECT nombre FROM clientes WHERE id_cliente = $id_cliente");
-          $cliente= mysqli_fetch_array($sql);
-          if ($cliente['nombre'] == '') {
+          if ((mysqli_num_rows(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"))) == 0) {
             $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente = $id_cliente"));
+          }else{
+              $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"));
           }
             ?>
             <tr>
