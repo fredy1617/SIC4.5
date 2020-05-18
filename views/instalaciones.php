@@ -72,7 +72,8 @@
                         <th>Telefono</th>
                         <th>Lugar</th>
     					          <th>Registro</th>
-    					          <th>Alta</th>
+                        <th>Alta</th>
+    					          <th>Abono</th>
                         <th>Agregar</th>
                         <th>Borrar</th>
                     </tr>
@@ -97,6 +98,7 @@
                         <td><?php echo $comuni;?></td>
     					          <td><?php echo $pendientes['registro'];?></td>
                         <td><form method="post" action="../views/alta_instalacion.php"><input type="hidden" name="id_cliente" value="<?php echo $pendientes['id_cliente'];?>"><button button type="submit" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">done</i></button></form></td>
+                        <td><form method="post" action="../views/abonar_instalacion.php"><input type="hidden" name="id_cliente" value="<?php echo $pendientes['id_cliente'];?>"><button button type="submit" class="btn btn-floating indigo darken-1 waves-effect waves-light"><i class="material-icons">attach_money</i></button></form></td>
                         <td><a onclick="ruta(<?php echo $pendientes['id_cliente'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></a></td>
                         <td><a onclick="eliminar_instalacion(<?php echo $pendientes['id_cliente']; ?>)" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
                     </tr>

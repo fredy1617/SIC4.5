@@ -6,13 +6,6 @@
 include('fredyNav.php')
 ?>
 <script>
-  function delete_operador(id){
-    $.post("../php/delete_operador.php", {
-            valorId: id,
-          }, function(mensaje) {
-              $("#resultado_operador").html(mensaje);
-          }); 
-  };
   function buscar() {
     var comunidad = $("select#comunidad").val();
     if (comunidad == 0) {
@@ -38,6 +31,7 @@ include('fredyNav.php')
           <div class="row"><br>
             <select id="comunidad" class="browser-default col s10" required onchange="buscar();">
               <option value="0" selected>SELECCIONE LA COMUNIDAD</option>
+              <option value="Todos">TODOS</option>
               <?php
               require('../php/conexion.php');
                   $sql = mysqli_query($conn,"SELECT * FROM comunidades ORDER BY nombre");
@@ -51,8 +45,8 @@ include('fredyNav.php')
           </div>
           </form>
       </div>
-      <div id="mostrar"></div>
   </div>
+  <div id="mostrar"></div>
 </body>
 </main>
 </html>

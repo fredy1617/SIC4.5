@@ -99,6 +99,7 @@ function insert_pago() {
     //Todo esto solo para agregar la descripcion automatica
     textoDescripcion = textoMes+" "+textoAño;
       
+
       if (document.getElementById('recargo').checked==true) {
         var Mensualidad = parseInt(textoCantidad);
         textoCantidad = Mensualidad+50;

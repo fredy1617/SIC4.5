@@ -10,17 +10,12 @@ include ('../php/admin.php');
   function buscar_cortes() {
       var textoDe = $("input#fecha_de").val();
       var textoA = $("input#fecha_a").val();
-      if (textoDe == "" || textoA == "")
-      {
-            M.toast({html:"Ingrese un rango de fechas.", classes: "rounded"});
-      }else{
         $.post("../php/todos_cortes.php", {
             valorDe: textoDe,
             valorA: textoA,
           }, function(mensaje) {
               $("#resultado_cortes").html(mensaje);
           }); 
-      }
   };
 </script>
 </head>

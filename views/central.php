@@ -215,6 +215,7 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
     </div>
   </div>
 </div>
+
 </div><!----------------CONTAINER----------------->
 </body>
 <?php } ?>

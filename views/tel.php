@@ -54,7 +54,7 @@ $tel = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes WHER
                 $fechaEntero = strtotime('-1 day', strtotime($cliente['fecha_instalacion']));
                 $dia =  date("d", $fechaEntero);
                 $array =  array('ENERO' => '01','FEBRERO' => '02', 'MARZO' => '03','ABRIL' => '04', 'MAYO' => '05', 'JUNIO' => '06', 'JULIO' => '07', 'AGOSTO' => '08', 'SEPTIEMBRE' => '09', 'OCTUBRE' => '10', 'NOVIEMBRE' => '11',  'DICIEMBRE' => '12');
-                if (strlen($ver[0])>=4) {
+                if (strlen($ver[0]) >= 4) {
                   $Mes = $array[$ver[0]];
                   $año = $ver[1];
                   $FechaCotejo = date($año.'-'.$Mes.'-'.$dia);

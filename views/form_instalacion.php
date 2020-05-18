@@ -18,7 +18,8 @@ include('../php/cobrador.php');
         }
         else {
             element.style.display='none';
-        }   
+        }
+        
     };
 function insert_cliente() {
     var textoNombres = $("input#nombres").val();
@@ -203,7 +204,7 @@ function insert_cliente() {
         </div>
         <div class="input-field">
           <textarea id="especificacion" class="materialize-textarea validate" data-length="150" required></textarea>
-          <label for="especificacion">Especificación: ej. (Dos pisos, Porton blanco)</label>
+          <label for="especificacion">Especificación: ej. (Dos pisos, Porton blanco, Preguntar por JUAN dueño del taller..)</label>
         </div>
         <div class="row">
           <div class="col s1"><br></div>

@@ -63,10 +63,12 @@ include('fredyNav.php');
       }else{
         Entra = 'Si';
         textoDescripcion = textoMas;
-        if (textoIdCliente >= 10000) {
+
+        if (textoIdCliente > 10000) {
           if(document.getElementById('mantenimiento').checked==true){
-          textoDescripcion = 'Mantenimiento: '+textoMas;
-          }else if(document.getElementById('especial').checked==true){
+            textoDescripcion = 'Mantenimiento: '+textoMas;
+          }
+          if(document.getElementById('especial').checked==true){
             textoDescripcion = 'Reporte Especial: '+textoMas;
           }
         }

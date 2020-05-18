@@ -39,6 +39,7 @@ if(mysqli_num_rows($rep) == 0 AND mysqli_num_rows($inst) == 0){
       }else if (textoVehiculo == "") {
         M.toast({html:"El campo Vehiculo(s) no puede ir vacío.", classes: "rounded"});
       }else{
+        M.toast({html:"Creando ruta...", classes: "rounded"});
         $.post("../php/crear_ruta.php", {
               valorResponsable: textoResponsable,
               valorAcompañante: textoAcompañante,
