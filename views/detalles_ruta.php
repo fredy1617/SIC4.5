@@ -320,14 +320,25 @@ $ruta = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM rutas WHERE id_rut
                 }else{
                     while($tmp = mysqli_fetch_array($sql_tmp)){
                         $id_reporte = $tmp['id_reporte'];
-                        $sql_reporte = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM reportes WHERE id_reporte = '$id_reporte'"));
-                    	$atendido =$sql_reporte['atendido'];
-                    	$estatus = '<span class="new badge red" data-badge-caption="Pendiente"></span>';
-                    	if ($atendido == 1) {
-                    		$estatus = '<span class="new badge green" data-badge-caption="Terminado"></span>';
-                    	}
+                        $sql = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM reportes WHERE id_reporte = '$id_reporte'"));
+                    	  $atendido =$sql['atendido'];
+                    	  $estatus = '<span class="new badge red" data-badge-caption="Pendiente"></span>';
+                    	  if ($atendido == 1) {
+                    		  $estatus = '<span class="new badge green" data-badge-caption="Terminado"></span>';
+                    	  }
 
-                        $id_cliente = $sql_reporte['id_cliente'];
+                        $id = $sql['id_reporte'];
+                        $Descripcion = $sql['descripcion'];
+                        $Solucion = $sql['solucion'];
+                        $Hora = $sql['hora_atendido'];
+                        if ($sql['id_cliente'] == ''){
+                        $sql = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM orden_servicios WHERE id = $id_reporte")); 
+                        $id = $sql['id'];
+                        $Descripcion = $sql['solicitud'];
+                        $Solucion = $sql['trabajo'];
+                        $Hora = ($sql['hora_r'] == '')? $sql['hora_s']: $sql['hora_r'];  
+                        }
+                        $id_cliente = $sql['id_cliente'];
                         $sql = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente");
                        $filas = mysqli_num_rows($sql);
                        if ($filas == 0) {
@@ -338,12 +349,12 @@ $ruta = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM rutas WHERE id_rut
       			           	$comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunidades WHERE id_comunidad=$id_comunidad"));
                 ?>
                     <tr>
-                      <td><?php echo $sql_reporte['id_reporte']; ?></td>
+                      <td><?php echo $id; ?></td>
                       <td><?php echo $cliente['nombre']; ?></td>
-                      <td><?php echo $sql_reporte['descripcion']; ?></td>
+                      <td><?php echo $Descripcion; ?></td>
                        <td><?php echo $comunidad['nombre'];?></td>
-                      <td><?php echo $sql_reporte['fecha_solucion']; ?></td>
-                      <td><?php echo $sql_reporte['hora_atendido']; ?></td>
+                      <td><?php echo $Solucion; ?></td>
+                      <td><?php echo $Hora; ?></td>
                       <td><?php echo $estatus; ?></td>
                     </tr>
                 <?php

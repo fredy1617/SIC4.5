@@ -8,8 +8,7 @@ include("is_logged.php");
 
 class PDF extends FPDF{
    //Cabecera de página
-   function Header(){
-    }
+   function Header(){ }
 
     function body(){
         global $conn;
@@ -45,25 +44,29 @@ class PDF extends FPDF{
             $this->MultiCell(194,4, utf8_decode('REGISTRO: '.$listado['fecha_registro']),0,'L',false);
             $this->MultiCell(180,1, utf8_decode('
                 -------------------------------------------------------------------------------------------------------------------------------------------------'),0,'L',false);
-
-
-
         }
         
-
         $this->Ln(10);
         $this->SetFont('Arial','B',18);
         $this->MultiCell(194,4, utf8_decode('RUTA REPORTES No.'.$id_ruta),0,'C',false);
-
         $resultado = mysqli_query($conn, "SELECT * FROM tmp_reportes WHERE ruta = $id_ruta");
         $aux = 0;
         $this->SetFont('Arial','B',10);
         while($listado = mysqli_fetch_array($resultado)){
 //Buscar Reporte
             $id_reporte = $listado['id_reporte'];
-            $reporte = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM reportes WHERE id_reporte='$id_reporte'"));
+            $sql_o = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM reportes WHERE id_reporte='$id_reporte'"));
+            $id = $sql_o['id_reporte'];
+            $rep = 'Si';
+            $Descripcion = $sql_o['descripcion'];
+            if ($sql_o['id_cliente'] == ''){
+                $sql_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM orden_servicios WHERE id = $id_reporte")); 
+                $id = $sql_o['id'];
+                $Descripcion = ($sql_o['trabajo'] == '')? $sql_o['solicitud']: $sql_o['trabajo'];
+                $rep = 'No';
+            }
 //Buscar Cliente
-            $id_cliente = $reporte['id_cliente'];
+            $id_cliente = $sql_o['id_cliente'];
             $sql = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente");
             $filas = mysqli_num_rows($sql);
             if ($filas == 0) {
@@ -77,12 +80,21 @@ class PDF extends FPDF{
             $this->MultiCell(194,4, utf8_decode('NO. CLIENTE: '.$cliente['id_cliente']),0,'L',false);
             $this->MultiCell(194,4, utf8_decode('NOMBRE: '.$cliente['nombre']),0,'L',false);
             $this->MultiCell(194,4, utf8_decode('TELÉFONO: '.$cliente['telefono']),0,'L',false);
-            $this->MultiCell(194,4, utf8_decode('DIRECCIÓN: '.$cliente['direccion']),0,'L',false);
+            if ($rep == 'Si') {
+                $this->MultiCell(194,4, utf8_decode('DIRECCIÓN: '.$cliente['direccion']),0,'L',false);
+                $this->MultiCell(194,4, utf8_decode('COORDENADAS: '.$cliente['coordenadas']),0,'L',false);
+            }else{
+                $this->MultiCell(194,4, utf8_decode(' ---> ORDEN DE SERVICO <---'),0,'L',false);
+                if ($sql_o['material'] != '') {
+                    $this->Ln(4);
+                    $this->MultiCell(194,4, utf8_decode(' --- MATERAL: '.$sql_o['material']),0,'L',false);
+                    $this->Ln(4);
+                }
+            }
             $this->MultiCell(194,4, utf8_decode('LUGAR: '.$sql_comunidad['nombre']),0,'L',false);
-            $this->MultiCell(194,4, utf8_decode('COORDENADAS: '.$cliente['coordenadas']),0,'L',false);
             $this->MultiCell(194,4, utf8_decode('REFERENCIA: '.$cliente['referencia']),0,'L',false);
-            $this->MultiCell(194,4, utf8_decode('DESCRIPCIÓN DEL REPORTE: '.$reporte['descripcion']),0,'L',false);
-            $this->MultiCell(194,4, utf8_decode('FECHA DE REPORTE: '.$reporte['fecha']),0,'L',false);
+            $this->MultiCell(194,4, utf8_decode('DESCRIPCIÓN DEL REPORTE: '.$Descripcion),0,'L',false);
+            $this->MultiCell(194,4, utf8_decode('FECHA DE REPORTE: '.$sql_o['fecha']),0,'L',false);
             $this->MultiCell(180,1, utf8_decode('
                 -------------------------------------------------------------------------------------------------------------------------------------------------'),0,'L',false);
         }
@@ -118,8 +130,7 @@ RESPONSABLE DE RUTA: '.$ruta['responsable']),1,'C',false);
         }
         mysqli_close($conn);
     }
-    function footer(){
-    }
+    function footer(){ }
 }
 
 //Creación del objeto de la clase heredada

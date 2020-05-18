@@ -4,7 +4,10 @@ $id_Reporte = $conn->real_escape_string($_POST['valorIdReporte']);
 
 $sql_buscar = mysqli_query($conn, "SELECT * FROM tmp_reportes WHERE id_reporte = '$id_Reporte'");
 $EnCampo = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = '$id_Reporte'"));
-if ($EnCampo['campo']==0) {
+if ($id_Reporte >= 10000) {
+    $EnCampo['campo']= 1;
+}
+if ($EnCampo['campo']==0 ) {
     echo '<script>M.toast({html:"No se puede agregar a ruta porque no selecciono < En campo >.", classes: "rounded"})</script>';
 }else{
     if(mysqli_num_rows($sql_buscar)>0){
@@ -37,17 +40,30 @@ if ($EnCampo['campo']==0) {
     }else{
         while($tmp = mysqli_fetch_array($sql_tmp)){
             $id_reporte = $tmp['id_reporte'];
-            $sql_reporte = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM reportes WHERE id_reporte = '$id_reporte'"));
-
-            $id_cliente = $sql_reporte['id_cliente'];
-            $sql_nombre = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM clientes WHERE id_cliente = '$id_cliente'"));
+            $sql = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM reportes WHERE id_reporte = '$id_reporte'"));
+            $id = $sql['id_reporte'];
+            $Descripcion = $sql['descripcion'];
+            if ($sql['id_cliente'] == ''){
+                $sql = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM orden_servicios WHERE id = $id_reporte")); 
+                $id = $sql['id'];
+                $Descripcion = ($sql['trabajo'] == '')? $sql['solicitud']: $sql['trabajo'];
+            }
+            $id_cliente = $sql['id_cliente'];
+            $ver = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente");
+            if (mysqli_num_rows($ver) == 0) {
+                $ver = mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente = $id_cliente");
+            }
+            $sql_nombre = mysqli_fetch_array($ver);
+            $id_comunidad = $sql_nombre['lugar'];
+            $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad = $id_comunidad"));
                 ?>
         <tr>
-            <td><?php echo $sql_reporte['id_reporte']; ?></td>
+            <td><?php echo $id; ?></td>
             <td><?php echo $sql_nombre['nombre']; ?></td>
-            <td><?php echo $sql_reporte['descripcion']; ?></td>
-            <td><?php echo $sql_reporte['fecha']; ?></td>
-            <td><a onclick="borrar_rep(<?php echo $sql_reporte['id_reporte']; ?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
+            <td><?php echo $comunidad['nombre']; ?></td>
+            <td><?php echo $Descripcion; ?></td>
+            <td><?php echo $sql['fecha']; ?></td>
+            <td><a onclick="borrar_rep(<?php echo $id; ?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
         </tr>
 <?php
             }
