@@ -1,7 +1,6 @@
 <?php
 include('../php/conexion.php');
 date_default_timezone_set('America/Mexico_City');
-
 $Responsable = $conn->real_escape_string($_POST['valorResponsable']);
 $Acompañante = $conn->real_escape_string($_POST['valorAcompañante']);
 $Vehiculo = $conn->real_escape_string($_POST['valorVehiculo']);
@@ -9,7 +8,7 @@ $Bobina = $conn->real_escape_string($_POST['valorBobina']);
 $Vale = $conn->real_escape_string($_POST['valorVale']);
 $Material = $conn->real_escape_string($_POST['valorMaterial']);
 $Fecha = date('Y-m-d'); 
-$aux= mysqli_num_rows(mysqli_query($conn, "SELECT * FROM rutas WHERE fecha = '$Fecha' AND estatus = 0 AND responsable='$Responsable' "));
+$aux= mysqli_num_rows(mysqli_query($conn, "SELECT * FROM rutas WHERE fecha = '$Fecha' AND estatus = 0 AND responsable='$Responsable'  AND acompanante='$Acompañante'"));
 if($aux<=0 or $aux==null){
 if (mysqli_query($conn, "INSERT INTO rutas(fecha, responsable, acompanante, material) VALUES ('$Fecha', '$Responsable', '$Acompañante', '$Material')")) {
 	echo '<script>M.toast({html : "Se creo la ruta correctamente.", classes: "rounded"})</script>';

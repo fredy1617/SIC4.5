@@ -1,6 +1,9 @@
 <?php
 include('../php/conexion.php');
-$DIA = $conn->real_escape_string($_POST['valorDia']);
+$ValorDe = $conn->real_escape_string($_POST['valorDe']);
+$ValorA = $conn->real_escape_string($_POST['valorA']);
+
+$DIA  = $ValorDe;
 $User = $conn->real_escape_string($_POST['valorUsuario']);
 
 if ($User ==  0) {
@@ -12,9 +15,10 @@ if ($User ==  0) {
 while($usuario = mysqli_fetch_array($usuarios)){
   $user=$usuario['user_name'];
   $id_user = $usuario['user_id'];
-  $instalaciones = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes WHERE fecha_instalacion = '$DIA' AND  tecnico LIKE '%$user%'"));
-  $Reportes_Oficina = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE (fecha_solucion = '$DIA'  AND ((campo = 0 AND atendido = 1) OR (atendido = 2 AND campo = 1)) AND (tecnico = '$id_user' OR apoyo = '$id_user'))"));
-  $Reportes_Campo = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE (fecha_solucion = '$DIA'  AND (campo = 1 AND atendido = 1) AND (tecnico = '$id_user' OR apoyo = '$id_user'))"));
+  $instalaciones = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes WHERE  fecha_instalacion >= '$ValorDe' AND fecha_instalacion <= '$ValorA' AND  tecnico LIKE '%$user%'"));
+  $Reportes_Oficina = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE (fecha_solucion >= '$ValorDe' AND fecha_solucion <= '$ValorA'  AND ((campo = 0 AND atendido = 1) OR (atendido = 2 AND campo = 1)) AND (tecnico = '$id_user' OR apoyo = '$id_user'))"));
+  $Reportes_Campo = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE (fecha_solucion >= '$ValorDe' AND fecha_solucion <= '$ValorA'  AND (campo = 1 AND atendido = 1) AND (tecnico = '$id_user' OR apoyo = '$id_user'))"));
+
 ?>
 <br><br>
 <h3 class="center">TECNICO: <?php echo $usuario['firstname']; ?></h3>
@@ -37,7 +41,8 @@ while($usuario = mysqli_fetch_array($usuarios)){
       </tr>
     </thead>
     <tbody>
-      <?php
+    <?php
+    while ($DIA <= $ValorA) {
       $resultado_instalaciones = mysqli_query($conn,"SELECT * FROM clientes WHERE fecha_instalacion = '$DIA' AND  tecnico LIKE '%$user%' ORDER BY hora_alta");
       $aux = mysqli_num_rows($resultado_instalaciones);
       if($aux > 0){
@@ -90,7 +95,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
           <td><?php echo $instalaciones['nombre'];?></td>
           <td><b>Instalacion</b></td>
           <td><?php echo $comunidad['nombre'];?></td>
-          <td><?php echo $info['hora_registro']; ?></td>
+          <td><?php echo $instalaciones['hora_registro']; ?></td>
           <td><?php echo $instalaciones['fecha_instalacion'];?></td>
           <td><?php echo $instalaciones['hora_alta']; ?></td>
           <td>Instalacion</td>
@@ -173,16 +178,17 @@ while($usuario = mysqli_fetch_array($usuarios)){
           </tr>
         <?php
         }
-        }else{
-          echo "<center><b><h5>No se encontro trabajo realizado para este usuario</h5></b></center>";
         }
+      }
+      $nuevafecha = strtotime('+1 day', strtotime($DIA));
+      $DIA = date('Y-m-d', $nuevafecha);
       }
       ?>
     </tbody>
 </table>
 <?php
     #CHECAMOS SI HAY REPORTES EN ESTA COMUNIDAD
-    $Cotejos = mysqli_query($conn, "SELECT * FROM pagos INNER JOIN fecha_cotejo ON pagos.id_pago = fecha_cotejo.id_pago WHERE pagos.Cotejado = 2 AND fecha_cotejo.fecha = '$DIA' AND fecha_cotejo.usuario = '$id_user' ORDER BY fecha_cotejo.hora");
+    $Cotejos = mysqli_query($conn, "SELECT * FROM pagos INNER JOIN fecha_cotejo ON pagos.id_pago = fecha_cotejo.id_pago WHERE pagos.Cotejado = 2 AND fecha_cotejo.fecha >= '$ValorDe' AND fecha_cotejo.fecha <= '$ValorA' AND fecha_cotejo.usuario = '$id_user' ORDER BY fecha_cotejo.fecha, fecha_cotejo.hora");
     if(mysqli_num_rows($Cotejos) > 0){
       ?>
       <h5>Cotejos: </h5>

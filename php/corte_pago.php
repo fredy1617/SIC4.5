@@ -18,6 +18,7 @@
             $bot_Token = '918836101:AAGGaH2MIoTjqdhOmRs_34G1Yjgx5VkwgFI';
             $id_Chat = '1087049979';
             $id_Chat2 = '1080437366';
+            $id_Chat3 = '1140290694';
             $website = 'https://api.telegram.org/bot'.$bot_Token;
             $enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
             
@@ -47,6 +48,8 @@
                 mysqli_query($enlace,"INSERT INTO cortes(usuario, fecha, cantidad, banco) VALUES ($id_user, '$Fecha_hoy', '$cantidad', '$banco')");
                 $Mensaje = 'Se hizo un corte en el sistema el dia: '.$Fecha_hoy.' del usuario: <b>"'.$cobrador['user_name'].'"</b> con las cantidades totales de: <b>banco = $'.$banco.', efectivo = $'.$cantidad.', credito = $'.$credito.'</b>.';
                 sendMessage($id_Chat, $Mensaje, $website);
+                sendMessage($id_Chat2, $Mensaje, $website);
+                sendMessage($id_Chat3, $Mensaje, $website);
 
             }
             
@@ -215,9 +218,7 @@
             $this->Ln(10);
 
             $this->SetFont('Arial','',11);
-            $this->Cell(60,4,'Servicios Integrales de Computacion ',0,0,'C',true);
-            $this->SetFont('Arial','B',12);
-            $this->Ln(15);
+           
             if ($cantidad > 0) {
               $this->MultiCell(65,4,utf8_decode('TOTAL EFECTIVO: $'.$cantidad.'.00'),0,'L',true);
               $this->Ln(3);
@@ -230,7 +231,9 @@
               $this->MultiCell(65,4,utf8_decode('TOTAL CREDITO: $'.$credito.'.00'),0,'L',true);
               $this->Ln(3);
             }   
-
+            $this->Cell(60,4,'Servicios Integrales de Computacion ',0,0,'C',true);
+            $this->SetFont('Arial','B',12);
+            $this->Ln(15);
             mysqli_query($enlace,"UPDATE pagos SET corte=1 WHERE id_user=$id_user");
             mysqli_close($enlace);
         }

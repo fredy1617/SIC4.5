@@ -97,11 +97,10 @@ if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $
   }
   //SE RESTAN DEUDAS DE ABONOS Y SI EL SALDO ES NEGATIVO SE CAMBIA DE COLOR
 $Saldo = $abono['suma']-$deuda['suma'];
-$color = 'green';
-if ($Saldo < 0) {
-  $color = 'red darken-2';
-}
-  ?>
+
+($Saldo < 0)? $color = 'red darken-2':  $color = 'green';
+
+?>
 		<div class="row">
 			<h2 class="hide-on-med-and-down">Credito de Cliente:</h2>
  			<h4 class="hide-on-large-only">Credito de Cliente:</h4>

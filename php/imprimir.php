@@ -41,14 +41,14 @@ class PDF extends FPDF{
             $this->MultiCell(60,4,utf8_decode('Descripción: '.$fila['descripcion']),0,'L',true);
             $this->Ln(1);
             $this->Cell(20,4,utf8_decode('Cantidad: $'.$fila['cantidad'].'.00'),0,0,'L',true);
-            if ($id_user == 47) {
+            if (($id_user == 47 OR $id_user == 42 OR $id_user == 31 OR $id_user == 52) AND $tipo_pago != 'Otros Pagos') {
                 $this->Ln(5);
                 $this->Cell(20,4,utf8_decode('Comisión: + $10.00'),0,0,'L',true);   
             }
             $this->Ln(5);
             $this->Cell(20,4,utf8_decode('Tipo: '.$fila['tipo']),0,0,'L',true);
             $this->Ln(5);
-            if ($tipo_pago == 'Abono') {
+            if ($tipo_pago == 'Abono' AND $fila['descripcion'] != 'Abono de instalacion') {
                 // SACAMOS LA SUMA DE TODAS LAS DEUDAS Y ABONOS ....
                 $deuda = mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS suma FROM deudas WHERE id_cliente = $id_cliente"));
                 $abono = mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS suma FROM pagos WHERE id_cliente = $id_cliente AND tipo = 'Abono'"));

@@ -2,6 +2,7 @@
 session_start();
 include('../php/conexion.php');
 date_default_timezone_set('America/Mexico_City');
+$Fecha_hoy = date('Y-m-d');
 $id_user = $_SESSION['user_id'];
 $Tipo_Campio = $conn->real_escape_string($_POST['valorTipo_Campio']);
 $Cantidad = $conn->real_escape_string($_POST['valorCantidad']);
@@ -46,12 +47,17 @@ if ($Mes == 'DICIEMBRE') {
   $AÑO1 = strtotime('+1 year', strtotime($año));
   $año = date('Y', $AÑO1);
 }
-$FechaCorte = date($año.'-'.$MesCorte.'-'.$diaCorte);
-if ($FechaCorte > date('Y-m-d')) {
-  $Cortado = "tel_cortado = 0, ";
-}else {
+if ($Tipo == 'Mes-Tel') {
+  $FechaCorte = date($año.'-'.$MesCorte.'-'.$diaCorte);
+  if ($FechaCorte > date('Y-m-d')) {
+    $Cortado = "tel_cortado = 0, ";
+  }else {
+    $Cortado = "";
+  }
+}else{
   $Cortado = "";
 }
+
 if ($Respuesta == 'Ver') {
     $sql_DEUDAS = mysqli_query($conn, "SELECT * FROM deudas WHERE liquidada = 0 AND id_cliente = '$IdCliente'");
     if (mysqli_num_rows($sql_DEUDAS)>0) {
@@ -131,8 +137,7 @@ if ($Respuesta == 'Ver') {
 }
 
 if ($entra == "Si") {
-  $Fecha_hoy = date('Y-m-d');
-  if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND descripcion = '$Descripcion' AND cantidad='$Cantidad' AND AND tipo IN ('Min-extra', 'Mes-Tel') ".$MASS))>0){
+  if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND descripcion = '$Descripcion' AND cantidad='$Cantidad' AND tipo IN ('Min-extra', 'Mes-Tel') ".$MASS))>0){
     echo '<script>M.toast({html:"Ya se encuentra un pago registrado con los mismos valores.", classes: "rounded"})</script>';
   }else{
   //o $consultaBusqueda sea igual a nombre + (espacio) + apellido
