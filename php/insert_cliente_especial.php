@@ -26,22 +26,12 @@ $mensaje = "";
 				$mensaje = '<script >M.toast({html:"Se registro el cliente especial satisfactoriamente.", classes: "rounded"})</script>';
 				$ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_cliente) AS id FROM especiales"));            
         		$IdCliente = $ultimo['id'];
-        		if ($Mantenimiento == 1) {
-        		    $Descripcion2= "'Mantenimiento: ".$Descripcion."'";
-        		    $ir	= "<script>ir2()</script>";
-        		}else{
-        			$Descripcion2= "'Reporte Especial: ".$Descripcion."'";
-        		    $ir	= "<script>ir1()</script>";
-        		}
+        		$Descripcion2= "'Mantenimiento: ".$Descripcion."'";
+        		$ir	= "<script>ir2()</script>";
 				$sql = "INSERT INTO reportes (id_cliente, descripcion, fecha, hora_registro, registro) VALUES ($IdCliente, ".$Descripcion2.", '$Registro', '$Hora', '$Usuario')";
 				if(mysqli_query($conn, $sql)){
 					?>
 				  <script>
-				  	function ir1(){
-					  var a = document.createElement("a");
-					    a.href = "../views/reportes_especiales.php";
-					    a.click();
-					};
 					function ir2(){
 					  var a = document.createElement("a");
 					    a.href = "../views/mantenimiento.php";

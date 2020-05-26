@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title>SIC | Reportes Pendientes</title>
+	<title>SIC | Mantenimientos</title>
 <?php 
 include('fredyNav.php');
 include('../php/conexion.php');

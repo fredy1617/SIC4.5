@@ -74,7 +74,7 @@ function insert_cliente() {
 };
 </script>
 </head>
-<body>
+<body onload="llenar()">
 	<div class="container">
 	  <br>
 	  <div>
@@ -139,7 +139,7 @@ function insert_cliente() {
 		        </div>
 		        <div class="col s12 m4 l4 row">
 		            <br>
-		            <input type="checkbox" id="Mantenimiento" name="Mantenimiento"  onclick="llenar()" />
+		            <input type="checkbox"  checked id="Mantenimiento" name="Mantenimiento"  onclick="llenar()" />
 		            <label for="Mantenimiento">Mantenimiento</label>
 		        </div>
 		    	</div>
