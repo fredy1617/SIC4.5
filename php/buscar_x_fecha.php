@@ -51,20 +51,35 @@ while($usuario = mysqli_fetch_array($usuarios)){
                 $cliente_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente_o"));
                 $id_comunidad_o = $cliente_o['lugar'];
                 $comunidad_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad_o"));
-                ?>
-                <tr>
-                  <td><?php echo $id_cliente_o; ?></td>
-                  <td><?php echo $cliente_o['nombre']; ?></td>            
-                  <td><b>Orden de Servicio</b></td>            
-                  <td><?php echo $comunidad_o['nombre']; ?></td>            
-                  <td><?php echo $orden['hora']; ?></td>
-                  <td><?php echo ($orden['fecha_s'] == '') ? $orden['fecha_r']: $orden['fecha_s']; ?></td>
-                  <td><?php echo ($orden['hora_s'] == '') ? $orden['hora_r']: $orden['hora_s']; ?></td>
-                  <td><?php echo $orden['solicitud']; ?></td>
-                  <td><?php echo $orden['trabajo'] ?></td>
-                  <td><?php echo ($orden['tecnicos_s'] == '') ? $orden['tecnicos_r']: $orden['tecnicos_s']; ?></td>
-                  <td>Campo</td>
-                </tr>
+                
+                $cadena_de_texto = $orden['tecnicos_r'];
+                $cadena_buscada   = $user;
+                $posicion_coincidencia = strrpos($cadena_de_texto, $cadena_buscada);
+                   
+                  //se puede hacer la comparacion con 'false' o 'true' y los comparadores '===' o '!=='
+                  if ($posicion_coincidencia === false){
+                      $tecnicos = $orden['tecnicos_s'];
+                      $fecha = $orden['fecha_s'];
+                      $hora = $orden['hora_s'];
+                  } else {
+                      $tecnicos = $orden['tecnicos_r'];
+                      $fecha = $orden['fecha_r'];
+                      $hora = $orden['hora_r'];
+                  }
+                  ?>
+                  <tr>
+                    <td><?php echo $id_cliente_o; ?></td>
+                    <td><?php echo $cliente_o['nombre']; ?></td>            
+                    <td><b>Orden de Servicio</b></td>            
+                    <td><?php echo $comunidad_o['nombre']; ?></td>            
+                    <td><?php echo $orden['hora']; ?></td>
+                    <td><?php echo $fecha ?></td>
+                    <td><?php echo $hora ?></td>
+                    <td><?php echo $orden['solicitud']; ?></td>
+                    <td><?php echo $orden['trabajo'] ?></td>
+                    <td><?php echo $tecnicos ?></td>
+                    <td>Campo</td>
+                  </tr>
             <?php
               }
           }
@@ -93,6 +108,21 @@ while($usuario = mysqli_fetch_array($usuarios)){
               $cliente_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente_o"));
               $id_comunidad_o = $cliente_o['lugar'];
               $comunidad_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad_o"));
+            
+              $cadena_de_texto = $orden['tecnicos_r'];
+              $cadena_buscada   = $user;
+              $posicion_coincidencia = strrpos($cadena_de_texto, $cadena_buscada);
+                   
+              //se puede hacer la comparacion con 'false' o 'true' y los comparadores '===' o '!=='
+              if ($posicion_coincidencia === false) {
+                  $tecnicos = $orden['tecnicos_s'];
+                  $fecha = $orden['fecha_s'];
+                  $hora = $orden['hora_s'];
+              } else {
+                  $tecnicos = $orden['tecnicos_r'];
+                  $fecha = $orden['fecha_r'];
+                  $hora = $orden['hora_r'];
+              }
               ?>
               <tr>
                 <td><?php echo $id_cliente_o; ?></td>
@@ -100,11 +130,11 @@ while($usuario = mysqli_fetch_array($usuarios)){
                 <td><b>Orden de Servicio</b></td>            
                 <td><?php echo $comunidad_o['nombre']; ?></td>            
                 <td><?php echo $orden['hora']; ?></td>
-                <td><?php echo ($orden['fecha_s'] == '') ? $orden['fecha_r']: $orden['fecha_s']; ?></td>
-                <td><?php echo ($orden['hora_s'] == '') ? $orden['hora_r']: $orden['hora_s']; ?></td>
+                <td><?php echo $fecha ?></td>
+                <td><?php echo $hora ?></td>
                 <td><?php echo $orden['solicitud']; ?></td>
                 <td><?php echo $orden['trabajo'] ?></td>
-                <td><?php echo ($orden['tecnicos_s'] == '') ? $orden['tecnicos_r']: $orden['tecnicos_s']; ?></td>
+                <td><?php echo $tecnicos ?></td>
                 <td>Campo</td>
               </tr>
           <?php
@@ -154,6 +184,21 @@ while($usuario = mysqli_fetch_array($usuarios)){
               $cliente_o2 = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente_o2"));
               $id_comunidad_o2 = $cliente_o2['lugar'];
               $comunidad_o2 = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad_o2"));
+              
+              $cadena_de_texto = $orden2['tecnicos_r'];
+              $cadena_buscada   = $user;
+              $posicion_coincidencia = strrpos($cadena_de_texto, $cadena_buscada);
+                   
+              //se puede hacer la comparacion con 'false' o 'true' y los comparadores '===' o '!=='
+              if ($posicion_coincidencia === false) {
+                  $tecnicos = $orden2['tecnicos_s'];
+                  $fecha = $orden2['fecha_s'];
+                  $hora = $orden2['hora_s'];
+              } else {
+                  $tecnicos = $orden2['tecnicos_r'];
+                  $fecha = $orden2['fecha_r'];
+                  $hora = $orden2['hora_r'];
+              }
               ?>
               <tr>
                 <td><?php echo $id_cliente_o2; ?></td>
@@ -161,11 +206,11 @@ while($usuario = mysqli_fetch_array($usuarios)){
                 <td><b>Orden de Servicio</b></td>            
                 <td><?php echo $comunidad_o2['nombre']; ?></td>            
                 <td><?php echo $orden2['hora']; ?></td>
-                <td><?php echo ($orden2['fecha_s'] == '') ? $orden2['fecha_r']: $orden2['fecha_s']; ?></td>
-                <td><?php echo ($orden2['hora_s'] == '') ? $orden2['hora_r']: $orden2['hora_s']; ?></td>
+                <td><?php echo $fecha ?></td>
+                <td><?php echo $hora ?></td>
                 <td><?php echo $orden2['solicitud']; ?></td>
                 <td><?php echo $orden2['trabajo'] ?></td>
-                <td><?php echo ($orden2['tecnicos_s'] == '') ? $orden2['tecnicos_r']: $orden2['tecnicos_s']; ?></td>
+                <td><?php echo $tecnicos ?></td>
                 <td>Campo</td>
               </tr>
           <?php
@@ -208,20 +253,35 @@ while($usuario = mysqli_fetch_array($usuarios)){
                 $cliente_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente_o"));
                 $id_comunidad_o = $cliente_o['lugar'];
                 $comunidad_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad_o"));
-                ?>
-                <tr>
-                  <td><?php echo $id_cliente_o; ?></td>
-                  <td><?php echo $cliente_o['nombre']; ?></td>            
-                  <td><b>Orden de Servicio</b></td>            
-                  <td><?php echo $comunidad_o['nombre']; ?></td>            
-                  <td><?php echo $orden['hora']; ?></td>
-                  <td><?php echo ($orden['fecha_s'] == '') ? $orden['fecha_r']: $orden['fecha_s']; ?></td>
-                  <td><?php echo ($orden['hora_s'] == '') ? $orden['hora_r']: $orden['hora_s']; ?></td>
-                  <td><?php echo $orden['solicitud']; ?></td>
-                  <td><?php echo $orden['trabajo'] ?></td>
-                  <td><?php echo ($orden['tecnicos_s'] == '') ? $orden['tecnicos_r']: $orden['tecnicos_s']; ?></td>
-                  <td>Campo</td>
-                </tr>
+                
+                $cadena_de_texto = $orden['tecnicos_r'];
+                $cadena_buscada   = $user;
+                $posicion_coincidencia = strrpos($cadena_de_texto, $cadena_buscada);
+                   
+                  //se puede hacer la comparacion con 'false' o 'true' y los comparadores '===' o '!=='
+                  if ($posicion_coincidencia === false){
+                      $tecnicos = $orden['tecnicos_s'];
+                      $fecha = $orden['fecha_s'];
+                      $hora = $orden['hora_s'];
+                  } else {
+                      $tecnicos = $orden['tecnicos_r'];
+                      $fecha = $orden['fecha_r'];
+                      $hora = $orden['hora_r'];
+                  }
+                  ?>
+                  <tr>
+                    <td><?php echo $id_cliente_o; ?></td>
+                    <td><?php echo $cliente_o['nombre']; ?></td>            
+                    <td><b>Orden de Servicio</b></td>            
+                    <td><?php echo $comunidad_o['nombre']; ?></td>            
+                    <td><?php echo $orden['hora']; ?></td>
+                    <td><?php echo $fecha ?></td>
+                    <td><?php echo $hora ?></td>
+                    <td><?php echo $orden['solicitud']; ?></td>
+                    <td><?php echo $orden['trabajo'] ?></td>
+                    <td><?php echo $tecnicos ?></td>
+                    <td>Campo</td>
+                  </tr>
             <?php
               }
             }
@@ -267,6 +327,21 @@ while($usuario = mysqli_fetch_array($usuarios)){
                   $cliente_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente_o"));
                   $id_comunidad_o = $cliente_o['lugar'];
                   $comunidad_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad_o"));
+                  
+                  $cadena_de_texto = $orden['tecnicos_r'];
+                  $cadena_buscada   = $user;
+                  $posicion_coincidencia = strrpos($cadena_de_texto, $cadena_buscada);
+                   
+                  //se puede hacer la comparacion con 'false' o 'true' y los comparadores '===' o '!=='
+                  if ($posicion_coincidencia === false) {
+                      $tecnicos = $orden['tecnicos_s'];
+                      $fecha = $orden['fecha_s'];
+                      $hora = $orden['hora_s'];
+                  } else {
+                      $tecnicos = $orden['tecnicos_r'];
+                      $fecha = $orden['fecha_r'];
+                      $hora = $orden['hora_r'];
+                  }
                   ?>
                   <tr>
                     <td><?php echo $id_cliente_o; ?></td>
@@ -274,11 +349,11 @@ while($usuario = mysqli_fetch_array($usuarios)){
                     <td><b>Orden de Servicio</b></td>            
                     <td><?php echo $comunidad_o['nombre']; ?></td>            
                     <td><?php echo $orden['hora']; ?></td>
-                    <td><?php echo ($orden['fecha_s'] == '') ? $orden['fecha_r']: $orden['fecha_s']; ?></td>
-                    <td><?php echo ($orden['hora_s'] == '') ? $orden['hora_r']: $orden['hora_s']; ?></td>
+                    <td><?php echo $fecha ?></td>
+                    <td><?php echo $hora ?></td>
                     <td><?php echo $orden['solicitud']; ?></td>
                     <td><?php echo $orden['trabajo'] ?></td>
-                    <td><?php echo ($orden['tecnicos_s'] == '') ? $orden['tecnicos_r']: $orden['tecnicos_s']; ?></td>
+                    <td><?php echo $tecnicos ?></td>
                     <td>Campo</td>
                   </tr>
               <?php
@@ -295,6 +370,21 @@ while($usuario = mysqli_fetch_array($usuarios)){
                   $cliente_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente_o"));
                   $id_comunidad_o = $cliente_o['lugar'];
                   $comunidad_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad_o"));
+                  
+                  $cadena_de_texto = $orden['tecnicos_r'];
+                  $cadena_buscada   = $user;
+                  $posicion_coincidencia = strrpos($cadena_de_texto, $cadena_buscada);
+                   
+                  //se puede hacer la comparacion con 'false' o 'true' y los comparadores '===' o '!=='
+                  if ($posicion_coincidencia === false) {
+                      $tecnicos = $orden['tecnicos_s'];
+                      $fecha = $orden['fecha_s'];
+                      $hora = $orden['hora_s'];
+                  } else {
+                      $tecnicos = $orden['tecnicos_r'];
+                      $fecha = $orden['fecha_r'];
+                      $hora = $orden['hora_r'];
+                  }
                   ?>
                   <tr>
                     <td><?php echo $id_cliente_o; ?></td>
@@ -302,11 +392,11 @@ while($usuario = mysqli_fetch_array($usuarios)){
                     <td><b>Orden de Servicio</b></td>            
                     <td><?php echo $comunidad_o['nombre']; ?></td>            
                     <td><?php echo $orden['hora']; ?></td>
-                    <td><?php echo ($orden['fecha_s'] == '') ? $orden['fecha_r']: $orden['fecha_s']; ?></td>
-                    <td><?php echo ($orden['hora_s'] == '') ? $orden['hora_r']: $orden['hora_s']; ?></td>
+                    <td><?php echo $fecha ?></td>
+                    <td><?php echo $hora ?></td>
                     <td><?php echo $orden['solicitud']; ?></td>
                     <td><?php echo $orden['trabajo'] ?></td>
-                    <td><?php echo ($orden['tecnicos_s'] == '') ? $orden['tecnicos_r']: $orden['tecnicos_s']; ?></td>
+                    <td><?php echo $tecnicos ?></td>
                     <td>Campo</td>
                   </tr>
               <?php
@@ -334,20 +424,35 @@ while($usuario = mysqli_fetch_array($usuarios)){
                 $cliente_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente_o"));
                 $id_comunidad_o = $cliente_o['lugar'];
                 $comunidad_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad_o"));
-                ?>
-                <tr>
-                  <td><?php echo $id_cliente_o; ?></td>
-                  <td><?php echo $cliente_o['nombre']; ?></td>            
-                  <td><b>Orden de Servicio</b></td>            
-                  <td><?php echo $comunidad_o['nombre']; ?></td>            
-                  <td><?php echo $orden['hora']; ?></td>
-                  <td><?php echo ($orden['fecha_s'] == '') ? $orden['fecha_r']: $orden['fecha_s']; ?></td>
-                  <td><?php echo ($orden['hora_s'] == '') ? $orden['hora_r']: $orden['hora_s']; ?></td>
-                  <td><?php echo $orden['solicitud']; ?></td>
-                  <td><?php echo $orden['trabajo'] ?></td>
-                  <td><?php echo ($orden['tecnicos_s'] == '') ? $orden['tecnicos_r']: $orden['tecnicos_s']; ?></td>
-                  <td>Campo</td>
-                </tr>
+                
+                $cadena_de_texto = $orden['tecnicos_r'];
+                $cadena_buscada   = $user;
+                $posicion_coincidencia = strrpos($cadena_de_texto, $cadena_buscada);
+                   
+                  //se puede hacer la comparacion con 'false' o 'true' y los comparadores '===' o '!=='
+                  if ($posicion_coincidencia === false){
+                      $tecnicos = $orden['tecnicos_s'];
+                      $fecha = $orden['fecha_s'];
+                      $hora = $orden['hora_s'];
+                  } else {
+                      $tecnicos = $orden['tecnicos_r'];
+                      $fecha = $orden['fecha_r'];
+                      $hora = $orden['hora_r'];
+                  }
+                  ?>
+                  <tr>
+                    <td><?php echo $id_cliente_o; ?></td>
+                    <td><?php echo $cliente_o['nombre']; ?></td>            
+                    <td><b>Orden de Servicio</b></td>            
+                    <td><?php echo $comunidad_o['nombre']; ?></td>            
+                    <td><?php echo $orden['hora']; ?></td>
+                    <td><?php echo $fecha ?></td>
+                    <td><?php echo $hora ?></td>
+                    <td><?php echo $orden['solicitud']; ?></td>
+                    <td><?php echo $orden['trabajo'] ?></td>
+                    <td><?php echo $tecnicos ?></td>
+                    <td>Campo</td>
+                  </tr>
             <?php
               }
             }
@@ -392,6 +497,21 @@ while($usuario = mysqli_fetch_array($usuarios)){
                   $cliente_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente_o"));
                   $id_comunidad_o = $cliente_o['lugar'];
                   $comunidad_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad_o"));
+
+                  $cadena_de_texto = $orden['tecnicos_r'];
+                  $cadena_buscada   = $user;
+                  $posicion_coincidencia = strrpos($cadena_de_texto, $cadena_buscada);
+                   
+                  //se puede hacer la comparacion con 'false' o 'true' y los comparadores '===' o '!=='
+                  if ($posicion_coincidencia === false) {
+                      $tecnicos = $orden['tecnicos_s'];
+                      $fecha = $orden['fecha_s'];
+                      $hora = $orden['hora_s'];
+                  } else {
+                      $tecnicos = $orden['tecnicos_r'];
+                      $fecha = $orden['fecha_r'];
+                      $hora = $orden['hora_r'];
+                  }
                   ?>
                   <tr>
                     <td><?php echo $id_cliente_o; ?></td>
@@ -399,11 +519,11 @@ while($usuario = mysqli_fetch_array($usuarios)){
                     <td><b>Orden de Servicio</b></td>            
                     <td><?php echo $comunidad_o['nombre']; ?></td>            
                     <td><?php echo $orden['hora']; ?></td>
-                    <td><?php echo ($orden['fecha_s'] == '') ? $orden['fecha_r']: $orden['fecha_s']; ?></td>
-                    <td><?php echo ($orden['hora_s'] == '') ? $orden['hora_r']: $orden['hora_s']; ?></td>
+                    <td><?php echo $fecha ?></td>
+                    <td><?php echo $hora ?></td>
                     <td><?php echo $orden['solicitud']; ?></td>
                     <td><?php echo $orden['trabajo'] ?></td>
-                    <td><?php echo ($orden['tecnicos_s'] == '') ? $orden['tecnicos_r']: $orden['tecnicos_s']; ?></td>
+                    <td><?php echo $tecnicos ?></td>
                     <td>Campo</td>
                   </tr>
               <?php
