@@ -97,8 +97,15 @@ include('../php/cobrador.php');
 		          	<span class="new badge pink" data-badge-caption=""><?php echo $fecha_ruta; ?></span>
 		          </p>
 		        </div>
-		        <div class="card-action">
-		        	<form method="post" action="../views/detalles_ruta.php"><input id="id_ruta" name="id_ruta" type="hidden" value="<?php echo $ruta['id_ruta']; ?>"><button class="waves-effect waves-light btn-small white orange-text"><b>Detalles</b></button></form>
+		        <div class="card-action row">
+		        	<form method="post" action="../views/detalles_ruta.php" class="col s8">
+		        		<input id="id_ruta" name="id_ruta" type="hidden" value="<?php echo $ruta['id_ruta']; ?>">
+		        		<button class="waves-effect waves-light btn-small white orange-text"><b>Detalles</b></button>
+		        	</form>
+		        	<form action="editar_ruta.php" method="post" class="col s4">
+		        		<input id="id_ruta" name="id_ruta" type="hidden" value="<?php echo $ruta['id_ruta']; ?>">
+		        		<button type="submit" class="btn-floating btn-tiny btn-small waves-effect waves-light pink"><i class="material-icons">edit</i></button>
+		        	</form>
 		        </div>
 		      </div>
 		    </div>
