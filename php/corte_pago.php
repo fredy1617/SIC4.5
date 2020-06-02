@@ -53,7 +53,6 @@
                 sendMessage($id_Chat, $Mensaje, $website);
                 sendMessage($id_Chat2, $Mensaje, $website);
                 sendMessage($id_Chat3, $Mensaje, $website);
-
             }
             
             $nombre_cobrador = $cobrador['firstname'].' '.$cobrador['lastname'];
