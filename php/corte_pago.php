@@ -33,10 +33,7 @@
             $cantidad=$total['precio'];
             $banco = $totalbanco['precio'];
             $credito = $totalcredito['precio'];
-
-            $ultimo =  mysqli_fetch_array(mysqli_query($enlace, "SELECT MAX(id_corte) AS id FROM cortes WHERE usuario=$id_user"));           
-            $corte = $ultimo['id'];
-
+            $corte = 0;
             //Insertar corte.....
             if ($cantidad != "" OR $banco != "" OR $credito != "") {
                 if ($banco == "") {
@@ -49,10 +46,9 @@
                     $credito = 0;
                 }
                 mysqli_query($enlace,"INSERT INTO cortes(usuario, fecha, cantidad, banco) VALUES ($id_user, '$Fecha_hoy', '$cantidad', '$banco')");
+                $ultimo =  mysqli_fetch_array(mysqli_query($enlace, "SELECT MAX(id_corte) AS id FROM cortes WHERE usuario=$id_user"));           
+            	$corte = $ultimo['id'];
                 $Mensaje = "Corte en el sistema del dia: ".$Fecha_hoy.". \nCon folio: <b>".$corte."</b> y usuario: <b>'".$cobrador['firstname']."(".$cobrador['user_name'].")"."'</b> con las cantidades totales de: \n  <b>Banco = $".$banco.". \n  Efectivo = $".$cantidad.". \n  Credito = $".$credito.".</b>";
-                sendMessage($id_Chat, $Mensaje, $website);
-                sendMessage($id_Chat2, $Mensaje, $website);
-                sendMessage($id_Chat3, $Mensaje, $website);
             }
             
             $nombre_cobrador = $cobrador['firstname'].' '.$cobrador['lastname'];
