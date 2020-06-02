@@ -42,6 +42,8 @@ class PDF extends FPDF{
           $this->Cell(20,4,'Corte De: ',0,0,'C',true);
           $this->Ln(5);
           $this->Cell(50,4,utf8_decode($nombre_cobrador),0,0,'C',true);
+          $this->Ln(8);
+          $this->Cell(32,4,'Folio: No. '.$id_corte,0,0,'C',true);
           $this->Ln(10);
           $this->Cell(90,4,'Fecha: '.$Fecha,0,0,'C',true);            
           $this->Ln(10);

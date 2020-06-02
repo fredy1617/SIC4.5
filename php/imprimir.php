@@ -51,8 +51,8 @@ class PDF extends FPDF{
             $this->Ln(5);
             if ($tipo_pago == 'Abono' AND $fila['descripcion'] != 'Abono de instalacion') {
                 // SACAMOS LA SUMA DE TODAS LAS DEUDAS Y ABONOS ....
-                $deuda = mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS suma FROM deudas WHERE id_cliente = $id_cliente"));
-                $abono = mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS suma FROM pagos WHERE id_cliente = $id_cliente AND tipo = 'Abono'"));
+                $deuda = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS suma FROM deudas WHERE id_cliente = $id_cliente"));
+                $abono = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS suma FROM pagos WHERE id_cliente = $id_cliente AND tipo = 'Abono'"));
                   //COMPARAMOS PARA VER SI LOS VALORES ESTAN VACIOS::
                 if ($deuda['suma'] == "") {
                     $deuda['suma'] = 0;

@@ -34,6 +34,9 @@
             $banco = $totalbanco['precio'];
             $credito = $totalcredito['precio'];
 
+            $ultimo =  mysqli_fetch_array(mysqli_query($enlace, "SELECT MAX(id_corte) AS id FROM cortes WHERE usuario=$id_user"));           
+            $corte = $ultimo['id'];
+
             //Insertar corte.....
             if ($cantidad != "" OR $banco != "" OR $credito != "") {
                 if ($banco == "") {
@@ -46,7 +49,7 @@
                     $credito = 0;
                 }
                 mysqli_query($enlace,"INSERT INTO cortes(usuario, fecha, cantidad, banco) VALUES ($id_user, '$Fecha_hoy', '$cantidad', '$banco')");
-                $Mensaje = 'Se hizo un corte en el sistema el dia: '.$Fecha_hoy.' del usuario: <b>"'.$cobrador['user_name'].'"</b> con las cantidades totales de: <b>banco = $'.$banco.', efectivo = $'.$cantidad.', credito = $'.$credito.'</b>.';
+                $Mensaje = "Corte en el sistema del dia: ".$Fecha_hoy.". \nCon folio: <b>".$corte."</b> y Usuario: <b>'".$cobrador['firstname']."(".$cobrador['user_name'].")"."'</b> con las cantidades totales de: \n  <b>Banco = $".$banco.". \n  Efectivo = $".$cantidad.". \n  Credito = $".$credito.".</b>";
                 sendMessage($id_Chat, $Mensaje, $website);
                 sendMessage($id_Chat2, $Mensaje, $website);
                 sendMessage($id_Chat3, $Mensaje, $website);
@@ -55,8 +58,6 @@
             
             $nombre_cobrador = $cobrador['firstname'].' '.$cobrador['lastname'];
               
-            $ultimo =  mysqli_fetch_array(mysqli_query($enlace, "SELECT MAX(id_corte) AS id FROM cortes WHERE usuario=$id_user"));           
-            $corte = $ultimo['id'];
             // Colores de los bordes, fondo y texto
             $this->SetFillColor(255,255,255);
             $this->SetTextColor(0,0,0);
@@ -69,6 +70,8 @@
             $this->Cell(20,4,'Corte De: ',0,0,'C',true);
             $this->Ln(5);
             $this->Cell(50,4,utf8_decode($nombre_cobrador),0,0,'C',true);
+            $this->Ln(8);
+            $this->Cell(32,4,'Folio: No. '.$corte,0,0,'C',true);
             $this->Ln(10);
             $this->Cell(90,4,'Fecha: '.Date('d-m-Y'),0,0,'C',true);            
             $this->Ln(10);
