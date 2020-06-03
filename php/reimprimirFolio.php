@@ -19,19 +19,15 @@ class PDF extends FPDF{
         // Colores de los bordes, fondo y texto
         $this->SetFillColor(255,255,255);
         $this->SetTextColor(0,0,0);
-        
         $this->AddPage();
-
         global $title;
         global $pass;
-        $this->Image('../img/logo.jpg',28,4,20);
-
+        $this->Image('../img/logo_ticket.jpg',28,4,20);
         $this->SetFont('Arial','B',13);
         $this->SetY(30);
         $this->SetX(6);
         $this->Cell(20,4,'Folio: '.$fila['id_dispositivo'],0,0,'C',true);
         $this->SetFont('Arial','',13);
-
         $this->SetY(30);
         $this->SetX(30);
         $this->Cell(40,4,'Fecha: '.$fila['fecha'],0,0,'C',true);

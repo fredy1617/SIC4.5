@@ -75,7 +75,7 @@ if (filter_var($IP, FILTER_VALIDATE_IP)) {
 		            $API->write('=max-limit='.$maxlimit,true);   //   2M/2M   [TX/RX]			
 					$READ = $API->read(false);
 					$ARRAY = $API->parse_response($READ);
-		            echo '<script >M.toast({html:"No se puede registrar dos IPs al mismo cliente.", classes: "rounded"})</script>';
+		            echo '<script >M.toast({html:"No se puede registrar dos Queues al mismo cliente.", classes: "rounded"})</script>';
 		        }else{
 		            $API->write("/queue/simple/add",false);
 		            $API->write('=target='.$target,false);   // IP

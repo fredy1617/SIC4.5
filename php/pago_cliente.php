@@ -31,7 +31,7 @@
             $this->AddPage();
             global $title;
             global $pass;
-            $this->Image('../img/logo.jpg',28,4,20);
+            $this->Image('../img/logo_ticket.jpg',28,4,20);
             $this->SetFont('Arial','B',13);
             $this->SetY(30);
             $this->Cell(90,4,'Fecha: '.$fila['fecha'],0,0,'C',true);
