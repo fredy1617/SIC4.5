@@ -19,21 +19,6 @@ if (isset($_POST['id_central']) == false) {
   <?php
 }else{
 $id_central = $_POST['id_central'];
-$AÑO = date('Y');
-$AÑO1 = strtotime('+1 year', strtotime($AÑO));
-$AÑO1 = date('Y', $AÑO1);
-
-$Pago = mysqli_fetch_array(mysqli_query($conn, "SELECT descripcion FROM pagos_centrales WHERE id_central = '$id_central'  ORDER BY id DESC LIMIT 1"));
-//AQUI COLOCAMOS EL MISMO AÑO EN CASO DE SER ENERO MAS
-$ver = explode(" ", $Pago['descripcion']);
-$ultimo = $ver[0];
-$MAS = false;
-if (count($ver)>1) {
-  $UltimoAño= (int) $ver[1];
-  if ($UltimoAño>$AÑO) {
-    $AÑO = $ver[1];
-  }
-}
 ?>
 <script>   
 function imprimir(id_pago){
@@ -54,16 +39,11 @@ function borrar(IdPago){
 function insert_pago() {  
     var textoCantidad = $("input#cantidad").val();
     var textoMes = $("select#mes").val();
+    var textoAño = $("select#año").val();
     var textoIdCentral = $("input#id_central").val();
-    var textoUltimo = $("input#ultimo").val();
 
     //Todo esto solo para agregar la descripcion automatica
-    textoDescripcion = textoMes+" "+<?php echo $AÑO; ?>;
-      if (document.getElementById('anual').checked==true) {
-         textoDescripcion = textoMes+" "+<?php echo $AÑO1; ?>;
-      }if (textoUltimo == "DICIEMBRE") {
-        textoDescripcion = textoMes+" "+<?php echo $AÑO1; ?>;
-      }
+    textoDescripcion = textoMes+" "+textoAño;
     
     if(document.getElementById('anual').checked==true){
       textoTipo = "Anual";
@@ -71,12 +51,14 @@ function insert_pago() {
       textoTipo = "Mensual";
     }
 
-    if (document.getElementById('anual').checked==false && document.getElementById('mensual').checked==false) {
-      M.toast({html: 'Elige una opcion Anual o Mensual.', classes: 'rounded'});
-    }else if (textoCantidad == "" || textoCantidad ==0) {
+    if (textoCantidad == "" || textoCantidad ==0) {
         M.toast({html: 'El campo Cantidad se encuentra vacío o en 0.', classes: 'rounded'});
     }else if (textoMes == 0) {
         M.toast({html: 'Seleccione un mes.', classes: 'rounded'});
+    }else if (textoAño == 0) {
+        M.toast({html: 'Seleccione un año.', classes: 'rounded'});
+    }else if (document.getElementById('anual').checked==false && document.getElementById('mensual').checked==false) {
+      M.toast({html: 'Elige una opcion Anual o Mensual.', classes: 'rounded'});
     }else {
         $.post("../php/insert_pago_central.php" , { 
             valorTipo: textoTipo,
@@ -132,7 +114,7 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
             <input id="cantidad" type="number" class="validate" data-length="6" value="0" required>
             <label for="cantidad">Cantidad :</label>
           </div>
-          <div class="input-field col s6 m3 l3">
+          <div class="input-field col s6 m2 l2">
             <select id="mes" class="browser-default">
               <option value="0" selected>Seleccione Mes</option>
               <option value="ENERO">Enero</option>
@@ -149,6 +131,15 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
               <option value="DICIEMBRE">Diciembre</option>
             </select>
           </div>
+          <div class="row col s8 m2 l2"><br>
+            <select id="año" class="browser-default">
+              <option value="0" selected>Seleccione Año</option>
+              <option value="2019">2019</option>
+              <option value="2020">2020</option>
+              <option value="2021">2021</option>
+              <option value="2022">2022</option>
+            </select>
+          </div>
           <div class="input-field col s6 m2 l2">
             <p>
               <input type="checkbox" id="anual"/>
@@ -162,7 +153,6 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
             </p>
           </div>
           <input id="id_central" value="<?php echo htmlentities($datos['id']);?>" type="hidden">
-          <input id="ultimo" value="<?php echo htmlentities($ultimo);?>" type="hidden">
         </form>
         <a onclick="insert_pago();" class="waves-effect waves-light btn pink right "><i class="material-icons right">send</i>Registrar Pago</a><br>
         <h4>Historial </h4>

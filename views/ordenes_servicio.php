@@ -187,11 +187,11 @@ include ('../php/cobrador.php');
             while($resultados = mysqli_fetch_array($sql_orden)) {
               $id_cliente = $resultados['id_cliente'];
               $id_user=$resultados['registro'];
-              $id_comunidad = $cliente['lugar'];
 
               $users = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$id_user"));
               $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente"));
-              $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunidades WHERE id_comunidad=$id_comunidad"));
+              $id_comunidad = $cliente['lugar'];
+              $comunidad2 = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunidades WHERE id_comunidad=$id_comunidad"));
               $Dias= 0;
               if ($resultados['fecha']<$Hoy) {
                 $date1 = new DateTime($Hoy);
@@ -228,7 +228,7 @@ include ('../php/cobrador.php');
                     <td>'.$cliente['nombre'].'</td>
                     <td>'.$Descripción.'</td>
                     <td>'.$resultados['fecha'].'</td>
-                    <td>'.$comunidad['nombre'].'</td>
+                    <td>'.$comunidad2['nombre'].'</td>
                     <td>'.$Tecnicos.'</td>
                     <td>'.$users['firstname'].'</td>
                     <td><span class="new badge '.$color_e.'" data-badge-caption=""><b>'.$resultados['estatus'].'</b></span></td>
