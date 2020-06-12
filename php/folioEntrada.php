@@ -21,7 +21,7 @@ class PDF extends FPDF{
         
         // Colores de los bordes, fondo y texto
         $this->SetFillColor(255,255,255);
-        $this->SetTextColor(0,0,0)
+        $this->SetTextColor(0,0,0);
         $this->AddPage();
         global $title;
         global $pass;

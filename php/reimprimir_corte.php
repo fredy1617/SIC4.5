@@ -64,7 +64,7 @@ class PDF extends FPDF{
             $TotalEI = 0;      
             while($fila = mysqli_fetch_array($sql_efectivoI)){                
                 $this->SetX(6);
-                $this->MultiCell(70,4,utf8_decode("Cliente: # " .$fila['id_cliente'].'; '.$fila['descripcion']),0,'L',true);
+                $this->MultiCell(70,4,utf8_decode("Cliente: # " .$fila['id_cliente'].'; '.$fila['descripcion'].'; Tipo: '.$fila['tipo']),0,'L',true);
                 $this->MultiCell(70,4,utf8_decode("$ ". $fila['cantidad'].'.00'),0,'R',true);
                 $this->Ln(5);
                 $TotalEI += $fila['cantidad'];
@@ -86,7 +86,7 @@ class PDF extends FPDF{
             $TotalBI = 0;
             while($fila = mysqli_fetch_array($sql_bancoI)){                
                 $this->SetX(6);
-                $this->MultiCell(70,4,utf8_decode("Cliente: # ".$fila['id_cliente'].'; '.$fila['descripcion']),0,'L',true);
+                $this->MultiCell(70,4,utf8_decode("Cliente: # ".$fila['id_cliente'].'; '.$fila['descripcion'].'; Tipo: '.$fila['tipo']),0,'L',true);
                 $this->MultiCell(70,4,utf8_decode("$ ". $fila['cantidad'].'.00'),0,'R',true);
                 $this->Ln(5);
                 $TotalBI += $fila['cantidad'];
@@ -109,7 +109,7 @@ class PDF extends FPDF{
             
             while($fila = mysqli_fetch_array($sql_creditoI)){
                 $this->SetX(6);
-                $this->MultiCell(70,4,utf8_decode("Cliente: # " .$fila['id_cliente'].'; '.$fila['descripcion']),0,'L',true);
+                $this->MultiCell(70,4,utf8_decode("Cliente: # " .$fila['id_cliente'].'; '.$fila['descripcion'].'; Tipo: '.$fila['tipo']),0,'L',true);
                 $this->MultiCell(70,4,utf8_decode("$ ". $fila['cantidad'].'.00'),0,'R',true);
                 $this->Ln(5);
             }
@@ -137,7 +137,7 @@ class PDF extends FPDF{
             $TotalES = 0;
             while($fila = mysqli_fetch_array($sql_efectivoST)){                
                 $this->SetX(6);
-                $this->MultiCell(70,4,utf8_decode("Cliente: # " .$fila['id_cliente'].'; '.$fila['descripcion']),0,'L',true);
+                $this->MultiCell(70,4,utf8_decode("Cliente: # " .$fila['id_cliente'].'; '.$fila['descripcion'].'; Tipo: '.$fila['tipo']),0,'L',true);
                 $this->MultiCell(70,4,utf8_decode("$ ". $fila['cantidad'].'.00'),0,'R',true);
                 $this->Ln(5);
                 $TotalES += $fila['cantidad'];
@@ -159,7 +159,7 @@ class PDF extends FPDF{
             $TotalBS = 0;
             while($fila = mysqli_fetch_array($sql_bancoST)){                
                 $this->SetX(6);
-                $this->MultiCell(70,4,utf8_decode("Cliente: # ".$fila['id_cliente'].'; '.$fila['descripcion']),0,'L',true);
+                $this->MultiCell(70,4,utf8_decode("Cliente: # ".$fila['id_cliente'].'; '.$fila['descripcion'].'; Tipo: '.$fila['tipo']),0,'L',true);
                 $this->MultiCell(70,4,utf8_decode("$ ". $fila['cantidad'].'.00'),0,'R',true);
                 $this->Ln(5);
                 $TotalBS += $fila['cantidad'];
@@ -171,13 +171,63 @@ class PDF extends FPDF{
            }
 
             $Todos_Pagos = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $id_corte" ));
-            $this->MultiCell(65,4,utf8_decode('Total de Pagos: '.$Todos_Pagos['count(*)']),0,'R',true);
-            $this->Ln(10);
+            $this->MultiCell(60,4,utf8_decode('Total de Pagos ('.$Todos_Pagos['count(*)'].'):'),0,'L',true);
+            $this->Ln(4);
 
             $this->SetFont('Arial','',11);
-            $this->Cell(60,4,'Servicios Integrales de Computacion ',0,0,'C',true);
-            $this->SetFont('Arial','B',12);
-            $this->Ln(15);
+            $Telefono = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $id_corte AND pagos.tipo IN ('Mes-Tel', 'Min-Extra')" ));
+            if ($Telefono > 0) {
+              $this->Cell(60,4,utf8_decode('Telefono = '.$Telefono),0,0,'C',true);
+              $this->Ln(5);
+            }
+            $Mes_Internet = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $id_corte AND pagos.tipo = 'Mensualidad'" ));
+            if ($Mes_Internet > 0) {
+              $this->Cell(60,4,utf8_decode('Mes-Internet = '.$Mes_Internet),0,0,'C',true);
+              $this->Ln(5);
+            }
+            $Abonos = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $id_corte AND pagos.tipo = 'Abono'" ));
+            if ($Abonos > 0) {
+              $this->Cell(60,4,utf8_decode('Abonos = '.$Abonos),0,0,'C',true);
+              $this->Ln(5);
+            }
+            $AntInst = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $id_corte AND pagos.tipo = 'Anticipo'" ));
+            if ($AntInst > 0) {
+              $this->Cell(60,4,utf8_decode('Anticipo Inst. = '.$AntInst),0,0,'C',true);
+              $this->Ln(5);
+            }
+            $AbonoInst = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $id_corte AND pagos.tipo = 'Abono Instalacion'" ));
+            if ($AbonoInst > 0) {
+              $this->Cell(60,4,utf8_decode('Abono Inst. = '.$AbonoInst),0,0,'C',true);
+              $this->Ln(5);
+            }
+            $LiquidInst = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $id_corte AND pagos.tipo = 'Liquidacion'" ));
+            if ($LiquidInst > 0) {
+              $this->Cell(60,4,utf8_decode('Liquidacion Inst. = '.$LiquidInst),0,0,'C',true);
+              $this->Ln(5);
+            }
+            $Reporte = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $id_corte AND pagos.tipo = 'Reporte'" ));
+            if ($Reporte > 0) {
+              $this->Cell(60,4,utf8_decode('Reportes = '.$Reporte),0,0,'C',true);
+              $this->Ln(5);
+            }
+            $AntiDisp = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $id_corte AND pagos.tipo = 'Dispositivo' AND pagos.descripcion = 'Anticipo'" ));
+            if ($AntiDisp > 0) {
+              $this->Cell(60,4,utf8_decode('Anticipo Disp. = '.$AntiDisp),0,0,'C',true);
+              $this->Ln(5);
+            }
+            $LiquidDisp = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $id_corte AND pagos.tipo = 'Dispositivo' AND pagos.descripcion = 'Liquidacion'" ));
+            if ($LiquidDisp > 0) {
+              $this->Cell(60,4,utf8_decode('Liquidacion Disp. = '.$LiquidDisp),0,0,'C',true);
+              $this->Ln(5);
+            }
+            $Otros = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $id_corte AND pagos.tipo = 'Otros Pagos'" ));
+            if ($Otros > 0) {
+              $this->Cell(60,4,utf8_decode('Otros Pagos = '.$Otros),0,0,'C',true);
+              $this->Ln(5);
+            }
+
+            $this->SetFont('Arial','B',11);
+            $this->Ln(9);
             if ($cantidad > 0) {
               $this->MultiCell(65,4,utf8_decode('TOTAL EFECTIVO: $'.$cantidad.'.00'),0,'L',true);
               $this->Ln(3);
@@ -189,7 +239,10 @@ class PDF extends FPDF{
             if ($credito > 0) {
               $this->MultiCell(65,4,utf8_decode('TOTAL CREDITO: $'.$credito.'.00'),0,'L',true);
               $this->Ln(3);
-            }            
+            }  
+            $this->Ln(5); 
+            $this->Cell(60,4,'Servicios Integrales de Computacion ',0,0,'C',true);
+            $this->Ln(15);          
         }
     }
 }

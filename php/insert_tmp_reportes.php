@@ -1,5 +1,7 @@
 <?php 
 include('../php/conexion.php');
+include('is_logged.php');
+$id_user = $_SESSION['user_id'];
 $id_Reporte = $conn->real_escape_string($_POST['valorIdReporte']);
 
 $sql_buscar = mysqli_query($conn, "SELECT * FROM tmp_reportes WHERE id_reporte = '$id_Reporte'");
@@ -13,7 +15,7 @@ if ($EnCampo['campo']==0 ) {
     if(mysqli_num_rows($sql_buscar)>0){
     	echo '<script>M.toast({html:"Ya se encuentra este reporte en ruta.", classes: "rounded"})</script>';
     }else{
-    	if(mysqli_query($conn, "INSERT INTO tmp_reportes (id_reporte) VALUES ('$id_Reporte')")){
+    	if(mysqli_query($conn, "INSERT INTO tmp_reportes (id_reporte, usuario) VALUES ('$id_Reporte', '$id_user')")){
     		echo '<script>M.toast({html:"Reporte agregado correctamente a la ruta.", classes: "rounded"})</script>';
     	}	
     }
@@ -31,7 +33,7 @@ if ($EnCampo['campo']==0 ) {
     </thead>
     <tbody>
     <?php 
-    $sql_tmp = mysqli_query($conn,"SELECT * FROM tmp_reportes WHERE ruta =0");
+    $sql_tmp = mysqli_query($conn,"SELECT * FROM tmp_reportes WHERE ruta = 0 AND usuario = $id_user");
     $columnas = mysqli_num_rows($sql_tmp);
     if($columnas == 0){
         ?>

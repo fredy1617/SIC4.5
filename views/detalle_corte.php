@@ -126,7 +126,7 @@ if (isset($_POST['id_corte']) == false) {
 	  		$id_cliente = $pago['id_cliente'];
 	  		$sql2 = mysqli_query($conn,  "SELECT nombre FROM clientes WHERE id_cliente = $id_cliente");
 	    	$cliente = mysqli_fetch_array($sql2);
-	    	if ($cliente['nombre'] == '') {
+	    	if (mysqli_num_rows($sql2) == '') {
 	            $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente = $id_cliente"));
 	        }
 	  	?>	

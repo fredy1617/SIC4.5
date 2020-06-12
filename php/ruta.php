@@ -52,16 +52,17 @@ class PDF extends FPDF{
         $this->SetFont('Arial','B',10);
         while($listado = mysqli_fetch_array($resultado)){
 //Buscar Reporte
-            $id_reporte = $listado['id_reporte'];
-            $sql_o = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM reportes WHERE id_reporte='$id_reporte'"));
-            $id = $sql_o['id_reporte'];
-            $rep = 'Si';
-            $Descripcion = $sql_o['descripcion'];
-            if ($sql_o['id_cliente'] == ''){
+            $id_reporte = $listado['id_reporte'];                   
+            if ((mysqli_num_rows(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $id_reporte"))) == 0){
                 $sql_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM orden_servicios WHERE id = $id_reporte")); 
                 $id = $sql_o['id'];
-                $Descripcion = ($sql_o['trabajo'] == '')? $sql_o['solicitud']: $sql_o['trabajo'];
+                $Descripcion = ($sql_o['trabajo'] == '')? $sql_o['solicitud']: $sql_o['trabajo'];  
                 $rep = 'No';
+            }else{
+                $sql_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $id_reporte")); 
+                $id = $sql_o['id_reporte'];
+                $Descripcion = $sql_o['descripcion'];
+                $rep = 'Si';
             }
 //Buscar Cliente
             $id_cliente = $sql_o['id_cliente'];

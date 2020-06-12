@@ -2,6 +2,8 @@
   include ('../php/conexion.php');
   $IdComunidad = $conn->real_escape_string($_POST['valorIdComunidad']);
   date_default_timezone_set('America/Mexico_City');
+  include('is_logged.php');
+  $id_user = $_SESSION['user_id'];
   $Hoy = date('Y-m-d');
 
   #CHECAMOS SI HAY REPORTES EN ESTA COMUNIDAD
@@ -15,7 +17,7 @@
         if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM tmp_reportes WHERE id_reporte = '$id_reporte'"))>0) {
         	echo "<script>M.toast({html: 'Ya se encuentra este reporte en ruta.', classes: 'rounded'});</script>";
         }else{
-        	if (mysqli_query($conn, "INSERT INTO tmp_reportes (id_reporte) VALUES ('$id_reporte')")) {
+        	if (mysqli_query($conn, "INSERT INTO tmp_reportes (id_reporte, usuario) VALUES ('$id_reporte', '$id_user')")) {
         		$Rep ++;
         	}
         }
@@ -32,7 +34,7 @@
         if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM tmp_reportes WHERE id_reporte = '$id_reporte'"))>0) {
         	echo "<script>M.toast({html: 'Ya se encuentra este reporte en ruta.', classes: 'rounded'});</script>";
         }else{
-        	if (mysqli_query($conn, "INSERT INTO tmp_reportes (id_reporte) VALUES ('$id_reporte')")) {
+          if (mysqli_query($conn, "INSERT INTO tmp_reportes (id_reporte, usuario) VALUES ('$id_reporte', '$id_user')")) {
         		$Rep ++;
         	}
         }
@@ -67,7 +69,7 @@
   			$pagar = $total-$dejo;
   			$paquete = $instalacion['paquete'];
   			$fecha = $instalacion['fecha_registro'];
-  			if (mysqli_query($conn, "INSERT INTO tmp_pendientes (id_cliente, nombre, telefono, lugar, direccion, referencia, total, dejo, pagar, paquete, fecha_registro) VALUES ($id_cliente, '$nombre', '$telefono', '$lugar', '$direccion', '$referencia', $total, $dejo, $pagar, $paquete, '$fecha')")) {
+  			if (mysqli_query($conn, "INSERT INTO tmp_pendientes (id_cliente, nombre, telefono, lugar, direccion, referencia, total, dejo, pagar, paquete, fecha_registro, usuario) VALUES ($id_cliente, '$nombre', '$telefono', '$lugar', '$direccion', '$referencia', $total, $dejo, $pagar, $paquete, '$fecha', '$id_user')")) {
   				$inst ++;
   			}
   		  

@@ -5,6 +5,7 @@
 include('fredyNav.php');
 include('../php/conexion.php');
 include ('../php/cobrador.php');
+$user_id = $_SESSION['user_id'];
 ?>
 <!--Inicia Script de reportes tmp-->
 <script>
@@ -102,6 +103,7 @@ include ('../php/cobrador.php');
     </div></p>
   </div>
   <br><br><br>
+      <!-- MUESTRA Instalaciones DE RUTA--->
         <div class="row">
         <h3 class="hide-on-med-and-down">Ruta Instalaciones</h3>
         <h5 class="hide-on-large-only">Ruta Instalaciones</h5>
@@ -120,7 +122,7 @@ include ('../php/cobrador.php');
                 </thead>
                 <tbody>
                 <?php 
-                $sql_tmp = mysqli_query($conn,"SELECT * FROM tmp_pendientes WHERE ruta_inst  =0");
+                $sql_tmp = mysqli_query($conn,"SELECT * FROM tmp_pendientes WHERE ruta_inst = 0 AND usuario = $user_id");
                 $columnas = mysqli_num_rows($sql_tmp);
                 if($columnas == 0){
                     ?>
@@ -151,6 +153,7 @@ include ('../php/cobrador.php');
             </table>
           </div>
         </div><br>
+      <!-- FIN Instalaciones DE RUTA--->
       <!-- MUESTRA REPORTES DE RUTA--->
         <div class="row" >
             <div id="reporte_borrar"></div>
@@ -170,13 +173,13 @@ include ('../php/cobrador.php');
               </thead>
               <tbody>
               <?php
-              $sql_tmp = mysqli_query($conn, "SELECT * FROM tmp_reportes WHERE ruta = 0");
+              $sql_tmp = mysqli_query($conn, "SELECT * FROM tmp_reportes WHERE ruta = 0 AND usuario = $user_id");
               $columnas = mysqli_num_rows($sql_tmp);
               if ($columnas == 0) {
                   echo "<h5 class = 'center'>No hay reportes en ruta</h5>";
               }else{
                 while ($tmp = mysqli_fetch_array($sql_tmp)) {
-                    $id_reporte = $tmp['id_reporte'];
+                    $id_reporte = $tmp['id_reporte'];                    
                     if ((mysqli_num_rows(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $id_reporte"))) == 0){
                       $sql = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM orden_servicios WHERE id = $id_reporte")); 
                       $id = $sql['id'];
@@ -213,6 +216,7 @@ include ('../php/cobrador.php');
         </div>
         <br><br>
         <a onclick="modal()" class="btn waves-light waves-effect right pink">Imprimir</a>
+      <!-- FIN REPORTES DE RUTA--->
 <br><br><br>
 </div>
 <br>

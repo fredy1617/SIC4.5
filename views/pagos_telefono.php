@@ -107,6 +107,9 @@ $color1 = 'green';
 if ($Saldo < 0) {
   $color1 = 'red darken-2';
 }
+
+$user_id = $_SESSION['user_id'];
+$area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE user_id='$user_id'"));
 ?>
 <div class="container">
   <h3 class="hide-on-med-and-down">Realizando pago del cliente:</h3>
@@ -118,14 +121,18 @@ if ($Saldo < 0) {
       <img src="../img/cliente.png" alt="" class="circle">
       <span class="title"><b>No. Cliente: </b><?php echo $datos['id_cliente'];?></span>
       <p><b>Nombre(s): </b><?php echo $datos['nombre'];?><br>
-        <b>Telefono: </b><?php echo $datos['telefono'];?><br>
-        <b>Extención: </b><?php echo $datos['tel_servicio'];?><br>
+         <?php if ($area['area'] != 'Cobrador') { ?>
+         <b>Telefono: </b><?php echo $datos['telefono'];?><br>
+         <b>Extención: </b><?php echo $datos['tel_servicio'];?><br>
+         <?php }?>
          <b>Comunidad: </b><?php echo $comunidad['nombre'];?><br>
+         <?php if ($area['area'] != 'Cobrador') { ?>
          <b>Dirección: </b><?php echo $datos['direccion'];?><br>
          <b>Referencia: </b><?php echo $datos['referencia'];?><br>
          <b>Observación: </b><?php echo $datos['descripcion']; ?><br>
          <b>Fecha de suscripción: </b><?php echo $datos['fecha_instalacion']; ?><br>
          <?php
+          }
          if ($datos['tel_cortado'] == 0) {
            $estado = "ACTIVO";
            $col = "green";

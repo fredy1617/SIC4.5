@@ -1,6 +1,8 @@
 <?php
 include('../php/conexion.php');
 date_default_timezone_set('America/Mexico_City');
+include('is_logged.php');
+$id_user = $_SESSION['user_id'];
 $Responsable = $conn->real_escape_string($_POST['valorResponsable']);
 $Acompañante = $conn->real_escape_string($_POST['valorAcompañante']);
 $Vehiculo = $conn->real_escape_string($_POST['valorVehiculo']);
@@ -10,29 +12,29 @@ $Material = $conn->real_escape_string($_POST['valorMaterial']);
 $Fecha = date('Y-m-d'); 
 $aux= mysqli_num_rows(mysqli_query($conn, "SELECT * FROM rutas WHERE fecha = '$Fecha' AND estatus = 0 AND responsable='$Responsable'  AND acompanante='$Acompañante'"));
 if($aux<=0 or $aux==null){
-if (mysqli_query($conn, "INSERT INTO rutas(fecha, responsable, acompanante, material) VALUES ('$Fecha', '$Responsable', '$Acompañante', '$Material')")) {
-	echo '<script>M.toast({html : "Se creo la ruta correctamente.", classes: "rounded"})</script>';
-	$ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_ruta) AS id FROM rutas WHERE estatus=0"));            
+	if (mysqli_query($conn, "INSERT INTO rutas(fecha, responsable, acompanante, material) VALUES ('$Fecha', '$Responsable', '$Acompañante', '$Material')")) {
+		echo '<script>M.toast({html : "Se creo la ruta correctamente.", classes: "rounded"})</script>';
+		$ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_ruta) AS id FROM rutas WHERE estatus=0"));            
 
-    $ultima_ruta = $ultimo['id'];
-	//GUARDAR REPORTE DE RUTA
-	mysqli_query($conn, "INSERT INTO reporte_rutas(id_ruta, vehiculo, bobina, vale) VALUES ('$ultima_ruta', '$Vehiculo', '$Bobina', '$Vale')");
+	    $ultima_ruta = $ultimo['id'];
+		//GUARDAR REPORTE DE RUTA
+		mysqli_query($conn, "INSERT INTO reporte_rutas(id_ruta, vehiculo, bobina, vale) VALUES ('$ultima_ruta', '$Vehiculo', '$Bobina', '$Vale')");
 
-	//modificar pendientes y reportes agregar id_ruta
-    mysqli_query($conn, "UPDATE tmp_pendientes SET ruta_inst = $ultima_ruta WHERE ruta_inst=0");
-    mysqli_query($conn, "UPDATE tmp_reportes SET ruta = $ultima_ruta WHERE ruta=0");
-	?>
-	<script>    
-	    var a = document.createElement("a");
-	      a.target="_blank"
-	      a.href = "../php/ruta.php";
-	      a.click();
-	</script>
-	<?php
+		//modificar pendientes y reportes agregar id_ruta
+	    mysqli_query($conn, "UPDATE tmp_pendientes SET ruta_inst = $ultima_ruta WHERE ruta_inst = 0 AND usuario = $id_user");
+	    mysqli_query($conn, "UPDATE tmp_reportes SET ruta = $ultima_ruta WHERE ruta = 0 AND usuario = $id_user");
+		?>
+		<script>    
+		    var a = document.createElement("a");
+		      a.target="_blank"
+		      a.href = "../php/ruta.php";
+		      a.click();
+		</script>
+		<?php
+	}else{
+		echo '<script>M.toast({html : "Ocurrio un error en la creación.", classes: "rounded"})</script>';
+	}
 }else{
-	echo '<script>M.toast({html : "Ocurrio un error en la creación.", classes: "rounded"})</script>';
-}}else{
 	echo '<script>M.toast({html : "Ya se encuentra una ruta registrada con los mismos valores el día de hoy.", classes: "rounded"})</script>';
 }
-
 ?>

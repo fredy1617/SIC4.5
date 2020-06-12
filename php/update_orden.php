@@ -1,7 +1,9 @@
 <?php
+include("is_logged.php");
 include('../php/conexion.php');
 date_default_timezone_set('America/Mexico_City');
 
+$user_id = $_SESSION['user_id'];
 $Estatus = $conn->real_escape_string($_POST['valorEstatus']);
 $EstatusI = $conn->real_escape_string($_POST['valorEstatusI']);
 $id = $conn->real_escape_string($_POST['valorIdOrden']);
@@ -15,17 +17,24 @@ if ($EstatusI == 'Revisar') {
 	$Material = $conn->real_escape_string($_POST['valorMaterial']);
 	$Tecnicos = $conn->real_escape_string($_POST['valorTecnicos']);
 	$sql = "UPDATE orden_servicios SET trabajo = '$Trabajo', material = '$Material',  estatus = '$Estatus', tecnicos_r = '$Tecnicos', fecha_r = '$FechaAtendido', hora_r = '$Hora' WHERE id = '$id'";
-
 }elseif ($EstatusI == 'Cotizar') {
 
 	$Precio = $conn->real_escape_string($_POST['valorPrecio']);
 	$Solucion = $conn->real_escape_string($_POST['valorSolucion']);
 	$sql = "UPDATE orden_servicios SET precio = $Precio, solucion = '$Solucion', estatus = '$Estatus' WHERE id = '$id'";
+	if ($Estatus == 'Cotizado') {
+		mysqli_query($conn, "UPDATE orden_servicios SET cotizo = $user_id WHERE id = '$id'");
+	}
 
 }elseif ($EstatusI == 'Cotizado' or $EstatusI == 'Pedir') {
 
 	$Solucion = $conn->real_escape_string($_POST['valorSolucion']);
 	$sql = "UPDATE orden_servicios SET solucion = '$Solucion', estatus = '$Estatus' WHERE id = '$id'";
+	if ($Estatus == 'Pedir') {
+		mysqli_query($conn, "UPDATE orden_servicios SET confirmo = $user_id WHERE id = '$id'");
+	}elseif ($Estatus == 'Realizar') {
+		mysqli_query($conn, "UPDATE orden_servicios SET compro = $user_id WHERE id = '$id'");
+	}
 
 }elseif ($EstatusI == 'Realizar') {
 

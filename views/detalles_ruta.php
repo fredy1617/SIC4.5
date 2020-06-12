@@ -319,24 +319,34 @@ $ruta = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM rutas WHERE id_rut
                     <?php
                 }else{
                     while($tmp = mysqli_fetch_array($sql_tmp)){
-                        $id_reporte = $tmp['id_reporte'];
-                        $sql = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM reportes WHERE id_reporte = '$id_reporte'"));
-                    	  $atendido =$sql['atendido'];
-                    	  $estatus = '<span class="new badge red" data-badge-caption="Pendiente"></span>';
-                    	  if ($atendido == 1) {
-                    		  $estatus = '<span class="new badge green" data-badge-caption="Terminado"></span>';
-                    	  }
-
-                        $id = $sql['id_reporte'];
-                        $Descripcion = $sql['descripcion'];
-                        $Solucion = $sql['solucion'];
-                        $Hora = $sql['hora_atendido'];
+                        $id_reporte = $tmp['id_reporte'];   
+                        $estatus = '<span class="new badge red" data-badge-caption="Pendiente"></span>';
+                        if ((mysqli_num_rows(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $id_reporte"))) == 0){
+                          $sql = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM orden_servicios WHERE id = $id_reporte")); 
+                          $id = $sql['id'];
+                          $Descripcion = $sql['solicitud'];
+                          $Hora = ($sql['hora_r'] == '')? $sql['hora_s']: $sql['hora_r'];  
+                          $Solucion = $sql['trabajo']; 
+                          $atendido =$sql['hora_s'];
+                          if ($atendido != '') {
+                            $estatus = '<span class="new badge green" data-badge-caption="Terminado"></span>';
+                          }
+                        }else{
+                          $sql = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $id_reporte")); 
+                          $id = $sql['id_reporte'];
+                          $Descripcion = $sql['descripcion'];
+                          $Solucion = $sql['solucion']; 
+                          $Hora = $sql['hora_atendido'];
+                          $atendido =$sql['atendido'];
+                          if ($atendido == 1) {
+                            $estatus = '<span class="new badge green" data-badge-caption="Terminado"></span>';
+                          }
+                        }
+                    	  
                         if ($sql['id_cliente'] == ''){
                         $sql = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM orden_servicios WHERE id = $id_reporte")); 
                         $id = $sql['id'];
-                        $Descripcion = $sql['solicitud'];
-                        $Solucion = $sql['trabajo'];
-                        $Hora = ($sql['hora_r'] == '')? $sql['hora_s']: $sql['hora_r'];  
+                        
                         }
                         $id_cliente = $sql['id_cliente'];
                         $sql = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente");

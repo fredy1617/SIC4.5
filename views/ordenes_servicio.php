@@ -5,6 +5,8 @@
 include('fredyNav.php');
 include('../php/conexion.php');
 include ('../php/cobrador.php');
+$user_id = $_SESSION['user_id'];
+
 ?>
 <!--Inicia Script de reportes tmp-->
 <script>
@@ -168,9 +170,9 @@ include ('../php/cobrador.php');
                 <th>Descripción</th>
                 <th>Fecha</th>
                 <th>Comunidad</th>
-                <th>Técnico</th>
                 <th>Registró</th>
                 <th>Estatus</th>
+                <th>Realizo</th>
                 <th>Atender</th>
                 <th>+Ruta</th>
             </tr>
@@ -205,18 +207,28 @@ include ('../php/cobrador.php');
               }elseif ($Dias == 4 OR $Dias == 5) { $color = "orange darken-4";
               }elseif ($Dias >= 6) { $color = "red accent-4"; }
               $Descripción = $resultados['trabajo'];
-              $Tecnicos = $resultados['tecnicos_r'];
-              if ($Tecnicos == '') {
-                $Tecnicos = 'SIN';
+
+              $Realizo = $resultados['tecnicos_r'];
+              if ($Realizo == '') {
+                $Realizo = 'SIN';
               }
               if ($resultados['estatus'] == 'Cotizar') {
                 $color_e = 'red darken-4';
               }else if($resultados['estatus'] == 'Cotizado') {
                 $color_e = 'orange darken-4';
+                $user_id = $resultados['cotizo'];
+                $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));
+                $Realizo = $usuario['firstname'];
               }else if($resultados['estatus'] == 'Pedir') {
                 $color_e = 'yellow darken-2';
+                $user_id = $resultados['confirmo'];
+                $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));
+                $Realizo = $usuario['firstname'];
               }else if($resultados['estatus'] == 'Realizar') {
                 $color_e = 'green darken-3';
+                $user_id = $resultados['compro'];
+                $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));
+                $Realizo = $usuario['firstname'];
               }else{
                 $Descripción = $resultados['solicitud'];
                 $color_e = 'blue darken-3';
@@ -229,9 +241,9 @@ include ('../php/cobrador.php');
                     <td>'.$Descripción.'</td>
                     <td>'.$resultados['fecha'].'</td>
                     <td>'.$comunidad2['nombre'].'</td>
-                    <td>'.$Tecnicos.'</td>
                     <td>'.$users['firstname'].'</td>
                     <td><span class="new badge '.$color_e.'" data-badge-caption=""><b>'.$resultados['estatus'].'</b></span></td>
+                    <td>'.$Realizo.'</td>
                     <td><br><form action="atender_orden.php" method="post"><input type="hidden" name="id_orden" value="'.$resultados['id'].'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">send</i></button></form></td>
                     <td><a onclick="ruta('.$resultados['id'].');" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></a></td>
                   </tr>';
@@ -245,6 +257,7 @@ include ('../php/cobrador.php');
     </div>
 
   <br><br><br>
+      <!-- MUESTRA Instalaciones DE RUTA--->
         <div class="row">
         <h3 class="hide-on-med-and-down">Ruta Instalaciones</h3>
         <h5 class="hide-on-large-only">Ruta Instalaciones</h5>
@@ -263,7 +276,7 @@ include ('../php/cobrador.php');
                 </thead>
                 <tbody>
                 <?php 
-                $sql_tmp = mysqli_query($conn,"SELECT * FROM tmp_pendientes WHERE ruta_inst  =0");
+                $sql_tmp = mysqli_query($conn,"SELECT * FROM tmp_pendientes WHERE ruta_inst = 0 AND usuario = $user_id");
                 $columnas = mysqli_num_rows($sql_tmp);
                 if($columnas == 0){
                     ?>
@@ -294,6 +307,7 @@ include ('../php/cobrador.php');
             </table>
           </div>
         </div><br>
+      <!-- FIN Instalaciones DE RUTA--->
       <!-- MUESTRA REPORTES DE RUTA--->
         <div class="row" >
             <div id="reporte_borrar"></div>
@@ -313,7 +327,7 @@ include ('../php/cobrador.php');
               </thead>
               <tbody>
               <?php
-              $sql_tmp = mysqli_query($conn, "SELECT * FROM tmp_reportes WHERE ruta = 0");
+              $sql_tmp = mysqli_query($conn, "SELECT * FROM tmp_reportes WHERE ruta = 0 AND usuario = $user_id");
               $columnas = mysqli_num_rows($sql_tmp);
               if ($columnas == 0) {
                   echo "<h5 class = 'center'>No hay reportes en ruta</h5>";
@@ -356,6 +370,7 @@ include ('../php/cobrador.php');
         </div>
         <br><br>
         <a onclick="modal()" class="btn waves-light waves-effect right pink">Imprimir</a>
+      <!-- FIN REPORTES DE RUTA--->
 <br><br><br>
 </div>
 <br>

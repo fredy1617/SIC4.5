@@ -1,5 +1,7 @@
 <?php 
 include('../php/conexion.php');
+include('is_logged.php');
+$id_user = $_SESSION['user_id'];
 $id_cliente = $conn->real_escape_string($_POST['valorIdCliente']);
 $mensaje = '';
 
@@ -20,7 +22,7 @@ if($numero_columnas==0){
 	$cliente_paquete = $cliente['paquete'];
 	$cliente_fecha =  $cliente['fecha_registro'];	
 
-	$sql_insert = "INSERT INTO tmp_pendientes (id_cliente, nombre, telefono, lugar, direccion, referencia, total, dejo, pagar, paquete, fecha_registro) VALUES ($cliente_id, '$cliente_nombre', '$cliente_telefono', '$cliente_lugar', '$cliente_direccion', '$cliente_referencia', $cliente_total, $cliente_dejo, $cliente_pagar, $cliente_paquete, '$cliente_fecha')";
+	$sql_insert = "INSERT INTO tmp_pendientes (id_cliente, nombre, telefono, lugar, direccion, referencia, total, dejo, pagar, paquete, fecha_registro, usuario) VALUES ($cliente_id, '$cliente_nombre', '$cliente_telefono', '$cliente_lugar', '$cliente_direccion', '$cliente_referencia', $cliente_total, $cliente_dejo, $cliente_pagar, $cliente_paquete, '$cliente_fecha', '$id_user')";
 
 	if(mysqli_query($conn, $sql_insert)){
 		echo '<script>M.toast({html:"Se agrego a la ruta.", classes: "rounded"})</script>';	
@@ -31,7 +33,7 @@ if($numero_columnas==0){
 	$mensaje = '<script>M.toast({html:"Ya se encuentra esta instalación en ruta.", classes: "rounded"})</script>';
 }
 
-$sql_instalacion = mysqli_query($conn,"SELECT * FROM tmp_pendientes WHERE ruta_inst =0");
+$sql_instalacion = mysqli_query($conn,"SELECT * FROM tmp_pendientes WHERE ruta_inst = 0 AND usuario = $id_user");
 		while($instalacion = mysqli_fetch_array($sql_instalacion)){
 			$id_comunidad = $instalacion['lugar'];
             $sql_comunidad = mysqli_fetch_array(mysqli_query($conn,"SELECT nombre FROM comunidades WHERE id_comunidad=$id_comunidad"));

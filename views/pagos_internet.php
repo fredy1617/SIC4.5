@@ -201,6 +201,8 @@ if ($datos['fecha_corte'] < $Fecha_Hoy ) {
      $Descuento = round($Descuento, 0, PHP_ROUND_HALF_DOWN);
   }
 }
+$user_id = $_SESSION['user_id'];
+$area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE user_id='$user_id'"));
 ?>
 <div class="container">
   <h3 class="hide-on-med-and-down">Realizando pago del cliente:</h3>
@@ -212,12 +214,15 @@ if ($datos['fecha_corte'] < $Fecha_Hoy ) {
       <img src="../img/cliente.png" alt="" class="circle">
       <span class="title"><b>No. Cliente: </b><?php echo $datos['id_cliente'];?></span>
       <p><b>Nombre(s): </b><?php echo $datos['nombre'];?><br>
-         <b>Telefono: </b><?php echo $datos['telefono'];?><br>
+         <?php if ($area['area'] != 'Cobrador') { ?><b>Telefono: </b><?php echo $datos['telefono'];?><br> <?php }?>
          <b>Comunidad: </b><?php echo $comunidad['nombre'];?><br>
+         <?php if ($area['area'] != 'Cobrador') { ?>
          <b>Dirección: </b><?php echo $datos['direccion'];?><br>
          <b>Referencia: </b><?php echo $datos['referencia'];?><br>
+         <?php }?>
          <b>Fecha Corte: </b><span id="corte"><?php echo $datos['fecha_corte'];?></span><br>
          <b>Fecha Corte Mensual: <?php echo $corteInt['fecha'];?></b><br>
+         <?php if ($area['area'] != 'Cobrador') { ?>
          <b>Fecha de Instalación: </b><?php echo $Instalacion;?><br>
          <?php
          $color = "green";
@@ -249,6 +254,7 @@ if ($datos['fecha_corte'] < $Fecha_Hoy ) {
             </label>
           </div>
           <br>
+          <?php }?>
          <hr>
         <b>SALDO: </b> <span class="new badge <?php echo $color1 ?>" data-badge-caption="">$<?php echo $Saldo; ?><br>
       </p>
