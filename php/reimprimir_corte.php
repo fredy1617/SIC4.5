@@ -3,7 +3,6 @@ include('../php/conexion.php');
 $id_corte = $_GET['id'];
 //Incluimos la libreria fpdf
 include("../fpdf/fpdf.php");
-include("is_logged.php");
 $pass="root";
 class PDF extends FPDF{
     function folioCliente(){
@@ -251,5 +250,4 @@ class PDF extends FPDF{
     $pdf->folioCliente();
     $pdf->Output('CORTE','I');
     mysqli_close($conn);
-
 ?>
