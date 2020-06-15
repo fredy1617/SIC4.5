@@ -16,9 +16,9 @@
             global $id_user;
             global $pass;
             $bot_Token = '918836101:AAGGaH2MIoTjqdhOmRs_34G1Yjgx5VkwgFI';
-            $id_Chat = '1087049979';
-            $id_Chat2 = '1080437366';
-            $id_Chat3 = '1140290694';
+            $id_Chat = '1087049979';#ID Fredy
+            $id_Chat2 = '1080437366';#ID Gabriel
+            $id_Chat3 = '1140290694';#ID Mayra
             $website = 'https://api.telegram.org/bot'.$bot_Token;
             $enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
             
@@ -48,7 +48,7 @@
                 mysqli_query($enlace,"INSERT INTO cortes(usuario, fecha, cantidad, banco) VALUES ($id_user, '$Fecha_hoy', '$cantidad', '$banco')");
                 $ultimo =  mysqli_fetch_array(mysqli_query($enlace, "SELECT MAX(id_corte) AS id FROM cortes WHERE usuario=$id_user"));           
            	    $corte = $ultimo['id'];
-                $Mensaje = "Corte en el sistema del dia: ".$Fecha_hoy.". \nCon folio: <b>".$corte."</b> y usuario: <b>'".$cobrador['firstname']."(".$cobrador['user_name'].")"."'</b> con las cantidades totales de: \n  <b>Banco = $".$banco.". \n  Efectivo = $".$cantidad.". \n  Credito = $".$credito.".</b>";
+                $Mensaje = "Corte en el sistema del dia: ".$Fecha_hoy.". \nCon folio: <b>".$corte."</b> y usuario: <b>'".$cobrador['firstname']."(".$cobrador['user_name'].")"."'</b> con las cantidades totales de: \n  <b>Banco = $".$banco.". \n  Efectivo = $".$cantidad.". \n  Credito = $".$credito.". \n \n  <a href ='189.197.184.252:6288/SIC4.5/php/reimprimir_corte.php?id=".$corte."'>  -- DESCARGAR -- </a></b>";
                 sendMessage($id_Chat, $Mensaje, $website);
                 sendMessage($id_Chat2, $Mensaje, $website);
                 sendMessage($id_Chat3, $Mensaje, $website);
