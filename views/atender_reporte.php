@@ -39,7 +39,7 @@ function encender(){
   $("#Orden").html(mensaje);
   }); 
 }
-function update_reporte(bandera, contador) {
+function update_reporte(bandera, contador, antender) {
     var textoNombre = $("input#nombres").val();
     var textoTelefono = $("input#telefono").val();
     var textoDireccion = $("input#direccion").val();
@@ -47,7 +47,6 @@ function update_reporte(bandera, contador) {
     var textoIdReporte = $("input#id_reporte").val();
     var textoFalla = $("textarea#falla").val();
     var textoSolucion = $("textarea#solucion").val();
-    var textoAtendido = $("select#atendido").val();
     var textoFecha = $("input#fecha_visita").val();
     var textoIdCliente = $("input#id_cliente").val();
 
@@ -105,7 +104,6 @@ function update_reporte(bandera, contador) {
         textoCosto = '';
         textoManoObra = '';
         textoTipo_cambio = '';
-
     }
 
     if(document.getElementById('campo').checked==true){
@@ -137,7 +135,7 @@ function update_reporte(bandera, contador) {
           valorFalla: textoFalla,
           valorSolucion: textoSolucion,
           valorTecnico: textoTecnico,
-          valorAtendido: textoAtendido,
+          valorAtendido: antender,
           valorManoObra: textoManoObra,
           valorFecha: textoFecha,
           valorCampo: textoCampo,
@@ -300,14 +298,6 @@ if($resultado['tecnico']==''){
               <label for="fecha_visita">Fecha visita:</label>
               <input id="fecha_visita" type="date">    
           </div><br><br>
-        <div class="input-field row col s12 m6 l6"><br><br>
-          <i class="col s1"> <br></i>
-          <select id="atendido" class="browser-default col s10" required>
-            <option selected disabled="">¿Listo?</option>
-            <option value="No">No</option>
-            <option value="Sí">Sí</option> 
-          </select>
-        </div>
         <div class="col s12 m6 l6">
           <p><br><br><br>
             <input type="checkbox" id="campo" <?php if ($resultado['campo'] ==1) {
@@ -401,9 +391,12 @@ if($resultado['tecnico']==''){
                   </p>
             </div>
                 </div>
-              <?php } ?>  
-                <input id="id_cliente" value="<?php echo htmlentities($cliente['id_cliente']);?>" type="hidden"><br><br><br>
-                <a onclick="update_reporte(<?php echo $bandera;?>, <?php echo $contador;?>);" class="waves-effect waves-light btn pink right"><i class="material-icons right">send</i>ACTUALIZAR REPORTE</a> 
+              <?php } ?>
+              <div>
+                <input id="id_cliente" value="<?php echo htmlentities($cliente['id_cliente']);?>" type="hidden">
+                <a onclick="update_reporte(<?php echo $bandera;?>, <?php echo $contador;?>, 1);" class="waves-effect waves-light btn red darken-4 right"><i class="material-icons right">check</i>TERMINAR</a> 
+                <a onclick="update_reporte(<?php echo $bandera;?>, <?php echo $contador;?>, 2);" class="waves-effect waves-light btn pink right"><i class="material-icons right">save</i>GUARDAR</a>  
+              </div>
         </div>       
     </form>
       

@@ -45,14 +45,9 @@ $sql2= "UPDATE clientes SET nombre = '$Nombre', telefono = '$Telefono', direccio
 if (mysqli_query($conn, $sql2)) {
   echo  '<script>M.toast({html:"Información actualizada.", classes: "rounded"})</script>';
 }
+	
+$Atender_Visita = $Atendido;
 
-if($Atendido == 'Sí'){
-	$Atendido = '1';	
-	$Atender_Visita = '1';
-}else{
-	$Atendido = '2';
-	$Atender_Visita ='2';
-} 	
 $mas = "";
 if ($Fecha_visita != 0) {
 	$Atendido = '1';
