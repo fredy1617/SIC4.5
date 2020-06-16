@@ -98,6 +98,7 @@
                     <td><b>'.$id_reporte.'</b></td>
                     <td><a class="tooltipped" data-position="top" data-tooltip=" Telefono: '.$cliente['telefono'].'  Comunidad: '.$comunidad['nombre'].'">'.$cliente['nombre'].'</a></td>
                     <td>'.$resultados['descripcion'].'</td>
+                    <td>'.$resultados['falla'].'</td>
                     <td>'.$resultados['fecha'].'</td>
                     <td>'.$comunidad['nombre'].'</td>
                     <td>'.$tecnico1[1].$Apoyo.'</td>

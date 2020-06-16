@@ -33,7 +33,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
         <th>Hora Registro</th>
         <th>Fecha</th>
         <th>Hora Termino</th>
-        <th>Falla</th>
+        <th>Diagnostico</th>
         <th>Solucion</th>
         <th>Técnicos</th>
         <th>Zona</th>
@@ -166,7 +166,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
             <td><?php echo $info['hora_registro']; ?></td>
             <td><?php echo $info['fecha_solucion']; ?></td>
             <td><?php echo $info['hora_atendido']; ?></td>
-            <td><b>Reporte: </b> <?php echo $info['descripcion']; ?>.<br><b>Falla: </b><?php echo $info['falla']; ?>.</td>
+            <td><b>Reporte: </b> <?php echo $info['descripcion']; ?>.<br><b>Diagnostico: </b><?php echo $info['falla']; ?>.</td>
             <td><?php echo ($info['atendido'] == 2) ? "Ser reviso en oficina y se envio a campo":$info['solucion']; ?></td>
             <td><?php echo $tecnico['firstname'].$Apoyo; ?></td>
             <td><?php echo ($info['campo'] == 1 AND $info['atendido'] == 1) ? "Campo":"Oficina"; ?></td>
@@ -311,7 +311,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
               <td><?php echo $info['hora_registro']; ?></td>
               <td><?php echo $info['fecha_solucion']; ?></td>
               <td><?php echo $info['hora_atendido']; ?></td>
-              <td><b>Reporte: </b> <?php echo $info['descripcion']; ?>.<br><b>Falla: </b><?php echo $info['falla']; ?>.</td>
+              <td><b>Reporte: </b> <?php echo $info['descripcion']; ?>.<br><b>Diagnostico: </b><?php echo $info['falla']; ?>.</td>
               <td><?php echo ($info['atendido'] == 2) ? "Ser reviso en oficina y se envio a campo":$info['solucion']; ?></td>
               <td><?php echo $tecnico['firstname'].$Apoyo; ?></td>
               <td><?php echo ($info['campo'] == 1 AND $info['atendido'] == 1) ? "Campo":"Oficina"; ?></td>
@@ -481,7 +481,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
               <td><?php echo $info['hora_registro']; ?></td>
               <td><?php echo $info['fecha_solucion']; ?></td>
               <td><?php echo $info['hora_atendido']; ?></td>
-              <td><b>Reporte: </b> <?php echo $info['descripcion']; ?>.<br><b>Falla: </b><?php echo $info['falla']; ?>.</td>
+              <td><b>Reporte: </b> <?php echo $info['descripcion']; ?>.<br><b>Diagnostico: </b><?php echo $info['falla']; ?>.</td>
               <td><?php echo ($info['atendido'] == 2) ? "Ser reviso en oficina y se envio a campo":$info['solucion']; ?></td>
               <td><?php echo $tecnico['firstname'].$Apoyo; ?></td>
               <td><?php echo ($info['campo'] == 1 AND $info['atendido'] == 1) ? "Campo":"Oficina"; ?></td>

@@ -254,7 +254,7 @@ if($resultado['tecnico']==''){
         <div class="input-field">
           <i class="material-icons prefix">close</i>
           <textarea id="falla" class="materialize-textarea validate" data-length="150" required><?php echo $resultado['falla'];?></textarea> 
-          <label for="falla">Falla detectada:</label>
+          <label for="falla">Diagnostico:</label>
         </div>
         <div class="input-field">
           <i class="material-icons prefix">done</i>

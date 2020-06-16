@@ -58,12 +58,14 @@ class PDF extends FPDF{
             if ((mysqli_num_rows(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $id_reporte"))) == 0){
                 $sql_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM orden_servicios WHERE id = $id_reporte")); 
                 $id = $sql_o['id'];
-                $Descripcion = ($sql_o['trabajo'] == '')? $sql_o['solicitud']: $sql_o['trabajo'];  
+                $Descripcion = $sql_o['solicitud'];  
+                $Diagnostico = $sql_o['trabajo'];  
                 $rep = 'No';
             }else{
                 $sql_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $id_reporte")); 
                 $id = $sql_o['id_reporte'];
                 $Descripcion = $sql_o['descripcion'];
+                $Diagnostico = $sql_o['falla'];
                 $rep = 'Si';
             }
 //Buscar Cliente
@@ -95,6 +97,7 @@ class PDF extends FPDF{
             $this->MultiCell(194,4, utf8_decode('LUGAR: '.$sql_comunidad['nombre']),0,'L',false);
             $this->MultiCell(194,4, utf8_decode('REFERENCIA: '.$cliente['referencia']),0,'L',false);
             $this->MultiCell(194,4, utf8_decode('DESCRIPCIÓN DEL REPORTE: '.$Descripcion),0,'L',false);
+            $this->MultiCell(194,4, utf8_decode('DIAGNOSTICO: '.$Diagnostico),0,'L',false);
             $this->MultiCell(194,4, utf8_decode('FECHA DE REPORTE: '.$sql_o['fecha']),0,'L',false);
             $this->MultiCell(180,1, utf8_decode('
                 -------------------------------------------------------------------------------------------------------------------------------------------------'),0,'L',false);

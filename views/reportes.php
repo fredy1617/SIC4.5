@@ -88,6 +88,7 @@ $user_id = $_SESSION['user_id'];
                 <th>No.Rep</th>
                 <th>Cliente</th>
                 <th>Descripción</th>
+                <th>Diagnostico</th>
                 <th>Fecha</th>
                 <th>Comunidad</th>
                 <th>Técnico</th>
