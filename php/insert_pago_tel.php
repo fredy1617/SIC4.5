@@ -60,7 +60,8 @@ if ($Tipo == 'Mes-Tel') {
 
 if ($Respuesta == 'Ver') {
     $sql_DEUDAS = mysqli_query($conn, "SELECT * FROM deudas WHERE liquidada = 0 AND id_cliente = '$IdCliente'");
-    if (mysqli_num_rows($sql_DEUDAS)>0) {
+    $sql_Abono = mysqli_query($conn, "SELECT * FROM pagos WHERE tipo = 'Abono' AND fecha = '$Fecha_hoy' AND id_cliente = '$IdCliente'");
+    if (mysqli_num_rows($sql_DEUDAS)>0 AND mysqli_num_rows($sql_Abono) == 0) {
       ?>
       <script>
         $(document).ready(function(){

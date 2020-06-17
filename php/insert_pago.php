@@ -3,6 +3,7 @@ session_start();
 include('../php/conexion.php');
 date_default_timezone_set('America/Mexico_City');
 $id_user = $_SESSION['user_id'];
+$Fecha_hoy = date('Y-m-d');
 
 $Promo = $conn->real_escape_string($_POST['valorPromo']);
 $Tipo_Campio = $conn->real_escape_string($_POST['valorTipo_Campio']);
@@ -18,7 +19,8 @@ $Respuesta = $conn->real_escape_string($_POST['valorRespuesta']);
 $entra = 'No';
 if ($Respuesta == 'Ver') {
     $sql_DEUDAS = mysqli_query($conn, "SELECT * FROM deudas WHERE liquidada = 0 AND id_cliente = '$IdCliente'");
-    if (mysqli_num_rows($sql_DEUDAS)>0) {
+    $sql_Abono = mysqli_query($conn, "SELECT * FROM pagos WHERE tipo = 'Abono' AND fecha = '$Fecha_hoy' AND id_cliente = '$IdCliente'");
+    if (mysqli_num_rows($sql_DEUDAS)>0 AND mysqli_num_rows($sql_Abono) == 0) {
       ?>
       <script>
         $(document).ready(function(){
@@ -102,7 +104,6 @@ if ($entra == "Si") {
   $Cotejamiento = 0;
   $fecha_corte = mysqli_fetch_array(mysqli_query($conn, 'SELECT * FROM clientes WHERE id_cliente='.$IdCliente));
   $Fecha_db = $fecha_corte['fecha_corte'];
-  $Fecha_hoy = date('Y-m-d');
 
   if($Fecha_hoy<=$Fecha_db){
     $Fecha = $fecha_corte['fecha_corte'];
