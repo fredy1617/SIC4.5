@@ -233,6 +233,9 @@ $user_id = $_SESSION['user_id'];
                 $Descripción = $resultados['solicitud'];
                 $color_e = 'blue darken-3';
               }
+              if ($Realizo == '') {
+                $Realizo = 'SIN';
+              }
               echo '
                   <tr>
                     <td><span class="new badge '.$color.'" data-badge-caption="">'.$Dias.'</span></td>
