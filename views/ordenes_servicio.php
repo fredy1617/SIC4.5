@@ -5,7 +5,7 @@
 include('fredyNav.php');
 include('../php/conexion.php');
 include ('../php/cobrador.php');
-$user_id = $_SESSION['user_id'];
+$id_user = $_SESSION['user_id'];
 
 ?>
 <!--Inicia Script de reportes tmp-->
@@ -91,7 +91,7 @@ $user_id = $_SESSION['user_id'];
             while($resultados = mysqli_fetch_array($consulta)) {
               $id_reporte = $resultados['id_reporte'];
               $id_cliente = $resultados['id_cliente'];
-              $id_user=$resultados['registro'];
+              $id_user1=$resultados['registro'];
               $EnCampo = ($resultados['campo'] == 1) ? 'En Campo' : '';
               if ($resultados['apoyo'] != 0) {
                 $id_apoyo = $resultados['apoyo'];
@@ -100,10 +100,10 @@ $user_id = $_SESSION['user_id'];
               }else{
                 $Apoyo = '';
               }
-              if ($id_user == 0) {
+              if ($id_user1 == 0) {
                 $Usuario = "Sistema";
               }else{
-                $users = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$id_user"));
+                $users = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$id_user1"));
                 $Usuario = $users['firstname'];
               }
               $sql = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente");
@@ -279,7 +279,7 @@ $user_id = $_SESSION['user_id'];
                 </thead>
                 <tbody>
                 <?php 
-                $sql_tmp = mysqli_query($conn,"SELECT * FROM tmp_pendientes WHERE ruta_inst = 0 AND usuario = $user_id");
+                $sql_tmp = mysqli_query($conn,"SELECT * FROM tmp_pendientes WHERE ruta_inst = 0 AND usuario = $id_user");
                 $columnas = mysqli_num_rows($sql_tmp);
                 if($columnas == 0){
                     ?>
@@ -330,7 +330,7 @@ $user_id = $_SESSION['user_id'];
               </thead>
               <tbody>
               <?php
-              $sql_tmp = mysqli_query($conn, "SELECT * FROM tmp_reportes WHERE ruta = 0 AND usuario = $user_id");
+              $sql_tmp = mysqli_query($conn, "SELECT * FROM tmp_reportes WHERE ruta = 0 AND usuario = $id_user");
               $columnas = mysqli_num_rows($sql_tmp);
               if ($columnas == 0) {
                   echo "<h5 class = 'center'>No hay reportes en ruta</h5>";
