@@ -217,24 +217,33 @@ $id_user = $_SESSION['user_id'];
               }else if($resultados['estatus'] == 'Cotizado') {
                 $color_e = 'orange darken-4';
                 $user_id = $resultados['cotizo'];
-                $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));
-                $Realizo = $usuario['firstname'];
+                if ($user_id == '') {
+                  $Realizo = 'SIN';
+                }else {  
+                  $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));
+                  $Realizo = $usuario['firstname'];
+                }
               }else if($resultados['estatus'] == 'Pedir') {
                 $color_e = 'yellow darken-2';
                 $user_id = $resultados['confirmo'];
-                $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));
-                $Realizo = $usuario['firstname'];
+                if ($user_id == '') {
+                  $Realizo = 'SIN';
+                }else {  
+                  $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));
+                  $Realizo = $usuario['firstname'];
+                }
               }else if($resultados['estatus'] == 'Realizar') {
                 $color_e = 'green darken-3';
                 $user_id = $resultados['compro'];
-                $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));
-                $Realizo = $usuario['firstname'];
+                if ($user_id == '') {
+                  $Realizo = 'SIN';
+                }else {  
+                  $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));
+                  $Realizo = $usuario['firstname'];
+                }
               }else{
                 $Descripción = $resultados['solicitud'];
                 $color_e = 'blue darken-3';
-              }
-              if ($Realizo == '') {
-                $Realizo = 'SIN';
               }
               echo '
                   <tr>
