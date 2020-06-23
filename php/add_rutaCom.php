@@ -82,12 +82,117 @@
 
 echo '<script>M.toast({html:"'.$mensaje.'", classes: "rounded"});</script>';
 ?>
-<script>
-	function ir(){
-		setTimeout("location.href='../views/ruta_comunidad.php'", 700);
-	}
-</script>
-<?php
- echo "<script>ir();</script>";
+<!-- MUESTRA Instalaciones DE RUTA--->
+        <div class="row">
+        <h3 class="hide-on-med-and-down">Ruta Instalaciones</h3>
+        <h5 class="hide-on-large-only">Ruta Instalaciones</h5>
+        <div id="instalaciones_ruta">
+            <table class="bordered highlight responsive-table">
+                <thead>
+                    <tr>
+                        <th>No. Cliente</th>
+                        <th>Nombre</th>
+                        <th>Servicio</th>
+                        <th>Telefono</th>
+                        <th>Lugar</th>
+                        <th>Dirección</th>
+                        <th>Borrar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php 
+                $sql_tmp = mysqli_query($conn,"SELECT * FROM tmp_pendientes WHERE ruta_inst = 0 AND usuario = $id_user");
+                $columnas = mysqli_num_rows($sql_tmp);
+                if($columnas == 0){
+                    ?>
+                    <h5 class="center">No hay instalaciones en ruta</h5>
+                    <?php
+                }else{
+                    while($tmp = mysqli_fetch_array($sql_tmp)){
+                        $id_comunidad = $tmp['lugar'];
+                        $sql_comunidad1 = mysqli_fetch_array(mysqli_query($conn,"SELECT nombre FROM comunidades WHERE id_comunidad=$id_comunidad"));
+                        $id_cliente = $tmp['id_cliente'];
+                        $serv = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM clientes WHERE id_cliente=$id_cliente"));
 
-?>
+                    ?>
+                    <tr>
+                      <td><?php echo $tmp['id_cliente']; ?></td>
+                      <td><?php echo $tmp['nombre']; ?></td>
+                      <td><?php echo $serv['servicio']; ?></td>
+                      <td><?php echo $tmp['telefono']; ?></td>
+                      <td><?php echo $sql_comunidad1['nombre']; ?></td>
+                      <td><?php echo $tmp['direccion']; ?></td>
+                      <td><a onclick="borrar_inst(<?php echo $tmp['id_cliente']; ?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
+                    </tr>
+                <?php
+                    }
+                }
+                ?>
+                </tbody>
+            </table>
+          </div>
+        </div><br>
+      <!-- FIN Instalaciones DE RUTA--->
+      <!-- MUESTRA REPORTES DE RUTA--->
+        <div class="row" >
+            <div id="reporte_borrar"></div>
+          <h3 class="hide-on-med-and-down">Ruta Reportes</h3>
+          <h5 class="hide-on-large-only">Ruta Reportes</h5>
+          <div id="resultado_ruta_reporte">
+          <table>
+              <thead>
+                  <tr>
+                      <th>No. Reporte</th>
+                      <th>Cliente</th>
+                      <th>Comunidad</th>
+                      <th>Descripción</th>
+                      <th>Fecha</th>
+                      <th>Borrar</th>
+                  </tr>
+              </thead>
+              <tbody>
+              <?php
+              $sql_tmp = mysqli_query($conn, "SELECT * FROM tmp_reportes WHERE ruta = 0 AND usuario = $id_user");
+              $columnas = mysqli_num_rows($sql_tmp);
+              if ($columnas == 0) {
+                  echo "<h5 class = 'center'>No hay reportes en ruta</h5>";
+              }else{
+                while ($tmp = mysqli_fetch_array($sql_tmp)) {
+                    $id_reporte = $tmp['id_reporte'];                    
+                    if ((mysqli_num_rows(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $id_reporte"))) == 0){
+                      $sql = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM orden_servicios WHERE id = $id_reporte")); 
+                      $id = $sql['id'];
+                      $Descripcion = ($sql['trabajo'] == '')? $sql['solicitud']: $sql['trabajo'];  
+                    }else{
+                      $sql = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $id_reporte")); 
+                      $id = $sql['id_reporte'];
+                     $Descripcion = $sql['descripcion'];
+                    }
+                    $id_cliente = $sql['id_cliente'];
+                    $ver = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente");
+                    if (mysqli_num_rows($ver) == 0) {
+                        $ver = mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente = $id_cliente");
+                    }
+                    $sql_nombre = mysqli_fetch_array($ver);
+                    $id_comunidad = $sql_nombre['lugar'];
+                    $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad = $id_comunidad"));
+                ?>
+                <tr>
+                    <td><?php echo $id; ?></td>
+                    <td><?php echo $sql_nombre['nombre']; ?></td>
+                    <td><?php echo $comunidad['nombre']; ?></td>
+                    <td><?php echo $Descripcion; ?></td>
+                    <td><?php echo $sql['fecha']; ?></td>
+                    <td><a onclick="borrar_rep(<?php echo $id; ?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
+                </tr>
+                <?php
+                }
+              }
+              ?>
+              </tbody>
+          </table>
+          </div>
+        </div>
+        <br><br>
+        <a onclick="modal()" class="btn waves-light waves-effect right pink">Imprimir</a>
+      <!-- FIN REPORTES DE RUTA--->

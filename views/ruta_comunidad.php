@@ -44,7 +44,6 @@ $user_id = $_SESSION['user_id'];
 </head>
 <body>
 	<div class="container">
-    <div id="Res_add"></div>
 	 <div class="row" >
       <h3 class="hide-on-med-and-down">Ruta por Comunidad</h3>
       <h5 class="hide-on-large-only">Ruta por Comunidad</h5>
@@ -286,6 +285,7 @@ $user_id = $_SESSION['user_id'];
       echo '<br><br>' ;   
       ?>
       </ul>
+      <div id="Res_add">
       <!-- MUESTRA Instalaciones DE RUTA--->
         <div class="row">
         <h3 class="hide-on-med-and-down">Ruta Instalaciones</h3>
@@ -400,6 +400,7 @@ $user_id = $_SESSION['user_id'];
         <br><br>
         <a onclick="modal()" class="btn waves-light waves-effect right pink">Imprimir</a>
       <!-- FIN REPORTES DE RUTA--->
+      </div>
 	</div>
 </body>
 </html>
