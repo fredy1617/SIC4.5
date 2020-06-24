@@ -48,7 +48,45 @@ $valorUsuario = $conn->real_escape_string($_POST['valorUsuario']);
       }
 ?>
 <?php 
+?>        
+    </tbody>
+</table><br><br>
+<h4>Matreial Ordenes</h4>
+<table class="bordered highlight responsive-table">
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th>Id_Cliente</th>
+        <th>Material</th>
+        <th>Fecha</th>
+        <th>Tipo</th>
+        <th>Es</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php
+      $sql_material = mysqli_query($conn, "SELECT * FROM orden_servicios WHERE fecha_s >= '$ValorDe' AND fecha_s <= '$ValorA' AND tecnicos_s LIKE '%$valorUsuario%' ORDER BY fecha_s");
+      $aux = mysqli_num_rows($sql_material);
+      if($aux>0){
+      while($material = mysqli_fetch_array($sql_material)){
+        ?>
+        <tr> 
+          <td><?php echo $aux;?></td>
+          <td><?php echo $material['id_cliente'];?></td>
+          <td><?php echo $material['material'];?></td>
+          <td><?php echo $material['fecha_s'];?></td>
+          <td>Nuevo</td>
+          <td>Orden Servicio</td>
+        </tr>
+        <?php
+        $aux--;
+      }
+      }else{
+        echo "<center><b><h5>No se encontro material utilizado</h5></b></center>";
+      }
+?>
+<?php 
 mysqli_close($conn);
 ?>        
     </tbody>
-</table><br><br><br>
+</table><br>

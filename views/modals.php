@@ -84,7 +84,7 @@ function recargar10() {
   }
 
   function recargar_corte() {
-    var textoClave = $("input#clave").val();
+    var textoClave = $("input#clave").val(); 
     if (textoClave == "corte$ic") {
       setTimeout("location.href='cortes_pagos.php'", 1000);
       var a = document.createElement("a");

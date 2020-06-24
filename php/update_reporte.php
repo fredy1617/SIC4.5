@@ -122,7 +122,7 @@ $mensaje = "";
 	 			echo '<script >M.toast({html:"Ya se encuentran valores similares registrados el dia de hoy.", classes: "rounded"})</script>';
 			}else{
 				if ($IdCliente > 10000) {
-					$Es = 'Especial o Mantenimiento';
+					$Es = 'Mantenimiento';
 				}else{
 					$Es = 'Reporte';
 				}
