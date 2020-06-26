@@ -30,8 +30,9 @@ while($usuario = mysqli_fetch_array($usuarios)){
         <th>Nombre</th>
         <th>Tipo</th>
         <th>Comunidad</th>
+        <th>Fecha Registro</th>
         <th>Hora Registro</th>
-        <th>Fecha</th>
+        <th>Fecha Termino</th>
         <th>Hora Termino</th>
         <th>Diagnostico</th>
         <th>Solucion</th>
@@ -72,6 +73,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
                     <td><?php echo $cliente_o['nombre']; ?></td>            
                     <td><b>Orden de Servicio</b></td>            
                     <td><?php echo $comunidad_o['nombre']; ?></td>            
+                    <td><?php echo $orden['fecha']; ?></td>
                     <td><?php echo $orden['hora']; ?></td>
                     <td><?php echo $fecha ?></td>
                     <td><?php echo $hora ?></td>
@@ -128,7 +130,8 @@ while($usuario = mysqli_fetch_array($usuarios)){
                 <td><?php echo $id_cliente_o; ?></td>
                 <td><?php echo $cliente_o['nombre']; ?></td>            
                 <td><b>Orden de Servicio</b></td>            
-                <td><?php echo $comunidad_o['nombre']; ?></td>            
+                <td><?php echo $comunidad_o['nombre']; ?></td>  
+                <td><?php echo $orden['fecha']; ?></td>
                 <td><?php echo $orden['hora']; ?></td>
                 <td><?php echo $fecha ?></td>
                 <td><?php echo $hora ?></td>
@@ -163,6 +166,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
             <td><?php echo $cliente['nombre']; ?></td>            
             <td><b>Reporte</b></td>            
             <td><?php echo $comunidad['nombre']; ?></td>            
+            <td><?php echo $info['fecha']; ?></td>
             <td><?php echo $info['hora_registro']; ?></td>
             <td><?php echo $info['fecha_solucion']; ?></td>
             <td><?php echo $info['hora_atendido']; ?></td>
@@ -205,6 +209,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
                 <td><?php echo $cliente_o2['nombre']; ?></td>            
                 <td><b>Orden de Servicio</b></td>            
                 <td><?php echo $comunidad_o2['nombre']; ?></td>            
+                <td><?php echo $orden2['fecha']; ?></td>
                 <td><?php echo $orden2['hora']; ?></td>
                 <td><?php echo $fecha ?></td>
                 <td><?php echo $hora ?></td>
@@ -225,6 +230,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
           <td><?php echo $instalaciones['nombre'];?></td>
           <td><b>Instalacion</b></td>
           <td><?php echo $comunidad['nombre'];?></td>
+          <td><?php echo $instalaciones['fecha_registro']; ?></td>
           <td><?php echo $instalaciones['hora_registro']; ?></td>
           <td><?php echo $instalaciones['fecha_instalacion'];?></td>
           <td><?php echo $instalaciones['hora_alta']; ?></td>
@@ -274,6 +280,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
                     <td><?php echo $cliente_o['nombre']; ?></td>            
                     <td><b>Orden de Servicio</b></td>            
                     <td><?php echo $comunidad_o['nombre']; ?></td>            
+                    <td><?php echo $orden['fecha']; ?></td>
                     <td><?php echo $orden['hora']; ?></td>
                     <td><?php echo $fecha ?></td>
                     <td><?php echo $hora ?></td>
@@ -308,6 +315,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
               <td><?php echo $cliente['nombre']; ?></td>            
               <td><b>Reporte</b></td>            
               <td><?php echo $comunidad['nombre']; ?></td>            
+              <td><?php echo $info['fecha']; ?></td>
               <td><?php echo $info['hora_registro']; ?></td>
               <td><?php echo $info['fecha_solucion']; ?></td>
               <td><?php echo $info['hora_atendido']; ?></td>
@@ -348,6 +356,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
                     <td><?php echo $cliente_o['nombre']; ?></td>            
                     <td><b>Orden de Servicio</b></td>            
                     <td><?php echo $comunidad_o['nombre']; ?></td>            
+                    <td><?php echo $orden['fecha']; ?></td>
                     <td><?php echo $orden['hora']; ?></td>
                     <td><?php echo $fecha ?></td>
                     <td><?php echo $hora ?></td>
@@ -391,6 +400,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
                     <td><?php echo $cliente_o['nombre']; ?></td>            
                     <td><b>Orden de Servicio</b></td>            
                     <td><?php echo $comunidad_o['nombre']; ?></td>            
+                    <td><?php echo $orden['fecha']; ?></td>
                     <td><?php echo $orden['hora']; ?></td>
                     <td><?php echo $fecha ?></td>
                     <td><?php echo $hora ?></td>
@@ -445,6 +455,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
                     <td><?php echo $cliente_o['nombre']; ?></td>            
                     <td><b>Orden de Servicio</b></td>            
                     <td><?php echo $comunidad_o['nombre']; ?></td>            
+                    <td><?php echo $orden['fecha']; ?></td>
                     <td><?php echo $orden['hora']; ?></td>
                     <td><?php echo $fecha ?></td>
                     <td><?php echo $hora ?></td>
@@ -478,6 +489,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
               <td><?php echo $cliente['nombre']; ?></td>            
               <td><b>Reporte</b></td>            
               <td><?php echo $comunidad['nombre']; ?></td>            
+              <td><?php echo $info['fecha']; ?></td>
               <td><?php echo $info['hora_registro']; ?></td>
               <td><?php echo $info['fecha_solucion']; ?></td>
               <td><?php echo $info['hora_atendido']; ?></td>
@@ -518,6 +530,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
                     <td><?php echo $cliente_o['nombre']; ?></td>            
                     <td><b>Orden de Servicio</b></td>            
                     <td><?php echo $comunidad_o['nombre']; ?></td>            
+                    <td><?php echo $orden['fecha']; ?></td>
                     <td><?php echo $orden['hora']; ?></td>
                     <td><?php echo $fecha ?></td>
                     <td><?php echo $hora ?></td>
