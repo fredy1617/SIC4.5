@@ -34,13 +34,14 @@ include('../php/cobrador.php');
 
 		while($ruta = mysqli_fetch_array($rutas)) {
 		$id_ruta = $ruta['id_ruta'];
+		$fecha_ruta = $ruta['fecha'];
 		$instalaciones = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM tmp_pendientes WHERE ruta_inst = $id_ruta"));
 		$reportes = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM tmp_reportes WHERE ruta = $id_ruta"));
 		$Total =$instalaciones['count(*)']+$reportes['count(*)'];
-		$instalacion = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM tmp_pendientes AS Pen JOIN clientes AS Cli ON Pen.id_cliente = Cli.id_cliente WHERE ruta_inst = $id_ruta and instalacion = 1"));
-		$reporte = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM tmp_reportes  AS TRep JOIN reportes AS Rep ON TRep.id_reporte = Rep.id_reporte WHERE ruta = $id_ruta and atendido = 1 OR atendido !=  NULL"));
-		$Avance = $instalacion['count(*)']+$reporte['count(*)'];
-		$fecha_ruta=$ruta['fecha'];
+		$instalacion = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM tmp_pendientes AS Pen JOIN clientes AS Cli ON Pen.id_cliente = Cli.id_cliente WHERE ruta_inst = $id_ruta AND instalacion = 1"));
+		$reporte = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM tmp_reportes  AS TRep JOIN reportes AS Rep ON TRep.id_reporte = Rep.id_reporte WHERE ruta = $id_ruta AND atendido = 1 OR atendido !=  NULL"));
+		$orden = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM tmp_reportes  AS TRep JOIN orden_servicios AS Orden ON TRep.id_reporte = Orden.id WHERE ruta = $id_ruta AND ((fecha_r >= '$fecha_ruta' AND fecha_s IS NULL) OR (fecha_r <= '$fecha_ruta' AND fecha_s >= '$fecha_ruta'))"));
+		$Avance = $instalacion['count(*)']+$reporte['count(*)']+$orden['count(*)'];
 		$mas_dias = strtotime('+1 day', strtotime($fecha_ruta));
 		$dosdias = date('Y-m-d', $mas_dias);
 		if ($Total == $Avance OR $Hoy > $dosdias) {

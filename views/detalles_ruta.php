@@ -304,6 +304,7 @@ $ruta = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM rutas WHERE id_rut
                         <th>Cliente</th>
                         <th>Descripción</th>
                         <th>Lugar</th>
+                        <th>Diagnostico</th>
                         <th>Fecha</th>
                         <th>Hora</th>
                         <th>Estatus</th>
@@ -325,10 +326,13 @@ $ruta = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM rutas WHERE id_rut
                           $sql = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM orden_servicios WHERE id = $id_reporte")); 
                           $id = $sql['id'];
                           $Descripcion = $sql['solicitud'];
-                          $Hora = ($sql['hora_r'] == '')? $sql['hora_s']: $sql['hora_r'];  
+                          $fecha = ($sql['fecha_s'] == '')? $sql['fecha_r']: $sql['fecha_s'];  
+                          $Hora = ($sql['hora_s'] == '')? $sql['hora_r']: $sql['hora_s'];  
                           $Solucion = $sql['trabajo']; 
-                          $atendido =$sql['hora_s'];
-                          if ($atendido != '') {
+                          if ($sql['estatus'] == 'Cotizar' OR $sql['estatus'] == 'Cotizado' OR $sql['estatus'] == 'Pedir' OR $sql['estatus'] == 'Realizar') {
+                            $estatus = '<span class="new badge orange" data-badge-caption="Revisado"></span>';
+                          }
+                          if ($sql['estatus'] == 'Facturar' OR $sql['estatus'] == 'Facturado') {
                             $estatus = '<span class="new badge green" data-badge-caption="Terminado"></span>';
                           }
                         }else{
@@ -336,6 +340,7 @@ $ruta = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM rutas WHERE id_rut
                           $id = $sql['id_reporte'];
                           $Descripcion = $sql['descripcion'];
                           $Solucion = $sql['solucion']; 
+                          $fecha = $sql['fecha_solucion'];
                           $Hora = $sql['hora_atendido'];
                           $atendido =$sql['atendido'];
                           if ($atendido == 1) {
@@ -364,6 +369,7 @@ $ruta = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM rutas WHERE id_rut
                       <td><?php echo $Descripcion; ?></td>
                        <td><?php echo $comunidad['nombre'];?></td>
                       <td><?php echo $Solucion; ?></td>
+                      <td><?php echo $fecha; ?></td>
                       <td><?php echo $Hora; ?></td>
                       <td><?php echo $estatus; ?></td>
                     </tr>
