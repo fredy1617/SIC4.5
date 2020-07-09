@@ -7,6 +7,22 @@
 ?>
 <title>SIC | Cortes Pagos</title>
 </head>
+<script>
+  function recargar_corte() {
+    var textoClave = $("input#clave").val(); 
+    if (textoClave == "") {
+        M.toast({html:"El campo clave no puede ir vacío.", classes: "rounded"});
+    }else{
+        $.post("../php/crear_corte.php", {
+              valorClave: textoClave
+            }, function(mensaje) {
+                $("#resultado_corte").html(mensaje);
+        });
+      }
+    
+  }
+
+</script>
 <main>
 <body>
     <?php
@@ -17,6 +33,7 @@
     <h3 class="hide-on-med-and-down">Pagos realizados por: <?php echo $usuario['user_name'];?></h3>
     <h5 class="hide-on-large-only">Pagos realizados por: <?php echo $usuario['user_name'];?></h5><br><br>
     <div>
+     <div id="resultado_corte"></div> 
       <h4 class="row"><b><< Internet >></b></h4>
       <div class="row">
         <?php

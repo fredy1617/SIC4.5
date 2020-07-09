@@ -2,6 +2,7 @@
     //Incluimos la libreria fpdf
     include("../fpdf/fpdf.php");
     include('is_logged.php');
+    $corte = $_GET['id'];
     function sendMessage($id, $msj, $website){
         $url = $website.'/sendMessage?chat_id='.$id.'&parse_mode=HTML&text='.urlencode($msj);
         file_get_contents($url);
@@ -15,40 +16,23 @@
         {
             global $id_user;
             global $pass;
+            global $corte;
+
             $bot_Token = '918836101:AAGGaH2MIoTjqdhOmRs_34G1Yjgx5VkwgFI';
             $id_Chat = '1087049979';#ID Fredy
             $id_Chat2 = '1080437366';#ID Gabriel
             $id_Chat3 = '1140290694';#ID Mayra
             $website = 'https://api.telegram.org/bot'.$bot_Token;
             $enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
-            
-            $cobrador = mysqli_fetch_array(mysqli_query($enlace, "SELECT * FROM users WHERE user_id = $id_user"));
-            $sql_total = mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo'");
-            $total = mysqli_fetch_array($sql_total);
-            $totalbanco = mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco'"));
-            $totalcredito = mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Credito'"));
             date_default_timezone_set('America/Mexico_City');
             $Fecha_hoy = date('Y-m-d');
-            $cantidad=$total['precio'];
-            $banco = $totalbanco['precio'];
-            $credito = $totalcredito['precio'];
-
-            $corte = 0;
-            //Insertar corte.....
-            if ($cantidad != "" OR $banco != "" OR $credito != "") {
-                if ($banco == "") {
-                    $banco = 0;
-                }
-                if ($cantidad == "") {
-                    $cantidad = 0;
-                }
-                if ($credito == "") {
-                    $credito = 0;
-                }
-                mysqli_query($enlace,"INSERT INTO cortes(usuario, fecha, cantidad, banco) VALUES ($id_user, '$Fecha_hoy', '$cantidad', '$banco')");
-                $ultimo =  mysqli_fetch_array(mysqli_query($enlace, "SELECT MAX(id_corte) AS id FROM cortes WHERE usuario=$id_user"));           
-           	    $corte = $ultimo['id'];
-                $Mensaje = "Corte en el sistema del dia: ".$Fecha_hoy.". \nCon folio: <b>".$corte."</b> y usuario: <b>'".$cobrador['firstname']."(".$cobrador['user_name'].")"."'</b> con las cantidades totales de: \n  <b>Banco = $".$banco.". \n  Efectivo = $".$cantidad.". \n  Credito = $".$credito.". \n \n  <a href ='189.197.184.252:6288/SIC4.5/php/reimprimir_corte.php?id=".$corte."'>  -- DESCARGAR -- </a></b>";
+            $cobrador = mysqli_fetch_array(mysqli_query($enlace, "SELECT * FROM users WHERE user_id = $id_user"));
+            $Cort =  mysqli_fetch_array(mysqli_query($enlace, "SELECT * FROM cortes WHERE id_corte = $corte"));           
+            $cantidad = $Cort['cantidad'];
+            $banco = $Cort['banco'];
+            $credito = $Cort['credito'];
+            if ($cantidad > 0 OR $banco > 0 OR $credito > 0) {
+                $Mensaje = "Corte en el sistema del dia: ".$Fecha_hoy.". \nCon folio: <b>".$corte."</b> y usuario: <b>'".$cobrador['firstname']."(".$cobrador['user_name'].")"."'</b> con las cantidades totales de: \n  <b>*Banco = $".$banco.". \n  *Efectivo = $".$cantidad.". \n  *Credito = $".$credito.". \n \n Relizado por: ".$Cort['realizo'].". \n \n  <a href ='189.197.184.252:6288/SIC4.5/php/reimprimir_corte.php?id=".$corte."'>  -- DESCARGAR -- </a></b>";
                 sendMessage($id_Chat, $Mensaje, $website);
                 sendMessage($id_Chat2, $Mensaje, $website);
                 sendMessage($id_Chat3, $Mensaje, $website);
@@ -71,7 +55,7 @@
             $this->Ln(8);
             $this->Cell(32,4,'Folio: No. '.$corte,0,0,'C',true);
             $this->Ln(10);
-            $this->Cell(90,4,'Fecha: '.Date('d-m-Y'),0,0,'C',true);            
+            $this->Cell(90,4,'Fecha: '.$Fecha_hoy,0,0,'C',true);            
             $this->Ln(10);
             $this->SetFont('Arial','B',14);            
             $this->Cell(60,4,'<< Internet >>  ',0,0,'C',true);

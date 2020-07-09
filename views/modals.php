@@ -83,20 +83,6 @@ function recargar10() {
     setTimeout("location.href='../views/cortes_telefono.php'", 800);
   }
 
-  function recargar_corte() {
-    var textoClave = $("input#clave").val(); 
-    if (textoClave == "corte$ic") {
-      setTimeout("location.href='cortes_pagos.php'", 1000);
-      var a = document.createElement("a");
-        a.target = "_blank";
-        a.href = "../php/corte_pago.php";
-        a.click();
-    }else{
-      M.toast({html:"Clave Incorrecta.", classes: "rounded"});
-    }
-    
-  }
-
   function admin() {
     setTimeout("location.href='home.php'", 1000);
   }
