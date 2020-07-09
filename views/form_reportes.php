@@ -21,8 +21,7 @@ include('fredyNav.php');
     }
     else {
       element2.style.display='none';
-    }
-        
+    }      
   };
   function verificar_reporte() {  
     var textoNombre = $("input#nombres").val();
@@ -103,7 +102,6 @@ include('fredyNav.php');
 
 </head>
 <main>
-
 <?php
 require('../php/conexion.php');
 
@@ -126,11 +124,9 @@ if ($filas == 0) {
 }
 $datos = mysqli_fetch_array($sql);
 
-
 //Sacamos la Comunidad
 $id_comunidad = $datos['lugar'];
 $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunidades WHERE id_comunidad='$id_comunidad'"));
-
 ?>
 <body>
 <div class="container row" id="Continuar" >

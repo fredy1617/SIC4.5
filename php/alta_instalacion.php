@@ -24,13 +24,7 @@ $Coordenada = $conn->real_escape_string($_POST['valorCoordenada']);
 $Extencion = $conn->real_escape_string($_POST['valorExtencion']);
 $FechaInstalacion = date('Y-m-d');
 $Hora = date('H:i:s');
-#--- MATERIALES ---
-$Antena = $conn->real_escape_string($_POST['valorAntena']);
-$Router = $conn->real_escape_string($_POST['valorRouter']);
-$Cable = $conn->real_escape_string($_POST['valorCable']);
-$Tubos = $conn->real_escape_string($_POST['valorTubos']);
-$Bobina = '';
-$Extras = $conn->real_escape_string($_POST['valorExtras']);
+
 
 if (filter_var($IP, FILTER_VALIDATE_IP)) {
 	$sql_ip = "SELECT * FROM clientes WHERE ip='$IP'";
@@ -87,6 +81,13 @@ if (filter_var($IP, FILTER_VALIDATE_IP)) {
 		            $sql="UPDATE clientes SET ip='$IP', material='$Material', tecnico='$Tecnico', instalacion=1, fecha_instalacion='$FechaInstalacion', fecha_corte='$FechaInstalacion', hora_alta = '$Hora', coordenadas = '$Coordenada', referencia = '$Referencia', direccion = '$Direccion', tel_servicio = '$Extencion' WHERE id_cliente=$IdCliente";
 		            
 		        	if(mysqli_query($conn,$sql)){
+						#--- MATERIALES ---
+						$Antena = $conn->real_escape_string($_POST['valorAntena']);
+						$Router = $conn->real_escape_string($_POST['valorRouter']);
+						$Cable = $conn->real_escape_string($_POST['valorCable']);
+						$Tubos = $conn->real_escape_string($_POST['valorTubos']);
+						$Bobina = '';
+						$Extras = $conn->real_escape_string($_POST['valorExtras']);
 		        		$Descripcion = "Liquidación de Instalación";
 						$Tipo_t = "Liquidacion";
 		        		if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = '$IdCliente' AND descripcion = '$Descripcion' AND cantidad='$Liquidar'"))>0){
@@ -122,6 +123,67 @@ if (filter_var($IP, FILTER_VALIDATE_IP)) {
 							$Mas = 'y Material';	
 						}else{
 							echo '<script>M.toast({html:"Ocurrio un error Material.", classes: "rounded"})</script>';
+						}
+						$IdTecnico = $_SESSION['user_id'];
+
+						if ($Antena != '') {
+							$sqlA = "UPDATE stock_tecnicos SET uso = 1, disponible = 1, fecha_salida = '$FechaInstalacion' WHERE serie = $Antena AND disponible = 0 AND tipo = 'Antena' AND tecnico = $IdTecnico";
+							if(mysqli_query($conn, $sqlA)){
+								echo '<script>M.toast({html:"Se dio de baja la antena: "'.$Antena.', classes: "rounded"})</script>';
+							}
+						}
+						if ($Router != '') {
+							$sqlR = "UPDATE stock_tecnicos SET uso = 1, disponible = 1, fecha_salida = '$FechaInstalacion' WHERE serie = $Router AND disponible = 0 AND tipo = 'Router' AND tecnico = $IdTecnico";
+							if(mysqli_query($conn, $sqlR)){
+								echo '<script>M.toast({html:"Se dio de baja el router: "'.$Router.', classes: "rounded"})</script>';
+							}
+						}
+						if ($Cable > 0) {
+							$bobina = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM stock_tecnicos WHERE uso < 300 AND tecnico = $IdTecnico AND disponible = 0 AND tipo = 'Bobina'"));
+							$Total =$bobina['uso']+$Cable;
+							if ($Total >= 300) {
+								if (mysqli_query($conn, "UPDATE stock_tecnicos SET uso = 300, fecha_salida = '$FechaInstalacion', disponible = 1  WHERE uso < 300 AND tecnico = $IdTecnico AND disponible = 0 AND tipo = 'Bobina'")){
+								    echo '<script>M.toast({html:"Se dio de baja la bobina.", classes: "rounded"})</script>';
+								}
+							}else{
+								if (mysqli_query($conn, "UPDATE stock_tecnicos SET uso = $Total WHERE uso < 300 AND tecnico = $IdTecnico AND disponible = 0 AND tipo = 'Bobina'")){
+								    echo '<script>M.toast({html:"Se actualizo la Bobina...", classes: "rounded"})</script>';
+								}
+							}	
+						}
+						if ($Tubos > 0) {
+							$Total = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS suma FROM stock_tecnicos WHERE tecnico = $IdTecnico AND disponible = 0 AND tipo = 'Tubo(s)'"));
+	      					$Uso = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(uso) AS suma FROM stock_tecnicos WHERE tecnico = $IdTecnico AND disponible = 0 AND tipo = 'Tubo(s)'"));
+	      					$Disponibles = $Total['suma']-$Uso['suma'];
+	      					if ($Tubos <= $Disponibles) {
+	      						$Entra = True;
+	      						while ($Entra) {
+							      $Prox_tubo = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM stock_tecnicos WHERE tecnico = $IdTecnico AND disponible = 0 AND tipo = 'Tubo(s)' LIMIT 1"));
+							      $id = $Prox_tubo['id'];
+							      $Cantidad = $Prox_tubo['cantidad'];
+							      $Uso = $Prox_tubo['uso']+$Tubos;
+							      $Resta = $Cantidad-$Uso;
+
+							      if ($Resta < 0) {
+							      	if (mysqli_query($conn, "UPDATE stock_tecnicos SET uso = $Cantidad, fecha_salida = '$FechaInstalacion', disponible = 1 WHERE id = $id")) {
+								        echo '<script>M.toast({html:"Tubos actualizados...", classes: "rounded"})</script>';
+								    }
+							        $Entra = True;  
+							        $Tubos = $Uso-$Cantidad;
+							      }else if ($Resta == 0) {
+							      	if (mysqli_query($conn, "UPDATE stock_tecnicos SET uso = $Cantidad, fecha_salida = '$FechaInstalacion', disponible = 1 WHERE id = $id")) {
+								        echo '<script>M.toast({html:"Tubos actualizados...", classes: "rounded"})</script>';
+								    }
+							        $Entra = False;  
+							        $Tubos = $Uso-$Cantidad;
+							      }else{
+							      	if (mysqli_query($conn, "UPDATE stock_tecnicos SET uso = $Uso WHERE id = $id")) {
+								        echo '<script>M.toast({html:"Tubos actualizados...", classes: "rounded"})</script>';
+								    }
+							     	$Entra = False;
+							      }
+							  }
+	      					}
 						}
 
 			            echo '<script>M.toast({html:"Cliente '.$Mas.' registrado.", classes: "rounded"})</script>';

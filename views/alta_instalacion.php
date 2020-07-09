@@ -29,17 +29,11 @@ function alta_instalacion_SM(bandera, contador) {
     var textoCoordenada = $("input#coordenada").val();
     var textoExtencion = $("input#tel_servicio").val();
 
-    var textoAntena = $("input#antena").val();
-    var textoRouter = $("input#router").val();
+     var textoAntena = $("select#antena").val();
+    var textoRouter = $("select#router").val();
     var textoCable = $("input#cable").val();
     var textoTubos = $("input#tubos").val();
     var textoOtros = $("input#mas").val();
-
-    if(document.getElementById('bobina').checked==true){
-      textoBobina   = 1;
-    }else{
-      textoBobina = 0;
-    }
     if(document.getElementById('credito').checked==true){
       textoTipo_cambio   = "Credito";
     }else{
@@ -54,31 +48,24 @@ function alta_instalacion_SM(bandera, contador) {
     } 
     textoExtras = textoExtras.slice(0, -2);
 
-    if(document.getElementById('otros').checked==true){
+    if(textoOtros.length > 4){
       if (textoExtras == '') {
         textoExtras = textoOtros;
       }else{
         textoExtras = textoExtras+', '+textoOtros;
       }
-      Entra = 'No';
-    }else{
-      Entra = 'Si';
     }
 
     if (textoIP == "") {
       M.toast({html:"El campo IP se encuentra vacío.", classes: "rounded"});
     }else if(textoTecnicos == ''){
       M.toast({html:"Seleccione un técnico por favor.", classes: "rounded"});
-    }else if(textoAntena == ''){
-      M.toast({html:"Ingrese un tipo de antena.", classes: "rounded"});
-    }else if(textoCable == '' || textoCable <= 0){
+    }else if(textoAntena == 0){
+      M.toast({html:"Seleccione una antena.", classes: "rounded"});
+    }else if(textoCable == '' || textoCable == 0){
       M.toast({html:"Ingrese la cantidad de metros de cable que utilizo.", classes: "rounded"});
-    }else if(textoTubos == '' || textoTubos < 0){
-      M.toast({html:"Ingresa la cantidad de tubos que utilizo.", classes: "rounded"});
-    }else if(textoRouter == ''){
-      M.toast({html:"Ingresa un tipo de router.", classes: "rounded"});
-    }else if(textoOtros == '' && Entra == 'No'){
-      M.toast({html:"Ingrese que otros materiales utilizo.", classes: "rounded"});
+    }else if(textoRouter == 0){
+      M.toast({html:"Seleccione un router.", classes: "rounded"});
     }else{
       $.post("../php/alta_instalacion_SM.php", {
           valorIP: textoIP,
@@ -95,11 +82,10 @@ function alta_instalacion_SM(bandera, contador) {
           valorRouter: textoRouter,
           valorCable: textoCable,
           valorTubos: textoTubos,
-          valorBobina: textoBobina,
           valorExtras: textoExtras
         }, function(mensaje) {
             $("#resultado_cliente").html(mensaje);
-        }); 
+        });
     }
 };
 
@@ -124,8 +110,8 @@ function alta_instalacion(bandera, contador) {
     var textoCoordenada = $("input#coordenada").val();
     var textoExtencion = $("input#tel_servicio").val();
 
-    var textoAntena = $("input#antena").val();
-    var textoRouter = $("input#router").val();
+    var textoAntena = $("select#antena").val();
+    var textoRouter = $("select#router").val();
     var textoCable = $("input#cable").val();
     var textoTubos = $("input#tubos").val();
     var textoOtros = $("input#mas").val();
@@ -143,31 +129,24 @@ function alta_instalacion(bandera, contador) {
     } 
     textoExtras = textoExtras.slice(0, -2);
 
-    if(document.getElementById('otros').checked==true){
+    if(textoOtros.length > 4){
       if (textoExtras == '') {
         textoExtras = textoOtros;
       }else{
         textoExtras = textoExtras+', '+textoOtros;
       }
-      Entra = 'No';
-    }else{
-      Entra = 'Si';
     }
 
     if (textoIP == "") {
       M.toast({html:"El campo IP se encuentra vacío.", classes: "rounded"});
     }else if(textoTecnicos == ''){
       M.toast({html:"Seleccione un técnico por favor.", classes: "rounded"});
-    }else if(textoAntena == ''){
-      M.toast({html:"Ingrese un tipo de antena.", classes: "rounded"});
+    }else if(textoAntena == 0){
+      M.toast({html:"Seleccione una antena.", classes: "rounded"});
     }else if(textoCable == '' || textoCable == 0){
-      M.toast({html:"Ingrese la cantidad de cables que utilizo.", classes: "rounded"});
-    }else if(textoTubos == '' || textoTubos == 0){
-      M.toast({html:"Ingresa la cantidad de tubos que utilizo.", classes: "rounded"});
-    }else if(textoRouter == ''){
-      M.toast({html:"Ingresa un tipo de router.", classes: "rounded"});
-    }else if(textoOtros == '' && Entra == 'No'){
-      M.toast({html:"Ingrese que otros materiales utilizo.", classes: "rounded"});
+      M.toast({html:"Ingrese la cantidad de metros de cable que utilizo.", classes: "rounded"});
+    }else if(textoRouter == 0){
+      M.toast({html:"Seleccione un router.", classes: "rounded"});
     }else{
       $.post("../php/alta_instalacion.php", {
           valorIP: textoIP,
@@ -316,52 +295,75 @@ if (isset($_POST['id_cliente']) == false) {
               </div>
               </div>
               <div class="row">
+          <?php 
+            $contador = 1;
+            $id_tecnico = $_SESSION['user_id'];?>
                 <div class="col s12 m6 l6">
                   <div class="row">
-                  <div class="input-field col s12 m12 l12">
-                    <i class="material-icons prefix">satellite</i>
-                    <input id="antena" type="text" class="validate" data-length="15" required>
-                    <label for="antena">Antena (ej: Lite Beam M5):</label>
+                  <div class="input-field col s12 m6 l6">
+                    <i class="material-icons col s2">satellite<br></i>
+                      <select id="antena" class="browser-default col s10" required>
+                        <option value="0" selected >Antena:</option>
+                        <?php
+                            $sql = mysqli_query($conn,"SELECT * FROM stock_tecnicos WHERE tipo = 'Antena' AND disponible = 0 AND tecnico = $id_tecnico");
+                            while($antena = mysqli_fetch_array($sql)){
+                              ?>
+                                <option value="<?php echo $antena['serie'];?>"><?php echo $antena['nombre'];?> (Serie: <?php echo $antena['serie'];?>)</option>
+                              <?php
+                            } 
+                        ?>
+                      </select>
+                  </div>
+                  <div class="input-field col s12 m6 l6">
+                    <i class="material-icons col s2">router<br></i>
+                      <select id="router" class="browser-default col s10" required>
+                        <option value="0" selected >Router:</option>
+                        <?php
+                            $sql = mysqli_query($conn,"SELECT * FROM stock_tecnicos WHERE tipo = 'Router' AND disponible = 0 AND tecnico = $id_tecnico");
+                            while($router = mysqli_fetch_array($sql)){
+                              ?>
+                                <option value="<?php echo $router['serie'];?>"><?php echo $router['nombre'];?> (Serie: <?php echo $router['serie'];?>)</option>
+                              <?php
+                            } 
+                        ?>
+                      </select>
                   </div>
                   </div>
                   <div class="input-field">
-                    <i class="material-icons prefix">router</i>
-                    <input id="router" type="text" class="validate" data-length="15" required>
-                    <label for="router">Router (ej: Tp-Link):</label>
+                    <i class="material-icons prefix">pan_tool</i>
+                    <input id="mano_obra" type="text" class="validate" data-length="15" required>
+                    <label for="mano_obra">Mano de obra:</label>
                   </div>
-                  <div class="row">
-                    <div class="col s4 m3 l3">
-                    <p>
-                      <br>
-                      <input type="checkbox" id="otros"/>
-                      <label for="otros">Otros</label>
-                    </p>
-                  </div>
-                  <div class="input-field col s8 m9 l9">
+                  <div class="input-field">
+                    <i class="material-icons prefix">add</i>
                     <input id="mas" type="text" class="validate" data-length="15" required>
-                    <label for="mas">¿Cuales? (ej: Torre, Clavos, etc.):</label>
-                  </div>
+                    <label for="mas">Otros ¿Cuales? (ej: 3 Camaras, 1 Grabador, etc.):</label>
                   </div>
                 </div>
                 
                 <!-- AQUI SE ENCUENTRA LA DOBLE COLUMNA EN ESCRITORIO.-->
                 <div class="col s12 m6 l6">
+                  <?php
+                  $bobina = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM stock_tecnicos WHERE disponible = 0 AND tecnico = $id_tecnico  AND tipo = 'Bobina'"));
+                  $CantidadB = $bobina['cantidad']-$bobina['uso'];
+                  $totalC = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS total FROM stock_tecnicos WHERE disponible = 0 AND tecnico = $id_tecnico  AND tipo = 'Tubo(s)'"));
+                  $totalU = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(uso) AS total FROM stock_tecnicos WHERE disponible = 0 AND tecnico = $id_tecnico  AND tipo = 'Tubo(s)'"));
+                  $Tubos = $totalC['total']-$totalU['total'];
+                  ?>
                   <div class="input-field col s12 m6 l6">
                     <i class="material-icons prefix">settings_input_hdmi</i>
                     <input id="cable" type="number" class="validate" data-length="15" required>
-                    <label for="cable">Cable Red (metros):</label>
+                    <label for="cable">Cable Red (metros) <?php echo $CantidadB;?>:</label>
                   </div>
                   <div class="input-field col s12 m6 l6">
                     <i class="material-icons prefix">priority_high</i>
-                    <input id="tubos" type="number" class="validate" data-length="15" required>
-                    <label for="tubos">Tubos (piezas):</label>
+                    <input id="tubos" type="number" class="validate" data-length="15" value="0" required>
+                    <label for="tubos">Tubos (piezas) <?php echo $Tubos;?>:</label>
                   </div>
                   <label>Extras:</label>
                   <p>
-                    <?php
-                    $contador = 1; 
+                    <?php 
                     $ven = array("Alambre","Taquetes","Conectores", "Tornillos","Grapas","Cinta","Clavos");
-
                       while ($contador < count($ven)) {
                       ?>
                       <div class="col s12 m6 l4">
@@ -374,7 +376,7 @@ if (isset($_POST['id_cliente']) == false) {
                     ?>
                   </p>
                 </div>
-              </div>
+        </div> 
         </form>
         </div>
         <div class="row">
