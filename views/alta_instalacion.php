@@ -60,12 +60,8 @@ function alta_instalacion_SM(bandera, contador) {
       M.toast({html:"El campo IP se encuentra vacío.", classes: "rounded"});
     }else if(textoTecnicos == ''){
       M.toast({html:"Seleccione un técnico por favor.", classes: "rounded"});
-    }else if(textoAntena == 0){
-      M.toast({html:"Seleccione una antena.", classes: "rounded"});
     }else if(textoCable == '' || textoCable == 0){
       M.toast({html:"Ingrese la cantidad de metros de cable que utilizo.", classes: "rounded"});
-    }else if(textoRouter == 0){
-      M.toast({html:"Seleccione un router.", classes: "rounded"});
     }else{
       $.post("../php/alta_instalacion_SM.php", {
           valorIP: textoIP,
