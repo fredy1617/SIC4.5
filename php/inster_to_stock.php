@@ -141,7 +141,11 @@ if(mysqli_query($conn, $sql)){
               <option value="Tenda">Tenda</option>
               <option value="Mercusys">Mercusys</option>
             </select>
-          </div>          
+          </div>  
+          <div class="input-field col s12 m5 l5">
+            <input id="serieR" type="text" class="validate" data-length="100" required>
+            <label for="serieR">Serie:</label>
+          </div>         
         </div>
         <div class="input-field row col s12 m7 l7" id="content3" style="display: none;">
           <!--CONTENIDO PARA BOBINA-->
