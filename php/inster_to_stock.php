@@ -109,6 +109,20 @@ if(mysqli_query($conn, $sql)){
               <option value="NanoBeam M2">NanoBeam M2</option>
               <option value="NanoBeam M5">NanoBeam M5</option>
               <option value="LiteBeam AC">LiteBeam AC</option>
+              <option value="PowerBeam AC">PowerBeam AC</option>
+              <option value="PowerBeam M5">PowerBeam M5</option>
+              <option value="PowerBeam M2">PowerBeam M2</option>
+              <option value="NanoStation AC">NanoStation AC</option>
+              <option value="NanoStation M2">NanoStation M2</option>
+              <option value="NanoStation M5">NanoStation M5</option>
+              <option value="Rocket M2">Rocket M2</option>
+              <option value="Rocket M5">Rocket M5</option>
+              <option value="Rocket AC">Rocket AC</option>
+              <option value="Rocket AC Prism">Rocket AC Prism</option>
+              <option value="MIMOSA B5C">MIMOSA B5C</option>
+              <option value="MIMOSA C5C">MIMOSA C5C</option>
+              <option value="Cambium ePMP">Cambium ePMP</option>
+              <option value="Cambium ePMP Force">Cambium ePMP Force</option>
             </select>
           </div> 
           <div class="input-field col s12 m5 l5">
@@ -124,12 +138,10 @@ if(mysqli_query($conn, $sql)){
               <option value="0" selected>Nombre: </option>
               <option value="Tp-Link">Tp-Link</option>
               <option value="TELMEX">TELMEX</option>
+              <option value="Tenda">Tenda</option>
+              <option value="Mercusys">Mercusys</option>
             </select>
-          </div> 
-          <div class="input-field col s12 m5 l5">
-            <input id="serieR" type="text" class="validate" data-length="100" required>
-            <label for="serieR">Serie:</label>
-          </div>         
+          </div>          
         </div>
         <div class="input-field row col s12 m7 l7" id="content3" style="display: none;">
           <!--CONTENIDO PARA BOBINA-->
