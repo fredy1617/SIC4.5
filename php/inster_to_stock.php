@@ -12,6 +12,7 @@ $Nombre = $conn->real_escape_string($_POST['valorNombre']);
 $Serie = $conn->real_escape_string($_POST['valorSerie']);
 $Cantidad = $conn->real_escape_string($_POST['valorCantidad']);
 $Regreso = $conn->real_escape_string($_POST['valorRegreso']);
+$Ruta = $conn->real_escape_string($_POST['valorRuta']);
 
 if ($Regreso == 'Si') {
   if (mysqli_query($conn, "UPDATE stock_tecnicos SET uso = 300, fecha_salida = '$Fecha_hoy', disponible = 1  WHERE uso < 300 AND tecnico = $IdTecnico AND disponible = 0 AND tipo = 'Bobina'")){
@@ -21,7 +22,7 @@ if ($Regreso == 'Si') {
   }
 }
 
-$sql = "INSERT INTO stock_tecnicos (nombre, serie, tipo, cantidad, fecha_alta, registro, tecnico) VALUES('$Nombre', '$Serie', '$Tipo', '$Cantidad', '$Fecha_hoy', '$Registro', '$IdTecnico')";
+$sql = "INSERT INTO stock_tecnicos (nombre, serie, tipo, cantidad, fecha_alta, registro, tecnico, ruta) VALUES('$Nombre', '$Serie', '$Tipo', '$Cantidad', '$Fecha_hoy', '$Registro', '$IdTecnico','$Ruta')";
 if(mysqli_query($conn, $sql)){
   echo '<script>M.toast({html:"El material se dió de alta satisfcatoriamente.", classes: "rounded"})</script>';
 }else{
@@ -69,6 +70,7 @@ if(mysqli_query($conn, $sql)){
             <th>Tipo</th>
             <th>Nombre</th>
             <th>Serie</th>
+            <th>Ruta</th>
           </thead>
           <tbody>
           <?php
@@ -80,6 +82,7 @@ if(mysqli_query($conn, $sql)){
               <td><?php echo $unidad['tipo']?></td>
               <td><?php echo $unidad['nombre']; ?></td>
               <td><?php echo $unidad['serie']; ?></td>
+              <td><?php echo $unidad['ruta']; ?></td>
             </tr>
           <?php
           }
@@ -99,7 +102,7 @@ if(mysqli_query($conn, $sql)){
             <option value="Tubo(s)">Tubo(s)</option>
           </select>
         </div>
-        <div class="input-field row col s12 m7 l7" id="content" style="display: none;">
+        <div class="input-field row col s12 m6 l6" id="content" style="display: none;">
           <!--CONTENIDO PARA ANTENA-->
           <div class="input-field col s12 m6 l6">
             <i class="col s1"> <br></i>
@@ -130,7 +133,7 @@ if(mysqli_query($conn, $sql)){
             <label for="serieA">Serie:</label>
           </div>        
         </div>
-        <div class="input-field row col s12 m7 l7" id="content2" style="display: none;">
+        <div class="input-field row col s12 m6 l6" id="content2" style="display: none;">
           <!--CONTENCIDO PARA ROUTER-->
           <div class="input-field col s12 m6 l6">
             <i class="col s1"> <br></i>
@@ -141,13 +144,13 @@ if(mysqli_query($conn, $sql)){
               <option value="Tenda">Tenda</option>
               <option value="Mercusys">Mercusys</option>
             </select>
-          </div>  
+          </div> 
           <div class="input-field col s12 m5 l5">
             <input id="serieR" type="text" class="validate" data-length="100" required>
             <label for="serieR">Serie:</label>
           </div>         
         </div>
-        <div class="input-field row col s12 m7 l7" id="content3" style="display: none;">
+        <div class="input-field row col s12 m6 l6" id="content3" style="display: none;">
           <!--CONTENIDO PARA BOBINA-->
           <div class="col s12 m6 l6">
           <p><br>
@@ -156,11 +159,18 @@ if(mysqli_query($conn, $sql)){
           </p>
         </div>        
         </div>
-        <div class="input-field row col s12 m7 l7" id="content4" style="display: none;">
+        <div class="input-field row col s12 m6 l6" id="content4" style="display: none;">
           <!--CONTENIDO PARA TUBOS-->
           <div class="input-field col s12 m6 l6">
-            <input id="cantidad" type="text" class="validate" data-length="100" required>
+            <input id="cantidad" type="number" class="validate" data-length="100" required>
             <label for="cantidad">Cantidad:</label>
+          </div>        
+        </div>
+        <div class="input-field row col s12 m3 l3">
+          <!--CONTENIDO ID RUTA-->
+          <div class="input-field col s12">
+            <input id="ruta" type="number" class="validate" data-length="100" required>
+            <label for="ruta">Ruta:</label>
           </div>        
         </div>
         <div class="row">

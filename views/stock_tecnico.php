@@ -53,6 +53,7 @@ if (isset($_POST['id_tecnico']) == false) {
 function update_stock() {
     var textoTipo = $("select#tipo").val();
     var textoIdTecnico = $("input#tecnico").val();
+    var textoRuta = $("input#ruta").val();
 
     if (textoTipo == 'Antena') {
       var textoNombre = $("select#nombreA").val();
@@ -86,6 +87,8 @@ function update_stock() {
       M.toast({html:"Ingrese la serie...", classes: "rounded"})
     }else if(textoCantidad == "" || textoCantidad <= 0){
       M.toast({html:"Ingrese un valor correcto en cantidad", classes: "rounded"})
+    }else if(textoRuta == "" || textoRuta <= 0){
+      M.toast({html:"Ingrese un numero de ruta..", classes: "rounded"})
     }else{
       $.post("../php/inster_to_stock.php", {
           valorIdTecnico: textoIdTecnico,
@@ -93,7 +96,8 @@ function update_stock() {
           valorNombre: textoNombre,
           valorSerie: textoSerie,
           valorCantidad: textoCantidad,
-          valorRegreso: textoRegreso
+          valorRegreso: textoRegreso,
+          valorRuta: textoRuta,
       }, function(mensaje) {
           $("#resultado_update_stock").html(mensaje);
       });
@@ -142,6 +146,7 @@ function update_stock() {
             <th>Tipo</th>
             <th>Nombre</th>
             <th>Serie</th>
+            <th>Ruta</th>
           </thead>
           <tbody>
           <?php
@@ -153,6 +158,7 @@ function update_stock() {
               <td><?php echo $unidad['tipo']?></td>
               <td><?php echo $unidad['nombre']; ?></td>
               <td><?php echo $unidad['serie']; ?></td>
+              <td><?php echo $unidad['ruta']; ?></td>
             </tr>
           <?php
           }
@@ -172,7 +178,7 @@ function update_stock() {
             <option value="Tubo(s)">Tubo(s)</option>
           </select>
         </div>
-        <div class="input-field row col s12 m7 l7" id="content" style="display: none;">
+        <div class="input-field row col s12 m6 l6" id="content" style="display: none;">
           <!--CONTENIDO PARA ANTENA-->
           <div class="input-field col s12 m6 l6">
             <i class="col s1"> <br></i>
@@ -203,7 +209,7 @@ function update_stock() {
             <label for="serieA">Serie:</label>
           </div>        
         </div>
-        <div class="input-field row col s12 m7 l7" id="content2" style="display: none;">
+        <div class="input-field row col s12 m6 l6" id="content2" style="display: none;">
           <!--CONTENCIDO PARA ROUTER-->
           <div class="input-field col s12 m6 l6">
             <i class="col s1"> <br></i>
@@ -220,7 +226,7 @@ function update_stock() {
             <label for="serieR">Serie:</label>
           </div>         
         </div>
-        <div class="input-field row col s12 m7 l7" id="content3" style="display: none;">
+        <div class="input-field row col s12 m6 l6" id="content3" style="display: none;">
           <!--CONTENIDO PARA BOBINA-->
           <div class="col s12 m6 l6">
           <p><br>
@@ -229,11 +235,18 @@ function update_stock() {
           </p>
         </div>        
         </div>
-        <div class="input-field row col s12 m7 l7" id="content4" style="display: none;">
+        <div class="input-field row col s12 m6 l6" id="content4" style="display: none;">
           <!--CONTENIDO PARA TUBOS-->
           <div class="input-field col s12 m6 l6">
-            <input id="cantidad" type="text" class="validate" data-length="100" required>
+            <input id="cantidad" type="number" class="validate" data-length="100" required>
             <label for="cantidad">Cantidad:</label>
+          </div>        
+        </div>
+        <div class="input-field row col s12 m3 l3">
+          <!--CONTENIDO ID RUTA-->
+          <div class="input-field col s12">
+            <input id="ruta" type="number" class="validate" data-length="100" required>
+            <label for="ruta">Ruta:</label>
           </div>        
         </div>
         <div class="row">
