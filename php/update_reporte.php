@@ -55,8 +55,8 @@ $mensaje = "";
 	$sql = "UPDATE reportes SET falla = '$Falla', solucion = '$Solucion', tecnico = '$Tecnico', apoyo = '$Apoyo', atendido = '$Atendido', atender_visita = '$Atender_Visita',  fecha_solucion = '$FechaAtendido'".$mas." ,hora_atendido = '$Hora', campo = '$Campo' WHERE id_reporte = $IdReporte";
 	if(mysqli_query($conn, $sql)){
 		$mensaje = '<script>M.toast({html:"Reporte actualizado correctamente.", classes: "rounded"})</script>';
-		if ($Campo == 1 AND $Antendido == 2) {
-			$sql2 = "UPDATE reportes SET fecha_d = '$FechaAtendido', hora_d = '$Hora', tecnico_d = '$Tecnico' WHERE id_reporte = $IdReporte";
+		if ($Campo == 1 AND $Atendido == 2) {
+			$sql2 = "UPDATE reportes SET fecha_d = '$FechaAtendido', hora_d = '$Hora', tecnico_d = '$Tecnico' WHERE id_reporte = '$IdReporte'";
 			if(mysqli_query($conn, $sql2)){
 				echo '<script>M.toast({html:"Diagnosticado y enviado a campo.", classes: "rounded"})</script>';
 			}
