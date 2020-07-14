@@ -148,6 +148,10 @@ while($usuario = mysqli_fetch_array($usuarios)){
           $id_cliente = $info['id_cliente'];
           $id_tec = $info['tecnico'];
           $tecnico = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_tec"));
+          $id_d =$info['tecnico_d'];
+          if ($id_d != '') {
+            $tecnico_d = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_d"));
+          }
           $sql2 = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente");
           if (mysqli_num_rows($sql2) == 0) {
             $sql2 = mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente");
@@ -172,7 +176,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
             <td><?php echo ($info['tecnico_d'] == $id_user) ?$info['hora_d']:$info['hora_atendido']; ?></td>
             <td><b>Reporte: </b> <?php echo $info['descripcion']; ?>.<br><b>Diagnostico: </b><?php echo $info['falla']; ?>.</td>
             <td><?php echo ($info['tecnico_d'] == $id_user) ? "Ser reviso en oficina y se envio a campo":$info['solucion']; ?></td>
-            <td><?php echo ($info['tecnico_d'] == $id_user) ?$info['tecnico_d']:$tecnico['firstname'].$Apoyo; ?></td>
+            <td><?php echo ($info['tecnico_d'] == $id_user) ?$tecnico_d['firstname']:$tecnico['firstname'].$Apoyo; ?></td>
             <td><?php echo ($info['campo'] == 1 AND $info['atendido'] == 1) ? "Campo":"Oficina"; ?></td>
           </tr>
         <?php
@@ -297,6 +301,10 @@ while($usuario = mysqli_fetch_array($usuarios)){
             $id_cliente = $info['id_cliente'];
             $id_tec = $info['tecnico'];
             $tecnico = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_tec"));
+            $id_d =$info['tecnico_d'];
+            if ($id_d != '') {
+              $tecnico_d = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_d"));
+            }
             $sql2 = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente");
             if (mysqli_num_rows($sql2) == 0) {
               $sql2 = mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente");
@@ -321,7 +329,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
               <td><?php echo ($info['tecnico_d'] == $id_user) ?$info['hora_d']:$info['hora_atendido']; ?></td>
               <td><b>Reporte: </b> <?php echo $info['descripcion']; ?>.<br><b>Diagnostico: </b><?php echo $info['falla']; ?>.</td>
               <td><?php echo ($info['tecnico_d'] == $id_user) ? "Ser reviso en oficina y se envio a campo":$info['solucion']; ?></td>
-              <td><?php echo ($info['tecnico_d'] == $id_user) ?$info['tecnico_d']:$tecnico['firstname'].$Apoyo; ?></td>
+              <td><?php echo ($info['tecnico_d'] == $id_user) ?$tecnico_d['firstname']:$tecnico['firstname'].$Apoyo; ?></td>
               <td><?php echo ($info['campo'] == 1 AND $info['atendido'] == 1) ? "Campo":"Oficina"; ?></td>
             </tr>
             <?php
