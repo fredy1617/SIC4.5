@@ -52,7 +52,7 @@ if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos_centrales WHERE desc
           </thead>
           <tbody>
           <?php
-          $sql_pagos = "SELECT * FROM pagos_centrales WHERE id_central = '$IdCentral' ORDER BY id DESC";
+          $sql_pagos = "SELECT * FROM pagos_centrales WHERE tipo != 'Dispositivo' AND id_central = '$IdCentral' ORDER BY id DESC";
           $resultado_pagos = mysqli_query($conn, $sql_pagos);
           $aux = mysqli_num_rows($resultado_pagos);
           if($aux>0){

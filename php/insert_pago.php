@@ -260,7 +260,7 @@ if ($entra == "Si") {
     </thead>
     <tbody>
     <?php
-    $sql_pagos = "SELECT * FROM pagos WHERE id_cliente = ".$IdCliente." ORDER BY id_pago DESC";
+    $sql_pagos = "SELECT * FROM pagos WHERE tipo != 'Dispositivo' AND id_cliente = ".$IdCliente." ORDER BY id_pago DESC";
     $resultado_pagos = mysqli_query($conn, $sql_pagos);
     $aux = mysqli_num_rows($resultado_pagos);
     if($aux>0){
