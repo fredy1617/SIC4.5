@@ -15,7 +15,6 @@ $Descuento = $conn->real_escape_string($_POST['valorDescuento']);
 $Hasta = $conn->real_escape_string($_POST['valorHasta']);
 $ReferenciaB = $conn->real_escape_string($_POST['valorRef']);
 $Respuesta = $conn->real_escape_string($_POST['valorRespuesta']);
-
 $entra = 'No';
 if ($Respuesta == 'Ver') {
     $sql_DEUDAS = mysqli_query($conn, "SELECT * FROM deudas WHERE liquidada = 0 AND id_cliente = '$IdCliente'");
@@ -97,37 +96,10 @@ if ($Respuesta == 'Ver') {
 }
 
 if ($entra == "Si") { 
-  if ($Descuento == "") {
-    $Descuento = 0;
-  }
-  $RegistrarCan = $Cantidad-$Descuento;
-  $Cotejamiento = 0;
-  $fecha_corte = mysqli_fetch_array(mysqli_query($conn, 'SELECT * FROM clientes WHERE id_cliente='.$IdCliente));
-  $Fecha_db = $fecha_corte['fecha_corte'];
-
-  if($Fecha_hoy<=$Fecha_db){
-    $Fecha = $fecha_corte['fecha_corte'];
-  }else{
-    $Fecha = date('Y-m-d');  
-  }
-
-  if($Promo == 'si'){
-    $nuevafecha = strtotime('+12 month', strtotime($Fecha));
-    $FechaCorte = date('Y-m-05', $nuevafecha);
-  }else{
-    $nuevafecha = strtotime('+1 month', strtotime($Fecha));
-    $dia =date('d');
-    if ($dia > 23) {
-      $nuevafecha = strtotime('+2 month', strtotime($Fecha));
-    }
-    $FechaCorte = date('Y-m-05', $nuevafecha);
-  }
-
-  $cambia_fecha = $FechaCorte;
-
-  //Variable vacía (para evitar los E_NOTICE)
-  $NDesc = explode(" ", $Descripcion);
-  $ver = $NDesc[0].' '.$NDesc[1];
+  
+  $Mes = $conn->real_escape_string($_POST['valorMes']);
+  $Año = $conn->real_escape_string($_POST['valorAño']);
+  $ver = $Mes.' '.$Año;
   $sql_ver = mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND descripcion like '%$ver%' AND tipo = 'Mensualidad'");
   if(mysqli_num_rows($sql_ver)>0){
     echo '<script>M.toast({html:"Ya se encuentra un pago del mismo mes y mismo año.", classes: "rounded"})</script>';
@@ -203,6 +175,18 @@ if ($entra == "Si") {
     </div>
     <?php
   }else{
+  if ($Descuento == "") {
+    $Descuento = 0;
+  }
+  $RegistrarCan = $Cantidad-$Descuento;
+  $Cotejamiento = 0;
+  $array =  array('ENERO' => '02','FEBRERO' => '03', 'MARZO' => '04','ABRIL' => '05', 'MAYO' => '06', 'JUNIO' => '07', 'JULIO' => '08', 'AGOSTO' => '09', 'SEPTIEMBRE' => '10', 'OCTUBRE' => '11', 'NOVIEMBRE' => '12',  'DICIEMBRE' => '01');
+    
+  $N_Mes = $array[$Mes];
+  
+  #FECHA DE CORTE SEGUN EL MES Y AÑO SELECCIONADO
+  $FechaCorte = date($Año.'-'.$N_Mes.'-05');  
+
   $sql = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, tipo, id_user, corte, tipo_cambio, Cotejado) VALUES ($IdCliente, '$Descripcion', '$RegistrarCan', '$Fecha_hoy', '$Tipo', $id_user, 0, '$Tipo_Campio', '$Cotejamiento')";
   if ($Tipo_Campio == "Credito") {
     $mysql= "INSERT INTO deudas(id_cliente, cantidad, fecha_deuda, hasta, tipo, descripcion, usuario) VALUES ($IdCliente, '$RegistrarCan', '$Fecha_hoy', '$Hasta', '$Tipo', '$Descripcion', $id_user)";

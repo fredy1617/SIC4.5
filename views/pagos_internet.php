@@ -143,7 +143,9 @@ function insert_pago() {
             valorDescuento: textoDescuento,
             valorHasta: textoHasta,
             valorRef: textoRef,
-            valorRespuesta: textoRespuesta
+            valorRespuesta: textoRespuesta,
+            valorMes: textoMes,
+            valorAño: textoAño
           }, function(mensaje) {
               $("#mostrar_pagos").html(mensaje);
           });  

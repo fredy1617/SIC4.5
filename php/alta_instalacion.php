@@ -127,13 +127,13 @@ if (filter_var($IP, FILTER_VALIDATE_IP)) {
 						$IdTecnico = $_SESSION['user_id'];
 
 						if ($Antena != '') {
-							$sqlA = "UPDATE stock_tecnicos SET uso = 1, disponible = 1, fecha_salida = '$FechaInstalacion' WHERE serie = $Antena AND disponible = 0 AND tipo = 'Antena' AND tecnico = $IdTecnico";
+							$sqlA = "UPDATE stock_tecnicos SET uso = 1, disponible = 1, fecha_salida = '$FechaInstalacion' WHERE serie = '$Antena' AND disponible = 0 AND tipo = 'Antena' AND tecnico = $IdTecnico";
 							if(mysqli_query($conn, $sqlA)){
 								echo '<script>M.toast({html:"Se dio de baja la antena: "'.$Antena.', classes: "rounded"})</script>';
 							}
 						}
 						if ($Router != '') {
-							$sqlR = "UPDATE stock_tecnicos SET uso = 1, disponible = 1, fecha_salida = '$FechaInstalacion' WHERE serie = $Router AND disponible = 0 AND tipo = 'Router' AND tecnico = $IdTecnico";
+							$sqlR = "UPDATE stock_tecnicos SET uso = 1, disponible = 1, fecha_salida = '$FechaInstalacion' WHERE serie = '$Router' AND disponible = 0 AND tipo = 'Router' AND tecnico = $IdTecnico";
 							if(mysqli_query($conn, $sqlR)){
 								echo '<script>M.toast({html:"Se dio de baja el router: "'.$Router.', classes: "rounded"})</script>';
 							}
