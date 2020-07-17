@@ -149,13 +149,15 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
           <label for="descripcion3">Descripción:</label>
         </div>
       </div>
-      <div class="col s6 m2 l2">
+      <?php if ($user_id == 59 OR $user_id == 38 OR $user_id == 10 OR $user_id == 49) { ?>
+        <div class="col s6 m2 l2">
           <p>
             <br>
-            <input type="checkbox" id="banco_otro"/>
-            <label for="banco_otro">Banco</label>
+            <input type="checkbox" id="banco"/>
+            <label for="banco">Banco</label>
           </p>
         </div>
+        <?php } ?>
         <div class="col s6 m2 l2">
           <p>
             <br>
