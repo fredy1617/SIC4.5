@@ -186,15 +186,16 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
             <option value="DICIEMBRE">Diciembre</option>
           </select>
         </div>  
-        <?php if ($user_id == 59 OR $user_id == 38 OR $user_id == 10 OR $user_id == 49) { ?>
+        <?php if ($user_id == 59 OR $user_id == 38 OR $user_id == 10 OR $user_id == 56) { 
+          $Ser = '';
+        }else{ $Ser = 'disabled="disabled"';}?>
         <div class="col s6 m2 l2">
           <p>
             <br>
-            <input type="checkbox" id="banco_tel"/>
+            <input type="checkbox" id="banco_tel" <?php echo $Ser;?>/>
             <label for="banco">Banco</label>
           </p>
         </div>
-        <?php } ?>
         <div class="col s6 m2 l2">
           <p>
             <br>
