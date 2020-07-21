@@ -300,6 +300,7 @@ if (isset($_POST['id_cliente']) == false) {
                     <i class="material-icons col s2">satellite<br></i>
                       <select id="antena" class="browser-default col s10" required>
                         <option value="0" selected >Antena:</option>
+                        <option value="N/A">Ninguna</option>
                         <?php
                             $sql = mysqli_query($conn,"SELECT * FROM stock_tecnicos WHERE tipo = 'Antena' AND disponible = 0 AND tecnico = $id_tecnico");
                             while($antena = mysqli_fetch_array($sql)){
@@ -314,6 +315,7 @@ if (isset($_POST['id_cliente']) == false) {
                     <i class="material-icons col s2">router<br></i>
                       <select id="router" class="browser-default col s10" required>
                         <option value="0" selected >Router:</option>
+                        <option value="N/A">Ninguno</option>
                         <?php
                             $sql = mysqli_query($conn,"SELECT * FROM stock_tecnicos WHERE tipo = 'Router' AND disponible = 0 AND tecnico = $id_tecnico");
                             while($router = mysqli_fetch_array($sql)){
