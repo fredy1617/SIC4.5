@@ -19,6 +19,7 @@
             global $corte;
 
             $bot_Token = '918836101:AAGGaH2MIoTjqdhOmRs_34G1Yjgx5VkwgFI';
+            $website = 'https://api.telegram.org/bot'.$bot_Token;
             $id_Chat = '1087049979';#ID Fredy
             $id_Chat2 = '1080437366';#ID Gabriel
             $id_Chat3 = '1140290694';#ID Mayra
