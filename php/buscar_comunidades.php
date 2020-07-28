@@ -3,11 +3,6 @@ include ("../php/conexion.php");
 
 $Texto = $conn->real_escape_string($_POST['texto']);
 
-//Filtro anti-XSS
-$caracteres_malos = array();
-$caracteres_buenos = array();
-
-$Texto = str_replace($caracteres_malos, $caracteres_buenos, $Texto);
 $mensaje = '';
 $sql = "SELECT * FROM comunidades";
 if ($Texto !="") {

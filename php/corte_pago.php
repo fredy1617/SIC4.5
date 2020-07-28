@@ -22,7 +22,6 @@
             $id_Chat = '1087049979';#ID Fredy
             $id_Chat2 = '1080437366';#ID Gabriel
             $id_Chat3 = '1140290694';#ID Mayra
-            $website = 'https://api.telegram.org/bot'.$bot_Token;
             $enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
             date_default_timezone_set('America/Mexico_City');
             $Fecha_hoy = date('Y-m-d');
