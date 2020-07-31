@@ -1,1 +1,1 @@
-curl http://localhost/SIC4.5/Ping/msj_telegram.php
+curl http://192.168.10.126:81/SIC4.5/Ping/msj_telegram.php
