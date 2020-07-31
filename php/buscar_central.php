@@ -28,9 +28,10 @@ if ($filas == 0) {
 			<tr>
 				<td>'.$resultados['id'].'</td>
 				<td>'.$comunidad['nombre'].'</td>
+		        <td>'.$resultados['descripcion'].'</td>
 		        <td>'.$resultados['ip'].'</td>
 		        <td>'.$servidor['nombre'].'</td>
-		        <td><form method="post" action="../views/editar_comunidad.php"><input name="id" type="hidden" value="'.$resultados['id'].'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>
+		        <td><form method="post" action="../views/editar_central_pins.php"><input name="id" type="hidden" value="'.$resultados['id'].'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>
 		    </tr>';
 	}//Fin while $resultados
 } //Fin else $filas

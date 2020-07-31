@@ -95,6 +95,7 @@ function insert_central_ping() {
           <tr>
             <th>No. Cental</th>
             <th>Comunidad</th>
+            <th>Descripcion</th>
             <th>IP</th>
             <th>Servidor</th>
             <th>Editar</th>
