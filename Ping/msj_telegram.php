@@ -9,6 +9,7 @@ function sendMessage($id, $msj, $website){
 $bot_Token = '1284789530:AAGhC_vfTpyElbPA4pHkyNoPe7PvdxV1Vpo';
 $website = 'https://api.telegram.org/bot'.$bot_Token;
 $id_Chat = '1087049979';#ID Fredy
+$id_Chat2 = '1080437366';#ID Gabriel
 
 #-------------------------------------------------------------------
 #ENVIAR MENSAJES SI HAY ERROR CON LOS SERVIDORES DE MIKROTIK
@@ -20,7 +21,7 @@ if(mysqli_num_rows($sql_errores_mikrotik) > 0){
    	while($error_mikrotik = mysqli_fetch_array($sql_errores_mikrotik)){
    		#Enviar mensaje a telagram
    		$Mensaje = "<b>ALERTA !! FALLA MIKROTIK:</b> \n \n*".$error_mikrotik['descripcion']." \n *IP: ".$error_mikrotik['ip'];
-        if(!sendMessage($id_Chat, $Mensaje, $website)){
+        if(!sendMessage($id_Chat, $Mensaje, $website) AND !sendMessage($id_Chat2, $Mensaje, $website)){
         	#Si se ENVIA el mensaje modificar msj_error a 1 para comprobar que se envio el msj
    			$id_eM = $error_mikrotik['id'];
    			mysqli_query($conn, "UPDATE errores_pings SET msj_error = 1 WHERE id = '$id_eM'");
@@ -38,7 +39,7 @@ if(mysqli_num_rows($sql_errores) > 0){
    	while($error = mysqli_fetch_array($sql_errores)){
    		#Enviar mensaje a telagram
    		$Mensaje = "<b>ALERTA !! FALLA DE PING:</b> \n \n*".$error['descripcion'];
-        if(!sendMessage($id_Chat, $Mensaje, $website)){
+        if(!sendMessage($id_Chat, $Mensaje, $website) AND !sendMessage($id_Chat2, $Mensaje, $website)){
         	#Si se ENVIA el mensaje modificar msj_error a 1 para comprobar que se envio el msj
    			$id_e = $error['id'];
    			mysqli_query($conn, "UPDATE errores_pings SET msj_error = 1 WHERE id = '$id_e'");
@@ -57,7 +58,7 @@ if(mysqli_num_rows($sql_errores_solucion) > 0){
    		echo "<br>";
    		#Enviar mensaje a telagram
    		$Mensaje = "<b>SOLUCION DE FALLA:</b> \n \n*".$error_solucion['descripcion']."\n* Fecha: ".$error_solucion['fecha_s'].", Hora: ".$error_solucion['hora_s']." de solucion.";
-        if(!sendMessage($id_Chat, $Mensaje, $website)){
+        if(!sendMessage($id_Chat, $Mensaje, $website) AND !sendMessage($id_Chat2, $Mensaje, $website)){
         	#Si se ENVIA el mensaje modificar msj_error a 1 para comprobar que se envio el msj
    			$id_eS = $error_solucion['id'];
    			mysqli_query($conn, "UPDATE errores_pings SET msj_solucion = 1 WHERE id = '$id_eS'");
