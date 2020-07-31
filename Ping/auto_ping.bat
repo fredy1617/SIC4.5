@@ -1,0 +1,1 @@
+curl http://localhost/SIC4.5/Ping/pings_all.php
