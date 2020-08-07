@@ -32,10 +32,13 @@
             $banco = $Cort['banco'];
             $credito = $Cort['credito'];
             if ($cantidad > 0 OR $banco > 0 OR $credito > 0) {
-                $Mensaje = "Corte en el sistema del dia: ".$Fecha_hoy.". \nCon folio: <b>".$corte."</b> y usuario: <b>'".$cobrador['firstname']."(".$cobrador['user_name'].")"."'</b> con las cantidades totales de: \n  <b>*Banco = $".$banco.". \n  *Efectivo = $".$cantidad.". \n  *Credito = $".$credito.". \n \n Relizado por: ".$Cort['realizo'].". \n \n  <a href ='189.197.184.252:6288/SIC4.5/php/reimprimir_corte.php?id=".$corte."'>  -- DESCARGAR -- </a></b>";
-                sendMessage($id_Chat, $Mensaje, $website);
-                sendMessage($id_Chat2, $Mensaje, $website);
-                sendMessage($id_Chat3, $Mensaje, $website);
+                $Ping = shell_exec("ping 8.8.8.8");
+                if (strpos($Ping, "perdidos = 0")) {
+                    $Mensaje = "Corte en el sistema del dia: ".$Fecha_hoy.". \nCon folio: <b>".$corte."</b> y usuario: <b>'".$cobrador['firstname']."(".$cobrador['user_name'].")"."'</b> con las cantidades totales de: \n  <b>*Banco = $".$banco.". \n  *Efectivo = $".$cantidad.". \n  *Credito = $".$credito.". \n \n Relizado por: ".$Cort['realizo'].". \n \n  <a href ='189.197.184.252:6288/SIC4.5/php/reimprimir_corte.php?id=".$corte."'>  -- DESCARGAR -- </a></b>";
+                    sendMessage($id_Chat, $Mensaje, $website);
+                    sendMessage($id_Chat2, $Mensaje, $website);
+                    sendMessage($id_Chat3, $Mensaje, $website);
+                }
             }
             
             $nombre_cobrador = $cobrador['firstname'].' '.$cobrador['lastname'];
