@@ -95,7 +95,7 @@ if(mysqli_num_rows($sql_servers) == 0){
 			$sql_eM = mysqli_query($conn, "SELECT * FROM errores_pings WHERE ip = '$ServerList' AND estatus = 'Mikrotik'");
 			#VERIFICA SI ENCUENTRA UN IP en estatus Pediente
 	   		if(mysqli_num_rows($sql_eM) == 0){
-				$Descripcion = 'No se ha podido hacer conexion al Mikrotik (TEST del Servidor: '.$Servidor['nombre'].')';
+				$Descripcion = 'No se ha podido hacer conexion al Mikrotik (TEST del Servidor: '.$Servidor['nombre'].'). Hora de falla: '.$Hora.' Fecha: '.$Fecha;
 		  		mysqli_query($conn, "INSERT INTO errores_pings (descripcion, ip, estatus, fecha_e, hora_e) VALUES('$Descripcion', '$ServerList', 'Mikrotik', '$Fecha', '$Hora')");
 			}	
 		}
