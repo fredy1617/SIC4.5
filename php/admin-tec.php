@@ -5,9 +5,12 @@ include('conexion.php');
 $id = $_SESSION['user_id'];
 #TOMAMOS LA INFORMACION DEL USUARIO (PARA SABER A QUE AREA PERTENECE)
 $area = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$id"));
-#COMPARAMOS SI SU AREA ES DIFERENTE A UN ADMINISTRADOR
-if($area['area'] != "Administrador" ){
-	#SI NO ES DIFERENTE A UN ADMINISTRADOR LE MUESTRA MENSAJE DE NEGACION Y REDIRECCIONA A LA PAGINA PRINCIPAL
+#COMPARAMOS SI SU AREA ES DE UN ADMINISTRADOR O SI EL ID ES IGUAL A ALGUNOS DE AHI QUE PERTENECEN A LOS INGENIEROS DE REDES QUE NO SON ADMINISTRADORES
+if($area['area'] == "Administrador" OR $id == 26 OR $id == 41 OR $id== 68){
+	#SI PERTENECEN LES DA LA BIENVENIDA Y LOS DEJA ENTRAR A LA PAGINA
+	echo '<script>M.toast({html:"Bienvenido !", classes: "rounded"})</script>';
+}else{
+	#SI NO ES NI ADMINISTRADOR NI ES DE LOS ID LE MUESTRA MENSAJE DE NEGACION Y REDIRECCIONA A LA PAGINA PRINCIPAL
 	echo '<script>M.toast({html:"Permiso denegado. Direccionando a la página principal.", classes: "rounded"})</script>';
   	echo '<script>admin();</script>';
 	mysqli_close($conn);

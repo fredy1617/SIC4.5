@@ -4,7 +4,7 @@
 	<title>SIC | Trabajos</title>
 <?php
 include('fredyNav.php');
-include('../php/admin.php');
+include('../php/admin-tec.php');
 include('../php/cobrador.php');
 ?>
 <script>
