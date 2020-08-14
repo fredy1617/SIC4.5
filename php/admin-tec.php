@@ -6,7 +6,7 @@ $id = $_SESSION['user_id'];
 #TOMAMOS LA INFORMACION DEL USUARIO (PARA SABER A QUE AREA PERTENECE)
 $area = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$id"));
 #COMPARAMOS SI SU AREA ES DE UN ADMINISTRADOR O SI EL ID ES IGUAL A ALGUNOS DE AHI QUE PERTENECEN A LOS INGENIEROS DE REDES QUE NO SON ADMINISTRADORES
-if($area['area'] == "Administrador" OR $id == 26 OR $id == 41 OR $id== 68){
+if($area['area'] == "Administrador" OR $area['area'] == "Redes"){
 	#SI PERTENECEN LES DA LA BIENVENIDA Y LOS DEJA ENTRAR A LA PAGINA
 	echo '<script>M.toast({html:"Bienvenido !", classes: "rounded"})</script>';
 }else{
