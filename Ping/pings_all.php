@@ -1,15 +1,22 @@
 <?php 
-include('../php/conexion.php');
+#DEFINIMOS UNA ZONA HORARIA
 date_default_timezone_set('America/Mexico_City');
+#INCLUIMOS LA CONEXION A LA BASE DE DATOS PARA PODER HACER CUALQUIER MODIFICACION, INSERCION O SELECCION
+include('../php/conexion.php');
+#INCLUIMOS EL ARCHIVO DONDE TEMENMOS EL API PARA LA CONEXION CON MIKROTIK
 include_once('../API/api_mt_include2.php');
 
+#GENERAMOS UNA FECHA DEL DIA EN CURSO REFERENTE A LA ZONA HORARIA
 $Fecha = date('Y-m-d');
+#GENERAMOS LA HORA EXACTA A LA ORA DE USAR ESTE ARCHIVO SEGUN LA ZONA HORARIA DEFINIDA ANTERIORMENTE
 $Hora = date('H:i:s');
-
+ #HACEMOS UNA SELECCION DE TODOS LOS SERVIDORES REGISTRADOS LA TABLA servidores A ESECPION DEL SERVIDOR CON ID 16 YA QUE ESTA FUERA DE SERVICIO
 $sql_servers = mysqli_query($conn, "SELECT * FROM servidores WHERE id_servidor != 16");
 if(mysqli_num_rows($sql_servers) == 0){
+	#EN CASO DE NO ENCONTRAR SERVIDORES MOSTRAR ESTE MENSAJE
     echo '<h5 class="center">No hay servicores</h5>';
 }else{
+	#RECORREMOS CON EL WHILE UNO POR UNO LA INFROMACION DE CADA SERVIDOR
     while($Servidor = mysqli_fetch_array($sql_servers)){
     	 //////// INFORMACION DEL SERVIDOR
 		$ServerList = $Servidor['ip'] ; //ip_de_tu_API
@@ -20,27 +27,27 @@ if(mysqli_num_rows($sql_servers) == 0){
 		echo $Servidor['nombre'].'<br><br>';
 		$API = new routeros_api();
 		$API->debug = false;
-		#CONEXION A MICROTICK
+		#CONEXION A MICROTICK DEL SERVIDOR EN TURNO
 		if ($API->connect($ServerList, $Username, $Pass, $Port)) {
-			echo 'ENTRO..<br>';
 			#BUSCAR UN ERROR DE LA MISMA IP en estatus Mikrotik
 			$sql_eM = mysqli_query($conn, "SELECT * FROM errores_pings WHERE ip = '$ServerList' AND estatus = 'Mikrotik'");
-			#VERIFICA SI ENCUENTRA UN IP en estatus Pediente
+			#VERIFICA SI ENCUENTRA ESTA IP en estatus Pediente
 	   		if(mysqli_num_rows($sql_eM) > 0){
 	   			#SI SE ENCONTRO UNA IP REGISTRADA 
 	   			$error_pendiente_M = mysqli_fetch_array($sql_eM);
 	   			$id_eM = $error_pendiente_M['id'];
+	   			#CAMBIAMOS EL ESTATUS  DEL ERROR (ID ENCONTRADO) A Solucionado YA QUE PUDO HACER CONEXION CON EL MIKROTIK
 		  		mysqli_query($conn, "UPDATE errores_pings SET estatus = 'Solucionado', hora_s = '$Hora', fecha_s = '$Fecha' WHERE id = '$id_eM'");
 			}
-
 			#HACER LA CONSULTA DE LAS CENTRALES QUE PERTENECEN AL SERVIDOR EN TURNO...
 			$ID = $Servidor['id_servidor']; 
 			$sql_Centrales =mysqli_query($conn, "SELECT * FROM centrales_pings INNER JOIN comunidades ON centrales_pings.comunidad = comunidades.id_comunidad WHERE centrales_pings.ip != '' AND comunidades.servidor = $ID");
 	    	if(mysqli_num_rows($sql_Centrales) == 0){
 	        	echo '<h5 class="center">No hay centrales</h5>';
 	    	}else{
+	    		#SE RECORREN CADA UNA DE LAS CENTRALES PERTENECIENTES AL SERVIDOR EN TURNO UNA POR UNA
 	        	while($Central = mysqli_fetch_array($sql_Centrales)){
-	        		echo 'CENTRAL:'.$Central['nombre'].'<br>';
+	        		#COMENZAMOS A HACER PING SE LA CENTRAL EN TURNO EN LA CONSOLA DE MIKROTIK
 	        		$IP = $Central['ip'];
 	        		$API->write('/ping',false);
 	    			$API->write('=address='.$IP,false);#IP A REALIZAR EL PING
@@ -52,12 +59,11 @@ if(mysqli_num_rows($sql_servers) == 0){
 	    			#VERIFICAR SI UBO PERDIDAS DE PAQUETES AL HACER EL PING
 	    			if($ARRAY[0]['packet-loss'] == 0){
 	    				#SI SE REALIZO EL PING A LA IP
-	    				echo "--->>>Conecto con la direccion: ".$ARRAY[0]['host']."<br>";
 	    				#BUSCAR UN ERROR DE LA MISMA IP en estatus Pendiente
 	    				$sql_e1 = mysqli_query($conn, "SELECT * FROM errores_pings WHERE ip = '$IP' AND estatus = 'Pendiente'");
-	    				#VERIFICA SI ENCUENTRA UN IP en estatus Pediente
+	    				#VERIFICA SI ENCUENTRA ESTA IP en estatus Pediente
 	       				if(mysqli_num_rows($sql_e1) > 0){
-	       					#SI SE ENCONTRO UNA IP REGISTRADA 
+	       					#SI SE ENCONTRO ESTA IP REGISTRADA 
 	       					$error_pendiente_conecto = mysqli_fetch_array($sql_e1);
 	       					$id_e1 = $error_pendiente_conecto['id'];
 	       					if ($error_pendiente_conecto['contador'] < 5) {
@@ -70,32 +76,33 @@ if(mysqli_num_rows($sql_servers) == 0){
 	       				}
 	    			}else{
 	    				#NO SE REALIZO EL PING A LA IP
-	    				echo "--->>No se hizo conexión con al IP<br>";
 	    				#BUSCAR UN ERROR DE LA MISMA IP en estatus Pendiente
 	    				$sql_e1 = mysqli_query($conn, "SELECT * FROM errores_pings WHERE ip = '$IP' AND estatus = 'Pendiente'");
-	    				#VERIFICA SI ENCUENTRA UN IP en estatus Pediente
+	    				#VERIFICA SI ENCUENTRA ESTA IP en estatus Pediente
 	       				if(mysqli_num_rows($sql_e1) > 0){
 	       					#SI SE ENCUEBTRA YA REGISTRADA LA IP SOLO AUMENTAMOS EN 1 EL contador
 	       					$error_pendiente = mysqli_fetch_array($sql_e1);
 	       					$id_e1 = $error_pendiente['id'];
 	       					mysqli_query($conn, "UPDATE errores_pings SET contador = contador+1 WHERE id = '$id_e1'");	
 	       				}else{
+	       					#CREAMOS LA DESCRIPCION DEL LA FALLA
 	       					$Descripcion = 'No se logra conectar a la IP: '.$IP.', de la comunidad: '.$Central['nombre'].' perteneciente a la fibra: '.$Servidor['nombre'].', Hora: '.$Hora.', Fecha: '.$Fecha.', equipo: '.$Central['descripcion'];
+	       					#REGISTRAMOS EN LA TABLA errores_pings UN NUEVO ERROR CON LA INFORMACION DE LA CENTRAL A LA QUE NO SE ACCEDIO
 	       					mysqli_query($conn, "INSERT INTO errores_pings (descripcion, ip, estatus, fecha_e, hora_e, contador) VALUES('$Descripcion', '$IP', 'Pendiente', '$Fecha', '$Hora', 1)");
 	       				}
 	    			}
 	        	}
 	        }
-
+	        #SE HACE LA DESCONECCION DE MIKROTIK DESPUES DE RECORRER TODAS LAS CENTRALES DEL SERVIDOR EN TURNO
 			$API->disconnect();
-			echo '<br><br><br>';
 		}else{
-			echo 'Sinn..<br>';
 			#BUSCAR UN ERROR DE LA MISMA IP en estatus Mikrotik
 			$sql_eM = mysqli_query($conn, "SELECT * FROM errores_pings WHERE ip = '$ServerList' AND estatus = 'Mikrotik'");
-			#VERIFICA SI ENCUENTRA UN IP en estatus Pediente
+			#VERIFICA SI ENCUENTRA ESTA IP en estatus Pediente
 	   		if(mysqli_num_rows($sql_eM) == 0){
+	       		#CREAMOS LA DESCRIPCION DEL LA FALLA
 				$Descripcion = 'No se ha podido hacer conexion al Mikrotik (TEST del Servidor: '.$Servidor['nombre'].'). Hora de falla: '.$Hora.' Fecha: '.$Fecha;
+	       		#REGISTRAMOS EN LA TABLA errores_pings UN NUEVO ERROR CON LA INFORMACION DEL MICROTIK AL QUE NO SE ACCEDIO
 		  		mysqli_query($conn, "INSERT INTO errores_pings (descripcion, ip, estatus, fecha_e, hora_e) VALUES('$Descripcion', '$ServerList', 'Mikrotik', '$Fecha', '$Hora')");
 			}	
 		}
