@@ -223,12 +223,12 @@ function recargar10() {
         <label for="clave">Ingresar Clave</label>
     </div>
     </div>
-    <h4 id="resultado_ruta">¿Desea agregar algun deducible?</h4>
+    <h4>¿Desea agregar algun deducible?</h4>
       <form class="row">
       <div class="input-field col s12 m6 l4">
           <i class="material-icons prefix">attach_money</i>
-          <input id="cantidad" type="number" class="validate" data-length="30" value="0" required>
-          <label for="cantidad">Cantidad:</label>
+          <input id="cantidadD" type="number" class="validate" data-length="30" value="0" required>
+          <label for="cantidadD">Cantidad:</label>
       </div>
       <div class="input-field col s10 m6 l6">
           <i class="material-icons prefix">edit</i>
