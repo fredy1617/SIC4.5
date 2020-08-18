@@ -177,7 +177,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
             <?php
           }
           #VEMOS SI ES UN TERMINO DE REPORTE (SOLUCION)
-          if ($info['fecha_solucion']==$DIA AND $info['atendido'] == 1 AND $info['tecnico'] == $id_user) {
+          if ($info['fecha_solucion']==$DIA AND $info['atendido'] == 1 AND ($info['tecnico'] == $id_user OR $info['apoyo'] == $id_user)) {
             $id_tec = $info['tecnico'];
             $tecnico = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_tec"));
             if ($info['apoyo'] != 0) {
@@ -351,7 +351,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
             <?php
           }
           #VEMOS SI ES UN TERMINO DE REPORTE (SOLUCION)
-          if ($info['fecha_solucion']==$DIA AND $info['atendido'] == 1 AND $info['tecnico'] == $id_user ) {
+          if ($info['fecha_solucion']==$DIA AND $info['atendido'] == 1 AND ($info['tecnico'] == $id_user OR $info['apoyo'] == $id_user )) {
             $id_tec = $info['tecnico'];
             $tecnico = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_tec"));
             if ($info['apoyo'] != 0) {
@@ -551,7 +551,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
               <?php
             }
             #VEMOS SI ES UN TERMINO DE REPORTE (SOLUCION)
-            if ($info['fecha_solucion']==$DIA AND $info['atendido'] == 1 AND $info['tecnico'] == $id_user) {
+            if ($info['fecha_solucion']==$DIA AND $info['atendido'] == 1 AND ($info['tecnico'] == $id_user OR $info['apoyo'] == $id_user)) {
               $id_tec = $info['tecnico'];
               $tecnico = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_tec"));
               if ($info['apoyo'] != 0) {
