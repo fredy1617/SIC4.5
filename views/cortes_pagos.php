@@ -10,18 +10,34 @@
 <script>
   function recargar_corte() {
     var textoClave = $("input#clave").val(); 
+    var textoCantidad = $("input#cantidad").val(); 
+    var textoDescripcion = $("input#descripcion").val();
+
+    entra = "Si";
+    if (textoCantidad != 0 || textoDescripcion != "") {
+      if (textoCantidad <= 0) {
+        entra = "No";
+        texto = "Ingrese una cantidad correcta";
+      }
+      if (textoDescripcion == "") {
+        entra = "No";
+        texto = "Ingrese una descripcion correcta";
+      }
+    } 
     if (textoClave == "") {
         M.toast({html:"El campo clave no puede ir vacío.", classes: "rounded"});
+    }else if (entra == "No") {
+        M.toast({html:texto, classes: "rounded"});
     }else{
         $.post("../php/crear_corte.php", {
-              valorClave: textoClave
+              valorClave: textoClave,
+              valorCantidad: textoCantidad,
+              valorDescripcion: textoDescripcion
             }, function(mensaje) {
                 $("#resultado_corte").html(mensaje);
         });
-      }
-    
+    }    
   }
-
 </script>
 <main>
 <body>

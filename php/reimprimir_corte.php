@@ -1,19 +1,23 @@
 <?php
-include('../php/conexion.php');
-$id_corte = $_GET['id'];
-//Incluimos la libreria fpdf
+#INCLUIMOS EL ARCHIVO CON LAS LIBRERIAS DE FPDF PARA PODER CREAR ARCHIVOS CON FORMATO PDF
 include("../fpdf/fpdf.php");
-$pass="root";
+#INCLUIMOS EL PHP DONDE VIENE LA INFORMACION DE LA CONEXION A LA BASE DE DATOS
+include('../php/conexion.php');
+$id_corte = $_GET['id'];//TOMAMOS EL ID DEL CORTE PREVIAMENTE CREADO PARA¨PODERLE ASIGNAR LOS PAGOS EN EL DETALLE
+    
+#CREAMOS LA CLASE DEL CONTENIDO DE NUESTRO PDF
 class PDF extends FPDF{
     function folioCliente(){
+        #METEMOS LAS BARIABLES CREADAS FUERA DE LA CLASE PDF DENTRO DE LA MISMA
         global $id_corte;
-        global $pass;
         global $conn;            
+        #TOMAMOS LA INFORMACION DEL CORTE CON EL ID GUARDADO EN LA VARIABLE $corte QUE RECIBIMOS CON EL GET
         $corte = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM cortes WHERE id_corte = $id_corte"));
-        $Fecha = $corte['fecha'];
-        $id_user = $corte['usuario'];
+        $Fecha = $corte['fecha'];//FECHA DEL CORTE
+        $id_user = $corte['usuario'];//CUENTA DE LA QUE SE HIZO EL CORTE
+        #TOMAMOS LA INFORMACION DE USERS DEL USUARIO
         $cobrador = mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_user");
-
+        #SI EXIXTE EN LA TABLA USER EL ID DEL USUARIO MOSTRAMOS SU NOMBRE SI NO NO SE MUESTRA NADA
         if ($cobrador->num_rows > 0){
               while ($row = $cobrador->fetch_assoc()){
                 $nombre_cobrador = $row['firstname'].' '.$row['lastname'];
@@ -21,12 +25,16 @@ class PDF extends FPDF{
         } else{
                 $nombre_cobrador = "";
         } 
+        #CHECAMOS TODOS LAS PAGO QUE SE REGISTRARON PARA ESTE CORTE EN LA TABLA DETALLES
         $detalles = mysqli_query($conn, "SELECT * FROM detalles WHERE id_corte = $id_corte");
         $sql_total = mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $id_corte AND pagos.tipo_cambio ='Efectivo'");
         $total = mysqli_fetch_array($sql_total);
         $totalbanco = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $id_corte AND pagos.tipo_cambio ='Banco'"));
         $totalcredito = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $id_corte AND pagos.tipo_cambio ='Credito'"));
-        $cantidad=$total['precio'];
+        #TOMAMOS LA INFORMACION DEL DEDUCIBLE CON EL ID GUARDADO EN LA VARIABLE $corte QUE RECIBIMOS CON EL GET
+        $Deducible =  mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM deducibles WHERE id_corte = '$id_corte'"));  
+        #GUARDAMOS LOS TOTALES DE CADA TIPO DE PAGO EN UNA RESPETIVA VARIABLE         
+        $cantidad=$total['precio']-$Deducible['cantidad'];
         $banco = $totalbanco['precio'];
         $credito = $totalcredito['precio'];
 		$aux = mysqli_num_rows($detalles);
@@ -46,10 +54,7 @@ class PDF extends FPDF{
           $this->Ln(10);
           $this->Cell(90,4,'Fecha: '.$Fecha,0,0,'C',true);            
           $this->Ln(10);
-          $this->SetFont('Arial','B',14);    
-
-          $corte = $id_corte;      
- 
+          $this->SetFont('Arial','B',14);   
           $this->Cell(60,4,'<< Internet >>  ',0,0,'C',true);
           $this->Ln(6);
             //---------------EFECTIVO-------------------------------------------
@@ -70,7 +75,7 @@ class PDF extends FPDF{
               }
               $this->SetFont('Arial','B',13);
               $this->Ln(8);
-              $this->MultiCell(65,4,utf8_decode('TOTAL: $'.$TotalEI.'.00'),0,'R',true);
+              $this->MultiCell(65,4,utf8_decode('SUBTOTAL: $'.$TotalEI.'.00'),0,'R',true);
               $this->Ln(10);
            }
             //---------------BANCO-------------------------------------------
@@ -92,7 +97,7 @@ class PDF extends FPDF{
               }
               $this->SetFont('Arial','B',13);
               $this->Ln(8);
-              $this->MultiCell(65,4,utf8_decode('TOTAL: $'.$TotalBI.'.00'),0,'R',true);
+              $this->MultiCell(65,4,utf8_decode('SUBTOTAL: $'.$TotalBI.'.00'),0,'R',true);
               $this->Ln(10);
            }
            //---------------CREDITO-------------------------------------------
@@ -115,7 +120,7 @@ class PDF extends FPDF{
             $this->SetFont('Arial','B',13);
             $this->Ln(8);
             $total_CI=  mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $id_corte AND pagos.tipo_cambio ='Credito' AND tipo != 'Dispositivo'"));
-            $this->MultiCell(65,4,utf8_decode('TOTAL: - $'.$total_CI['precio'].'.00'),0,'R',true);
+            $this->MultiCell(65,4,utf8_decode('SUBTOTAL: - $'.$total_CI['precio'].'.00'),0,'R',true);
             $this->Ln(10);
           }
 
@@ -142,7 +147,7 @@ class PDF extends FPDF{
             }
             $this->SetFont('Arial','B',13);
             $this->Ln(8);
-            $this->MultiCell(65,4,utf8_decode('TOTAL: $'.$TotalEO.'.00'),0,'R',true);
+            $this->MultiCell(65,4,utf8_decode('SUBTOTAL: $'.$TotalEO.'.00'),0,'R',true);
             $this->Ln(10);
           }
             //---------------BANCO-------------------------------------------
@@ -164,7 +169,7 @@ class PDF extends FPDF{
             }
             $this->SetFont('Arial','B',13);
             $this->Ln(8);
-            $this->MultiCell(65,4,utf8_decode('TOTAL: $'.$TotalBO.'.00'),0,'R',true);
+            $this->MultiCell(65,4,utf8_decode('SUBTOTAL: $'.$TotalBO.'.00'),0,'R',true);
             $this->Ln(10);
           }
 
@@ -192,7 +197,7 @@ class PDF extends FPDF{
             }
             $this->SetFont('Arial','B',13);
             $this->Ln(8);           
-            $this->MultiCell(65,4,utf8_decode('TOTAL: $'.$TotalES.'.00'),0,'R',true);
+            $this->MultiCell(65,4,utf8_decode('SUBTOTAL: $'.$TotalES.'.00'),0,'R',true);
             $this->Ln(10);
           }
             //---------------BANCO-------------------------------------------
@@ -214,13 +219,23 @@ class PDF extends FPDF{
             }
             $this->SetFont('Arial','B',13);
             $this->Ln(8);            
-            $this->MultiCell(65,4,utf8_decode('TOTAL: $'.$TotalBS.'.00'),0,'R',true);
+            $this->MultiCell(65,4,utf8_decode('SUBTOTAL: $'.$TotalBS.'.00'),0,'R',true);
             $this->Ln(10);
           }
 
             $Todos_Pagos = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $id_corte" ));
             $this->Cell(60,4,'------------------------------------------',0,0,'C',true);
             $this->Ln(8);
+            $this->Cell(60,4,'<< Deducibles >> ',0,0,'C',true);
+            $this->Ln(6);
+            $this->SetFont('Arial','',11);
+            $this->Ln(6);
+            $this->MultiCell(70,4,utf8_decode("Descripcion: ".$Deducible['descripcion']),0,'L',true);
+            $this->MultiCell(70,4,utf8_decode("- $ ". $Deducible['cantidad'].'.00'),0,'R',true);
+            $this->Ln(5);
+            $this->SetFont('Arial','B',14);             
+            $this->Cell(60,4,'------------------------------------------',0,0,'C',true);
+            $this->Ln(5);
             $this->MultiCell(60,4,utf8_decode('Total de Pagos ('.$Todos_Pagos['count(*)'].'):'),0,'L',true);
             $this->Ln(4);
 

@@ -11,7 +11,6 @@ $Partes = explode('$ic', $Clave);
 $id = $Partes[1];
 $user = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$id'"));
 $Realizo = $user['firstname'];
-echo $Realizo;
 
 $Pass = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM sistempass WHERE id_user=$id"));
 if ($Pass['pass'] == $Clave){
@@ -35,20 +34,27 @@ if ($Pass['pass'] == $Clave){
         if ($credito == "") {
             $credito = 0;
         }
-        mysqli_query($conn,"INSERT INTO cortes(usuario, fecha, cantidad, banco, credito, realizo) VALUES ($id_user, '$Fecha_hoy', '$cantidad', '$banco', '$credito', '$Realizo')");
-        $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_corte) AS id FROM cortes WHERE usuario=$id_user"));           
-        $corte = $ultimo['id'];
+
+        if (mysqli_query($conn,"INSERT INTO cortes (usuario, fecha, cantidad, banco, credito, realizo) VALUES ($id_user, '$Fecha_hoy', '$cantidad', '$banco', '$credito', '$Realizo')")) {
+            $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_corte) AS id FROM cortes WHERE usuario=$id_user"));           
+            $corte = $ultimo['id'];
+            $CantidadD = $conn->real_escape_string($_POST['valorCantidad']);
+            $Descripcion = $conn->real_escape_string($_POST['valorDescripcion']);
+            if ($CantidadD > 0 AND $Descripcion != "") {
+                mysqli_query($conn,"INSERT INTO deducibles (id_corte, cantidad, descripcion, fecha, usuario) VALUES ('$corte', '$CantidadD', '$Descripcion', '$Fecha_hoy', '$id_user')");
+            }
+            ?>
+            <script>
+                setTimeout("location.href='cortes_pagos.php'", 1000);
+                id_corte = <?php echo $corte; ?>;
+                var a = document.createElement("a");
+                    a.target = "_blank";
+                    a.href = "../php/corte_pago.php?id="+id_corte;
+                    a.click();
+            </script>
+            <?php
+        }
     }
-    ?>
-    <script type="text/javascript">
-      	setTimeout("location.href='cortes_pagos.php'", 1000);
-		id_corte = <?php echo $corte; ?>;
-		var a = document.createElement("a");
-		    a.target = "_blank";
-		    a.href = "../php/corte_pago.php?id="+id_corte;
-		    a.click();
-	</script>
-	<?php
 }else{
     echo '<script>M.toast({html:"Clave incorrecta intente nuevamnete...", classes: "rounded"})</script>';
 }

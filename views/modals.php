@@ -223,6 +223,19 @@ function recargar10() {
         <label for="clave">Ingresar Clave</label>
     </div>
     </div>
+    <h4 id="resultado_ruta">¿Desea agregar algun deducible?</h4>
+      <form class="row">
+      <div class="input-field col s12 m6 l4">
+          <i class="material-icons prefix">attach_money</i>
+          <input id="cantidad" type="number" class="validate" data-length="30" value="0" required>
+          <label for="cantidad">Cantidad:</label>
+      </div>
+      <div class="input-field col s10 m6 l6">
+          <i class="material-icons prefix">edit</i>
+          <input id="descripcion" type="text" class="validate" data-length="30" required>
+          <label for="descripcion">Descripcion:(ej: Biaticos para Marcos y Luis) </label>
+      </div>
+      </form>
   </div>
   <div class="modal-footer">
       <a onclick="recargar_corte()" class="modal-action modal-close waves-effect waves-green btn-flat">Aceptar</a>

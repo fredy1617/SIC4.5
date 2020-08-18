@@ -37,8 +37,10 @@
             $cobrador = mysqli_fetch_array(mysqli_query($enlace, "SELECT * FROM users WHERE user_id = $id_user"));
             #TOMAMOS LA INFORMACION DEL CORTE CON EL ID GUARDADO EN LA VARIABLE $corte QUE RECIBIMOS CON EL GET
             $Cort =  mysqli_fetch_array(mysqli_query($enlace, "SELECT * FROM cortes WHERE id_corte = $corte"));  
+            #TOMAMOS LA INFORMACION DEL DEDUCIBLE CON EL ID GUARDADO EN LA VARIABLE $corte QUE RECIBIMOS CON EL GET
+            $Deducible =  mysqli_fetch_array(mysqli_query($enlace, "SELECT * FROM deducibles WHERE id_corte = '$corte'"));  
             #GUARDAMOS LOS TOTALES DE CADA TIPO DE PAGO EN UNA RESPETIVA VARIABLE         
-            $cantidad = $Cort['cantidad'];
+            $cantidad = $Cort['cantidad']-$Deducible['cantidad'];
             $banco = $Cort['banco'];
             $credito = $Cort['credito'];
             #VERIFICAMOS SI EN EL CORTE ECHO NO ESTEN TODAS LAS CANTIDADES VACIAS
@@ -51,9 +53,9 @@
                     #CREAMOS EL MENSAJE CON LA INFORMACION QUE HAY QUE ENVIAR POR TELEGRAM
                     $Mensaje = "Corte en el sistema del dia: ".$Fecha_hoy.". \nCon folio: <b>".$corte."</b> y usuario: <b>'".$cobrador['firstname']."(".$cobrador['user_name'].")"."'</b> con las cantidades totales de: \n  <b>*Banco = $".$banco.". \n  *Efectivo = $".$cantidad.". \n  *Credito = $".$credito.". \n \n Relizado por: ".$Cort['realizo'].". \n \n  <a href ='189.197.184.252:6288/SIC4.5/php/reimprimir_corte.php?id=".$corte."'>  -- DESCARGAR -- </a></b>";
                     #MANDAMOS LLAMAR LA FUNCION DE ENVIAR EL MENSAJE POR TELEGRAM LE AÑADIMOS EL MENSAJE Y LO REPETIMOS CUANTAS VECES QUERAMOS ENVIAR EL MENSAJE A DIFERENTES CHATS SEGUN EL id_Chat
-                    sendMessage($id_Chat, $Mensaje, $website);                
-                    sendMessage($id_Chat2, $Mensaje, $website);                
-                    sendMessage($id_Chat3, $Mensaje, $website);                
+                    sendMessage($id_Chat, $Mensaje, $website);               
+                    sendMessage($id_Chat2, $Mensaje, $website);               
+                    sendMessage($id_Chat3, $Mensaje, $website);               
                 }
             }
             
@@ -101,7 +103,7 @@
                 $this->SetFont('Arial','B',13);
                 $this->Ln(8);
                 $total_EI=  mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo' AND tipo != 'Dispositivo' AND tipo != 'Orden Servicio'"));
-                $this->MultiCell(65,4,utf8_decode('TOTAL: $'.$total_EI['precio'].'.00'),0,'R',true);
+                $this->MultiCell(65,4,utf8_decode('SUBTOTAL: $'.$total_EI['precio'].'.00'),0,'R',true);
                 $this->Ln(10);
             }
             //---------------BANCO-------------------------------------------
@@ -127,7 +129,7 @@
                 $this->SetFont('Arial','B',13);
                 $this->Ln(8);
                 $totalbancoI = mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco' AND tipo != 'Dispositivo' AND tipo != 'Orden Servicio'"));
-                $this->MultiCell(65,4,utf8_decode('TOTAL: $'.$totalbancoI['precio'].'.00'),0,'R',true);
+                $this->MultiCell(65,4,utf8_decode('SUBTOTAL: $'.$totalbancoI['precio'].'.00'),0,'R',true);
                 $this->Ln(10);
             }
             //---------------CREDITO-------------------------------------------
@@ -153,7 +155,7 @@
                 $this->SetFont('Arial','B',13);
                 $this->Ln(8);
                 $total_CI=  mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Credito' AND tipo != 'Dispositivo' AND tipo != 'Orden Servicio'"));
-                $this->MultiCell(65,4,utf8_decode('TOTAL: - $'.$total_CI['precio'].'.00'),0,'R',true);
+                $this->MultiCell(65,4,utf8_decode('SUBTOTAL: - $'.$total_CI['precio'].'.00'),0,'R',true);
                 $this->Ln(10);
             }
 
@@ -183,7 +185,7 @@
                 $this->SetFont('Arial','B',13);
                 $this->Ln(8);
                 $total_EO=  mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo' AND tipo = 'Orden Servicio'"));
-                $this->MultiCell(65,4,utf8_decode('TOTAL: $'.$total_EO['precio'].'.00'),0,'R',true);
+                $this->MultiCell(65,4,utf8_decode('SUBTOTAL: $'.$total_EO['precio'].'.00'),0,'R',true);
                 $this->Ln(10);
             }
             //---------------BANCO-------------------------------------------
@@ -209,7 +211,7 @@
                 $this->SetFont('Arial','B',13);
                 $this->Ln(8);
                 $totalbancoO = mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco' AND tipo = 'Orden Servicio'"));
-                $this->MultiCell(65,4,utf8_decode('TOTAL: $'.$totalbancoO['precio'].'.00'),0,'R',true);
+                $this->MultiCell(65,4,utf8_decode('SUBTOTAL: $'.$totalbancoO['precio'].'.00'),0,'R',true);
                 $this->Ln(10);
             }
 
@@ -241,7 +243,7 @@
                 $this->SetFont('Arial','B',13);
                 $this->Ln(8);
                 $total_EST=  mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo' AND tipo = 'Dispositivo'"));            
-                $this->MultiCell(65,4,utf8_decode('TOTAL: $'.$total_EST['precio'].'.00'),0,'R',true);
+                $this->MultiCell(65,4,utf8_decode('SUBTOTAL: $'.$total_EST['precio'].'.00'),0,'R',true);
                 $this->Ln(10);
             }
             //---------------BANCO-------------------------------------------
@@ -267,11 +269,21 @@
                 $this->SetFont('Arial','B',13);
                 $this->Ln(8);
                 $totalbancoST = mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco' AND tipo = 'Dispositivo'"));            
-                $this->MultiCell(65,4,utf8_decode('TOTAL: $'.$totalbancoST['precio'].'.00'),0,'R',true);
+                $this->MultiCell(65,4,utf8_decode('SUBTOTAL: $'.$totalbancoST['precio'].'.00'),0,'R',true);
                 $this->Ln(10);
             }
 
             $Todos_Pagos = mysqli_fetch_array(mysqli_query($enlace,"SELECT count(*) FROM pagos WHERE id_user=$id_user AND corte = 0" ));
+            $this->Cell(60,4,'------------------------------------------',0,0,'C',true);
+            $this->Ln(8);
+            $this->Cell(60,4,'<< Deducibles >> ',0,0,'C',true);
+            $this->Ln(6);
+            $this->SetFont('Arial','',11);
+            $this->Ln(6);
+            $this->MultiCell(70,4,utf8_decode("Descripcion: ".$Deducible['descripcion']),0,'L',true);
+            $this->MultiCell(70,4,utf8_decode("- $ ". $Deducible['cantidad'].'.00'),0,'R',true);
+            $this->Ln(5);
+            $this->SetFont('Arial','B',14);             
             $this->Cell(60,4,'------------------------------------------',0,0,'C',true);
             $this->Ln(8);
             $this->MultiCell(65,4,utf8_decode('Total de Pagos: '.$Todos_Pagos['count(*)']),0,'R',true);
