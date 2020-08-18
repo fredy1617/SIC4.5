@@ -32,9 +32,15 @@ class PDF extends FPDF{
         $totalbanco = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $id_corte AND pagos.tipo_cambio ='Banco'"));
         $totalcredito = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $id_corte AND pagos.tipo_cambio ='Credito'"));
         #TOMAMOS LA INFORMACION DEL DEDUCIBLE CON EL ID GUARDADO EN LA VARIABLE $corte QUE RECIBIMOS CON EL GET
-        $Deducible =  mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM deducibles WHERE id_corte = '$id_corte'"));  
+        $sql_Deducible = mysqli_query($conn, "SELECT * FROM deducibles WHERE id_corte = '$id_corte'");  
+        if (mysqli_num_rows($sql_Deducible) > 0) {
+            $Deducible = mysqli_fetch_array($sql_Deducible);
+            $Deducir = $Deducible['cantidad'];
+        }else{
+            $Deducir = 0;
+        }
         #GUARDAMOS LOS TOTALES DE CADA TIPO DE PAGO EN UNA RESPETIVA VARIABLE         
-        $cantidad=$total['precio']-$Deducible['cantidad'];
+        $cantidad = $total['precio']-$Deducir;
         $banco = $totalbanco['precio'];
         $credito = $totalcredito['precio'];
 		$aux = mysqli_num_rows($detalles);
@@ -226,13 +232,17 @@ class PDF extends FPDF{
             $Todos_Pagos = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)  FROM detalles INNER JOIN pagos ON detalles.id_pago = pagos.id_pago WHERE detalles.id_corte = $id_corte" ));
             $this->Cell(60,4,'------------------------------------------',0,0,'C',true);
             $this->Ln(8);
+
             $this->Cell(60,4,'<< Deducibles >> ',0,0,'C',true);
             $this->Ln(6);
-            $this->SetFont('Arial','',11);
-            $this->Ln(6);
-            $this->MultiCell(70,4,utf8_decode("Descripcion: ".$Deducible['descripcion']),0,'L',true);
-            $this->MultiCell(70,4,utf8_decode("- $ ". $Deducible['cantidad'].'.00'),0,'R',true);
-            $this->Ln(5);
+            if (mysqli_num_rows($sql_Deducible) > 0) {
+              $Deducible = mysqli_fetch_array($sql_Deducible);
+              $this->SetFont('Arial','',11);
+              $this->Ln(6);
+              $this->MultiCell(70,4,utf8_decode("Descripcion: ".$Deducible['descripcion']),0,'L',true);
+              $this->MultiCell(70,4,utf8_decode("- $ ". $Deducible['cantidad'].'.00'),0,'R',true);
+              $this->Ln(5);
+            }
             $this->SetFont('Arial','B',14);             
             $this->Cell(60,4,'------------------------------------------',0,0,'C',true);
             $this->Ln(5);

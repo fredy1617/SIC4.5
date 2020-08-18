@@ -38,9 +38,15 @@
             #TOMAMOS LA INFORMACION DEL CORTE CON EL ID GUARDADO EN LA VARIABLE $corte QUE RECIBIMOS CON EL GET
             $Cort =  mysqli_fetch_array(mysqli_query($enlace, "SELECT * FROM cortes WHERE id_corte = $corte"));  
             #TOMAMOS LA INFORMACION DEL DEDUCIBLE CON EL ID GUARDADO EN LA VARIABLE $corte QUE RECIBIMOS CON EL GET
-            $Deducible =  mysqli_fetch_array(mysqli_query($enlace, "SELECT * FROM deducibles WHERE id_corte = '$corte'"));  
+            $sql_Deducible = mysqli_query($enlace, "SELECT * FROM deducibles WHERE id_corte = '$corte'");  
+            if (mysqli_num_rows($sql_Deducible) > 0) {
+                $Deducible = mysqli_fetch_array($sql_Deducible);
+                $Deducir = $Deducible['cantidad'];
+            }else{
+                $Deducir = 0;
+            }
             #GUARDAMOS LOS TOTALES DE CADA TIPO DE PAGO EN UNA RESPETIVA VARIABLE         
-            $cantidad = $Cort['cantidad']-$Deducible['cantidad'];
+            $cantidad = $Cort['cantidad']-$Deducir;
             $banco = $Cort['banco'];
             $credito = $Cort['credito'];
             #VERIFICAMOS SI EN EL CORTE ECHO NO ESTEN TODAS LAS CANTIDADES VACIAS
@@ -278,11 +284,14 @@
             $this->Ln(8);
             $this->Cell(60,4,'<< Deducibles >> ',0,0,'C',true);
             $this->Ln(6);
-            $this->SetFont('Arial','',11);
-            $this->Ln(6);
-            $this->MultiCell(70,4,utf8_decode("Descripcion: ".$Deducible['descripcion']),0,'L',true);
-            $this->MultiCell(70,4,utf8_decode("- $ ". $Deducible['cantidad'].'.00'),0,'R',true);
-            $this->Ln(5);
+            if (mysqli_num_rows($sql_Deducible) > 0) {
+                $Deducible = mysqli_fetch_array($sql_Deducible);
+                $this->SetFont('Arial','',11);
+                $this->Ln(6);
+                $this->MultiCell(70,4,utf8_decode("Descripcion: ".$Deducible['descripcion']),0,'L',true);
+                $this->MultiCell(70,4,utf8_decode("- $ ". $Deducible['cantidad'].'.00'),0,'R',true);
+                $this->Ln(5);
+            }
             $this->SetFont('Arial','B',14);             
             $this->Cell(60,4,'------------------------------------------',0,0,'C',true);
             $this->Ln(8);
