@@ -233,7 +233,7 @@ function recargar10() {
       <div class="input-field col s10 m6 l6">
           <i class="material-icons prefix">edit</i>
           <input id="descripcionD" type="text" class="validate" data-length="30" required>
-          <label for="descripcionD">Descripcion:(ej: Biaticos para Marcos y Luis) </label>
+          <label for="descripcionD">Descripcion:(ej: Viaticos para Marcos y Luis) </label>
       </div>
       </form>
   </div>
