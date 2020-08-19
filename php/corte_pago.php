@@ -285,7 +285,6 @@
             $this->Cell(60,4,'<< Deducibles >> ',0,0,'C',true);
             $this->Ln(6);
             if (mysqli_num_rows($sql_Deducible) > 0) {
-                $Deducible = mysqli_fetch_array($sql_Deducible);
                 $this->SetFont('Arial','',11);
                 $this->Ln(6);
                 $this->MultiCell(70,4,utf8_decode("Descripcion: ".$Deducible['descripcion']),0,'L',true);
