@@ -11,7 +11,7 @@
   function recargar_corte() {
     var textoClave = $("input#clave").val(); 
     var textoCantidad = $("input#cantidadD").val(); 
-    var textoDescripcion = $("input#descripcion").val();
+    var textoDescripcion = $("input#descripcionD").val();
 
     entra = "Si";
     if (textoCantidad != 0 || textoDescripcion != "") {
