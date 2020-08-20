@@ -51,22 +51,21 @@ if(mysqli_num_rows($sql_servers) == 0){
 	        		$IP = $Central['ip'];
 	        		$API->write('/ping',false);
 	    			$API->write('=address='.$IP,false);#IP A REALIZAR EL PING
-	    			$API->write('=count=4',false);#NUMERO DE PINGS
+	    			$API->write('=count=5',false);#NUMERO DE PINGS
 	    			$API->write('=interval=1');
 	    			$READ = $API->read(false);
 	    			$ARRAY = $API->parse_response($READ);
-
-	    			#SI PING ES MAYOR A 0 LOS ALGUNO DE LOS 4 PINGS SE REALIZAN Y ES UN PING CORRECTO
+	    			#SI PING ES MAYOR A 0 LOS ALGUNO DE LOS 5 PINGS SE REALIZAN Y ES UN PING CORRECTO
 				    $PING = 0;
-				    #RECORREMOS EL ARRAY CON LOS 4 PINGS
+				    #RECORREMOS EL ARRAY CON LOS 5 PINGS
 				    foreach ($ARRAY as $key => $value) {
-				        #TOMAMOS EL PING A VER SI HAY PERDIDA O NO SI HACE PING INCREMENTA LA VARIABLE $PING EN 1 SI ALMENOS HACE 1 PING DE 4 SE TOMA COMO CORRECTO
+				        #TOMAMOS EL PING A VER SI HAY PERDIDA O NO SI HACE PING INCREMENTA LA VARIABLE $PING EN 1 SI ALMENOS HACE 1 PING DE 5 SE TOMA COMO CORRECTO
 				        if($value['packet-loss'] == 0){
 				            #SI SE REALIZO EL PING A LA IP
 				            $PING ++;
 				        }
-				      }
-					#VERIFICAR SI UBO PERDIDAS DE PAQUETES AL HACER EL PING SI ALMENOS HACE 1 PING DE 4 SE TOMA COMO CORRECTO
+				    }
+					#VERIFICAR SI UBO PERDIDAS DE PAQUETES AL HACER EL PING SI ALMENOS HACE 1 PING DE 5 SE TOMA COMO CORRECTO
 					if($PING > 0){
 	    				#SI SE REALIZO EL PING A LA IP
 	    				#BUSCAR UN ERROR DE LA MISMA IP en estatus Pendiente
