@@ -75,11 +75,11 @@ if(mysqli_num_rows($sql_servers) == 0){
 	       					#SI SE ENCONTRO ESTA IP REGISTRADA 
 	       					$error_pendiente_conecto = mysqli_fetch_array($sql_e1);
 	       					$id_e1 = $error_pendiente_conecto['id'];
-	       					if ($error_pendiente_conecto['contador'] < 6) {
-	       						#BORRARA ERROR PORQUE COMO EL CONTADOR ES MENOR A 6 NO SE CONSIDERA COMO ERROR
+	       					if ($error_pendiente_conecto['contador'] < 10) {
+	       						#BORRARA ERROR PORQUE COMO EL CONTADOR ES MENOR A 10 NO SE CONSIDERA COMO ERROR
 	       						mysqli_query($conn, "DELETE FROM errores_pings WHERE id = '$id_e1'");
 	       					}else{
-	       						#COMO EL CONTADOR ES MAYOR A 6 PERO REALIZO EL PING CAMBIAR ESTATUS A Solucionado
+	       						#COMO EL CONTADOR ES MAYOR A 10 PERO REALIZO EL PING CAMBIAR ESTATUS A Solucionado
 	       						mysqli_query($conn, "UPDATE errores_pings SET estatus = 'Solucionado', hora_s = '$Hora', fecha_s = '$Fecha' WHERE id = '$id_e1'");	
 	       					}
 	       				}
