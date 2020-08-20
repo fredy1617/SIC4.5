@@ -37,7 +37,7 @@ if(mysqli_num_rows($sql_errores_mikrotik) > 0){
 #-------------------------------------------------------------------
 #ENVIAR MENSAJES SI HAY ERRORES DE PINGS A IP's
 #-------------------------------------------------------------------
-$sql_errores = mysqli_query($conn, "SELECT * FROM errores_pings WHERE msj_error = 0 AND estatus = 'Pendiente' AND contador >= 8");
+$sql_errores = mysqli_query($conn, "SELECT * FROM errores_pings WHERE msj_error = 0 AND estatus = 'Pendiente' AND contador >= 6");
 if(mysqli_num_rows($sql_errores) > 0){
    	#SI SE ENCONTRARON ERRORES SE RECORREN CADA UNO...
    	while($error = mysqli_fetch_array($sql_errores)){

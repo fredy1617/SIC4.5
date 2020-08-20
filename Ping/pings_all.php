@@ -51,13 +51,23 @@ if(mysqli_num_rows($sql_servers) == 0){
 	        		$IP = $Central['ip'];
 	        		$API->write('/ping',false);
 	    			$API->write('=address='.$IP,false);#IP A REALIZAR EL PING
-	    			$API->write('=count=1',false);
-	    			$API->write('=interval=1');#NUMERO DE PINGS
+	    			$API->write('=count=4',false);#NUMERO DE PINGS
+	    			$API->write('=interval=1');
 	    			$READ = $API->read(false);
 	    			$ARRAY = $API->parse_response($READ);
 
-	    			#VERIFICAR SI UBO PERDIDAS DE PAQUETES AL HACER EL PING
-	    			if($ARRAY[0]['packet-loss'] == 0){
+	    			#SI PING ES MAYOR A 0 LOS ALGUNO DE LOS 4 PINGS SE REALIZAN Y ES UN PING CORRECTO
+				    $PING = 0;
+				    #RECORREMOS EL ARRAY CON LOS 4 PINGS
+				    foreach ($ARRAY as $key => $value) {
+				        #TOMAMOS EL PING A VER SI HAY PERDIDA O NO SI HACE PING INCREMENTA LA VARIABLE $PING EN 1 SI ALMENOS HACE 1 PING DE 4 SE TOMA COMO CORRECTO
+				        if($value['packet-loss'] == 0){
+				            #SI SE REALIZO EL PING A LA IP
+				            $PING ++;
+				        }
+				      }
+					#VERIFICAR SI UBO PERDIDAS DE PAQUETES AL HACER EL PING SI ALMENOS HACE 1 PING DE 4 SE TOMA COMO CORRECTO
+					if($PING > 0){
 	    				#SI SE REALIZO EL PING A LA IP
 	    				#BUSCAR UN ERROR DE LA MISMA IP en estatus Pendiente
 	    				$sql_e1 = mysqli_query($conn, "SELECT * FROM errores_pings WHERE ip = '$IP' AND estatus = 'Pendiente'");
@@ -66,11 +76,11 @@ if(mysqli_num_rows($sql_servers) == 0){
 	       					#SI SE ENCONTRO ESTA IP REGISTRADA 
 	       					$error_pendiente_conecto = mysqli_fetch_array($sql_e1);
 	       					$id_e1 = $error_pendiente_conecto['id'];
-	       					if ($error_pendiente_conecto['contador'] < 8) {
-	       						#BORRARA ERROR PORQUE COMO EL CONTADOR ES MENOR A 8 NO SE CONSIDERA COMO ERROR
+	       					if ($error_pendiente_conecto['contador'] < 6) {
+	       						#BORRARA ERROR PORQUE COMO EL CONTADOR ES MENOR A 6 NO SE CONSIDERA COMO ERROR
 	       						mysqli_query($conn, "DELETE FROM errores_pings WHERE id = '$id_e1'");
 	       					}else{
-	       						#COMO EL CONTADOR ES MAYOR A 8 PERO REALIZO EL PING CAMBIAR ESTATUS A Solucionado
+	       						#COMO EL CONTADOR ES MAYOR A 6 PERO REALIZO EL PING CAMBIAR ESTATUS A Solucionado
 	       						mysqli_query($conn, "UPDATE errores_pings SET estatus = 'Solucionado', hora_s = '$Hora', fecha_s = '$Fecha' WHERE id = '$id_e1'");	
 	       					}
 	       				}
