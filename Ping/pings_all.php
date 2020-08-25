@@ -12,10 +12,7 @@ $Fecha = date('Y-m-d');
 $Hora = date('H:i:s');
  #HACEMOS UNA SELECCION DE TODOS LOS SERVIDORES REGISTRADOS LA TABLA servidores A ESECPION DEL SERVIDOR CON ID 16 YA QUE ESTA FUERA DE SERVICIO
 $sql_servers = mysqli_query($conn, "SELECT * FROM servidores WHERE id_servidor != 16");
-if(mysqli_num_rows($sql_servers) == 0){
-	#EN CASO DE NO ENCONTRAR SERVIDORES MOSTRAR ESTE MENSAJE
-    echo '<h5 class="center">No hay servicores</h5>';
-}else{
+if(mysqli_num_rows($sql_servers) > 0){
 	#RECORREMOS CON EL WHILE UNO POR UNO LA INFROMACION DE CADA SERVIDOR
     while($Servidor = mysqli_fetch_array($sql_servers)){
     	 //////// INFORMACION DEL SERVIDOR
@@ -24,7 +21,6 @@ if(mysqli_num_rows($sql_servers) == 0){
 		$Pass = $Servidor['pass']; //contraseña_API
 		$Port = $Servidor['port']; //puerto_API
 
-		echo $Servidor['nombre'].'<br><br>';
 		$API = new routeros_api();
 		$API->debug = false;
 		#CONEXION A MICROTICK DEL SERVIDOR EN TURNO
@@ -42,9 +38,7 @@ if(mysqli_num_rows($sql_servers) == 0){
 			#HACER LA CONSULTA DE LAS CENTRALES QUE PERTENECEN AL SERVIDOR EN TURNO...
 			$ID = $Servidor['id_servidor']; 
 			$sql_Centrales =mysqli_query($conn, "SELECT * FROM centrales_pings INNER JOIN comunidades ON centrales_pings.comunidad = comunidades.id_comunidad WHERE centrales_pings.ip != '' AND comunidades.servidor = $ID");
-	    	if(mysqli_num_rows($sql_Centrales) == 0){
-	        	echo '<h5 class="center">No hay centrales</h5>';
-	    	}else{
+	    	if(mysqli_num_rows($sql_Centrales) > 0){
 	    		#SE RECORREN CADA UNA DE LAS CENTRALES PERTENECIENTES AL SERVIDOR EN TURNO UNA POR UNA
 	        	while($Central = mysqli_fetch_array($sql_Centrales)){
 	        		#COMENZAMOS A HACER PING SE LA CENTRAL EN TURNO EN LA CONSOLA DE MIKROTIK
@@ -61,8 +55,7 @@ if(mysqli_num_rows($sql_servers) == 0){
 				    foreach ($ARRAY as $key => $value) {
 				        #TOMAMOS EL PING A VER SI HAY PERDIDA O NO SI HACE PING INCREMENTA LA VARIABLE $PING EN 1 SI ALMENOS HACE 1 PING DE 5 SE TOMA COMO CORRECTO
 				        if($value['packet-loss'] == 0){
-				            #SI SE REALIZO EL PING A LA IP
-				            $PING ++;
+				            $PING ++;// SI SE REALIZO EL PING A LA IP SE INCREMENTA EN 1
 				        }
 				    }
 					#VERIFICAR SI UBO PERDIDAS DE PAQUETES AL HACER EL PING SI ALMENOS HACE 1 PING DE 5 SE TOMA COMO CORRECTO
