@@ -45,12 +45,12 @@ if ($Pass['pass'] == $Clave){
             }
             ?>
             <script>
-                setTimeout("location.href='cortes_pagos.php'", 1000);
                 id_corte = <?php echo $corte; ?>;
                 var a = document.createElement("a");
                     a.target = "_blank";
                     a.href = "../php/corte_pago.php?id="+id_corte;
                     a.click();
+                setTimeout("location.href='cortes_pagos.php'", 2000);
             </script>
             <?php
             #SI ALMENOS UNO DE LOS TOTALES ES MAYOR A CERO PROCEDEMOS A ENVIAR EL MENSAJE POR TELEGRAM
