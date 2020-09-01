@@ -58,7 +58,7 @@ include('fredyNav.php');
               <td><?php echo $IP; ?></td>    
               <td><?php echo $resultados['fecha_e']; ?></td>
               <td><?php echo $resultados['hora_e']; ?></td>
-              <td><?php echo $resultados['contador']; ?> m</td>
+              <td><?php echo $resultados['contador']; ?> min</td>
             </tr>
           <?php
           }
