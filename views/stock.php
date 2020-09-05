@@ -14,7 +14,7 @@
       <h3 class="row"><b>Stock de Tecnicos:</b></h3><br>
       <div class="row">
         <?php
-        $usuarios = mysqli_query($conn, "SELECT * FROM users WHERE area = 'Redes' OR user_id = 25 OR user_id = 28");
+        $usuarios = mysqli_query($conn, "SELECT * FROM users WHERE area = 'Redes' OR user_id IN(25, 28, 49)");
         $filas = mysqli_num_rows($usuarios);
         if ($filas > 0) {
         ?>        
