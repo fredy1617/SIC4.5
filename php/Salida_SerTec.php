@@ -1,25 +1,30 @@
 <?php
-//Incluimos la libreria fpdf
+#INCLUIMOS EL ARCHIVO CON LA CONEXION A LA BASE DE DATPS
+include('../php/conexion.php');
+#INCLUIMOS EL ARCHIVO CON LAS LIBRERIAS DE FPDF PARA PODER CREAR ARCHIVOS CON FORMATO PDF
 include("../fpdf/fpdf.php");
+#INCLUIMOS EL PHP DONDE VIENE LA INFORMACION DEL INICIO DE SESSION
 include('is_logged.php');
-$pass='root';
+
 $id_dispositivo =$_GET['id'];
-//Incluimos el archivo de conexion a la base de datos
+
+#CREAMOS LA CLASE DEL CONTENIDO DE NUESTRO PDF
 class PDF extends FPDF{
     function folioCliente(){
+        #METEMOS LAS BARIABLES CREADAS FUERA DE LA CLASE PDF DENTRO DE LA MISMA
         global $id_dispositivo;
-        global $pass;
-        $enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
-        $listado = mysqli_query($enlace, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
+        global $conn;
+
+        $listado = mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
         $num_filas = mysqli_num_rows($listado);
         $fila = mysqli_fetch_array($listado);
         $id_tecnico = $fila['tecnico'];
-        $tecnico = mysqli_fetch_array(mysqli_query($enlace,"SELECT * FROM users WHERE user_id=$id_tecnico"));
+        $tecnico = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM users WHERE user_id=$id_tecnico"));
         $id_User = $fila['recibe'];
         if ($id_User == NULL) {
             $id_User =  $_SESSION['user_id'];
         }
-        $User = mysqli_fetch_array(mysqli_query($enlace, "SELECT * FROM users WHERE user_id = '$id_User'"));
+        $User = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$id_User'"));
 
         $registro = $User['firstname'].' '.$User['lastname'];
 
@@ -83,7 +88,7 @@ class PDF extends FPDF{
         $this->SetX(6);
         $this->MultiCell(70,4,utf8_decode('------------------------------------------------------'),0,'L',true);
         
-        $SqlRefacciones = mysqli_query($enlace, "SELECT * FROM refacciones WHERE id_dispositivo = '$id_dispositivo'");
+        $SqlRefacciones = mysqli_query($conn, "SELECT * FROM refacciones WHERE id_dispositivo = '$id_dispositivo'");
         $filas = mysqli_num_rows($SqlRefacciones);
         $sub = 0;
         if ($filas > 0) {
@@ -101,7 +106,7 @@ class PDF extends FPDF{
                 $sub=$sub+$refaccion['cantidad'];
             }
             }
-            $sql = mysqli_query($enlace, "SELECT * FROM pagos WHERE id_cliente = '$id_dispositivo' AND descripcion = 'Anticipo' AND tipo = 'Dispositivo'");
+            $sql = mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = '$id_dispositivo' AND descripcion = 'Anticipo' AND tipo = 'Dispositivo'");
             $Total_anti = 0;
             if (mysqli_num_rows($sql)>0) {
                             
@@ -155,16 +160,16 @@ class PDF extends FPDF{
     function folioCliente2(){
         global $id_dispositivo;
         global $pass;
-        $enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
-        $listado = mysqli_query($enlace, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
+        $conn = mysqli_connect("localhost", "root", $pass, "servintcomp");
+        $listado = mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
         $num_filas = mysqli_num_rows($listado);
         $fila = mysqli_fetch_array($listado);
         $id_tecnico = $fila['tecnico'];
-        $tecnico = mysqli_fetch_array(mysqli_query($enlace,"SELECT * FROM users WHERE user_id=$id_tecnico"));  $id_User = $fila['recibe'];
+        $tecnico = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM users WHERE user_id=$id_tecnico"));  $id_User = $fila['recibe'];
         if ($id_User == NULL) {
             $id_User =  $_SESSION['user_id'];
         }
-        $User = mysqli_fetch_array(mysqli_query($enlace, "SELECT * FROM users WHERE user_id = '$id_User'"));
+        $User = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$id_User'"));
 
         $registro = $User['firstname'].' '.$User['lastname'];
 
@@ -233,7 +238,7 @@ class PDF extends FPDF{
         $this->SetX(6);
         $this->MultiCell(70,4,utf8_decode('------------------------------------------------------'),0,'L',true);
         
-        $SqlRefacciones = mysqli_query($enlace, "SELECT * FROM refacciones WHERE id_dispositivo = '$id_dispositivo'");
+        $SqlRefacciones = mysqli_query($conn, "SELECT * FROM refacciones WHERE id_dispositivo = '$id_dispositivo'");
         $filas = mysqli_num_rows($SqlRefacciones);
         $sub = 0;
         if ($filas > 0) {
@@ -251,7 +256,7 @@ class PDF extends FPDF{
                 $sub=$sub+$refaccion['cantidad'];
             }
         }
-            $sql = mysqli_query($enlace, "SELECT * FROM pagos WHERE id_cliente = '$id_dispositivo' AND descripcion = 'Anticipo' AND tipo = 'Dispositivo'");
+            $sql = mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = '$id_dispositivo' AND descripcion = 'Anticipo' AND tipo = 'Dispositivo'");
             $Total_anti = 0;
             if (mysqli_num_rows($sql)>0) {
                             
@@ -305,19 +310,19 @@ class PDF extends FPDF{
 
 global $pass;
 global $id_dispositivo;
-$enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
-$listado = mysqli_query($enlace, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
+$conn = mysqli_connect("localhost", "root", $pass, "servintcomp");
+$listado = mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
 $fila = mysqli_fetch_array($listado);
 $pdf = new PDF('P', 'mm', array(80,297));
 $pdf->SetTitle('Folio_'.$id_dispositivo.'_'.$fila['nombre'].'_'.'_'.$fila['marca'].'_'.$fila['modelo'].'_color_'.$fila['color']);
 $pdf->folioCliente();
 $pdf->folioCliente2();
 $pdf->Output('Folio_'.$id_dispositivo.'_'.$fila['nombre'].'_'.'_'.$fila['marca'].'_'.$fila['modelo'].'_color_'.$fila['color'],'I');
-$listado = mysqli_query($enlace, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
+$listado = mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
 $num_filas = mysqli_num_rows($listado);
 if ($num_filas > 0) {
     date_default_timezone_set('America/Mexico_City');
     $FechaSalida = date('Y-m-d');
-    mysqli_query ($enlace, "UPDATE dispositivos SET  estatus='Entregado', fecha_salida='$FechaSalida' WHERE id_dispositivo='$id_dispositivo'");
+    mysqli_query ($conn, "UPDATE dispositivos SET  estatus='Entregado', fecha_salida='$FechaSalida' WHERE id_dispositivo='$id_dispositivo'");
 }
 ?>

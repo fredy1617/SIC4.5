@@ -1,13 +1,17 @@
 <?php
+#INCLUIMOS EL ARCHIVO CON LA CONEXION A LA BASE DE DATPS
 include('../php/conexion.php');
-$id_cliente = $_GET['Id'];
+$id_cliente = $_GET['Id'];//TOMAMOS EL ID DEL CLIENTE PREVIAMENTE CREADO PARA PODERLE VER SU INFORMACION
 
-//Incluimos la libreria fpdf
+#INCLUIMOS EL ARCHIVO CON LAS LIBRERIAS DE FPDF PARA PODER CREAR ARCHIVOS CON FORMATO PDF
 include("../fpdf/fpdf.php");
-include("is_logged.php");
+#INCLUIMOS EL PHP DONDE VIENE LA INFORMACION DEL INICIO DE SESSION
+include('is_logged.php');
 
+#CREAMOS LA CLASE DEL CONTENIDO DE NUESTRO PDF
 class PDF extends FPDF{
 	function folioCliente(){
+        #METEMOS LAS BARIABLES CREADAS FUERA DE LA CLASE PDF DENTRO DE LA MISMA
 		global $id_cliente;
 		global $conn;
 
@@ -18,8 +22,6 @@ class PDF extends FPDF{
             $this->SetFillColor(255,255,255);
             $this->SetTextColor(0,0,0);
             $this->AddPage();
-            global $title;
-            global $pass;
             $this->Image('../img/logo_ticket.jpg',28,4,20);
             $this->SetFont('Arial','B',13);
             $this->SetY(30);

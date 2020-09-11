@@ -42,7 +42,7 @@ class PDF extends FPDF{
             $this->MultiCell(60,4,utf8_decode('Descripción: '.$fila['descripcion']),0,'L',true);
             $this->Ln(1);
             $this->Cell(20,4,utf8_decode('Cantidad: $'.$fila['cantidad'].'.00'),0,0,'L',true);
-            if (($id_user == 47 OR $id_user == 42 OR $id_user == 31 OR $id_user == 52 OR $id_user == 67 OR $id_user == 57 OR $id_user == 63 OR $id_user == 24 OR $id_user == 55 OR $id_user == 29) AND $tipo_pago != 'Otros Pagos') {
+            if (($id_user == 47 OR $id_user == 42 OR $id_user == 31 OR $id_user == 52 OR $id_user == 67 OR $id_user == 57 OR $id_user == 63 OR $id_user == 24 OR $id_user == 55 OR $id_user == 29 OR $id_user == 64) AND $tipo_pago != 'Otros Pagos') {
                 $this->Ln(5);
                 $this->Cell(20,4,utf8_decode('Comisión: + $10.00'),0,0,'L',true);   
             }

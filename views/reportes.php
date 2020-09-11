@@ -4,7 +4,6 @@
 <?php 
 include('fredyNav.php');
 include('../php/conexion.php');
-include ('../php/cobrador.php');
 $user_id = $_SESSION['user_id'];
 ?>
 <!--Inicia Script de reportes tmp-->

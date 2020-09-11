@@ -14,9 +14,12 @@ class PDF extends FPDF{
         global $conn;
         global $listado;
         global $id_ruta;
-        
+        $ruta =  mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM rutas WHERE estatus=0 AND id_ruta = $id_ruta")); 
+        $this->SetFont('Arial','',14);
+        $this->MultiCell(250,4, utf8_decode('RUTA No.'.$id_ruta.', Fecha: '.$ruta['fecha'].', Hora: '.$ruta['hora']),0,'C',false);
+        $this->Ln(10);
         $this->SetFont('Arial','B',18);
-        $this->MultiCell(194,4, utf8_decode('RUTA INSTALACIONES No.'.$id_ruta),0,'C',false);
+        $this->MultiCell(194,4, utf8_decode('INSTALACIONES'),0,'C',false);
 
         $resultado = mysqli_query($conn, "SELECT * FROM tmp_pendientes WHERE ruta_inst = $id_ruta");
         $aux = 0;
@@ -48,7 +51,7 @@ class PDF extends FPDF{
         
         $this->Ln(10);
         $this->SetFont('Arial','B',18);
-        $this->MultiCell(194,4, utf8_decode('RUTA REPORTES No.'.$id_ruta),0,'C',false);
+        $this->MultiCell(194,4, utf8_decode('REPORTES'),0,'C',false);
         $resultado = mysqli_query($conn, "SELECT * FROM tmp_reportes WHERE ruta = $id_ruta");
         $aux = 0;
         $this->SetFont('Arial','B',10);

@@ -1,21 +1,24 @@
 <?php
 include('../fpdf/fpdf.php');
 include('../php/conexion.php');
+$Id = $_GET['id'];
 
 class PDF extends FPDF{
    //Cabecera de página
    function Header(){   }
     function body(){
         global $conn;
-        global $listado;
+        global $Id;
 
-        $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_ruta) AS id FROM rutas WHERE estatus=0"));            
+        $ruta =  mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM rutas WHERE estatus=0 AND id_ruta = $Id"));            
 
-        $ultima_ruta = $ultimo['id'];
+        $this->SetFont('Arial','',14);
+        $this->MultiCell(250,4, utf8_decode('RUTA No.'.$Id.', Fecha: '.$ruta['fecha'].', Hora: '.$ruta['hora']),0,'C',false);
+        $this->Ln(10);
         $this->SetFont('Arial','B',18);
-        $this->MultiCell(194,4, utf8_decode('RUTA INSTALACIONES No.'.$ultima_ruta),0,'C',false);
+        $this->MultiCell(194,4, utf8_decode('INSTALACIONES'),0,'C',false);
 
-        $resultado = mysqli_query($conn, "SELECT * FROM tmp_pendientes WHERE ruta_inst = $ultima_ruta");
+        $resultado = mysqli_query($conn, "SELECT * FROM tmp_pendientes WHERE ruta_inst = $Id");
         $aux = 0;
         $this->SetFont('Arial','B',10);
         while($listado = mysqli_fetch_array($resultado)){
@@ -45,9 +48,9 @@ class PDF extends FPDF{
         
         $this->Ln(10);
         $this->SetFont('Arial','B',18);
-        $this->MultiCell(194,4, utf8_decode('RUTA REPORTES No.'.$ultima_ruta),0,'C',false);
+        $this->MultiCell(194,4, utf8_decode('REPORTES'),0,'C',false);
 
-        $resultado = mysqli_query($conn, "SELECT * FROM tmp_reportes WHERE ruta = $ultima_ruta");
+        $resultado = mysqli_query($conn, "SELECT * FROM tmp_reportes WHERE ruta = $Id");
         $aux = 0;
         $this->SetFont('Arial','B',10);
         while($listado = mysqli_fetch_array($resultado)){
@@ -104,8 +107,8 @@ class PDF extends FPDF{
         $this->Ln(12);
         $this->SetX(19);
         $this->SetFont('Arial','B',10);
-        $rep_ruta = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reporte_rutas WHERE id_ruta = $ultima_ruta"));
-        $ruta = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM rutas WHERE id_ruta = $ultima_ruta"));
+        $rep_ruta = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reporte_rutas WHERE id_ruta = $Id"));
+        $ruta = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM rutas WHERE id_ruta = $Id"));
         if ($ruta['material'] != ''){
             $MATERIAL = 'MATERIAL:
 '.$ruta['material'].'
@@ -114,16 +117,16 @@ class PDF extends FPDF{
     $MATERIAL = '';
 }
         if ($rep_ruta['bobina'] == 1 AND $rep_ruta['vale'] == 1){
-            $this->MultiCell(155,10,utf8_decode($MATERIAL.'1.- OTORGAR BOBINA NUEVA PARA LA RUTA ('.$ultima_ruta.') A NOMBRE DE: '.$ruta['responsable'].'
-2.- OTORGAR VALE DE GASOLINA PARA LA RUTA ('.$ultima_ruta.') EN EL VEHICULO: '.$rep_ruta['vehiculo'].'
+            $this->MultiCell(155,10,utf8_decode($MATERIAL.'1.- OTORGAR BOBINA NUEVA PARA LA RUTA ('.$Id.') A NOMBRE DE: '.$ruta['responsable'].'
+2.- OTORGAR VALE DE GASOLINA PARA LA RUTA ('.$Id.') EN EL VEHICULO: '.$rep_ruta['vehiculo'].'
   _____________________________
 RESPONSABLE DE RUTA: '.$ruta['responsable']),1,'C',false);
         }else if ($rep_ruta['bobina'] == 1) {
-            $this->MultiCell(155,10,utf8_decode($MATERIAL.'1.- OTORGAR BOBINA NUEVA PARA LA RUTA ('.$ultima_ruta.') A NOMBRE DE: '.$ruta['responsable'].'
+            $this->MultiCell(155,10,utf8_decode($MATERIAL.'1.- OTORGAR BOBINA NUEVA PARA LA RUTA ('.$Id.') A NOMBRE DE: '.$ruta['responsable'].'
   _____________________________
 RESPONSABLE DE RUTA: '.$ruta['responsable']),1,'C',false);
         }else if ($rep_ruta['vale'] == 1) {
-            $this->MultiCell(155,10,utf8_decode($MATERIAL.'1.- OTORGAR VALE DE GASOLINA PARA LA RUTA ('.$ultima_ruta.') EN EL VEHICULO: '.$rep_ruta['vehiculo'].'
+            $this->MultiCell(155,10,utf8_decode($MATERIAL.'1.- OTORGAR VALE DE GASOLINA PARA LA RUTA ('.$Id.') EN EL VEHICULO: '.$rep_ruta['vehiculo'].'
   _____________________________
 RESPONSABLE DE RUTA: '.$ruta['responsable']),1,'C',false);
         }else{

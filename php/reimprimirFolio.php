@@ -1,20 +1,25 @@
 <?php
-//Incluimos la libreria fpdf
+#INCLUIMOS EL ARCHIVO CON LA CONEXION A LA BASE DE DATPS
+include('../php/conexion.php');
+#INCLUIMOS EL ARCHIVO CON LAS LIBRERIAS DE FPDF PARA PODER CREAR ARCHIVOS CON FORMATO PDF
 include("../fpdf/fpdf.php");
+#INCLUIMOS EL PHP DONDE VIENE LA INFORMACION DEL INICIO DE SESSION
 include('is_logged.php');
-$pass='root';
-$id_dispositivo = $_POST['id_dispositivo'];
-//Incluimos el archivo de conexion a la base de datos
+
+$id_dispositivo =$_GET['id'];
+
+#CREAMOS LA CLASE DEL CONTENIDO DE NUESTRO PDF
 class PDF extends FPDF{
     function folioCliente(){
+        #METEMOS LAS BARIABLES CREADAS FUERA DE LA CLASE PDF DENTRO DE LA MISMA
         global $id_dispositivo;
-        global $pass;
-        $enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
-        $listado = mysqli_query($enlace, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
+        global $conn;
+        
+        $listado = mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
         $num_filas = mysqli_num_rows($listado);
         $fila = mysqli_fetch_array($listado);
         $id_tecnico = $fila['tecnico'];
-        $tecnico = mysqli_fetch_array(mysqli_query($enlace,"SELECT * FROM users WHERE user_id=$id_tecnico"));
+        $tecnico = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM users WHERE user_id=$id_tecnico"));
 
         // Colores de los bordes, fondo y texto
         $this->SetFillColor(255,255,255);
@@ -74,14 +79,14 @@ class PDF extends FPDF{
     3.- SIN ESTE TICKET, NO SE HARÁ LA ENTREGA DEL EQUIPO.'),1,'L',true);
 
        
-        mysqli_close($enlace);
+        mysqli_close($conn);
     }
     }
 global $pass;
 global $id_dispositivo;
-$enlace = mysqli_connect("localhost", "root", $pass, "servintcomp");
+$conn = mysqli_connect("localhost", "root", $pass, "servintcomp");
 
-$listado = mysqli_query($enlace, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
+$listado = mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
 $num_filas = mysqli_num_rows($listado);
 $fila = mysqli_fetch_array($listado);
 
