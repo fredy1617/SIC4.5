@@ -32,8 +32,6 @@ class PDF extends FPDF{
         $this->SetFillColor(255,255,255);
         $this->SetTextColor(0,0,0);
         $this->AddPage();
-        global $title;
-        global $pass;
         $this->Image('../img/logo_ticket.jpg',28,4,20);
         $this->SetFont('Arial','B',13);
         $this->SetY(30);
@@ -159,8 +157,7 @@ class PDF extends FPDF{
 
     function folioCliente2(){
         global $id_dispositivo;
-        global $pass;
-        $conn = mysqli_connect("localhost", "root", $pass, "servintcomp");
+        global $conn;
         $listado = mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
         $num_filas = mysqli_num_rows($listado);
         $fila = mysqli_fetch_array($listado);
@@ -177,8 +174,6 @@ class PDF extends FPDF{
         $this->SetFillColor(255,255,255);
         $this->SetTextColor(0,0,0);
         $this->AddPage();
-        global $title;
-        global $pass;
         $this->Image('../img/logo_ticket.jpg',28,4,20);
         $this->SetFont('Arial','B',13);
         $this->SetY(30);
@@ -308,9 +303,8 @@ class PDF extends FPDF{
     }
 }
 
-global $pass;
 global $id_dispositivo;
-$conn = mysqli_connect("localhost", "root", $pass, "servintcomp");
+global $conn;
 $listado = mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
 $fila = mysqli_fetch_array($listado);
 $pdf = new PDF('P', 'mm', array(80,297));
