@@ -51,7 +51,7 @@ if ($API->connect($ServerList, $Username, $Pass, $Port)) {
             	#AGREGAMOS LA IP A LISTA DE MOROSOS
             	$id_user = $_SESSION['user_id'];
 				$usuario = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM users WHERE user_id = $id_user"));
-            	$comment = 'No_Cliente: '.$cortes['id_cliente'].' Cortado Por MOROSO Por: '.$usuario['firstname'];
+            	$comment = 'No_Cliente:_'.$cortes['id_cliente'].'_Cortado_por:_'.$usuario['firstname'];
             	$API->write("/ip/firewall/address-list/add",false);
                 $API->write('=address='.$IP,false);   // IP
                 $API->write('=list=MOROSOS',false);       // lista

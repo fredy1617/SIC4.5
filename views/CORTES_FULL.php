@@ -20,7 +20,7 @@
       element = document.getElementById("content");
       element.style.display='block'; 
 
-      $.post("../php/buscar_cortes_full2.php", {
+      $.post("../php/buscar_cortes_full.php", {
           valorServidor: textoServidor,
           }, function(mensaje) {
               $("#cortes").html(mensaje);
