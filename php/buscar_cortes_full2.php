@@ -18,6 +18,6 @@ while ($cortes = mysqli_fetch_array($ARRAYCORTADOS)) {
             	$id_user = $_SESSION['user_id'];
 	$usuario = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM users WHERE user_id = $id_user"));
     $comment = 'No_Cliente: '.$cortes['id_cliente'].' Cortado por: '.$usuario['firstname'];
-	echo "add address= ".$cortes['ip']." comment= ".$comment]." list= MOROSOS <br>";
+	echo "add address= ".$cortes['ip']." comment= ".$comment." list= MOROSOS <br>";
 }
 ?>
