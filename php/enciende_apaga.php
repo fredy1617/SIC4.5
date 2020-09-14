@@ -77,7 +77,7 @@ if ($Orden == "Encender") {
 
 }elseif ($Orden == "Apagar") {
     $Nombre = $area['firstname'];
-    $comment = "CORTADO POR MOROSO, cortado por: ".$Nombre;
+    $comment = "CORTADO POR MOROSO, cortado por: ".$Nombre. 'Cliente: '.$cliente['id_cliente'];
     if( $address !="" && $list!="" ){
                     $API = new routeros_api();
                     $API->debug = false;
