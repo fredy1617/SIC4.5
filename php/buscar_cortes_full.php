@@ -62,7 +62,8 @@ if ($API->connect($ServerList, $Username, $Pass, $Port)) {
             	$AgregarStr .= $comment.' - '.$IP.'<br>';
             }
 		}
-		echo "<h5><b>Clientes Por Cortar: ".$Morosos.' ||  Clientes Cortados: '.$Agregar+$Estan."</b></h5>";
+		$Total = $Agregar+$Estan;
+		echo "<h5><b>Clientes Por Cortar: ".$Morosos.' ||  Clientes Cortados: '.$Total."</b></h5>";
 		#echo 'YA ESTAN EN MOROSOS:<br>'.$EstanStr;
 		#echo 'SE AGREGARON A MOROSOS:<br>'.$AgregarStr;
 	}else{
