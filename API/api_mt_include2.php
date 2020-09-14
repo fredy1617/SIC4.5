@@ -295,9 +295,9 @@ class routeros_api
             } else {
                 $LENGTH = $BYTE;
             }
+            $_ = "";
             // If we have got more characters to read, read them in.
             if ($LENGTH > 0) {
-                $_      = "";
                 $retlen = 0;
                 while ($retlen < $LENGTH) {
                     $toread = $LENGTH - $retlen;

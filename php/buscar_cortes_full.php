@@ -48,7 +48,16 @@ if ($API->connect($ServerList, $Username, $Pass, $Port)) {
             }else{ // si no existe lo creo;
             	#NO SE ENCUENTRA EN MOROSOS INCREMENTAMOS EN 1 $Agregar
             	$Agregar ++;
-            	
+            	#AGREGAMOS LA IP A LISTA DE MOROSOS
+            	$id_user = $_SESSION['user_id'];
+				$usuario = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM users WHERE user_id = $id_user"));
+            	$comment = 'No_Cliente: '.$cortes['id_cliente'].' Cortado Por MOROSO Por: '.$usuario['firstname'];
+            	$API->write("/ip/firewall/address-list/add",false);
+                $API->write('=address='.$IP,false);   // IP
+                $API->write('=list=MOROSOS',false);       // lista
+                $API->write('=comment='.$comment,true);  // comentario
+                $READ = $API->read(false);
+                $ARRAY = $API->parse_response($READ);
             }
 		}
 		echo "<h5><b>Clientes Por Cortar: ".$Morosos.'  ||  Clientes Ya Cortados: '.$Estan.'  ||  Clientes Cortados: '.$Agregar."</b></h5>";
