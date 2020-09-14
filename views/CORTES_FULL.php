@@ -19,8 +19,8 @@
       //HACEMOS VISIBLE EL DIV QUE TIENE LE ID content
       element = document.getElementById("content");
       element.style.display='block'; 
-      
-      $.post("../php/buscar_cortes_full.php", {
+
+      $.post("../php/buscar_cortes_full2.php", {
           valorServidor: textoServidor,
           }, function(mensaje) {
               $("#cortes").html(mensaje);
