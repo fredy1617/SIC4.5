@@ -32,7 +32,7 @@ if ($API->connect($ServerList, $Username, $Pass, $Port)) {
 	$Morosos = mysqli_num_rows($ARRAYCORTADOS);
 	#VERIFICAMOS SI EL CONTADOR DE CLEINTES MOROSOS ES MAYOR A 0
 	if ($Morosos > 0) {
-		$Estan = 0; $Agregar = 0;
+		$Estan = 0; $EstanStr = ''; $Agregar = 0; $AgregarStr = '';
 		while ($cortes = mysqli_fetch_array($ARRAYCORTADOS)) {
 			$IP = $cortes['ip'];//IP DEL CLIENTE
 			#BUSCAMOS LA IP EN ADDRESS-LIST MOROSOS
@@ -45,6 +45,7 @@ if ($API->connect($ServerList, $Username, $Pass, $Port)) {
             if(count($ARRAY)>0){
             	#SI SE ENCUENTRA EN MOROSOS INCREMENTAMOS EN 1 $Estan 
                 $Estan ++;
+                $EstanStr.= $IP.'<br>';
             }else{ // si no existe lo creo;
             	#NO SE ENCUENTRA EN MOROSOS INCREMENTAMOS EN 1 $Agregar
             	$Agregar ++;
@@ -58,9 +59,13 @@ if ($API->connect($ServerList, $Username, $Pass, $Port)) {
                 $API->write('=comment='.$comment,true);  // comentario
                 $READ = $API->read(false);
                 $ARRAY = $API->parse_response($READ);
+            	$AgregarStr .= $comment.' - '.$IP.'<br>';
+
             }
 		}
 		echo "<h5><b>Clientes Por Cortar: ".$Morosos.'  ||  Clientes Ya Cortados: '.$Estan.'  ||  Clientes Cortados: '.$Agregar."</b></h5>";
+		echo 'YA ESTAN EN MOROSOS:<br>'.$EstanStr;
+		echo 'SE AGREGARON A MOROSOS:<br>'.$AgregarStr;
 	}else{
 		echo "NO HAY CLIENTES MOROSOS!!...<br>";
 	} 
