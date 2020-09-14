@@ -60,12 +60,11 @@ if ($API->connect($ServerList, $Username, $Pass, $Port)) {
                 $READ = $API->read(false);
                 $ARRAY = $API->parse_response($READ);
             	$AgregarStr .= $comment.' - '.$IP.'<br>';
-
             }
 		}
-		echo "<h5><b>Clientes Por Cortar: ".$Morosos.'  ||  Clientes Ya Cortados: '.$Estan.'  ||  Clientes Cortados: '.$Agregar."</b></h5>";
-		echo 'YA ESTAN EN MOROSOS:<br>'.$EstanStr;
-		echo 'SE AGREGARON A MOROSOS:<br>'.$AgregarStr;
+		echo "<h5><b>Clientes Por Cortar: ".$Morosos.' ||  Clientes Cortados: '.$Agregar+$Estan."</b></h5>";
+		#echo 'YA ESTAN EN MOROSOS:<br>'.$EstanStr;
+		#echo 'SE AGREGARON A MOROSOS:<br>'.$AgregarStr;
 	}else{
 		echo "NO HAY CLIENTES MOROSOS!!...<br>";
 	} 
