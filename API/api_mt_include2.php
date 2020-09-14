@@ -308,12 +308,13 @@ class routeros_api
                 $this->debug('>>> [' . $retlen . '/' . $LENGTH . '] bytes read.');
             }
             // If we get a !done, make a note of it.
-            if ($_ == "!done")
+            $pos = strpos($_, '=comment=');
+            if ($_ == "!done" || $pos !== false)
                 $receiveddone = true;
             $STATUS = socket_get_status($this->socket);
             if ($LENGTH > 0)
                 $this->debug('>>> [' . $LENGTH . ', ' . $STATUS['unread_bytes'] . ']' . $_);
-            if ((!$this->connected && !$STATUS['unread_bytes']) || ($this->connected && !$STATUS['unread_bytes'] && $receiveddone))
+            if ((!$this->connected && !$STATUS['unread_bytes']) || ($this->connected && !$STATUS['unread_bytes']))
                 break;
         }
         if ($parse)

@@ -3,7 +3,6 @@ include('../php/conexion.php');
 
 $Id_Comunidad = $conn->real_escape_string($_POST['comunidad']);
 
-
 $sql = mysqli_query($conn, "SELECT * FROM clientes WHERE  lugar = '$Id_Comunidad'");
 if ($Id_Comunidad == 'Todos') {
   $sql = mysqli_query($conn, "SELECT * FROM clientes");

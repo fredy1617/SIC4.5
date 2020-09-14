@@ -1,23 +1,62 @@
 <?php
+#INCLUIMOS EL ARCHIVO DONDE TEMENMOS EL API PARA LA CONEXION CON MIKROTIK
+include_once('../API/api_mt_include2.php');
+#INCLUIMOS EL ARCHIVO CON LA CONEXION A LA BASE DE DATOS
 include('../php/conexion.php');
-date_default_timezone_set('America/Mexico_City');
+#INCLUIMOS EL PHP DONDE VIENE LA INFORMACION DEL INICIO DE SESSION
+include('is_logged.php');
+#GENERAMOS UNA FECHA DEL DIA EN CURSO REFERENTE A LA ZONA HORARIA
+$Fecha = date('Y-m-d');
+
+
 $Servidor = $conn->real_escape_string($_POST['valorServidor']);
 
-$hoy = date('Y-m-d');
+
 $serv = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM servidores WHERE id_servidor = $Servidor"));
 
 echo "<h3> Servidor: ".$serv['nombre']." </h3>";
-echo "/ip firewall address-list <br>";
+//////// INFORMACION DEL SERVIDOR
+$ServerList = $serv['ip'] ; //ip_de_tu_API
+$Username = $serv['user']; //usuario_API
+$Pass = $serv['pass']; //contraseña_API
+$Port = $serv['port']; //puerto_API
 
-$ARRAYCORTADOS = mysqli_query($conn, "SELECT * FROM clientes  WHERE fecha_corte < '$hoy' AND instalacion = 1");
-while ($cortes = mysqli_fetch_array($ARRAYCORTADOS)) {
-	$id_comunidad = $cortes['lugar'];
-                $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad='$id_comunidad'"));
-    $id_servidor = $comunidad['servidor'];
-    $servidor = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM servidores WHERE id_servidor='$id_servidor'"));
-                
-	if($servidor['id_servidor']==$Servidor) {
-		echo "add address= ".$cortes['ip']." comment= Numero_de_Cliente_".$cortes['id_cliente']." list= MOROSOS <br>";
-	}
+$API = new routeros_api();
+$API->debug = false;
+#CONEXION A MICROTICK DEL SERVIDOR EN TURNO
+if ($API->connect($ServerList, $Username, $Pass, $Port)) {
+	echo "<br>Cortando Servicios...<br><br>";
+	#SELECCIONAMOS TODOS LOS CLIENTES QUE TENGA DE FECHA DE CORTE MENOR A HOY QUE PERTENEZCAN AL SERVIDOR SELECCIONADO.
+	$ARRAYCORTADOS = mysqli_query($conn, "SELECT * FROM clientes INNER JOIN comunidades ON clientes.lugar = comunidades.id_comunidad WHERE clientes.fecha_corte < '$Fecha' AND clientes.instalacion = 1 AND comunidades.servidor = $Servidor");
+	#CONTAMOS CUANTOS CLIENTES SON
+	$Morosos = mysqli_num_rows($ARRAYCORTADOS);
+	#VERIFICAMOS SI EL CONTADOR DE CLEINTES MOROSOS ES MAYOR A 0
+	if ($Morosos > 0) {
+		$Estan = 0; $Agregar = 0;
+		while ($cortes = mysqli_fetch_array($ARRAYCORTADOS)) {
+			$IP = $cortes['ip'];//IP DEL CLIENTE
+			#BUSCAMOS LA IP EN ADDRESS-LIST MOROSOS
+			$API->write("/ip/firewall/address-list/getall",false);
+            $API->write('?address='.$IP,false);
+            $API->write('?list=MOROSOS',true);       
+            $READ = $API->read(false);
+            $ARRAY = $API->parse_response($READ); // AQUI SE GUARDA LA RESPUESTA DE SI ENCONTRO LA IP EN ADDRESS-LIST MOROSOS
+            #VERIFICAMOS SI SE ENCONTRO
+            if(count($ARRAY)>0){
+            	#SI SE ENCUENTRA EN MOROSOS INCREMENTAMOS EN 1 $Estan 
+                $Estan ++;
+            }else{ // si no existe lo creo;
+            	#NO SE ENCUENTRA EN MOROSOS INCREMENTAMOS EN 1 $Agregar
+            	$Agregar ++;
+            	
+            }
+		}
+		echo "<h5><b>Clientes Por Cortar: ".$Morosos.'  ||  Clientes Ya Cortados: '.$Estan.'  ||  Clientes Cortados: '.$Agregar."</b></h5>";
+	}else{
+		echo "NO HAY CLIENTES MOROSOS!!...<br>";
+	} 
+    $API->disconnect();
+}else{
+	echo "ERROR DE CONEXION MICROTICK...<br>";
 }
 ?>
