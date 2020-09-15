@@ -98,7 +98,6 @@ if ($Orden == "Encender") {
                             $ARRAY = $API->parse_response($READ);
 
                     		    echo "<script >M.toast({html: 'El internet fue Apagado/Cortado', classes: 'rounded'})</script>";
-                            mysqli_query($conn,"UPDATE clientes SET fecha_corte = '$Fecha_hoy' WHERE id_cliente = '$Cliente'");
                         }
                         $API->disconnect();
                     }else{
