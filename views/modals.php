@@ -149,6 +149,7 @@ function recargar10() {
             <option value="ULISES">ULISES</option>
             <option value="LUIS">LUIS</option>
             <option value="ALFREDO">ALFREDO</option>
+            <option value="VICTOR">VICTOR</option>
             <option value="MIGUEL">MIGUEL</option>
           </select>
       </div>
