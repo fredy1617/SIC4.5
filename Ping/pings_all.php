@@ -15,7 +15,7 @@ $sql_servers = mysqli_query($conn, "SELECT * FROM servidores WHERE id_servidor !
 if(mysqli_num_rows($sql_servers) > 0){
 	#RECORREMOS CON EL WHILE UNO POR UNO LA INFROMACION DE CADA SERVIDOR
     while($Servidor = mysqli_fetch_array($sql_servers)){
-    	 //////// INFORMACION DEL SERVIDOR
+    	//////// INFORMACION DEL SERVIDOR
 		$ServerList = $Servidor['ip'] ; //ip_de_tu_API
 		$Username = $Servidor['user']; //usuario_API
 		$Pass = $Servidor['pass']; //contraseña_API

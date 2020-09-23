@@ -45,8 +45,8 @@ if(mysqli_num_rows($sql_errores) > 0){
    		$Mensaje = "<b>ALERTA !! FALLA DE PING:</b> \n \n*".$error['descripcion'];
         if(!sendMessage($id_Chat, $Mensaje, $website) AND !sendMessage($id_Chat2, $Mensaje, $website) AND !sendMessage($id_Chat3, $Mensaje, $website)){
         	#Si se ENVIA el mensaje modificar msj_error a 1 para comprobar que se envio el msj
-   			$id_e = $error['id'];
-   			mysqli_query($conn, "UPDATE errores_pings SET msj_error = 1 WHERE id = '$id_e'");
+     			$id_e = $error['id'];
+     			mysqli_query($conn, "UPDATE errores_pings SET msj_error = 1 WHERE id = '$id_e'");
         } 
     }
 }
@@ -64,8 +64,8 @@ if(mysqli_num_rows($sql_errores_solucion) > 0){
    		$Mensaje = "<b>SOLUCION DE FALLA:</b> \n \n*".$error_solucion['descripcion']."\n* Fecha: ".$error_solucion['fecha_s'].", Hora: ".$error_solucion['hora_s']." de solucion.";
         if(!sendMessage($id_Chat, $Mensaje, $website) AND !sendMessage($id_Chat2, $Mensaje, $website) AND !sendMessage($id_Chat3, $Mensaje, $website)){
         	#Si se ENVIA el mensaje modificar msj_error a 1 para comprobar que se envio el msj
-   			$id_eS = $error_solucion['id'];
-   			mysqli_query($conn, "UPDATE errores_pings SET msj_solucion = 1 WHERE id = '$id_eS'");
+   			  $id_eS = $error_solucion['id'];
+   			  mysqli_query($conn, "UPDATE errores_pings SET msj_solucion = 1 WHERE id = '$id_eS'");
         } 
     }
 }
