@@ -5,7 +5,8 @@ $Hoy = date('Y-m-d');
 $instalaciones = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes WHERE instalacion IS NULL"));
 $reportes = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE ((fecha_visita = '$Hoy'  AND atender_visita = 0) OR (fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR atendido != 1 OR atendido IS NULL) AND id_cliente < 10000"));
 $reportesEsp = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE ((fecha_visita = '$Hoy'  AND atender_visita = 0) OR (fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR atendido != 1 OR atendido IS NULL) AND id_cliente > 10000 AND descripcion LIKE 'Reporte Especial:%'"));
-$Ordenes = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM orden_servicios  WHERE  estatus IN ('Revisar', 'Cotizar', 'Cotizado', 'Pedir', 'Realizar')"));
+$Ordenes_R = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar', 'Cotizar', 'Cotizado', 'Pedir', 'Realizar')  AND dpto = 1"));
+$Ordenes_T = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar', 'Cotizar', 'Cotizado', 'Pedir', 'Realizar')  AND dpto = 2"));
 $Mantenimiento = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE ((fecha_visita = '$Hoy'  AND atender_visita = 0) OR (fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR atendido != 1 OR atendido IS NULL) AND id_cliente > 10000 AND descripcion LIKE 'Mantenimiento:%'"));
 $tel = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM pagos WHERE Cotejado =1"));
 $pendientes = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM dispositivos WHERE estatus IN ('Cotizado','En Proceso','Pendiente') AND fecha > '2019-01-01'"));
@@ -41,6 +42,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    <li><a href="ver_almacen.php" class="black-text"><i class="material-icons">dashboard</i>Almacen <span class="new badge pink" data-badge-caption=""><?php echo $almacen['count(*)'];?></span> </a></li>
 				    <li><a href="listos.php" class="black-text"><i class="material-icons">assignment_turned_in</i>Listos <span class="new badge pink" data-badge-caption=""><?php echo $listos['count(*)'];?></span> </a></li>
 				    <li><a href="pendientes.php" class="black-text"><i class="material-icons">assignment_late</i>Pendientes <span class="new badge pink" data-badge-caption=""><?php echo $pendientes['count(*)'];?></span> </a></li>
+				    <li><a href="ordenes_servicio_t.php" class="black-text"><i class="material-icons">assignment</i>Orden Servicio<span class="new badge pink" data-badge-caption=""><?php echo $Ordenes_T['count(*)'];?></span></a></li>
 				    <li><a href="reporte_pagos_ST.php" class="black-text"><i class="material-icons">list</i>Reporte Pagos</a></li>
 				    <li><a href="rep_refacciones.php" class="black-text"><i class="material-icons">list</i>Rep. Refacciones</a></li>    			 
  				 </ul>
@@ -53,7 +55,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    <li><a href="../views/instalaciones.php" class="black-text"><i class="material-icons">list</i>Instalaciones <span class=" new badge pink" data-badge-caption=""><?php echo $instalaciones['count(*)']?></span></a></li>
 				    <li><a href="stock.php" class="black-text"> <i class="material-icons">assignment_ind</i>Sotck </a></li>
 				    <li><a href="reportes.php" class="black-text"><i class="material-icons">perm_scan_wifi</i>Reportes <span class="new badge pink" data-badge-caption=""><?php echo $reportes['count(*)'];?></span></a></li>			    
-				    <li><a href="ordenes_servicio.php" class="black-text"><i class="material-icons">assignment</i>Orden Servicio<span class="new badge pink" data-badge-caption=""><?php echo $reportesEsp['count(*)']+$Ordenes['count(*)'];?></span></a></li>			    
+				    <li><a href="ordenes_servicio.php" class="black-text"><i class="material-icons">assignment</i>Orden Servicio<span class="new badge pink" data-badge-caption=""><?php echo $reportesEsp['count(*)']+$Ordenes_R['count(*)'];?></span></a></li>			    
 				    <li><a href="mantenimiento.php" class="black-text"><i class="material-icons">build</i>Mantenimiento <span class="new badge pink" data-badge-caption=""><?php echo $Mantenimiento['count(*)'];?></span></a></li>			    
 				    <li><a href="tel.php" class="black-text"><i class="material-icons">phone</i>Teléfono <span class=" new badge pink" data-badge-caption=""><?php echo $tel['count(*)'];?></span></a></li>
 				    <li><a href="menu_rutas.php" class="black-text"><i class="material-icons">near_me</i>Rutas<span class="new badge pink" data-badge-caption=""><?php echo $rutas['count(*)'];?></span></a></li>
@@ -76,21 +78,26 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				<ul id='dropdown3' class='dropdown-content'>
 				    <li><a href="admin_clientes.php" class="black-text"> <i class="material-icons">search</i>Clientes </a></li>
 				    <li><a href="Estatus_contratos.php" class="black-text"><i class="material-icons">assignment</i>Contratos Vencidos</a></li>
-				    <li><a href="cortes_pagos.php" class="black-text"><i class="material-icons">attach_money</i>Cortes Pagos </a></li>   
-				    <li><a href="usuarios.php" class="black-text"><i class="material-icons">people</i>Usuarios </a></li>
-				    <li><a class='dropdown-btn black-text' data-target='sub-dropdown'><i class="material-icons left">assignment</i>Reportes <i class="material-icons right">chevron_right</i></a></li>
+				    <li><a href="cortes_pagos.php" class="black-text"><i class="material-icons">attach_money</i>Cortes Pagos </a></li><li><a class='dropdown-btn black-text' data-target='sub-dropdown'><i class="material-icons left">assignment</i>Reportes <i class="material-icons right">chevron_right</i></a></li>
 				    <ul id='sub-dropdown' class='dropdown-content'>
 				    	<li><a href="rep_pagos.php" class="black-text"><i class="material-icons">report</i>Reporte Pagos </a></li>
 				    	<li><a href="reportes_atendidos.php" class="black-text"><i class="material-icons">done</i>Reportes Atendidos </a></li>
 				    	<li><a href="rep_instalaciones.php" class="black-text"><i class="material-icons">format_list_numbered</i>Rep. Instalaciones</a></li>
 				    	<li><a href="reporte_deudas.php" class="black-text"><i class="material-icons">list</i>Reporte Deudas</a></li>    	
 				    	<li><a href="reporte_material.php" class="black-text"><i class="material-icons">router</i>Reporte Material</a></li>    	
+				    	<li><a href="rep_ruta.php" class="black-text"><i class="material-icons">location</i>Reporte Rutas</a></li>    	
 				    	<li><a href="canceladas.php" class="black-text"><i class="material-icons">do_not_disturb</i>Canceladas</a></li>    	
+				    </ul>   
+				    <li><a href="usuarios.php" class="black-text"><i class="material-icons">people</i>Usuarios </a></li>
+				    <li><a class='dropdown-btn black-text' data-target='sub-dropdown2'><i class="material-icons left">content_cut</i> CORTES <i class="material-icons right">chevron_right</i></a></li>
+				    <ul id='sub-dropdown2' class='dropdown-content'>
+				    	<li><a href="total_cortes.php" class="black-text"><i class="material-icons">money_off</i>Total Cortes</a></li>
+				    	<li><a href="historial_cortes.php" class="black-text"><i class="material-icons">content_cut</i>Historial de Cortes </a></li>
+				    	<li><a href="list_cortes_sin_confirmar.php" class="black-text"><i class="material-icons">done</i>Sin Confirmar </a></li>
+				    	<li><a href="cobradores_list.php" class="black-text"><i class="material-icons">attach_money</i>Saldo Cobradores </a></li>  	
 				    </ul>
-				    <li><a href="historial_cortes.php" class="black-text"><i class="material-icons">content_cut</i>Historial de Cortes </a></li>
 				    <li><a href="reporte_x_fecha.php" class="black-text"><i class="material-icons">assignment_turned_in</i>Trabajos Realizados</a></li>
 				    <li><a href="en_cajas.php" class="black-text"><i class="material-icons">monetization_on</i>En Cajas</a></li>
-				    <li><a href="total_cortes.php" class="black-text"><i class="material-icons">money_off</i>Total Cortes</a></li>
 				    <li><a href="CORTES_FULL.php" class="black-text"><i class="material-icons left">signal_wifi_off</i>Cortes Full</a></li>	
 				    <li><a href="activos.php" class="black-text"><i class="material-icons left">import_export</i>Activos</a></li>	
  				 </ul>
@@ -129,6 +136,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    			  <li><a href="ver_almacen.php"><i class="material-icons">dashboard</i>Almacen <span class="new badge pink" data-badge-caption=""><?php echo $almacen['count(*)'];?></span> </a></li>
 			      				  <li><a href="listos.php"><i class="material-icons">assignment_turned_in</i>Listos <span class="new badge pink" data-badge-caption=""><?php echo $listos['count(*)'];?></span> </a></li>
 						    	  <li><a href="pendientes.php"><i class="material-icons">assignment_late</i>Pendientes<span class="new badge pink" data-badge-caption=""><?php echo $pendientes['count(*)'];?></span></a></li>
+						    	  <li><a href="ordenes_servicio_t.php"><i class="material-icons">assignment</i>Orden Servicio<span class="new badge pink" data-badge-caption=""><?php echo $Ordenes_T['count(*)'];?></span></a></li>
 						    	  <li><a href="reporte_pagos_ST.php"><i class="material-icons">list</i>Reporte Pagos</a></li>
 						    	  <li><a href="rep_refacciones.php"><i class="material-icons">list</i>Reporte Refacciones</a></li>
 					    		</ul>
@@ -181,15 +189,18 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 								    <li><a href="cortes_pagos.php"><i class="material-icons">attach_money</i>Cortes Pagos </a></li>
 								    <li><a href="usuarios.php"><i class="material-icons">people</i>Usuarios </a></li>
 								    <li><a href="rep_pagos.php"><i class="material-icons">report</i>Reporrte Pagos </a></li>
-								     <li><a href="historial_cortes.php"><i class="material-icons">content_cut</i>Historial Cortes </a></li>
+								    <li><a href="total_cortes.php"><i class="material-icons">money_off</i>Total Cortes</a></li>
+								    <li><a href="historial_cortes.php"><i class="material-icons">content_cut</i>Historial Cortes </a>
+				    				<li><a href="list_cortes_sin_confirmar.php"><i class="material-icons">done</i>Sin Confirmar </a></li>
+				    				<li><a href="cobradores_list.php"><i class="material-icons">attach_money</i>Saldo Cobradores </a></li>  	
 								    <li><a href="rep_instalaciones.php"><i class="material-icons">format_list_numbered</i>Reporte Instalaciones</a></li>
 								    <li><a href="reportes_atendidos.php"><i class="material-icons">done</i>Reportes Atendidos</a></li>
 				    				<li><a href="reporte_material.php"><i class="material-icons">router</i>Reporte Material</a></li>  	
+				    				<li><a href="rep_ruta.php"><i class="material-icons">location</i>Reporte Rutas</a></li>    	
 				    				<li><a href="canceladas.php"><i class="material-icons">do_not_disturb</i>Canceladas</a></li>  	
 								    <li><a href="reporte_x_fecha.php"><i class="material-icons">assignment_turned_in</i>Trabajo Realizado</a></li>
 								    <li><a href="en_cajas.php"><i class="material-icons">monetization_on</i>En Cajas</a></li>
 								    <li><a href="reporte_deudas.php"><i class="material-icons">list</i>Reporte Deudas</a></li>
-								    <li><a href="total_cortes.php"><i class="material-icons">money_off</i>Total Cortes</a></li>
 						    	 	<li><a href="CORTES_FULL.php"><i class="material-icons">signal_wifi_off</i>Cortes Full</a></li>
 						    	 	<li><a href="Activos.php"><i class="material-icons">import_export</i>Activos</a></li>
 				 				</ul>
