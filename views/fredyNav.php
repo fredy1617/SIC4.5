@@ -160,7 +160,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    			  <li><a href="stock.php" class="black-text"> <i class="material-icons">assignment_ind</i>Sotck </a></li>
 			      				  <li><a href="../views/instalaciones.php"><i class="material-icons">list</i>Instalaciones <span class="new badge pink" data-badge-caption=""><?php echo $instalaciones['count(*)'];?></span></a></li>
 						    	  <li><a href="reportes.php"><i class="material-icons">perm_scan_wifi</i>Reportes <span class=" new badge pink" data-badge-caption=""><?php echo $reportes['count(*)'];?></span></a></li>
-						    	  <li><a href="ordenes_servicio.php"><i class="material-icons">assignment</i>Orden Servicio<span class=" new badge pink" data-badge-caption=""><?php echo $reportesEsp['count(*)']+$Ordenes['count(*)'];?></span></a></li>
+						    	  <li><a href="ordenes_servicio.php"><i class="material-icons">assignment</i>Orden Servicio<span class=" new badge pink" data-badge-caption=""><?php echo $reportesEsp['count(*)']+$Ordenes_R['count(*)'];?></span></a></li>
 						    	  <li><a href="mantenimiento.php"><i class="material-icons">build</i>Mantenimiento<span class="new badge pink" data-badge-caption=""><?php echo $Mantenimiento['count(*)'];?></span></a></li>
 						    	  <li><a href="tel.php"><i class="material-icons">phone</i>Teléfono <span class=" new badge pink" data-badge-caption=""><?php echo $tel['count(*)'];?></span></a></li>
 						    	  <li><a href="menu_rutas.php"><i class="material-icons">near_me</i>Rutas <span class=" new badge pink" data-badge-caption=""><?php echo $rutas['count(*)'];?></span></a></li>
