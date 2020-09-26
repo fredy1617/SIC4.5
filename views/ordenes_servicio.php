@@ -53,11 +53,11 @@ $id_user = $_SESSION['user_id'];
 <div class="container">
   <div class="row">
       <br><br>
-      <h3 class="hide-on-med-and-down col s12 m9 l9">Ordenes de Servicio Pendientes</h3>
-      <h5 class="hide-on-large-only col s12 m9 l9">Ordenes de Servicio Pendientes</h5>
-        <div class="col s2 m1 l1"><br>
-          <a class="waves-effect waves-light btn pink" href="../php/imprimir_reportes.php" target="blank"><i class="material-icons black-text Small">picture_as_pdf</i></a>
-        </div>        
+      <h3 class="hide-on-med-and-down col l9">Ordenes de Servicio En Proceso</h3>
+      <h5 class="hide-on-large-only col s12 m9 l9">Ordenes de Servicio En Proceso</h5>
+        <div class="col s4 m3 l3"><br>
+          <a class="waves-effect waves-light btn pink" href="../views/ordenes_pendientes.php"><i class="material-icons prefix right">send</i>Pendientes</a>
+        </div>      
     </div>
     <div class="row">
       <p><div id="resultado_reporte_pendiente">
@@ -179,7 +179,7 @@ $id_user = $_SESSION['user_id'];
           </thead>
           <tbody>
           <?php
-          $sql_orden = mysqli_query($conn,"SELECT * FROM orden_servicios  WHERE  estatus IN ('Revisar', 'Cotizar', 'Cotizado', 'Pedir', 'Realizar') ORDER BY fecha");
+          $sql_orden = mysqli_query($conn,"SELECT * FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar', 'Cotizar', 'Cotizado', 'Pedir', 'Realizar')  AND dpto = 1 ORDER BY fecha");
           //Obtiene la cantidad de filas que hay en la sql_orden
           $filas = mysqli_num_rows($sql_orden);
           //Si no existe ninguna fila que sea igual a $sql_ordenBusqueda, entonces mostramos el siguiente mensaje
@@ -241,6 +241,9 @@ $id_user = $_SESSION['user_id'];
                   $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));
                   $Realizo = $usuario['firstname'];
                 }
+              }else if($resultados['estatus'] == 'PorConfirmar') {
+                $color_e = 'black';
+                $Realizo = 'SIN';
               }else{
                 $Descripción = $resultados['solicitud'];
                 $color_e = 'blue darken-3';

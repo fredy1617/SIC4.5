@@ -83,7 +83,31 @@ function update_orden() {
                 <b>Trabajo: </b><?php echo $orden['trabajo'];?><br>                
                 <b>Material: </b><?php echo $orden['material'];?><br> 
                 <b>Solucion: </b><?php echo $orden['solucion'];?><br> 
-                <b>Precio: $<?php echo $orden['precio'];?></b><br> 
+                <b>Cotizacion: </b> $<?php echo $orden['precio'];?><br> 
+                  <?php
+                  $totalE = 0;
+                  $Extras = mysqli_query($conn, "SELECT * FROM orden_extras WHERE id_orden = $id_orden");
+                  echo '<b class = "col s2">Extra(s): </b>';
+                  if (mysqli_num_rows($Extras) > 0) {
+                    echo '<table class = "col s6">
+                        <thead>
+                          <tr>
+                          <th>Descripcion</th>
+                          <th>Cantida</th>
+                          </tr>
+                        </thead>
+                        <tbody>';
+                    while ($extra = mysqli_fetch_array($Extras)) {
+                      $totalE += $extra['cantidad'];
+                      echo '<tr>
+                          <td>'.$extra['descripcion'].'</td>
+                          <td> $'.$extra['cantidad'].'</td>
+                          </tr>';
+                    }
+                    echo '  </tbody>
+                        </table>'; 
+                  } ?><br><br><br><br><br><br>
+                <b>TOTAL: $<?php echo $orden['precio']+$totalE;?></b><br> 
                 <hr>
               </p>
               <br>

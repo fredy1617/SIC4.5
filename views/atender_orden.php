@@ -22,6 +22,24 @@ if (isset($_POST['id_orden']) == false) {
   $tecnico = $_SESSION['user_name'];
 ?>
 <script>
+function insert_extra(orden){
+  var textoCantidad = $("input#cantidad").val();
+  var textoDescripcion = $("input#descripcion").val();
+
+  if (textoCantidad == "" || textoCantidad == 0) {
+    M.toast({html: "El campo Cantidad se encuentra vacío o en 0.", classes: "rounded"});
+  }else if (textoDescripcion == "") {
+    M.toast({html: "El campo Descripcion se encuentra vacío.", classes: "rounded"});
+  }else{
+    $.post("../php/insert_extra.php", {
+      valorCantidad : textoCantidad,
+      valorIdOrden: orden,
+      valorDescripcion:textoDescripcion,
+    }, function(mensaje) {
+      $("#extra").html(mensaje);
+    });
+  }
+};
 function update_orden() {
     var textoEstatus = $("select#estatus").val();
     var textoEstatusI = $("input#estatusI").val();
@@ -151,7 +169,33 @@ function update_orden() {
                 <?php if ($orden['estatus'] != 'Revisar') { ?>             
                 <b>Trabajo: </b><?php echo $orden['trabajo'];?><br>                
                 <b>Material: </b><?php echo $orden['material'];?><br> 
-                <?php } ?>               
+                <?php } ?>   
+                <b>Cotizacion: </b> $<?php echo $orden['precio'];?><br> 
+                <div id="extra">
+                  <?php
+                  $totalE = 0;
+                  $Extras = mysqli_query($conn, "SELECT * FROM orden_extras WHERE id_orden = $id_orden");
+                  echo '<b class = "col s2">Extra(s): </b>';
+                  if (mysqli_num_rows($Extras) > 0) {
+                    echo '<table class = "col s6">
+                        <thead>
+                          <tr>
+                          <th>Descripcion</th>
+                          <th>Cantida</th>
+                          </tr>
+                        </thead>
+                        <tbody>';
+                    while ($extra = mysqli_fetch_array($Extras)) {
+                      $totalE += $extra['cantidad'];
+                      echo '<tr>
+                          <td>'.$extra['descripcion'].'</td>
+                          <td> $'.$extra['cantidad'].'</td>
+                          </tr>';
+                    }
+                    echo '  </tbody>
+                        </table>'; 
+                  } ?>
+                </div>
               </p>
               <br>
               <a href="#!" class="secondary-content"><span class="new badge green" data-badge-caption="<?php echo 'FECHA DE REGISTRO: '.$orden['fecha'];?>"></span></a>
@@ -160,6 +204,31 @@ function update_orden() {
       </div>
     	<form class="col s12">
         <div class="row">
+          <?php if ($orden['estatus'] == 'Realizar') { ?>
+          <div class="row col s12">
+            <div class="col s12 m2 l2">
+              <h4 class="hide-on-med-and-down">Extras:</h4>
+              <h6 class="hide-on-large-only">Extras:</h6>
+            </div>      
+            <div class="row col s9 m3 l3">
+              <div class="input-field">
+                <i class="material-icons prefix">payment</i>
+                <input id="cantidad" type="number" class="validate" data-length="6" value="0" required>
+                <label for="cantidad">Cantidad:</label>
+              </div>
+            </div>
+            <div class="row col s9 m4 l4">
+              <div class="input-field">
+                <i class="material-icons prefix">edit</i>
+                <input id="descripcion" type="text" class="validate" data-length="6" required>
+                <label for="descripcion">Descripcion:</label>
+              </div>
+            </div><br>            
+              <div class="col l1"><br></div>
+              <a onclick="insert_extra(<?php echo $id_orden;?>);" class="waves-effect waves-light btn pink  col s8 m2 l2"><i class="material-icons right">send</i>Registrar Extra</a>
+            </form>         
+          </div> 
+          <?php } ?>
           <?php if ($orden['estatus'] == 'Revisar') { ?>
            <div class="col s12 l9 m9">
            <div class="input-field col s12 l6 m6">
@@ -205,7 +274,7 @@ function update_orden() {
           <?php }elseif ($orden['estatus'] == 'Cotizado' OR $orden['estatus'] == 'Pedir' OR $orden['estatus'] == 'Realizar') { ?>
           <div class="col s12 l9 m9"><br>
            <div class="input-field col s12 l4 m4">
-              <h5>Precio: $<?php echo $orden['precio'];?></h5>
+              <h5><b>Total = $<?php echo $orden['precio']+$totalE;?></b></h5>
            </div>
            <div class="input-field col s12 l8 m8">
               <i class="material-icons prefix">check</i>
@@ -244,6 +313,8 @@ function update_orden() {
                 <option value="Pedir">Pedir</option> 
                 <option value="Realizar">Realizar</option> 
                 <option value="Facturar">Facturar</option> 
+                <option value="Pendiente">Pendiente</option> 
+                <option value="Cancelada">Cancelada</option> 
               </select>
            </div>
             <input id="id_orden" value="<?php echo htmlentities($id_orden);?>" type="hidden"><br><br>

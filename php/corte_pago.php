@@ -1,4 +1,6 @@
 <?php
+    #INCLUIMOS EL ARCHIVO CON LA CONEXION A LA BASE DE DATPS
+    include('../php/conexion.php');
     #INCLUIMOS EL ARCHIVO CON LAS LIBRERIAS DE FPDF PARA PODER CREAR ARCHIVOS CON FORMATO PDF
     include("../fpdf/fpdf.php");
     #INCLUIMOS EL PHP DONDE VIENE LA INFORMACION DEL INICIO DE SESSION
@@ -14,17 +16,16 @@
             #METEMOS LAS BARIABLES CREADAS FUERA DE LA CLASE PDF DENTRO DE LA MISMA
             global $id_user;
             global $corte;
-            #HACEMOS CONEXION CON LA BASE DE DATOS
-            $enlace = mysqli_connect("localhost", "root", "root", "servintcomp");
+            global $conn;
             #DEFINIMOS UNA ZONA HORARIA
             date_default_timezone_set('America/Mexico_City');
             $Fecha_hoy = date('Y-m-d');//CREAMOS UNA FECHA DEL DIA EN CURSO SEGUN LA ZONA HORARIA
             #TOMAMOS LA INFORMACION DEL USUARIO QUE ESTA LOGEADO QUIEN HIZO LOS COBROS
-            $cobrador = mysqli_fetch_array(mysqli_query($enlace, "SELECT * FROM users WHERE user_id = $id_user"));
+            $cobrador = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_user"));
             #TOMAMOS LA INFORMACION DEL CORTE CON EL ID GUARDADO EN LA VARIABLE $corte QUE RECIBIMOS CON EL GET
-            $Cort =  mysqli_fetch_array(mysqli_query($enlace, "SELECT * FROM cortes WHERE id_corte = $corte"));  
+            $Cort =  mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM cortes WHERE id_corte = $corte"));  
             #TOMAMOS LA INFORMACION DEL DEDUCIBLE CON EL ID GUARDADO EN LA VARIABLE $corte QUE RECIBIMOS CON EL GET
-            $sql_Deducible = mysqli_query($enlace, "SELECT * FROM deducibles WHERE id_corte = '$corte'");  
+            $sql_Deducible = mysqli_query($conn, "SELECT * FROM deducibles WHERE id_corte = '$corte'");  
             if (mysqli_num_rows($sql_Deducible) > 0) {
                 $Deducible = mysqli_fetch_array($sql_Deducible);
                 $Deducir = $Deducible['cantidad'];
@@ -35,7 +36,6 @@
             $cantidad = $Cort['cantidad']-$Deducir;
             $banco = $Cort['banco'];
             $credito = $Cort['credito'];
-            
             
             $nombre_cobrador = $cobrador['firstname'].' '.$cobrador['lastname'];
             
@@ -60,7 +60,7 @@
             $this->Ln(6);
             //---------------EFECTIVO-------------------------------------------
 
-            $sql_efectivoI = mysqli_query($enlace, "SELECT * FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo' AND tipo != 'Dispositivo' AND tipo != 'Orden Servicio' AND tipo != 'Orden Servicio'");
+            $sql_efectivoI = mysqli_query($conn, "SELECT * FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo' AND tipo != 'Dispositivo' AND tipo != 'Orden Servicio' AND tipo != 'Orden Servicio'");
             $filas = mysqli_num_rows($sql_efectivoI);
             if ($filas > 0) {
 
@@ -72,7 +72,7 @@
                 while($fila = mysqli_fetch_array($sql_efectivoI)){
                     //insertar pagos de corte...
                     $id_pago = $fila['id_pago'];
-                    mysqli_query($enlace,"INSERT INTO detalles(id_corte, id_pago) VALUES ($corte, $id_pago )");
+                    mysqli_query($conn,"INSERT INTO detalles(id_corte, id_pago) VALUES ($corte, $id_pago )");
                     $this->SetX(6);
                     $this->MultiCell(70,4,utf8_decode("Cliente: # " .$fila['id_cliente'].'; '.$fila['descripcion'].'; Tipo: '.$fila['tipo']),0,'L',true);
                     $this->MultiCell(70,4,utf8_decode("$ ". $fila['cantidad'].'.00'),0,'R',true);
@@ -80,13 +80,13 @@
                 }
                 $this->SetFont('Arial','B',13);
                 $this->Ln(8);
-                $total_EI=  mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo' AND tipo != 'Dispositivo' AND tipo != 'Orden Servicio'"));
+                $total_EI=  mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo' AND tipo != 'Dispositivo' AND tipo != 'Orden Servicio'"));
                 $this->MultiCell(65,4,utf8_decode('SUBTOTAL: $'.$total_EI['precio'].'.00'),0,'R',true);
                 $this->Ln(10);
             }
             //---------------BANCO-------------------------------------------
             
-            $sql_bancoI = mysqli_query($enlace, "SELECT * FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco' AND tipo != 'Dispositivo' AND tipo != 'Orden Servicio'");
+            $sql_bancoI = mysqli_query($conn, "SELECT * FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco' AND tipo != 'Dispositivo' AND tipo != 'Orden Servicio'");
             $filas = mysqli_num_rows($sql_bancoI);
             if ($filas > 0) {
             
@@ -98,7 +98,7 @@
                 while($fila = mysqli_fetch_array($sql_bancoI)){
                     //insertar pagos de corte...
                     $id_pago = $fila['id_pago'];
-                    mysqli_query($enlace,"INSERT INTO detalles(id_corte, id_pago) VALUES ($corte, $id_pago )");
+                    mysqli_query($conn,"INSERT INTO detalles(id_corte, id_pago) VALUES ($corte, $id_pago )");
                     $this->SetX(6);
                     $this->MultiCell(70,4,utf8_decode("Cliente: # ".$fila['id_cliente'].'; '.$fila['descripcion'].'; Tipo: '.$fila['tipo']),0,'L',true);
                     $this->MultiCell(70,4,utf8_decode("$ ". $fila['cantidad'].'.00'),0,'R',true);
@@ -106,13 +106,13 @@
                 }
                 $this->SetFont('Arial','B',13);
                 $this->Ln(8);
-                $totalbancoI = mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco' AND tipo != 'Dispositivo' AND tipo != 'Orden Servicio'"));
+                $totalbancoI = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco' AND tipo != 'Dispositivo' AND tipo != 'Orden Servicio'"));
                 $this->MultiCell(65,4,utf8_decode('SUBTOTAL: $'.$totalbancoI['precio'].'.00'),0,'R',true);
                 $this->Ln(10);
             }
             //---------------CREDITO-------------------------------------------
 
-            $sql_creditoI = mysqli_query($enlace, "SELECT * FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Credito' AND tipo != 'Dispositivo' AND tipo != 'Orden Servicio'");
+            $sql_creditoI = mysqli_query($conn, "SELECT * FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Credito' AND tipo != 'Dispositivo' AND tipo != 'Orden Servicio'");
             $filas = mysqli_num_rows($sql_creditoI);
             if ($filas > 0) {
 
@@ -124,7 +124,7 @@
                 while($fila = mysqli_fetch_array($sql_creditoI)){
                     //insertar pagos de corte...
                     $id_pago = $fila['id_pago'];
-                    mysqli_query($enlace,"INSERT INTO detalles(id_corte, id_pago) VALUES ($corte, $id_pago )");
+                    mysqli_query($conn,"INSERT INTO detalles(id_corte, id_pago) VALUES ($corte, $id_pago )");
                     $this->SetX(6);
                     $this->MultiCell(70,4,utf8_decode("Cliente: # " .$fila['id_cliente'].'; '.$fila['descripcion'].'; Tipo: '.$fila['tipo']),0,'L',true);
                     $this->MultiCell(70,4,utf8_decode("$ ". $fila['cantidad'].'.00'),0,'R',true);
@@ -132,7 +132,7 @@
                 }
                 $this->SetFont('Arial','B',13);
                 $this->Ln(8);
-                $total_CI=  mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Credito' AND tipo != 'Dispositivo' AND tipo != 'Orden Servicio'"));
+                $total_CI=  mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Credito' AND tipo != 'Dispositivo' AND tipo != 'Orden Servicio'"));
                 $this->MultiCell(65,4,utf8_decode('SUBTOTAL: - $'.$total_CI['precio'].'.00'),0,'R',true);
                 $this->Ln(10);
             }
@@ -142,7 +142,7 @@
             $this->Ln(10);           
             $this->Cell(60,4,'<< Orden Serv. >> ',0,0,'C',true);
             $this->Ln(6);
-            $sql_efectivoO = mysqli_query($enlace, "SELECT * FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo' AND tipo = 'Orden Servicio'");
+            $sql_efectivoO = mysqli_query($conn, "SELECT * FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo' AND tipo = 'Orden Servicio'");
             $filas = mysqli_num_rows($sql_efectivoO);
             if ($filas > 0) {
 
@@ -154,7 +154,7 @@
                 while($fila = mysqli_fetch_array($sql_efectivoO)){
                     //insertar pagos de corte...
                     $id_pago = $fila['id_pago'];
-                    mysqli_query($enlace,"INSERT INTO detalles(id_corte, id_pago) VALUES ($corte, $id_pago )");
+                    mysqli_query($conn,"INSERT INTO detalles(id_corte, id_pago) VALUES ($corte, $id_pago )");
                     $this->SetX(6);
                     $this->MultiCell(70,4,utf8_decode("Cliente: # " .$fila['id_cliente'].'; '.$fila['descripcion'].'; Tipo: '.$fila['tipo']),0,'L',true);
                     $this->MultiCell(70,4,utf8_decode("$ ". $fila['cantidad'].'.00'),0,'R',true);
@@ -162,13 +162,13 @@
                 }
                 $this->SetFont('Arial','B',13);
                 $this->Ln(8);
-                $total_EO=  mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo' AND tipo = 'Orden Servicio'"));
+                $total_EO=  mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo' AND tipo = 'Orden Servicio'"));
                 $this->MultiCell(65,4,utf8_decode('SUBTOTAL: $'.$total_EO['precio'].'.00'),0,'R',true);
                 $this->Ln(10);
             }
             //---------------BANCO-------------------------------------------
             
-            $sql_bancoO = mysqli_query($enlace, "SELECT * FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco' AND tipo = 'Orden Servicio'");
+            $sql_bancoO = mysqli_query($conn, "SELECT * FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco' AND tipo = 'Orden Servicio'");
             $filas = mysqli_num_rows($sql_bancoO);
             if ($filas > 0) {
             
@@ -180,7 +180,7 @@
                 while($fila = mysqli_fetch_array($sql_bancoO)){
                     //insertar pagos de corte...
                     $id_pago = $fila['id_pago'];
-                    mysqli_query($enlace,"INSERT INTO detalles(id_corte, id_pago) VALUES ($corte, $id_pago )");
+                    mysqli_query($conn,"INSERT INTO detalles(id_corte, id_pago) VALUES ($corte, $id_pago )");
                     $this->SetX(6);
                     $this->MultiCell(70,4,utf8_decode("Cliente: # ".$fila['id_cliente'].'; '.$fila['descripcion'].'; Tipo: '.$fila['tipo']),0,'L',true);
                     $this->MultiCell(70,4,utf8_decode("$ ". $fila['cantidad'].'.00'),0,'R',true);
@@ -188,7 +188,7 @@
                 }
                 $this->SetFont('Arial','B',13);
                 $this->Ln(8);
-                $totalbancoO = mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco' AND tipo = 'Orden Servicio'"));
+                $totalbancoO = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco' AND tipo = 'Orden Servicio'"));
                 $this->MultiCell(65,4,utf8_decode('SUBTOTAL: $'.$totalbancoO['precio'].'.00'),0,'R',true);
                 $this->Ln(10);
             }
@@ -200,7 +200,7 @@
             $this->Ln(6);
             //---------------EFECTIVO-------------------------------------------
 
-            $sql_efectivoST = mysqli_query($enlace, "SELECT * FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo' AND tipo = 'Dispositivo'");
+            $sql_efectivoST = mysqli_query($conn, "SELECT * FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo' AND tipo = 'Dispositivo'");
             $filas = mysqli_num_rows($sql_efectivoST);
             if ($filas > 0) {
 
@@ -212,7 +212,7 @@
                 while($fila = mysqli_fetch_array($sql_efectivoST)){
                     //insertar pagos de corte...
                     $id_pago = $fila['id_pago'];
-                    mysqli_query($enlace,"INSERT INTO detalles(id_corte, id_pago) VALUES ($corte, $id_pago )");
+                    mysqli_query($conn,"INSERT INTO detalles(id_corte, id_pago) VALUES ($corte, $id_pago )");
                     $this->SetX(6);
                     $this->MultiCell(70,4,utf8_decode("Cliente: # " .$fila['id_cliente'].'; '.$fila['descripcion'].'; Tipo: '.$fila['tipo']),0,'L',true);
                     $this->MultiCell(70,4,utf8_decode("$ ". $fila['cantidad'].'.00'),0,'R',true);
@@ -220,13 +220,13 @@
                 }
                 $this->SetFont('Arial','B',13);
                 $this->Ln(8);
-                $total_EST=  mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo' AND tipo = 'Dispositivo'"));            
+                $total_EST=  mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo' AND tipo = 'Dispositivo'"));            
                 $this->MultiCell(65,4,utf8_decode('SUBTOTAL: $'.$total_EST['precio'].'.00'),0,'R',true);
                 $this->Ln(10);
             }
             //---------------BANCO-------------------------------------------
             
-            $sql_bancoST = mysqli_query($enlace, "SELECT * FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco' AND tipo = 'Dispositivo'");
+            $sql_bancoST = mysqli_query($conn, "SELECT * FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco' AND tipo = 'Dispositivo'");
             $filas = mysqli_num_rows($sql_bancoST);
             if ($filas > 0) {
             
@@ -238,7 +238,7 @@
                 while($fila = mysqli_fetch_array($sql_bancoST)){
                     //insertar pagos de corte...
                     $id_pago = $fila['id_pago'];
-                    mysqli_query($enlace,"INSERT INTO detalles(id_corte, id_pago) VALUES ($corte, $id_pago )");
+                    mysqli_query($conn,"INSERT INTO detalles(id_corte, id_pago) VALUES ($corte, $id_pago )");
                     $this->SetX(6);
                     $this->MultiCell(70,4,utf8_decode("Cliente: # ".$fila['id_cliente'].'; '.$fila['descripcion'].'; Tipo: '.$fila['tipo']),0,'L',true);
                     $this->MultiCell(70,4,utf8_decode("$ ". $fila['cantidad'].'.00'),0,'R',true);
@@ -246,12 +246,12 @@
                 }
                 $this->SetFont('Arial','B',13);
                 $this->Ln(8);
-                $totalbancoST = mysqli_fetch_array(mysqli_query($enlace, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco' AND tipo = 'Dispositivo'"));            
+                $totalbancoST = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco' AND tipo = 'Dispositivo'"));            
                 $this->MultiCell(65,4,utf8_decode('SUBTOTAL: $'.$totalbancoST['precio'].'.00'),0,'R',true);
                 $this->Ln(10);
             }
 
-            $Todos_Pagos = mysqli_fetch_array(mysqli_query($enlace,"SELECT count(*) FROM pagos WHERE id_user=$id_user AND corte = 0" ));
+            $Todos_Pagos = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM pagos WHERE id_user=$id_user AND corte = 0" ));
             $this->Cell(60,4,'------------------------------------------',0,0,'C',true);
             $this->Ln(8);
             $this->Cell(60,4,'<< Deducibles >> ',0,0,'C',true);
@@ -270,57 +270,57 @@
             $this->Ln(4);
 
             $this->SetFont('Arial','',11);
-            $Telefono = mysqli_num_rows(mysqli_query($enlace,"SELECT *  FROM pagos WHERE corte = 0 AND id_user = $id_user AND tipo IN ('Mes-Tel', 'Min-Extra')" ));
+            $Telefono = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM pagos WHERE corte = 0 AND id_user = $id_user AND tipo IN ('Mes-Tel', 'Min-Extra')" ));
             if ($Telefono > 0) {
               $this->Cell(60,4,utf8_decode('Telefono = '.$Telefono),0,0,'C',true);
               $this->Ln(5);
             }
-            $Mes_Internet = mysqli_num_rows(mysqli_query($enlace,"SELECT *  FROM pagos WHERE corte = 0 AND id_user = $id_user AND tipo = 'Mensualidad'" ));
+            $Mes_Internet = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM pagos WHERE corte = 0 AND id_user = $id_user AND tipo = 'Mensualidad'" ));
             if ($Mes_Internet > 0) {
               $this->Cell(60,4,utf8_decode('Mes-Internet = '.$Mes_Internet),0,0,'C',true);
               $this->Ln(5);
             }
-            $Abonos = mysqli_num_rows(mysqli_query($enlace,"SELECT *  FROM pagos WHERE corte = 0 AND id_user = $id_user AND tipo = 'Abono'" ));
+            $Abonos = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM pagos WHERE corte = 0 AND id_user = $id_user AND tipo = 'Abono'" ));
             if ($Abonos > 0) {
               $this->Cell(60,4,utf8_decode('Abonos = '.$Abonos),0,0,'C',true);
               $this->Ln(5);
             }
-            $AntInst = mysqli_num_rows(mysqli_query($enlace,"SELECT *  FROM pagos WHERE corte = 0 AND id_user = $id_user AND tipo = 'Anticipo'" ));
+            $AntInst = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM pagos WHERE corte = 0 AND id_user = $id_user AND tipo = 'Anticipo'" ));
             if ($AntInst > 0) {
               $this->Cell(60,4,utf8_decode('Anticipo Inst. = '.$AntInst),0,0,'C',true);
               $this->Ln(5);
             }
-            $AbonoInst = mysqli_num_rows(mysqli_query($enlace,"SELECT *  FROM pagos WHERE corte = 0 AND id_user = $id_user AND tipo = 'Abono Instalacion'" ));
+            $AbonoInst = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM pagos WHERE corte = 0 AND id_user = $id_user AND tipo = 'Abono Instalacion'" ));
             if ($AbonoInst > 0) {
               $this->Cell(60,4,utf8_decode('Abono Inst. = '.$AbonoInst),0,0,'C',true);
               $this->Ln(5);
             }
-            $LiquidInst = mysqli_num_rows(mysqli_query($enlace,"SELECT *  FROM pagos WHERE corte = 0 AND id_user = $id_user AND tipo = 'Liquidacion'" ));
+            $LiquidInst = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM pagos WHERE corte = 0 AND id_user = $id_user AND tipo = 'Liquidacion'" ));
             if ($LiquidInst > 0) {
               $this->Cell(60,4,utf8_decode('Liquidacion Inst. = '.$LiquidInst),0,0,'C',true);
               $this->Ln(5);
             }
-            $Reporte = mysqli_num_rows(mysqli_query($enlace,"SELECT *  FROM pagos WHERE corte = 0 AND id_user = $id_user AND tipo = 'Reporte'" ));
+            $Reporte = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM pagos WHERE corte = 0 AND id_user = $id_user AND tipo = 'Reporte'" ));
             if ($Reporte > 0) {
               $this->Cell(60,4,utf8_decode('Reportes = '.$Reporte),0,0,'C',true);
               $this->Ln(5);
             }
-            $AntiDisp = mysqli_num_rows(mysqli_query($enlace,"SELECT *  FROM pagos WHERE corte = 0 AND id_user = $id_user AND tipo = 'Dispositivo' AND descripcion = 'Anticipo'" ));
+            $AntiDisp = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM pagos WHERE corte = 0 AND id_user = $id_user AND tipo = 'Dispositivo' AND descripcion = 'Anticipo'" ));
             if ($AntiDisp > 0) {
               $this->Cell(60,4,utf8_decode('Anticipo Disp. = '.$AntiDisp),0,0,'C',true);
               $this->Ln(5);
             }
-            $LiquidDisp = mysqli_num_rows(mysqli_query($enlace,"SELECT *  FROM pagos WHERE corte = 0 AND id_user = $id_user AND tipo = 'Dispositivo' AND descripcion = 'Liquidacion'" ));
+            $LiquidDisp = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM pagos WHERE corte = 0 AND id_user = $id_user AND tipo = 'Dispositivo' AND descripcion = 'Liquidacion'" ));
             if ($LiquidDisp > 0) {
               $this->Cell(60,4,utf8_decode('Liquidacion Disp. = '.$LiquidDisp),0,0,'C',true);
               $this->Ln(5);
             }
-            $Orden = mysqli_num_rows(mysqli_query($enlace,"SELECT *  FROM pagos WHERE corte = 0 AND id_user = $id_user AND tipo = 'Orden Servicio'" ));
+            $Orden = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM pagos WHERE corte = 0 AND id_user = $id_user AND tipo = 'Orden Servicio'" ));
             if ($Orden > 0) {
               $this->Cell(60,4,utf8_decode('Ordenes Serv. = '.$Orden),0,0,'C',true);
               $this->Ln(5);
             }
-            $Otros = mysqli_num_rows(mysqli_query($enlace,"SELECT *  FROM pagos WHERE corte = 0 AND id_user = $id_user AND tipo = 'Otros Pagos'" ));
+            $Otros = mysqli_num_rows(mysqli_query($conn,"SELECT *  FROM pagos WHERE corte = 0 AND id_user = $id_user AND tipo = 'Otros Pagos'" ));
             if ($Otros > 0) {
               $this->Cell(60,4,utf8_decode('Otros Pagos = '.$Otros),0,0,'C',true);
               $this->Ln(5);
@@ -343,8 +343,8 @@
             $this->Ln(5); 
             $this->Cell(60,4,'Servicios Integrales de Computacion ',0,0,'C',true);
             $this->Ln(15);          
-            mysqli_query($enlace,"UPDATE pagos SET corte=1 WHERE id_user=$id_user");
-            mysqli_close($enlace);
+            mysqli_query($conn,"UPDATE pagos SET corte=1 WHERE id_user=$id_user");
+            mysqli_close($conn);
         }
     }
     $pdf = new PDF('P', 'mm', array(80,297));

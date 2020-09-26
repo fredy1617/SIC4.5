@@ -18,7 +18,7 @@ class PDF extends FPDF{
 		$fila = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"));
 		$id_user = $_SESSION['user_id'];
 		$user = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$id_user"));
-		 // Colores de los bordes, fondo y texto
+		// Colores de los bordes, fondo y texto
             $this->SetFillColor(255,255,255);
             $this->SetTextColor(0,0,0);
             $this->AddPage();

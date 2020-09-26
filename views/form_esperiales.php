@@ -4,6 +4,7 @@
 	<title>SIC | Clientes Especiales</title>
 <?php
 include('fredyNav.php');
+include ('../php/cobrador.php');
 ?>
 <script>
 function llenar(){

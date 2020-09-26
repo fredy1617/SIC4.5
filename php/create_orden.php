@@ -6,6 +6,8 @@ $Nuevo = $conn->real_escape_string($_POST['valorNuevo']);
 $Nombre = $conn->real_escape_string($_POST['valorNombres']);
 $Telefono = $conn->real_escape_string($_POST['valorTelefono']);
 $Comunidad = $conn->real_escape_string($_POST['valorComunidad']);
+$Estatus = $conn->real_escape_string($_POST['valorEstatus']);
+$Dpto = $conn->real_escape_string($_POST['valorDpto']);
 $Referencia = $conn->real_escape_string($_POST['valorReferencia']);
 $id_user = $_SESSION['user_id'];
 
@@ -31,7 +33,7 @@ if ($Nuevo == 'Si') {
         echo '<script>M.toast({html:"Ya se encuentra una orden registrada con la misma info.", classes: "rounded"})</script>';
       }else{
 
-        $sql = "INSERT INTO orden_servicios (id_cliente, solicitud, fecha, hora, registro, estatus) VALUES ($IdCliente, '$Solicitud', '$Fecha_hoy', '$Hora', $id_user, 'Revisar')";
+        $sql = "INSERT INTO orden_servicios (id_cliente, solicitud, fecha, hora, registro, estatus, dpto) VALUES ($IdCliente, '$Solicitud', '$Fecha_hoy', '$Hora', $id_user, '$Estatus', '$Dpto')";
         if(mysqli_query($conn, $sql)){
           echo  '<script>M.toast({html:"Orden de servicio creada.", classes: "rounded"})</script>'; 
           $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id) AS id FROM orden_servicios"));            
@@ -80,7 +82,7 @@ if ($Nuevo == 'Si') {
       echo '<script>M.toast({html:"Ya se encuentra una orden registrada con la misma info.", classes: "rounded"})</script>';
     }else{
 
-      $sql = "INSERT INTO orden_servicios (id_cliente, solicitud, fecha, hora, registro, estatus) VALUES ($IdCliente, '$Solicitud', '$Fecha_hoy', '$Hora', $id_user, 'Revisar')";
+      $sql = "INSERT INTO orden_servicios (id_cliente, solicitud, fecha, hora, registro, estatus, dpto) VALUES ($IdCliente, '$Solicitud', '$Fecha_hoy', '$Hora', $id_user, '$Estatus', '$Dpto')";
       if(mysqli_query($conn, $sql)){
         echo  '<script>M.toast({html:"Orden de servicio creada.", classes: "rounded"})</script>'; 
         $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id) AS id FROM orden_servicios"));            

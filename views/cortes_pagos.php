@@ -2,12 +2,15 @@
 <html lang="en">
 <head>
 <?php
+  #INCLUIMOS EL ARCHIVO DONDE ESTA LA BARRA DE NAVEGACION DEL SISTEMA
   include('fredyNav.php');
+  #INCLUIMOS EL ARCHIVO EL CUAL HACE LA CONEXION DE LA BASE DE DATOS PARA ACCEDER A LA INFORMACION DEL SISTEMA
   include('../php/conexion.php');
 ?>
 <title>SIC | Cortes Pagos</title>
 </head>
 <script>
+  //FUNCION QUE ENVIA LOS DATOS PARA VALIDAR DESPUES DE LLENADO DEL MODAL
   function recargar_corte() {
     var textoClave = $("input#clave").val(); 
     var textoCantidad = $("input#cantidadD").val(); 
@@ -36,7 +39,25 @@
             }, function(mensaje) {
                 $("#resultado_corte").html(mensaje);
         });
-    }    
+    }   
+  } 
+  //FUNCION QUE ENVIA LA INFORMACION PARA CONFIRMAR EL CORTE Y CHECAR SI EL COBRADOR ENTREGO TODO O QUEDO A DEBER EFECTIVO
+  function confirmar(){
+    var textoId = $("input#id").val(); 
+    var textoCantidad = $("input#cantidadCon").val(); 
+
+    if (textoId <= 0) {
+        M.toast({html:"Ingese un Id de corte.", classes: "rounded"});
+    }else if (textoCantidad <= 0) {
+        M.toast({html:"Ingrese una cantidad mayor a 0", classes: "rounded"});
+    }else{
+        $.post("../php/confirmar_corte.php", {
+              valorId: textoId,
+              valorCantidad: textoCantidad
+            }, function(mensaje) {
+                $("#resultado_confirmar").html(mensaje);
+        });
+    }
   }
 </script>
 <main>
@@ -403,7 +424,32 @@
         <div class="row">
         <a class="waves-effect waves-light btn pink right modal-trigger" href="#corte">CORTE<i class="material-icons right">content_cut</i></a>
         </div>
-  </div><br><br>
+
+<!-- VISTA DE CONFIRMAR PAGO  -->
+    <div class="row" id="resultado_confirmar"><br><br>
+      <h3 class="hide-on-med-and-down">Confirmar Corte:</h3>
+      <h5 class="hide-on-large-only">Confirmar Corte:</h5>
+      <form class="col s12"><br>     
+          <div class="row col s10 m3 l3">
+            <div class="input-field">
+                <i class="material-icons prefix">filter_9_plus</i>
+                <input id="id" type="number" class="validate" data-length="6"  required>
+                <label for="id">Corte (ej: 1243):</label>
+            </div>
+          </div>
+          <div class="row col s10 m3 l3">
+            <div class="input-field">
+                <i class="material-icons prefix">payment</i>
+                <input id="cantidadCon" type="number" class="validate" data-length="6" value="0" required>
+                <label for="cantidadCon">Cantidad (Efectivo):</label>
+            </div>
+          </div>
+          <div class="row"><br>
+            <a onclick="confirmar();" class="waves-effect waves-light btn pink right "><i class="material-icons right">send</i>Confirmar</a>
+          </div>
+      </form>
+    </div>
+  </div><br><br><!-- FIN DE CONTAINER  -->
 <?php mysqli_close($conn);?>
 </body>
 </main>

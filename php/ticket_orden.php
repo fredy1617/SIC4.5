@@ -16,6 +16,7 @@ class PDF extends FPDF{
         $user = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$id_user"));
 		$id_cliente = $fila['id_cliente'];
         $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente = $id_cliente"));
+        
 
 		 // Colores de los bordes, fondo y texto
             $this->SetFillColor(255,255,255);
@@ -37,10 +38,29 @@ class PDF extends FPDF{
             $this->Ln(1);
             $this->MultiCell(60,4,utf8_decode('Trabajo: '.$fila['trabajo']),0,'L',true);
             $this->Ln(1);
-            $this->Cell(20,4,utf8_decode('Precio: $'.$fila['precio'].'.00'),0,0,'L',true);
+            $totalE = 0;
+            $desE = '';
+            $Extras = mysqli_query($conn, "SELECT * FROM orden_extras WHERE id_orden = $id_orden");
+            if (mysqli_num_rows($Extras) > 0) {
+                while ($extra = mysqli_fetch_array($Extras)) {
+                    $totalE += $extra['cantidad'];
+                    $desE .= '; '.$extra['descripcion'];
+             
+               }
+               $this->MultiCell(60,4,utf8_decode('Trabajo Extra: '.$desE),0,'L',true);
+               $this->Ln(1);
+            }
+
+            $this->Cell(20,4,utf8_decode('Cotizacion: $'.$fila['precio'].'.00'),0,0,'L',true);
             $this->Ln(5);
+            $this->Cell(20,4,utf8_decode('Extras: $'.$totalE.'.00'),0,0,'L',true);
+            $this->Ln(6);
+            $TOTAL = $fila['precio']+$totalE;
+            $this->Cell(90,4,utf8_decode('Total: $'.$TOTAL.'.00'),0,0,'C',true);
+            $this->Ln(6);
+            
             $this->MultiCell(60,4,utf8_decode('Atendió: '.$user['firstname'].' '.$user['lastname']),0,'L',true);
-            $this->Ln(4);
+            $this->Ln(5);
             $this->MultiCell(70,4,utf8_decode('_________________________________'),0,'L',false);
             $this->SetX(6);
             $this->MultiCell(70,7,utf8_decode('Firma de Conformidad'),0,'C',false);

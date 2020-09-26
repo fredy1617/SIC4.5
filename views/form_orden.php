@@ -4,6 +4,7 @@
 	<title>SIC | Orden de Servicio</title>
 <?php
 include('fredyNav.php');
+include ('../php/cobrador.php');
 ?>
 <script>
 function buscar() {
@@ -18,6 +19,8 @@ function create_orden() {
     var textoNombreC = $("input#nombresC").val();
     var textoTelefono = $("input#telefono").val();
     var textoComunidad = $("select#comunidad").val();
+    var textoEstatus = $("select#estatus").val();
+    var textoDpto = $("select#dpto").val();
     var textoSolicitud = $("textarea#solicitud").val();
     var textoColor = $("textarea#color").val();
     var textoCerca = $("textarea#cercas").val();    
@@ -31,6 +34,10 @@ function create_orden() {
       M.toast({html: 'El campo Telefono se encuentra vacío.', classes: 'rounded'});
     }else if(textoComunidad == "0"){
       M.toast({html: 'No se ha seleccionado una comunidad aún.', classes: 'rounded'});
+    }else if(textoEstatus == "0"){
+      M.toast({html: 'No se ha seleccionado un Estatus aún.', classes: 'rounded'});
+    }else if(textoDpto == "0"){
+      M.toast({html: 'No se ha seleccionado una Departamento aún.', classes: 'rounded'});
     }else if(textoSolicitud == ""){
       M.toast({html: 'El campo Solicitud se encuentra vacío.', classes: 'rounded'});
     }else if(textoColor == ""){
@@ -45,6 +52,8 @@ function create_orden() {
           valorNombres: textoNombreC,
           valorTelefono: textoTelefono,
           valorComunidad: textoComunidad,
+          valorEstatus: textoEstatus,
+          valorDpto: textoDpto,
           valorSolicitud: textoSolicitud,
           valorReferencia: 'Casa de color: '+textoColor+', Cercas de '+textoCerca+' ('+textoEsp+')'
         }, function(mensaje) {
@@ -90,9 +99,8 @@ function create_orden() {
 	          <textarea id="especificacion" class="materialize-textarea validate" data-length="150" ></textarea>
 	          <label for="especificacion">Especificación: ej. (Dos pisos, Porton blanco)</label>
 	        </div>
-	        <div class="col s12 m5 l5"> <br>
+	        <div class="col s12 m6 l3"> <br>
 		        <div class="input-field row">
-		          <i class="col s1"> <br></i>
 		          <select id="comunidad" class="browser-default col s10">
 		            <option value="0" selected>COMUNIDAD:</option>
 		            <?php
@@ -107,8 +115,25 @@ function create_orden() {
 		          </select>
 		        </div>   
 		    </div>
-	         <!-- AQUI SE ENCUENTRA LA DOBLE COLUMNA EN ESCRITORIO.-->
-	        <div class="col s12 m7 l7">
+		    <div class="col s12 m6 l2"> <br>
+		        <div class="input-field row">
+		          <select id="estatus" class="browser-default col s11">
+		            <option value="0" selected>Estatus:</option>
+		            <option value="PorConfirmar">Por Confirmar</option>		            
+		            <option value="Revisar">Revisar</option>		            
+		          </select>
+		        </div>   
+		    </div>
+		    <div class="col s12 m6 l2"> <br>
+		        <div class="input-field row">
+		          <select id="dpto" class="browser-default col s11">
+		            <option value="0" selected>Departamento:</option>
+		            <option value="1">Redes</option>		            
+		            <option value="2">Taller</option>		            
+		          </select>
+		        </div>   
+		    </div>
+	        <div class="col s12 m6 l5">
 	        	<div class="input-field row">
 		          <i class="material-icons prefix">comment</i>
 		          <textarea id="solicitud" class="

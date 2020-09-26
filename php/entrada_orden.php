@@ -45,6 +45,8 @@ class PDF extends FPDF{
             $this->Ln(2);
             $this->MultiCell(60,4,utf8_decode('Solicitud: '.$fila['solicitud']),0,'L',true);
             $this->Ln(2);
+            $this->MultiCell(60,4,utf8_decode('Estatus: '.$fila['estatus']),0,'L',true);
+            $this->Ln(2);
             $this->MultiCell(60,4,utf8_decode('Atendió: '.$user['firstname'].' '.$user['lastname']),0,'L',true);
             $this->MultiCell(60,4,utf8_decode('Tel-SIC: 433 935 62 86'),0,'L',true);
             $this->Ln(2);

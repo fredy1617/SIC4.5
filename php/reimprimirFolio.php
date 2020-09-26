@@ -77,14 +77,10 @@ class PDF extends FPDF{
     1.- PASADOS 30 DÍAS NO SOMOS RESPONSABLES DE LOS EQUIPOS. 
     2.- EN SOFTWARE (PROGRAMAS) NO HAY GARANTÍA.
     3.- SIN ESTE TICKET, NO SE HARÁ LA ENTREGA DEL EQUIPO.'),1,'L',true);
-
-       
-        mysqli_close($conn);
     }
     }
-global $pass;
+global $conn;
 global $id_dispositivo;
-$conn = mysqli_connect("localhost", "root", $pass, "servintcomp");
 
 $listado = mysqli_query($conn, "SELECT * FROM dispositivos WHERE id_dispositivo=$id_dispositivo");
 $num_filas = mysqli_num_rows($listado);
