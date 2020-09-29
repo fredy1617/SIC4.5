@@ -42,7 +42,7 @@
 						<td><?php echo $resultados['user_id']; ?></td>
 						<td><?php echo $resultados['firstname'].' '.$resultados['lastname']; ?></td>		
 						<td><?php echo $resultados['user_name']; ?></td>		
-						<td><form method="post" action="../views/saldo_cobrador.php"><input name="id" type="hidden" value="49"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">attach_money</i></button></form></td>		
+						<td><form method="post" action="../views/saldo_cobrador.php"><input name="id" type="hidden" value="<?php echo $resultados['user_id']; ?>"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">attach_money</i></button></form></td>		
 					</tr>
 				<?php
 				}//FIN WHILE
