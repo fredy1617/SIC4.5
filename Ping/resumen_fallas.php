@@ -8,10 +8,10 @@ function sendMessage($id, $msj, $website){
     #SE ENCARGA DE IR A EL URL Y ENVIAR EL MENSAJE DESDE EL BOT
     file_get_contents($url);
 }
-$bot_Token = '1353311525:AAEv95sHfBzsyK3WNVSkBRXxm6wqcIgHoTY';//TOKEN UNICO DEL BOT RESUMEN_FALLAS (ID PARA IDENTIFICAR AL BOT Y PODER ENVIAR EL MENSAJE DESDE EL BOT)
+$bot_Token = '1353311525:AAEv95sHfBzsyK3WNVSkBRXxm8wqcIgHoTY';//TOKEN UNICO DEL BOT RESUMEN_FALLAS (ID PARA IDENTIFICAR AL BOT Y PODER ENVIAR EL MENSAJE DESDE EL BOT)
 $website = 'https://api.telegram.org/bot'.$bot_Token;//DIRECCION A LA QUE SE TIENE QUE ACCEDER LA FUNCION PARA PODER ENVIAR EL MENSAJE DESDE EL BOT
 $id_Chat = '1087049979';//ID Fredy ES COMO UN NUMERO TELEFONICO CON EL QUE EL BOT IDENTIFICA A QUIEN ENVIAR EL MENSAJE
-$id_Chat2 = '1080437366';//ID Gabriel ES COMO UN NUMERO TELEFONICO CON EL QUE EL BOT IDENTIFICA A QUIEN ENVIAR EL MENSAJE
+$id_Chat2 = '1080437388';//ID Gabriel ES COMO UN NUMERO TELEFONICO CON EL QUE EL BOT IDENTIFICA A QUIEN ENVIAR EL MENSAJE
 $id_Chat3 = '972701200'; //ID Luis ES COMO UN NUMERO TELEFONICO CON EL QUE EL BOT IDENTIFICA A QUIEN ENVIAR EL MENSAJE
 
 #SELECCIONAMOS TODAS LAS CENTRALES REGISTRADAS EN LA  TABLA CENTRALES PINGS
@@ -27,16 +27,16 @@ if (mysqli_num_rows($Centrales)>0) {
 	$Fecha = date('Y-m-14');
 	$Hora = date('H:i:s');
 
-	#CREAMOS UNA HORA ANTERIOR A LA DEL JUSTO DEL MOMENTO -6 HORAS PARA EL RANGO DE 6 HORAS
-	$nuevahora = strtotime('-6 hour', strtotime($Hora));
-    $Hora_6 = date('H:i:s', $nuevahora);
-    $MSJ.= "<b>ERRORES DE ".$Hora." -A- ".$Hora_6."</b> \n\n";//LO AGREGAMOS AL FORMATO DEL MENSAJE
+	#CREAMOS UNA HORA ANTERIOR A LA DEL JUSTO DEL MOMENTO -8 HORAS PARA EL RANGO DE 8 HORAS
+	$nuevahora = strtotime('-8 hour', strtotime($Hora));
+    $Hora_8 = date('H:i:s', $nuevahora);
+    $MSJ.= "<b>ERRORES DE ".$Hora_8." -A- ".$Hora."</b> \n\n";//LO AGREGAMOS AL FORMATO DEL MENSAJE
     #RECORREMOS LAS CENTRALES UNA POR UNA
 	while ($Central = mysqli_fetch_array($Centrales)) {
 
-		#SQL DE SELECCION DE LOS ERRORES DE LA FECHA DE HOY Y CON UN RANGO DE 6 HORAS Y CON LA IP DE LA COMUNIDAD EN TURNO
+		#SQL DE SELECCION DE LOS ERRORES DE LA FECHA DE HOY Y CON UN RANGO DE 8 HORAS Y CON LA IP DE LA COMUNIDAD EN TURNO
 		$ip = $Central['ip'];//IP DE LA CENTRAL EN TURNO
-		$sql_Errores = mysqli_query($conn, "SELECT * FROM errores_pings WHERE (fecha_e = '$Fecha' AND hora_e >= '$Hora_6' AND hora_e <= '$Hora' AND ip = '$ip' ) OR (estatus = 'Pendiente' AND ip = '$ip') ORDER BY hora_e");
+		$sql_Errores = mysqli_query($conn, "SELECT * FROM errores_pings WHERE (fecha_e = '$Fecha' AND hora_e >= '$Hora_8' AND hora_e <= '$Hora' AND ip = '$ip' ) OR (estatus = 'Pendiente' AND ip = '$ip') ORDER BY hora_e");
 
 		#CONTRAMOS LOS ERRORES ENCOTRADOS
 		$Errores = mysqli_num_rows($sql_Errores);

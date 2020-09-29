@@ -10,19 +10,17 @@ $user_id = $_SESSION['user_id'];
 <!--Inicia Script de reportes tmp-->
 <script>
   function borrar_inst(IdCliente){
-    $.post("../php/borrar_inst.php", {          
-            tipo : "mantenimiento", 
+    $.post("../php/borrar_inst.php", {  
             valorIdCliente: IdCliente,
     }, function(mensaje) {
-    $("#borrar_inst").html(mensaje);
+    $("#delete").html(mensaje);
     }); 
   };
   function borrar_rep(IdReporte){
-    $.post("../php/borrar_rep.php", {           
-            tipo : "mantenimiento",
+    $.post("../php/borrar_rep.php", { 
             valorIdReporte: IdReporte,
     }, function(mensaje) {
-    $("#reporte_borrar").html(mensaje);
+    $("#delete").html(mensaje);
     }); 
   };
   function ruta(id_reporte) {
@@ -171,6 +169,7 @@ echo $especiales;
     </div></p>
   </div>
   <br><br><br>
+    <div id="delete">
       <!-- MUESTRA Instalaciones DE RUTA--->
         <div class="row">
         <h3 class="hide-on-med-and-down">Ruta Instalaciones</h3>
@@ -285,6 +284,7 @@ echo $especiales;
         <br><br>
         <a onclick="modal()" class="btn waves-light waves-effect right pink">Imprimir</a>
       <!-- FIN REPORTES DE RUTA--->
+    </div>
 <br><br><br>
 </div>
 <br>

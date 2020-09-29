@@ -1,5 +1,6 @@
 <?php
 include('../php/is_logged.php');
+#INCLUIMOS EL ARCHIVO CON LOS DATOS Y CONEXXION A LA BASE DE DATOS
 include('../php/conexion.php');
 $Hoy = date('Y-m-d');
 $instalaciones = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes WHERE instalacion IS NULL"));

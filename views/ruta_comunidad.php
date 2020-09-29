@@ -1,294 +1,82 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>SIC | Ruta Comunidad</title>
-
-<?php
-include('fredyNav.php');
-include('../php/conexion.php');
-$comunidades = mysqli_query($conn, 'SELECT * FROM comunidades');
-date_default_timezone_set('America/Mexico_City');
-$Hoy = date('Y-m-d');
-$user_id = $_SESSION['user_id'];
-?>
-<script>
-    function borrar_inst(IdCliente){
-        $.post("../php/borrar_inst.php", {
-            tipo : "comunidad",
-            valorIdCliente : IdCliente,
-        }, function(mensaje){
-            $("#borrar_inst").html(mensaje);
-        });
-    };
-    function borrar_rep(IdReporte){
-        $.post("../php/borrar_rep.php",{
-            tipo : "comunidad",
-            valorIdReporte : IdReporte,
-        }, function(mensaje){
-            $("#reporte_borrar").html(mensaje);
-        });
-    };
-    function add_ruta(id_comunidad) {
-        M.toast({html:"Insertando comunidada a ruta...", classes: "rounded"});
-        $.post("../php/add_rutaCom.php", {valorIdComunidad: id_comunidad}, function(mensaje){
-            $("#Res_add").html(mensaje);
-        });
-    };
-    function modal(){
-       $(document).ready(function(){
-          $('#rutamodal').modal();
-          $('#rutamodal').modal('open'); 
-       });
-     };
-</script>
+  <title>SIC | Ruta Comunidad</title>
+  <?php
+  #INCLUIMOS EL ARCHIVO DONDE ESTA LA BARRA DE NAVEGACION DEL SISTEMA
+  include('fredyNav.php');
+  #INCLUIMOS EL ARCHIVO CON LOS DATOS Y CONEXXION A LA BASE DE DATOS
+  include('../php/conexion.php');
+  $user_id = $_SESSION['user_id'];//ID DEL USUARIO LOGEADO EN LA SESSION DEL SISTEMA
+  ?>
+  <script>
+      //FUNCION QUE MUESTRA LAS COMUNIDADES Y TODO EL CONTENIDO DE PENDIENTES
+      function buscar(){
+        var texto = $("input#busqueda").val();
+        
+      $.post("../php/buscar_rutaComunidad.php", {
+              texto: texto,
+            }, function(mensaje) {
+                $("#comunidades").html(mensaje);
+            }); 
+      };
+      //FUNCION QUE BORRA LAS INSATALACIONES DE LA LISTA PARA RUTA
+      function borrar_inst(IdCliente){
+          $.post("../php/borrar_inst.php", {
+              valorIdCliente : IdCliente,
+          }, function(mensaje){
+              $("#add_delete").html(mensaje);
+          });
+      };
+      //FUNCION QUE BORRA LOS REPORTES DE LA LISTA PARA RUTA
+      function borrar_rep(IdReporte){
+          $.post("../php/borrar_rep.php",{
+              valorIdReporte : IdReporte
+          }, function(mensaje){
+              $("#add_delete").html(mensaje);
+          });
+      };
+      //FUNCION QUE INSERTA TODOS LOS REPORTES EN CAMPO E INSTALACIONES SOLAMENTE
+      function add_ruta(id_comunidad) {
+          M.toast({html:"Insertando comunidada a ruta...", classes: "rounded"});
+          $.post("../php/add_rutaCom.php", {valorIdComunidad: id_comunidad}, function(mensaje){
+              $("#add_delete").html(mensaje);
+          });
+      };
+      //FUNCION QUE HACE MOSTRAR EL MODAL PARA CREAR LA RUTA DONDE SE AGREGA RESPONSABLE, MATERIAL, ETC.
+      function modal(){
+         $(document).ready(function(){
+            $('#rutamodal').modal();
+            $('#rutamodal').modal('open'); 
+         });
+       };
+  </script>
 </head>
-<body>
-	<div class="container">
-	 <div class="row" >
-      <h3 class="hide-on-med-and-down">Ruta por Comunidad</h3>
-      <h5 class="hide-on-large-only">Ruta por Comunidad</h5>
+<body onload="buscar();">
+  <div class="container">
+   <div class="row"><br>
+      <h3 class="hide-on-med-and-down col s10 m6 l6">Ruta por Comunidad</h3>
+      <h5 class="hide-on-large-only col s10 m6 l6">Ruta por Comunidad</h5>
+      <!-- BUSCADOR POR COMUNIDAD -->
+      <form class="col s10 m5 l5">
+          <div class="row">
+            <div class="input-field col s12">
+              <i class="material-icons prefix">search</i>
+              <input id="busqueda" name="busqueda" type="text" class="validate" onkeyup="buscar();">
+              <label for="busqueda">Buscar(Comunidad)</label>
+            </div>
+          </div>
+      </form>
     </div>
+    
     <!-- MUESTRA TODO LO QUE HAY POR CADA COMUNIDAD--->
-    <ul class="collapsible">
-      <?php
-      while ($comunidad = mysqli_fetch_array($comunidades)) {
-        $nombre = $comunidad['nombre'];
-        $id_comunidad = $comunidad['id_comunidad'];		
-        $reportes = mysqli_query($conn, "SELECT * FROM clientes INNER JOIN reportes ON clientes.id_cliente = reportes.id_cliente WHERE ((reportes.fecha_visita = '$Hoy'  AND reportes.atender_visita = 0) OR (reportes.fecha_visita < '$Hoy' AND reportes.atender_visita = 0 AND reportes.visita = 1) OR reportes.atendido != 1 OR reportes.atendido IS NULL) AND clientes.lugar = '$id_comunidad'  ORDER BY reportes.fecha");
-        $reportesEsp = mysqli_query($conn, "SELECT * FROM especiales INNER JOIN reportes ON especiales.id_cliente = reportes.id_cliente WHERE ((reportes.fecha_visita = '$Hoy'  AND reportes.atender_visita = 0) OR (reportes.fecha_visita < '$Hoy' AND reportes.atender_visita = 0 AND reportes.visita = 1) OR reportes.atendido != 1 OR reportes.atendido IS NULL) AND especiales.lugar = '$id_comunidad' AND especiales.id_cliente > 10000 AND reportes.descripcion LIKE 'Reporte Especial:%'");
-        $Mantenimiento = mysqli_query($conn, "SELECT * FROM especiales INNER JOIN reportes ON especiales.id_cliente = reportes.id_cliente WHERE ((reportes.fecha_visita = '$Hoy'  AND reportes.atender_visita = 0) OR (reportes.fecha_visita < '$Hoy' AND reportes.atender_visita = 0 AND reportes.visita = 1) OR reportes.atendido != 1 OR reportes.atendido IS NULL) AND especiales.lugar = '$id_comunidad' AND especiales.id_cliente > 10000 AND reportes.descripcion LIKE 'Mantenimiento:%'");
-        $instalaciones = mysqli_query($conn, "SELECT * FROM clientes WHERE instalacion IS NULL AND lugar = '$id_comunidad' ORDER BY id_cliente ASC");
-
-        $SiRep = mysqli_num_rows($reportes);
-        $SiMant = mysqli_num_rows($Mantenimiento);
-        $SiInst = mysqli_num_rows($instalaciones);
-        $SiEsp = mysqli_num_rows($reportesEsp);
-
-        if ($SiRep > 0 OR $SiInst > 0 OR $SiEsp> 0 OR $SiMant> 0) {
-          #INICIA LI
-          ?>
-          <li>
-            <div class="row hide-on-large-only">
-            <!-- Barras desplegables MOVIL--->
-            <div class="collapsible-header col s12 m7 l7">
-            <h6 ><?php echo $nombre; ?><i class="material-icons right">arrow_drop_down</i></h6> 
-            </div>
-            <!-- BOTON MOVIL--->                    
-            <a onclick = "add_ruta(<?php echo $id_comunidad; ?>);" class = "hide-on-large-only btn waves-effect waves-light pink right col s12 m5 l5">+ Ruta</a>
-            </div>
-            <!-- BOTON PC--->
-            <a onclick = "add_ruta(<?php echo $id_comunidad; ?>);" class = "hide-on-med-and-down btn waves-effect waves-light pink right col s12 m5 l5">Agregar A Ruta</a>
-            <!-- Barras desplegables PC--->
-            <div class="collapsible-header col s12 m7 l7 hide-on-med-and-down">
-            <h5><?php echo $nombre; ?><i class="material-icons right">arrow_drop_down</i></h5>  
-            </div>
-            <div class="collapsible-body"> 
-                    <?php
-        			if ($SiRep > 0) {
-        				echo '<h6><b class = "indigo-text">Reportes Pendientes</b></h6>';
-        				?>
-        				<table class="border highlight responsive-table">
-        					<thead>
-        						<tr>
-	        						<th>No.Rep</th>
-	        						<th>Cliente</th>
-	        						<th>Descripcion</th>
-	        						<th>Fecha</th>
-	        						<th>Técnico</th>
-	        						<th>Registró</th>
-	        					</tr>
-        					</thead>
-        					<tbody>
-        				<?php	
-        				while ($Reporte = mysqli_fetch_array($reportes)) { 
-        					$id_user=$Reporte['registro'];
-					        if ($id_user == 0) {
-					          $Usuario = "Sistema";
-					        }else{
-					          $users =  mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$id_user"));
-					          $Usuario = $users['firstname'];
-					        } 
-      					  $id_cliente = $Reporte['id_cliente'];      	
-        				  $sql = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente");
-					        $cliente = mysqli_fetch_array($sql);
-                  if ($Reporte['tecnico'] =='') {
-                    $tecnico1[0] = '';
-                    $tecnico1[1] = 'Sin tecnico';
-                  }else{
-                    $id_tecnico = $Reporte['tecnico'];
-                    $tecnico1 = mysqli_fetch_array(mysqli_query($conn, "SELECT user_id, user_name FROM users WHERE user_id = $id_tecnico"));
-                  }
-                  ?>
-        					<tr>
-        						<td><?php echo $Reporte['id_reporte']; ?></td>
-        						<td><?php echo $cliente['nombre']; ?></td>
-                    <td><?php echo $Reporte['descripcion']; ?></td>
-        						<td><?php echo $Reporte['fecha']; ?></td>
-        						<td><?php echo $tecnico1[1]; ?></td>
-        						<td><?php echo $Usuario; ?></td>
-        					</tr>
-        					<?php
-        				}
-        				?>
-        					</tbody>
-        				</table>
-        				<?php
-        			}
-              if ($SiEsp > 0) {
-                echo '<h6><b class = "indigo-text">Ordenes de Servicio</b></h6>';
-              ?>
-              <table class="border highlight responsive-table">
-                <thead>
-                  <tr>
-                    <th>No.Rep</th>
-                    <th>Cliente</th>
-                    <th>Descripcion</th>
-                    <th>Fecha</th>
-                    <th>Técnico</th>
-                    <th>Registró</th>
-                  </tr>
-                </thead>
-                <tbody>
-                <?php   
-                while ($Reporte = mysqli_fetch_array($reportesEsp)) { 
-                  $id_user=$Reporte['registro'];
-                  if ($id_user == 0) {
-                    $Usuario = "Sistema";
-                  }else{
-                    $users =  mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$id_user"));
-                    $Usuario = $users['firstname'];
-                  } 
-                  $id_cliente = $Reporte['id_cliente'];         
-                  $sql = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente");
-                  $filas = mysqli_num_rows($sql);
-                  if ($filas == 0) {
-                    $sql = mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente");
-                  }
-                  $cliente = mysqli_fetch_array($sql);
-                  if ($Reporte['tecnico'] =='') {
-                    $tecnico1[0] = '';
-                    $tecnico1[1] = 'Sin tecnico';
-                  }else{
-                    $id_tecnico = $Reporte['tecnico'];
-                    $tecnico1 = mysqli_fetch_array(mysqli_query($conn, "SELECT user_id, user_name FROM users WHERE user_id = $id_tecnico"));
-                  }
-                  ?>
-                  <tr>
-                    <td><?php echo $Reporte['id_reporte']; ?></td>
-                    <td><?php echo $cliente['nombre']; ?></td>
-                    <td><?php echo $Reporte['descripcion']; ?></td>
-                    <td><?php echo $Reporte['fecha']; ?></td>
-                    <td><?php echo $tecnico1[1]; ?></td>
-                    <td><?php echo $Usuario; ?></td>
-                  </tr>
-                <?php
-                  }
-                ?>
-                </tbody>
-              </table>
-              <?php
-                }
-              if ($SiMant > 0) {
-                  echo '<h6><b class = "indigo-text">Mantenimiento</b></h6>';
-                ?>
-                <table class="border highlight responsive-table">
-                  <thead>
-                    <tr>
-                      <th>No.Rep</th>
-                      <th>Cliente</th>
-                      <th>Descripcion</th>
-                      <th>Fecha</th>
-                      <th>Técnico</th>
-                      <th>Registró</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  <?php   
-                  while ($Reporte = mysqli_fetch_array($Mantenimiento)) { 
-                    $id_user=$Reporte['registro'];
-                    if ($id_user == 0) {
-                      $Usuario = "Sistema";
-                    }else{
-                      $users =  mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$id_user"));
-                      $Usuario = $users['firstname'];
-                    } 
-                    $id_cliente = $Reporte['id_cliente'];         
-                    $sql = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente");
-                    $filas = mysqli_num_rows($sql);
-                    if ($filas == 0) {
-                      $sql = mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente");
-                    }
-                    $cliente = mysqli_fetch_array($sql);
-                    if ($Reporte['tecnico'] =='') {
-                      $tecnico1[0] = '';
-                      $tecnico1[1] = 'Sin tecnico';
-                    }else{
-                      $id_tecnico = $Reporte['tecnico'];
-                      $tecnico1 = mysqli_fetch_array(mysqli_query($conn, "SELECT user_id, user_name FROM users WHERE user_id = $id_tecnico"));
-                    }
-                    ?>
-                    <tr>
-                      <td><?php echo $Reporte['id_reporte']; ?></td>
-                      <td><?php echo $cliente['nombre']; ?></td>
-                      <td><?php echo $Reporte['descripcion']; ?></td>
-                      <td><?php echo $Reporte['fecha']; ?></td>
-                      <td><?php echo $tecnico1[1]; ?></td>
-                      <td><?php echo $Usuario; ?></td>
-                    </tr>
-                  <?php
-                    }
-                  ?>
-                  </tbody>
-              </table>
-              <?php
-                }
-              if ($SiInst > 0) {
-          			echo '<h6><b class = "indigo-text">Instalaciones Pendientes</b></h6>';
-              ?>
-              <table class="border highlight responsive-table">
-                <thead>
-                  <tr>
-                    <th>No. Cliente</th>
-                    <th>Nombre</th>
-                    <th>Servicio</th>
-                    <th>Telefono</th>
-                    <th>Registró</th>
-                  </tr>
-                </thead>
-                <tbody>
-                <?php
-          			while ($Instalacion = mysqli_fetch_array($instalaciones)) {
-                  $id_cliente = $Instalacion['id_cliente'];
-                  $Servicio = mysqli_fetch_array(mysqli_query($conn, "SELECT servicio FROM clientes WHERE id_cliente = $id_cliente"));	
-                  ?>
-                  <tr>
-                    <td><?php echo $id_cliente; ?></td>
-                    <td><?php echo $Instalacion['nombre']; ?></td>
-                    <td><?php echo $Servicio['servicio']; ?></td>
-                    <td><?php echo $Instalacion['telefono']; ?></td>
-                    <td><?php echo $Instalacion['registro']; ?></td>
-                  </tr>
-                  <?php
-          				}
-                  ?>
-                  </tbody>
-              </table>
-              <?php
-          		}
-        		  #FIN LI
-              ?>
-            </div>
-          </li>
-        <?php
-        }
-      }
-      echo '<br><br>' ;   
-      ?>
-      </ul>
-      <div id="Res_add">
+    <div id="comunidades">
+      
+    </div>
+    <div id="add_delete">
       <!-- MUESTRA Instalaciones DE RUTA--->
         <div class="row">
-        <h3 class="hide-on-med-and-down">Ruta Instalaciones</h3>
+        <h4 class="hide-on-med-and-down">Ruta Instalaciones</h4>
         <h5 class="hide-on-large-only">Ruta Instalaciones</h5>
         <div id="instalaciones_ruta">
             <table class="bordered highlight responsive-table">
@@ -340,7 +128,7 @@ $user_id = $_SESSION['user_id'];
       <!-- MUESTRA REPORTES DE RUTA--->
         <div class="row" >
             <div id="reporte_borrar"></div>
-          <h3 class="hide-on-med-and-down">Ruta Reportes</h3>
+          <h4 class="hide-on-med-and-down">Ruta Reportes</h4>
           <h5 class="hide-on-large-only">Ruta Reportes</h5>
           <div id="resultado_ruta_reporte">
           <table>
@@ -400,7 +188,7 @@ $user_id = $_SESSION['user_id'];
         <br><br>
         <a onclick="modal()" class="btn waves-light waves-effect right pink">Imprimir</a>
       <!-- FIN REPORTES DE RUTA--->
-      </div>
-	</div>
+    </div>
+  </div>
 </body>
 </html>
