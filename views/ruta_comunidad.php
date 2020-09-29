@@ -8,6 +8,7 @@
   #INCLUIMOS EL ARCHIVO CON LOS DATOS Y CONEXXION A LA BASE DE DATOS
   include('../php/conexion.php');
   $user_id = $_SESSION['user_id'];//ID DEL USUARIO LOGEADO EN LA SESSION DEL SISTEMA
+  echo '<script>M.toast({html:"CARGANDO COMUNIDADES Y PENDIENTES...", classes: "rounded"})</script>';
   ?>
   <script>
       //FUNCION QUE MUESTRA LAS COMUNIDADES Y TODO EL CONTENIDO DE PENDIENTES
