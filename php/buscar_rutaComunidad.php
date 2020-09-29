@@ -238,7 +238,7 @@ if ($filas == 0) {
 	                      <td><?php echo $Reporte['fecha']; ?></td>
 	                      <td><?php echo $tecnico1[1]; ?></td>
 	                      <td><?php echo $Usuario; ?></td>
-	                      <td><a onclick="ruta(<?php echo $Reporte['$id_reporte']; ?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></a></td>
+	                      <td><a onclick="ruta(<?php echo $Reporte['id_reporte']; ?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></a></td>
 	                    </tr>
 	                  <?php
 	                    }
