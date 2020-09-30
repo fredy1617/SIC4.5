@@ -31,33 +31,35 @@ include ('../php/superAdmin.php');
                     <h5 class="center">No hay instalaciones Usuarios</h5>	
                     <?php
                 }else{
-                $Todo = 0;
+                $AllEfectivo = 0;
                 $AllBanco = 0;
                 while($tmp = mysqli_fetch_array($sql_tmp)){
                 	$id_user = $tmp['user_id'];
-					$sql=mysqli_query($conn,"SELECT SUM(cantidad)  AS suma FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo'");
-					$sql2=mysqli_query($conn,"SELECT SUM(cantidad)  AS suma FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco'");
-					$num = mysqli_num_rows($sql);	
-					$pagos = mysqli_fetch_array($sql);					
-					$banco = mysqli_fetch_array($sql2);
+					$efectivo = mysqli_fetch_array(mysqli_query($conn,"SELECT SUM(cantidad)  AS suma FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo'"));					
+					$banco = mysqli_fetch_array(mysqli_query($conn,"SELECT SUM(cantidad)  AS suma FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco'"));
+					$deuda = mysqli_fetch_array(mysqli_query($conn,"SELECT SUM(cantidad)  AS suma FROM deudas_cortes WHERE cobrador=$id_user AND liquidada = 0"));
 
-					$total = $pagos['suma']; 
+					$Efectivo = $efectivo['suma']; 
 					$Banco = $banco['suma'];
-					if ($total =='') {
-						$total= 0;
+					$Deuda = $deuda['suma'];
+					if ($Efectivo =='') {
+						$Efectivo= 0;
 					}
 					if ($Banco =='') {
 						$Banco= 0;
+					}
+					if($Deuda != ''){
+						$Efectivo = $Efectivo+$Deuda;
 					}
                 ?>
 					<tr>
 						<td><?php echo $tmp['firstname']; ?></td>
 						<td><?php echo $tmp['lastname']; ?></td>
-						<td>$<?php echo $total; ?></td>	
+						<td>$<?php echo $Efectivo; ?></td>	
 						<td>$<?php echo $Banco; ?></td>	
 					</tr>
 					<?php
-					$Todo = $Todo+$total;
+					$AllEfectivo = $AllEfectivo+$Efectivo;
 					$AllBanco = $AllBanco+$Banco;
                     }
                 }
@@ -65,7 +67,7 @@ include ('../php/superAdmin.php');
 					<tr>
 						<td></td>
 						<td><h5>TOTAL:</h5></td>
-						<td><h5>$<?php echo $Todo; ?></h5></td>
+						<td><h5>$<?php echo $AllEfectivo; ?></h5></td>
 						<td><h5>$<?php echo $AllBanco; ?></h5></td>
 					</tr>
 				</tbody>				
