@@ -11,8 +11,8 @@ function sendMessage($id, $msj, $website){
 }
 $bot_Token = '1284789530:AAGhC_vfTpyElbPA4pHkyNoPe7PvdxV1Vpo';//TOKEN UNICO DEL BOT CORTES (ID PARA IDENTIFICAR AL BOT Y PODER ENVIAR EL MENSAJE DESDE EL BOT)
 $website = 'https://api.telegram.org/bot'.$bot_Token;//DIRECCION A LA QUE SE TIENE QUE ACCEDER LA FUNCION PARA PODER ENVIAR EL MENSAJE DESDE EL BOT
-$id_Chat = '1087049979';//ID Fredy ES COMO UN NUMERO TELEFONICO CON EL QUE EL BOT IDENTIFICA A QUIEN ENVIAR EL MENSAJE
-$id_Chat2 = '1080437366';//ID Gabriel ES COMO UN NUMERO TELEFONICO CON EL QUE EL BOT IDENTIFICA A QUIEN ENVIAR EL MENSAJE
+$id_Chat = '587049979';//ID Fredy ES COMO UN NUMERO TELEFONICO CON EL QUE EL BOT IDENTIFICA A QUIEN ENVIAR EL MENSAJE
+$id_Chat2 = '580437366';//ID Gabriel ES COMO UN NUMERO TELEFONICO CON EL QUE EL BOT IDENTIFICA A QUIEN ENVIAR EL MENSAJE
 $id_Chat3 = '972701200'; //ID Luis ES COMO UN NUMERO TELEFONICO CON EL QUE EL BOT IDENTIFICA A QUIEN ENVIAR EL MENSAJE
 
 #-------------------------------------------------------------------
@@ -37,7 +37,7 @@ if(mysqli_num_rows($sql_errores_mikrotik) > 0){
 #-------------------------------------------------------------------
 #ENVIAR MENSAJES SI HAY ERRORES DE PINGS A IP's
 #-------------------------------------------------------------------
-$sql_errores = mysqli_query($conn, "SELECT * FROM errores_pings WHERE msj_error = 0 AND estatus = 'Pendiente' AND contador >= 10");
+$sql_errores = mysqli_query($conn, "SELECT * FROM errores_pings WHERE msj_error = 0 AND estatus = 'Pendiente' AND contador >= 5");
 if(mysqli_num_rows($sql_errores) > 0){
    	#SI SE ENCONTRARON ERRORES SE RECORREN CADA UNO...
    	while($error = mysqli_fetch_array($sql_errores)){
