@@ -1,7 +1,6 @@
 <?php
 #INCLUIMOS EL ARCHIVO CON LA CONEXION A LA BASE DE DATPS
 include('../php/conexion.php');
-$ver = $_GET['r'];//TOMAMOS EL LA LETRA QUE SE  NOS ENVIA 
 $id = $_GET['id'];//TOMAMOS EL ID DEL CORTE PREVIAMENTE CREADO PARA PODERLE VER SU INFORMACION
 
 #INCLUIMOS EL ARCHIVO CON LAS LIBRERIAS DE FPDF PARA PODER CREAR ARCHIVOS CON FORMATO PDF
@@ -37,20 +36,30 @@ class PDF extends FPDF{
             $this->SetFont('Arial','',11);
             $this->Ln(4);
             $this->MultiCell(60,4,utf8_decode('Cobrador: '.$user['firstname'].' '.$user['lastname']),0,'L',true);
-            $this->Ln(1);
+            $entrega = $corte['cantidad'];
+            $this->Ln(4);
+            $this->MultiCell(60,4,utf8_decode('Corte: '.$corte['cantidad']),0,'L',true);
+            $sql_deducible = mysqli_query($conn, "SELECT * FROM deducibles WHERE id_corte = $id");
+            if (mysqli_num_rows($sql_deducible) > 0) {
+                $deducible = mysqli_fetch_array($sql_deducible);
+                $entrega = $entrega - $deducible['cantidad'];
+                $this->Ln(3);
+                $this->MultiCell(60,4,utf8_decode('Deducible(s): $'.$deducible['cantidad'].'.00'),0,'L',true);
+                $this->Ln(1);
+                $this->MultiCell(60,4,utf8_decode('('.$deducible['descripcion'].').'),0,'L',true);
+            }
+            $sql_deuda =mysqli_query($conn, "SELECT * FROM deudas_cortes WHERE id_corte = $id AND cobrador = $id_user");
+            if (mysqli_num_rows($sql_deuda) > 0) {
+                $deuda = mysqli_fetch_array($sql_deuda);
+                $entrega = $entrega-$deuda['cantidad'];
+                $this->Ln(3);
+                $this->MultiCell(60,4,utf8_decode('Adeudo: $'.$deuda['cantidad'].'.00'),0,'L',true);
+            }
+            $this->Ln(4);
             $this->MultiCell(60,4,utf8_decode('Corte Realizado Por: '.$corte['realizo']),0,'L',true);
             $this->SetFont('Arial','B',12);
             $this->Ln(4);
-            #VERIFICAMOS SI LA LETRA ENVIADA ES UNA d PARA VER SI ENTREGO COMPLETO EL EFECTIVO O GENERO UNA DEUDA
-            if ($ver == 'd') {
-                #SI ES d LA LETRA GENERO UNA DEUDA Y NO ENTREGO COMPLETO ENTONCES AL TOTAL DEL EFECTIVO DEL CORTE LE RESTAMOS LA DEUDA Y SABREMOS CUANTO ENTREGO
-                $deuda = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM deudas_cortes WHERE id_corte = $id AND cobrador = $id_user"));
-                $entrega = $corte['cantidad']-$deuda['cantidad'];
-                $this->MultiCell(65,4,utf8_decode('ENTREGO: $ '.$entrega.'.00'),0,'R',true);
-            }else{
-                #SI LA LETRA ES DIFERENTE A d ENTREGO COMPLETO ENTONCES SOLO IMPRIMIMOS EL TOTAL DEL EFECTIVO DEL CORTE
-                $this->MultiCell(65,4,utf8_decode('ENTREGO: $ '.$corte['cantidad'].'.00'),0,'R',true);
-            }
+            $this->MultiCell(65,4,utf8_decode('ENTREGO: $ '.$entrega.'.00'),0,'R',true);
             $this->Ln(6);
             $this->SetFont('Arial','',10);
             $this->MultiCell(70,4,utf8_decode('_________________________________'),0,'L',false);

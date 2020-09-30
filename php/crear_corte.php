@@ -8,6 +8,8 @@ include('is_logged.php');
 $id_user = $_SESSION['user_id'];//ID DEL USUARIO LOGEADO EN LA SESSION DEL SISTEMA
 #GENERAMOS UNA FECHA DEL DIA EN CURSO REFERENTE A LA ZONA HORARIA
 $Fecha_hoy = date('Y-m-d');
+#GENERAMOS UNA HORA EN CURSO REFERENTE A LA ZONA HORARIA
+$Hora = date('H:i:s');
 
 #RECIBIMOS EL LA VARIABLE valorClave CON EL METODO POST DEL DOCUMENTO corte_pagos.php DEL MODAL PARA CREAR EL CORTE
 $Clave = $conn->real_escape_string($_POST['valorClave']);
@@ -42,11 +44,23 @@ if ($Pass['pass'] == $Clave){
         #SELECCIONAMOS EL USARIO CON EL ID QUE ESTAMOS RECIBIENDO CON LA $Clave
         $user = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$id'"));
         $Realizo = $user['firstname'];//NOMBRE DEL USUARIO QUE ESTA REALIZANDO EL CORTE
-        #CREAMOS EL CORTE.....
-        if (mysqli_query($conn,"INSERT INTO cortes (usuario, fecha, cantidad, banco, credito, realizo, msj, confirmar) VALUES ($id_user, '$Fecha_hoy', '$cantidad', '$banco', '$credito', '$Realizo', 0, 0)")) {
-            #SELECCIONAMOS EL ULTIMO CORTE CREADO
-            $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_corte) AS id FROM cortes WHERE usuario=$id_user"));           
-            $corte = $ultimo['id'];//TOMAMOS EL ID DEL ULTIMO CORTE
+        #SELECCIONAMOS UN CORTE QUE YA TENGA LOS MISMOS VALORES
+        $sql_check = mysqli_query($conn, "SELECT id_corte FROM cortes WHERE usuario = '$id_user' AND fecha = '$Fecha_hoy' AND cantidad = '$cantidad' AND banco = '$banco' AND credito =  '$credito' AND realizo = '$Realizo'");
+        #VERIFICAMOS SI EXISTE YA UN CORTE CON ESTOS MISMO VALORES YA CREADO
+        if (mysqli_num_rows($sql_check)>0) {
+            #SI YA EXISTE UN CORTE TOMAMOS EL ID DE ESTE
+            $ultimo = mysqli_fetch_array($sql_check);
+            $corte = $ultimo['id_corte'];//TOMAMOS EL ID DEL CORTE
+        }else{
+            #SI NO EXISTE CREAMOS EL CORTE.....
+            if (mysqli_query($conn,"INSERT INTO cortes (usuario, fecha, hora, cantidad, banco, credito, realizo, msj, confirmar) VALUES ($id_user, '$Fecha_hoy', '$Hora', '$cantidad', '$banco', '$credito', '$Realizo', 0, 0)")) {
+                #SELECCIONAMOS EL ULTIMO CORTE CREADO
+                $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_corte) AS id FROM cortes WHERE usuario=$id_user"));           
+                $corte = $ultimo['id'];//TOMAMOS EL ID DEL ULTIMO CORTE
+            }
+        }
+        #VERIFICAMOS QUE EL ID DEL NO ESTE VACIO.
+        if ($corte != "") {            
             #RECIBIMOS EL LA VARIABLE valorCantidad CON EL METODO POST DEL DOCUMENTO corte_pagos.php DEL MODAL PARA CREAR EL CORTE (VIATICOS)
             $CantidadD = $conn->real_escape_string($_POST['valorCantidad']);
             #RECIBIMOS EL LA VARIABLE valorDescripcion CON EL METODO POST DEL DOCUMENTO corte_pagos.php DEL MODAL PARA CREAR EL CORTE (VIATICOS)
@@ -67,9 +81,7 @@ if ($Pass['pass'] == $Clave){
                 //RECARGAMOS LA PAGINA cortes_pagos.php EN 2000 Milisegundos = 2 SEGUNDOS
                 setTimeout("location.href='cortes_pagos.php'", 2000);
             </script>
-            <?php
-            #INCLUIMOS EL ARCHIVO PARA ENVIAR EL MENSAJE POR TELEGRAM DEL CORTE
-            include ('msj_botTelegramCorte.php');                  
+            <?php                  
         }
     }
 }else{

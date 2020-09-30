@@ -50,7 +50,18 @@
             $('#rutamodal').modal();
             $('#rutamodal').modal('open'); 
          });
-       };
+      };
+      function ruta(id_reporte) {
+        if (id_reporte == "") {
+          M.toast({html:"Ocurrio un error al seleccionar el reporte.", classes: "rounded"});
+        }else{
+          $.post("../php/insert_tmp_reportes.php", {
+              valorIdReporte: id_reporte,
+            }, function(mensaje) {
+                $("#resultado_ruta_reporte").html(mensaje);
+            }); 
+        }
+      };
   </script>
 </head>
 <body onload="buscar();">
