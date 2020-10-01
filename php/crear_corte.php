@@ -46,7 +46,6 @@ if ($Pass['pass'] == $Clave){
         $Realizo = $user['firstname'];//NOMBRE DEL USUARIO QUE ESTA REALIZANDO EL CORTE
         #SELECCIONAMOS UN CORTE QUE YA TENGA LOS MISMOS VALORES
         $sql_check = mysqli_query($conn, "SELECT id_corte FROM cortes WHERE usuario = '$id_user' AND fecha = '$Fecha_hoy' AND cantidad = '$cantidad' AND banco = '$banco' AND credito =  '$credito' AND realizo = '$Realizo'");
-        $corte = 0;//DEFINIMOS EL CORTE EN 0 PARA NO TENER ERROR
         #VERIFICAMOS SI EXISTE YA UN CORTE CON ESTOS MISMO VALORES YA CREADO
         if (mysqli_num_rows($sql_check)>0) {
             #SI YA EXISTE UN CORTE TOMAMOS EL ID DE ESTE
@@ -61,7 +60,7 @@ if ($Pass['pass'] == $Clave){
             }
         }
         #VERIFICAMOS QUE EL ID DEL NO ESTE VACIO.
-        if ($corte != 0) {            
+        if ($corte != "") {            
             #RECIBIMOS EL LA VARIABLE valorCantidad CON EL METODO POST DEL DOCUMENTO corte_pagos.php DEL MODAL PARA CREAR EL CORTE (VIATICOS)
             $CantidadD = $conn->real_escape_string($_POST['valorCantidad']);
             #RECIBIMOS EL LA VARIABLE valorDescripcion CON EL METODO POST DEL DOCUMENTO corte_pagos.php DEL MODAL PARA CREAR EL CORTE (VIATICOS)
