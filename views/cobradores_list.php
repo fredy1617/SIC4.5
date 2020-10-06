@@ -28,7 +28,7 @@
 			<tbody>
 			<?php
 			#SELECCIONAMOS TODOS LOS USUARIOS QUE RECIBAN PAGOS DE ALGUN TIPO
-			$sql = mysqli_query($conn, "SELECT * FROM users WHERE area IN ('Cobrador' , 'Oficina') OR user_id IN (10, 25, 28, 56, 59, 41, 26, 49)");
+			$sql = mysqli_query($conn, "SELECT * FROM users WHERE area IN ('Cobrador' , 'Oficina') OR user_id IN (10, 25, 28, 56, 59, 41, 26, 49, 68)");
 			#VERIFICAMOS SI SE ENCONTRARON USUARIOS
 			if (mysqli_num_rows($sql) <= 0) {
 				#SI NO SE ENCUENTRAN USUARIOS MOSTRAR MENSAJE
