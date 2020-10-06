@@ -40,8 +40,9 @@ if(mysqli_num_rows($sql_servers) > 0){
 			$sql_Centrales =mysqli_query($conn, "SELECT * FROM centrales_pings INNER JOIN comunidades ON centrales_pings.comunidad = comunidades.id_comunidad WHERE centrales_pings.ip != '' AND comunidades.servidor = $ID");
 	    	if(mysqli_num_rows($sql_Centrales) > 0){
 	    		#SE RECORREN CADA UNA DE LAS CENTRALES PERTENECIENTES AL SERVIDOR EN TURNO UNA POR UNA
-	    		echo "Central".$Central['comunidad'];
 	        	while($Central = mysqli_fetch_array($sql_Centrales)){
+	    			echo "Central".$Central['comunidad'];
+
 	        		#COMENZAMOS A HACER PING SE LA CENTRAL EN TURNO EN LA CONSOLA DE MIKROTIK
 	        		$IP = $Central['ip'];
 	        		$API->write('/ping',false);
