@@ -309,7 +309,9 @@ class routeros_api
             }
             // If we get a !done, make a note of it.
             $pos = strpos($_, '=comment=');
-            if ($_ == "!done" || $pos !== false)
+            $pos2 = strpos($_, '=max-rtt=');
+    
+            if ($_ == "!done" || $pos !== false || $pos2 !== false)
                 $receiveddone = true;
             $STATUS = socket_get_status($this->socket);
             if ($LENGTH > 0)
