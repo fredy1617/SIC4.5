@@ -22,7 +22,7 @@ if(mysqli_num_rows($sql_servers) > 0){
 		$Port = $Servidor['port']; //puerto_API
 
 		$API = new routeros_api();
-		$API->debug = false;
+		$API->debug = true;
 		#CONEXION A MICROTICK DEL SERVIDOR EN TURNO
 		if ($API->connect($ServerList, $Username, $Pass, $Port)) {
 			#BUSCAR UN ERROR DE LA MISMA IP en estatus Mikrotik
@@ -61,7 +61,7 @@ if(mysqli_num_rows($sql_servers) > 0){
 				    }
 					#VERIFICAR SI UBO PERDIDAS DE PAQUETES AL HACER EL PING SI ALMENOS HACE 1 PING DE 5 SE TOMA COMO CORRECTO
 					if($PING > 0){
-				        echo "<br>HIZO PING IP: ".$IP;
+				        echo "<br>HIZO PING IP: ".$IP."<br>";
 
 	    				#SI SE REALIZO EL PING A LA IP
 	    				#BUSCAR UN ERROR DE LA MISMA IP en estatus Pendiente
@@ -80,7 +80,7 @@ if(mysqli_num_rows($sql_servers) > 0){
 	       					}
 	       				}
 	    			}else{
-				        echo "<br>NOOOO! HIZO PING IP: ".$IP;
+				        echo "<br>NOOOO! HIZO PING IP: ".$IP."<br>";
 
 	    				#NO SE REALIZO EL PING A LA IP
 	    				#BUSCAR UN ERROR DE LA MISMA IP en estatus Pendiente
