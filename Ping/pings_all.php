@@ -81,7 +81,7 @@ if(mysqli_num_rows($sql_servers) > 0){
 	       					}
 	       				}
 	    			}else{
-				        echo "<br>NOOOO! HIZO PING IP: ".$IP."<br>";
+				        echo "<br><br>--->>>>>>>NOOOO! HIZO PING IP: ".$IP."<br><br>";
 
 	    				#NO SE REALIZO EL PING A LA IP
 	    				#BUSCAR UN ERROR DE LA MISMA IP en estatus Pendiente
