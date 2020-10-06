@@ -40,6 +40,7 @@ if(mysqli_num_rows($sql_servers) > 0){
 			$sql_Centrales =mysqli_query($conn, "SELECT * FROM centrales_pings INNER JOIN comunidades ON centrales_pings.comunidad = comunidades.id_comunidad WHERE centrales_pings.ip != '' AND comunidades.servidor = $ID");
 	    	if(mysqli_num_rows($sql_Centrales) > 0){
 	    		#SE RECORREN CADA UNA DE LAS CENTRALES PERTENECIENTES AL SERVIDOR EN TURNO UNA POR UNA
+	    		echo "Central".$Central['comunidad'];
 	        	while($Central = mysqli_fetch_array($sql_Centrales)){
 	        		#COMENZAMOS A HACER PING SE LA CENTRAL EN TURNO EN LA CONSOLA DE MIKROTIK
 	        		$IP = $Central['ip'];
@@ -60,6 +61,8 @@ if(mysqli_num_rows($sql_servers) > 0){
 				    }
 					#VERIFICAR SI UBO PERDIDAS DE PAQUETES AL HACER EL PING SI ALMENOS HACE 1 PING DE 5 SE TOMA COMO CORRECTO
 					if($PING > 0){
+				        echo "<br>HIZO PING IP: ".$IP;
+
 	    				#SI SE REALIZO EL PING A LA IP
 	    				#BUSCAR UN ERROR DE LA MISMA IP en estatus Pendiente
 	    				$sql_e1 = mysqli_query($conn, "SELECT * FROM errores_pings WHERE ip = '$IP' AND estatus = 'Pendiente'");
@@ -77,6 +80,8 @@ if(mysqli_num_rows($sql_servers) > 0){
 	       					}
 	       				}
 	    			}else{
+				        echo "<br>NOOOO! HIZO PING IP: ".$IP;
+
 	    				#NO SE REALIZO EL PING A LA IP
 	    				#BUSCAR UN ERROR DE LA MISMA IP en estatus Pendiente
 	    				$sql_e1 = mysqli_query($conn, "SELECT * FROM errores_pings WHERE ip = '$IP' AND estatus = 'Pendiente'");
