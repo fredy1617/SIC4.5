@@ -52,7 +52,8 @@ if ($filas == 0) {
             <!-- CABEZERA HEADER Barras desplegables SOLO MOSTRAR PARA PC MUESTRA EL NOMBRE DE LA COMUNIDAD--->
 	        <div class="collapsible-header col s12 m7 l7 hide-on-med-and-down">
             	<!--  MUESTRA EL NOMBRE DE LA COMUNIDAD--->
-	            <h5><?php echo $nombre; ?><i class="material-icons right">arrow_drop_down</i></h5>  
+	            <h5><?php echo $nombre; ?> <i class="material-icons right">arrow_drop_down</i></h5>
+	            <b class="blue-text"> -Instalaciones(<?php echo $SiInst; ?>); -Reportes(<?php echo $SiRep; ?>); -Oredenes(<?php echo $SiOrdenes; ?>); -Mantenimientos(<?php echo $SiMant; ?>)</b>
 	        </div>
 	        <!--CABEZERA HEADER BOTON SOLO MOSTRAR PARA MOVIL--->                    
             <a onclick = "add_ruta(<?php echo $id_comunidad; ?>);" class = "hide-on-large-only btn waves-effect waves-light pink right col s12 m5 l5">+ Ruta</a>
