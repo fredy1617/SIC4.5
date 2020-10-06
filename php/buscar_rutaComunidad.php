@@ -12,6 +12,8 @@ $Texto = $conn->real_escape_string($_POST['texto']);
 if ($Texto != "") {
 	#SI RECIBIMOS ALGUN TEXTO BUSCAMOS ALGUNA COMUNIDAD CON ESE NOMBRE SIMILAR
 	$sql = "SELECT * FROM comunidades WHERE nombre LIKE '%$Texto%'";
+	echo '<script>M.toast({html:"Texto.", classes: "rounded"})</script>';
+
 }else{
 	#SI EL TEXTO ESTA VACIO SELECCIONAMOS TODAS LAS COMUNIDADES
 	$sql = "SELECT * FROM comunidades";
