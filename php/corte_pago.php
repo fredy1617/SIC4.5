@@ -327,11 +327,10 @@
             }
 
             $this->SetFont('Arial','B',11);
-            $this->Ln(9);
-            if ($cantidad > 0) {
-              $this->MultiCell(65,4,utf8_decode('TOTAL EFECTIVO: $'.$cantidad.'.00'),0,'L',true);
-              $this->Ln(3);
-            }
+    
+            $this->MultiCell(65,4,utf8_decode('TOTAL EFECTIVO: $'.$cantidad.'.00'),0,'L',true);
+            $this->Ln(3);
+            
             if ($banco > 0) {
               $this->MultiCell(65,4,utf8_decode('TOTAL BANCO: $'.$banco.'.00'),0,'L',true);
               $this->Ln(3);
