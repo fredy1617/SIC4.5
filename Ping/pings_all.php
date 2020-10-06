@@ -22,7 +22,7 @@ if(mysqli_num_rows($sql_servers) > 0){
 		$Port = $Servidor['port']; //puerto_API
 
 		$API = new routeros_api();
-		$API->debug = true;
+		$API->debug = false;
 		#CONEXION A MICROTICK DEL SERVIDOR EN TURNO
 		if ($API->connect($ServerList, $Username, $Pass, $Port)) {
 			#BUSCAR UN ERROR DE LA MISMA IP en estatus Mikrotik
