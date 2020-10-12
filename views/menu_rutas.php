@@ -67,7 +67,7 @@ include('../php/cobrador.php');
 								 while($tmp = mysqli_fetch_array($sql_tmp1)){
 								 	$id_reporte = $tmp['id_reporte'];//TOMAMOS EL ID DEL REPORTE EN TURNO
 								 	#AGREGAMOS EL REPORTE EN TURNO A LA TABLA DE no_realizados id,id_trabjo, 'REPORTE'
-								 	if (mysqli_query($conn,"INSERT INTO no_realizados (id_trabajo, tipo) VALUES($id_reporte, 'REPORTE')")) {
+								 	if (mysqli_query($conn,"INSERT INTO no_realizados (id_trabajo, tipo, id_ruta) VALUES($id_reporte, 'REPORTE', $id_ruta)")) {
 								 		#SI SE AGREGA, ELIMINAMOS EL REPORTE DE LA RUTA PARA tmp_reportes Y ASI PUEDAN SER AGREGADOS A OTRAS RUTAS
 						            	mysqli_query($conn, "DELETE FROM tmp_reportes  WHERE id_reporte = $id_reporte");
 								 	}
@@ -80,7 +80,7 @@ include('../php/cobrador.php');
 								 while($tmp = mysqli_fetch_array($sql_tmp2)){
 								 	$id_cliente = $tmp['id_cliente'];//TOMAMOS EL ID DEL CLIENTE DEL LA INSTALACION EN TURNO
 								 	#AGREGAMOS LA INSTALACION EN TURNO A LA TABLA DE no_realidados id, id_trabajo, 'INSTALACION'
-								 	if (mysqli_query($conn,"INSERT INTO no_realizados (id_trabajo, tipo) VALUES($id_cliente, 'INSTALACION')")) {
+								 	if (mysqli_query($conn,"INSERT INTO no_realizados (id_trabajo, tipo, id_ruta) VALUES($id_cliente, 'INSTALACION', $id_ruta)")) {
 								 		#SI SE AGREGA, ELIMINAMOS LA INSTALACION DE LA RUTA PARA tmp_pendientes Y ASI PUEDAN SER AGREGADAS A OTRAS RUTAS
 						                mysqli_query($conn, "DELETE FROM tmp_pendientes WHERE id_cliente = $id_cliente");
 								 	}
