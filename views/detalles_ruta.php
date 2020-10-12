@@ -253,6 +253,7 @@ $ruta = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM rutas WHERE id_rut
                         <th>Fecha</th>
                         <th>Hora</th>
                         <th>Estatus</th>
+                        <th>Alta</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -285,6 +286,8 @@ $ruta = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM rutas WHERE id_rut
                       <td><?php echo $cliente['fecha_instalacion']; ?></td> 
                       <td><?php echo $cliente['hora_alta']; ?></td> 
                       <td><?php echo $estatus; ?></td>
+                      <td><form method="post" action="../views/alta_instalacion.php"><input type="hidden" name="id_cliente" value="<?php echo $tmp['id_cliente'];?>"><button button type="submit" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">done</i></button></form></td>
+
             
                     </tr>
                 <?php
@@ -308,6 +311,7 @@ $ruta = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM rutas WHERE id_rut
                         <th>Fecha</th>
                         <th>Hora</th>
                         <th>Estatus</th>
+                        <th>Atender</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -372,6 +376,7 @@ $ruta = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM rutas WHERE id_rut
                       <td><?php echo $fecha; ?></td>
                       <td><?php echo $Hora; ?></td>
                       <td><?php echo $estatus; ?></td>
+                      <td><br><form action="<?php echo ($id > 100000)? 'atender_orden.php':'atender_reporte.php'; ?>" method="post"><input type="hidden" name="<?php echo ($id > 100000)? 'id_orden':'id_reporte'; ?>" value="<?php echo $id; ?>"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">send</i></button></form></td>
                     </tr>
                 <?php
                     }
