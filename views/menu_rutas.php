@@ -37,6 +37,7 @@ include('../php/cobrador.php');
 				while($ruta = mysqli_fetch_array($rutas)) {
 					$id_ruta = $ruta['id_ruta'];//TOMAMOS EL ID DE LA RUTA EN TURNO
 					$fecha_ruta = $ruta['fecha'];//TOMAMOS LA FECHA DE LA RUTA EN TURNO
+					$hora_ruta = $ruta['hora'];//TOMAMOS LA HORA DE LA RUTA EN TURNO
 					#CONTAMOS TODAS LAS INSTALACIONES ASIGNADAS A ESTA RUTA EN TURNO
 					$instalaciones = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM tmp_pendientes WHERE ruta_inst = $id_ruta"));
 					#CONTAMOS TODOS LOS REPORTES INCLUYE ORDENES Y MANTENIMIENTOS ASIGNADOS A ESTA RUTA EN TURNO
@@ -48,7 +49,8 @@ include('../php/cobrador.php');
 					#CONTAMOS TODOS LOS REPORTES TERMINADOS INCLUYE MANTENIMIENTOS ASIGNADOS A ESTA RUTA EN TURNO
 					$reporte = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM tmp_reportes  AS TRep JOIN reportes AS Rep ON TRep.id_reporte = Rep.id_reporte WHERE ruta = $id_ruta AND atendido = 1 OR atendido !=  NULL"));
 					#CONTAMOS TODAS LAS ORDENES TERMINADAS ASIGNADOS A ESTA RUTA EN TURNO
-					$orden = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM tmp_reportes  AS TRep JOIN orden_servicios AS Orden ON TRep.id_reporte = Orden.id WHERE ruta = $id_ruta AND ((fecha_r >= '$fecha_ruta' AND fecha_s IS NULL) OR (fecha_r <= '$fecha_ruta' AND fecha_s >= '$fecha_ruta'))"));
+					$orden = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM tmp_reportes  AS TRep JOIN orden_servicios AS Orden ON TRep.id_reporte = Orden.id WHERE ruta = $id_ruta AND ((fecha_r > '$fecha_ruta'  AND  fecha_s IS NULL)  OR (fecha_r = '$fecha_ruta' AND hora_r > '$hora_ruta' AND  fecha_s IS NULL)  OR (fecha_r <= '$fecha_ruta' AND fecha_s > '$fecha_ruta') OR (fecha_r <= '$fecha_ruta' AND fecha_s = '$fecha_ruta' AND hora_s > '$hora_ruta' ))"));
+
 					#SUMAMOS LOS CONTADORES DE REPORTES, ORDENES E INSTALACIONES TERMINADAS PARA SABER QUE AVANCE LLEVA DEL TOTAL
 					$Avance = $instalacion['count(*)']+$reporte['count(*)']+$orden['count(*)'];
 					#SUMAMOS DOS DIA A LA FECHA DE LA RUTA
@@ -73,6 +75,20 @@ include('../php/cobrador.php');
 								 	}
 						        }//FIN WHILE
 							}//FIN IF REPORTES
+							#BUSCAMOS ORDENES QUE NO HAYAN SIDO ATENDIDOS
+							$sql_tmp2 = mysqli_query($conn,"SELECT * FROM tmp_reportes INNER JOIN orden_servicios ON tmp_reportes.id_reporte = orden_servicios.id WHERE ruta = $id_ruta AND ((fecha_r IS NULL AND  fecha_s IS NULL)  OR (fecha_r < '$fecha_ruta'  AND  fecha_s IS NULL)  OR (fecha_r = '$fecha_ruta' AND hora_r < '$hora_ruta' AND  fecha_s IS NULL)  OR (fecha_r <= '$fecha_ruta' AND fecha_s < '$fecha_ruta') OR (fecha_r <= '$fecha_ruta' AND fecha_s = '$fecha_ruta' AND hora_s < '$hora_ruta' ))");
+							#VERIFICAMOS QUE HAYA ALMENOS UNO
+							if(mysqli_num_rows($sql_tmp2) > 0){
+								# SI ENCUENTRA, RECORREMOS CADA UNO DE LOS REPORTES
+								while($tmp = mysqli_fetch_array($sql_tmp2)){
+									$id = $tmp['id'];//TOMAMOS EL ID DEL REPORTE EN TURNO
+									#AGREGAMOS EL REPORTE EN TURNO A LA TABLA DE no_realizados id,id_trabjo, 'REPORTE'
+									if (mysqli_query($conn,"INSERT INTO no_realizados (id_trabajo, tipo, id_ruta) VALUES($id, 'REPORTE', $id_ruta)")) {
+										#SI SE AGREGA, ELIMINAMOS EL REPORTE DE LA RUTA PARA tmp_reportes Y ASI PUEDAN SER AGREGADOS A OTRAS RUTAS
+										mysqli_query($conn, "DELETE FROM tmp_reportes  WHERE id_reporte = $id");
+									}
+								}//FIN WHILE
+							}//FIN IF ORDENES
 							#BUSCAMOS INSTALACIONES QUE NO HAYAN SIDO REALIZADAS AUN
 							$sql_tmp2 = mysqli_query($conn,"SELECT * FROM tmp_pendientes INNER JOIN clientes ON tmp_pendientes.id_cliente = clientes.id_cliente  WHERE tmp_pendientes.ruta_inst = $id_ruta AND clientes.instalacion IS NULL");
 						    if(mysqli_num_rows($sql_tmp2) > 0){

@@ -51,7 +51,7 @@
                         <td><?php echo $Solucion; ?></td>
                         <td><?php echo $fecha; ?></td>
                         <td><?php echo $Hora; ?></td>
-                        <td><?php echo ($ruta['estatus'] == 1)?'<span class="new badge red" data-badge-caption="Pendiente"></span>':$estatus; ?></td>
+                        <td><?php echo $estatus; ?></td>
                         <td><br><form action="<?php echo ($id > 100000)? 'atender_orden.php':'atender_reporte.php'; ?>" method="post"><input type="hidden" name="<?php echo ($id > 100000)? 'id_orden':'id_reporte'; ?>" value="<?php echo $id; ?>"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">send</i></button></form></td>
                       </tr>
                   <?php
