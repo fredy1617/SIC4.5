@@ -37,20 +37,20 @@ $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE 
 
 if ($Orden == "Encender") {
     if( $address !="" && $list!=""  ){
-        $API = new routeros_api();
-        $API->debug = false;
-        if ($API->connect($ServerList, $Username, $Pass, $Port)) {
-           $API->write("/ip/firewall/address-list/getall",false);
-           $API->write('?address='.$address,false);
-           $API->write('?list='.$list,true);       
-           $READ = $API->read(false);
-           $ARRAY = $API->parse_response($READ); // busco si ya existe
-            if(count($ARRAY)>0){ 
-                $ID = $ARRAY[0]['.id'];
-                $API->write('/ip/firewall/address-list/remove', false);
-                $API->write('=.id='.$ID, true);
-                $READ = $API->read(false);
-                echo "<script >M.toast({html: 'El internet fue Encencido/Reactivado.'".$ID.", classes: 'rounded'})</script>";
+      $API = new routeros_api();
+      $API->debug = false;
+      if ($API->connect($ServerList, $Username, $Pass, $Port)) {
+        $API->write("/ip/firewall/address-list/getall",false);
+        $API->write('?address='.$address,false);
+        $API->write('?list='.$list,true);       
+        $READ = $API->read(false);
+        $ARRAY = $API->parse_response($READ); // busco si ya existe
+        if(count($ARRAY)>0){ 
+            $ID = $ARRAY[0]['.id'];
+            $API->write('/ip/firewall/address-list/remove', false);
+            $API->write('=.id='.$ID, true);
+            $READ = $API->read(false);
+                echo "<script >M.toast({html: 'El internet fue Encencido/Reactivado.', classes: 'rounded'})</script>";
             }else{ // si no existe lo creo
                 echo "<script >M.toast({html: 'Este cliente ya tiene el internet Encencido/Reactivado', classes: 'rounded'})</script>";
             }
