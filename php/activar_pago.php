@@ -32,6 +32,7 @@ $Fecha_hoy = date('Y-m-d');
            $READ = $API->read(false);
            $ARRAY = $API->parse_response($READ); // busco si ya existe
             if(count($ARRAY)>0){ 
+                $ID = $ARRAY[0]['.id'];
                 $API->write('/ip/firewall/address-list/remove', false);
                 $API->write('=.id='.$ID, true);
                 $READ = $API->read(false);
