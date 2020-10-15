@@ -50,12 +50,21 @@ if ($Orden == "Encender") {
             $API->write('/ip/firewall/address-list/remove', false);
             $API->write('=.id='.$ID, true);
             $READ = $API->read(false);
-                echo "<script >M.toast({html: 'El internet fue Encencido/Reactivado.', classes: 'rounded'})</script>";
+            $API->write("/ip/firewall/address-list/getall",false);
+	        $API->write('?address='.$address,false);
+	        $API->write('?list='.$list,true);       
+	        $READ = $API->read(false);
+	        $ARRAY = $API->parse_response($READ); // busco si ya existe
+	        if(count($ARRAY) == 0){
+                echo "<script >M.toast({html: 'El internet fue Encencido/Reactivado.(".$ID.")', classes: 'rounded'})</script>";
             }else{ // si no existe lo creo
-                echo "<script >M.toast({html: 'Este cliente ya tiene el internet Encencido/Reactivado', classes: 'rounded'})</script>";
-            }
-            $API->disconnect();
-        }else{
+	            echo "<script >M.toast({html: OCURRIO UN ERROR', classes: 'rounded'})</script>";
+	        }
+        }else{ // si no existe lo creo
+            echo "<script >M.toast({html: 'Este cliente ya tiene el internet Encencido/Reactivado', classes: 'rounded'})</script>";
+        }
+        $API->disconnect();
+      }else{
           echo "<script >M.toast({html: 'No se ha podido hacer conexión al mikrotik Cliente: '.$Cliente, classes: 'rounded'})</script>";
           $sql = "INSERT INTO reportes (id_cliente, descripcion, fecha) VALUES ($Cliente, '$Descripcion', '$Fecha_hoy')";
           if(mysqli_query($conn, $sql)){
