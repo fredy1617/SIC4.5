@@ -43,7 +43,7 @@ $Fecha_hoy = date('Y-m-d');
                 if(count($ARRAY) == 0){
                     echo "<html><h3>SERVICIO REACTIVADO!!</h3></html>";
                 }else{ // si no existe lo creo
-                    echo "<script >M.toast({html: OCURRIO UN ERROR', classes: 'rounded'})</script>";
+                    echo "<html><h2>>OCURRIO UN ERROR 410...(NO SE ACTIVO)</h2></html>";
                 }     
             }else{ // si no existe lo creo
                 echo "<html><h3>Cliente verificado y no fue cortado aún...</h3></html>";
