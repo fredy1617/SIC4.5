@@ -32,17 +32,25 @@ $Fecha_hoy = date('Y-m-d');
            $READ = $API->read(false);
            $ARRAY = $API->parse_response($READ); // busco si ya existe
             if(count($ARRAY)>0){ 
-                $ID = $ARRAY[0]['.id'];
                 $API->write('/ip/firewall/address-list/remove', false);
                 $API->write('=.id='.$ID, true);
                 $READ = $API->read(false);
-                echo "Servicio reactivado.<br>";
+                $API->write("/ip/firewall/address-list/getall",false);
+                $API->write('?address='.$address,false);
+                $API->write('?list='.$list,true);       
+                $READ = $API->read(false);
+                $ARRAY = $API->parse_response($READ); // busco si ya existe
+                if(count($ARRAY) == 0){
+                    echo "<html><h3>SERVICIO REACTIVADO!!</h3></html>";
+                }else{ // si no existe lo creo
+                    echo "<script >M.toast({html: OCURRIO UN ERROR', classes: 'rounded'})</script>";
+                }     
             }else{ // si no existe lo creo
-                echo "Cliente verificado y no fue cortado aún.<br>";
+                echo "<html><h3>Cliente verificado y no fue cortado aún...</h3></html>";
             }
             $API->disconnect();
         }else{
-          echo "<html><font color = 'red'><h3>OCURRIO UN ERROR 404... CONSULTAR CON PROGRAMACION ! CLIENTE: ".$IdCliente."</h3> </font></html>";
+          echo "<html><font color = 'red'><h2>OCURRIO UN ERROR 404... CONSULTAR CON PROGRAMACION ! CLIENTE: ".$IdCliente."</h2> </font></html>";
           $sql = "INSERT INTO reportes (id_cliente, descripcion, fecha) VALUES ('$IdCliente', 'Hubo un error con la conexion al mikrotik.', '$Fecha_hoy')";
           if(mysqli_query($conn, $sql)){
             echo "<br> El reporte se dió de alta satisfcatoriamente.<br>";
