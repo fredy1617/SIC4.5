@@ -50,7 +50,7 @@ if ($Orden == "Encender") {
                 $API->write('/ip/firewall/address-list/remove', false);
                 $API->write('=address='.$address, true);
                 $READ = $API->read(false);
-                echo "<script >M.toast({html: 'El internet fue Encencido/Reactivado.'"..", classes: 'rounded'})</script>";
+                echo "<script >M.toast({html: 'El internet fue Encencido/Reactivado.'".$ID.", classes: 'rounded'})</script>";
             }else{ // si no existe lo creo
                 echo "<script >M.toast({html: 'Este cliente ya tiene el internet Encencido/Reactivado', classes: 'rounded'})</script>";
             }
