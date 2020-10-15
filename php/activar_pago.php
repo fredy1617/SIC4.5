@@ -32,10 +32,12 @@ $Fecha_hoy = date('Y-m-d');
            $READ = $API->read(false);
            $ARRAY = $API->parse_response($READ); // busco si ya existe
             if(count($ARRAY)>0){ 
+              #REMOVER DE LA LISTA
                 $ID = $ARRAY[0]['.id'];
                 $API->write('/ip/firewall/address-list/remove', false);
                 $API->write('=.id='.$ID, true);
                 $READ = $API->read(false);
+                #VERIFICAR NUEVAMENTE SI YA NO ESTA EN LA LISTA
                 $API->write("/ip/firewall/address-list/getall",false);
                 $API->write('?address='.$address,false);
                 $API->write('?list='.$list,true);       
@@ -44,6 +46,10 @@ $Fecha_hoy = date('Y-m-d');
                 if(count($ARRAY) == 0){
                     echo "<html><h3>SERVICIO REACTIVADO!!</h3></html>";
                 }else{ // si no existe lo creo
+                    $sql = "INSERT INTO reportes (id_cliente, descripcion, fecha) VALUES ('$IdCliente', 'PAGO MENSUALIDAD Y NO SE LE ACTIVO AUTOMATICAMENTE EL SERVICIO ERROR DE API.', '$Fecha_hoy')";
+                    if(mysqli_query($conn, $sql)){
+                      echo "<br> El reporte se dió de alta satisfcatoriamente.<br>";
+                    }
                     echo "<html><font color = 'red'><h2>OCURRIO UN ERROR 410...(NO SE ACTIVO)</h2></font></html>";
                 }     
             }else{ // si no existe lo creo

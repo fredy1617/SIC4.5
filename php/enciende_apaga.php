@@ -46,10 +46,12 @@ if ($Orden == "Encender") {
         $READ = $API->read(false);
         $ARRAY = $API->parse_response($READ); // busco si ya existe
         if(count($ARRAY)>0){ 
+            #REMOVER DE LA LISTA
             $ID = $ARRAY[0]['.id'];
             $API->write('/ip/firewall/address-list/remove', false);
             $API->write('=.id='.$ID, true);
             $READ = $API->read(false);
+            #VERIFICAR NUEVAMENTE SI YA NO ESTA EN LA LISTA
             $API->write("/ip/firewall/address-list/getall",false);
   	        $API->write('?address='.$address,false);
   	        $API->write('?list='.$list,true);       
@@ -58,7 +60,11 @@ if ($Orden == "Encender") {
   	        if(count($ARRAY) == 0){
                 echo "<script >M.toast({html: 'El internet fue Encencido/Reactivado.(".$ID.")', classes: 'rounded'})</script>";
             }else{ // si no existe lo creo
-  	            echo "<script >M.toast({html: OCURRIO UN ERROR', classes: 'rounded'})</script>";
+                $sql = "INSERT INTO reportes (id_cliente, descripcion, fecha) VALUES ('$IdCliente', 'SE USO BOTON DE ENCENDIDO Y NO SE ACTIVO EL INTERNET ERROR DE API.', '$Fecha_hoy')";
+                if(mysqli_query($conn, $sql)){
+                  echo "<script >M.toast({html: 'El reporte se dió de alta satisfcatoriamente.', classes: 'rounded'})</script>";
+                }
+  	            echo "<script >M.toast({html: 'OCURRIO UN ERROR', classes: 'rounded'})</script>";
   	        }
         }else{ // si no existe lo creo
             echo "<script >M.toast({html: 'Este cliente ya tiene el internet Encencido/Reactivado', classes: 'rounded'})</script>";
