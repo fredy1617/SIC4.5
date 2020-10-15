@@ -48,9 +48,9 @@ if ($Orden == "Encender") {
             if(count($ARRAY)>0){ 
                 $ID = $ARRAY[0]['.id'];
                 $API->write('/ip/firewall/address-list/remove', false);
-                $API->write('=.id='.$ID, true);
+                $API->write('=address='.$address, true);
                 $READ = $API->read(false);
-                echo "<script >M.toast({html: 'El internet fue Encencido/Reactivado.', classes: 'rounded'})</script>";
+                echo "<script >M.toast({html: 'El internet fue Encencido/Reactivado.'"..", classes: 'rounded'})</script>";
             }else{ // si no existe lo creo
                 echo "<script >M.toast({html: 'Este cliente ya tiene el internet Encencido/Reactivado', classes: 'rounded'})</script>";
             }
