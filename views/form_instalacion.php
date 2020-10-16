@@ -3,7 +3,6 @@
 	<title>SIC | Formulario Instalación</title>
 <?php 
 include('fredyNav.php');
-include('../php/cobrador.php');
 ?>
 <style type="text/css">
   .select-dropdown{

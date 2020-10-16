@@ -4,8 +4,8 @@
 <?php
   include('fredyNav.php');
   include('../php/conexion.php');
-  include('../php/cobrador.php');
   $user_id = $_SESSION['user_id'];
+  $area = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));
 ?>
 <title>SIC | Instalaciones Pendientes</title>
 <script>
@@ -71,10 +71,14 @@
                         <th>Telefono</th>
                         <th>Lugar</th>
     					          <th>Registro</th>
+                        <?php if($area['area'] != "Cobrador"){ ?>
                         <th>Alta</th>
+                        <?php } ?>
     					          <th>Abono</th>
+                        <?php if($area['area'] != "Cobrador"){ ?>
                         <th>Agregar</th>
                         <th>Borrar</th>
+                        <?php } ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -96,10 +100,14 @@
                         <td><?php echo $pendientes['telefono'];?></td>
                         <td><?php echo $comuni;?></td>
     					          <td><?php echo $pendientes['registro'];?></td>
+                        <?php if($area['area'] != "Cobrador"){ ?>                        
                         <td><form method="post" action="../views/alta_instalacion.php"><input type="hidden" name="id_cliente" value="<?php echo $pendientes['id_cliente'];?>"><button button type="submit" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">done</i></button></form></td>
+                        <?php } ?>
                         <td><form method="post" action="../views/abonar_instalacion.php"><input type="hidden" name="id_cliente" value="<?php echo $pendientes['id_cliente'];?>"><button button type="submit" class="btn btn-floating indigo darken-1 waves-effect waves-light"><i class="material-icons">attach_money</i></button></form></td>
+                        <?php if($area['area'] != "Cobrador"){ ?>
                         <td><a onclick="ruta(<?php echo $pendientes['id_cliente'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></a></td>
                         <td><a onclick="eliminar_instalacion(<?php echo $pendientes['id_cliente']; ?>)" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
+                        <?php } ?>
                     </tr>
                     <?php
         		}
@@ -107,6 +115,7 @@
                 </tbody>
             </table>
             <br><br><br>
+  <?php if($area['area'] != "Cobrador"){ ?>
     <div id="delete">
       <!-- MUESTRA Instalaciones DE RUTA--->
         <div class="row">
@@ -223,6 +232,7 @@
         <a onclick="modal()" class="btn waves-light waves-effect right pink">Imprimir</a>
       <!-- FIN REPORTES DE RUTA--->
     </div>
+  <?php } ?>
 </div><br><br><br>
 </body>
 </main>

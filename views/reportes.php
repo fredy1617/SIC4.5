@@ -5,6 +5,7 @@
 include('fredyNav.php');
 include('../php/conexion.php');
 $user_id = $_SESSION['user_id'];
+$area = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));
 ?>
 <!--Inicia Script de reportes tmp-->
 <script>
@@ -90,8 +91,10 @@ $user_id = $_SESSION['user_id'];
                 <th>Comunidad</th>
                 <th>Técnico</th>
                 <th>Registró</th>
+                <?php if($area['area'] != "Cobrador"){ ?>
                 <th>Atender</th>
                 <th>+Ruta</th>
+                <?php } ?>
                 <th>Editar</th>
             </tr>
           </thead>
@@ -101,6 +104,7 @@ $user_id = $_SESSION['user_id'];
     </div></p>
   </div>
   <br><br><br>
+  <?php if($area['area'] != "Cobrador"){ ?>
     <div id="delete">
       <!-- MUESTRA Instalaciones DE RUTA--->
         <div class="row">
@@ -217,6 +221,7 @@ $user_id = $_SESSION['user_id'];
         <a onclick="modal()" class="btn waves-light waves-effect right pink">Imprimir</a>
       <!-- FIN REPORTES DE RUTA--->
     </div>
+  <?php } ?>
 <br><br><br>
 </div>
 <br>

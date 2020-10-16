@@ -1,5 +1,7 @@
 <?php
   include ('../php/conexion.php');
+  #INCLUIMOS EL PHP DONDE VIENE LA INFORMACION DEL INICIO DE SESSION
+  include('../php/is_logged.php');
   $Texto = $conn->real_escape_string($_POST['texto']);  
 
   date_default_timezone_set('America/Mexico_City');
@@ -89,7 +91,11 @@
           mysqli_query($conn,"UPDATE reportes SET descripcion = 'RETRASO DE VISITA NO ATENDIO: ".$Nombre." VISTAR URGENTEMENTE!'  WHERE id_reporte = $id_reporte");
             $resultados = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte=$id_reporte"));  
         }
-      }      
+      } 
+      $user_id = $_SESSION['user_id'];
+      $area = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));  
+      $mas = ($area['area'] == "Cobrador")?'':'<td><br><form action="atender_reporte.php" method="post"><input type="hidden" name="id_reporte" value="'.$id_reporte.'"><button type="submit" class="btn-floating btn-tiny waves-effect   waves-light pink"><i class="material-icons">send</i></button></form></td><td><a onclick="ruta('.$id_reporte.');" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></a></td>';
+
       //Output
       $mensaje .= '
                   <tr>
@@ -103,8 +109,7 @@
                     <td>'.$comunidad['nombre'].'</td>
                     <td>'.$tecnico1[1].$Apoyo.'</td>
                     <td>'.$Usuario.'</td>
-                    <td><br><form action="atender_reporte.php" method="post"><input type="hidden" name="id_reporte" value="'.$id_reporte.'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">send</i></button></form></td>
-                    <td><a onclick="ruta('.$id_reporte.');" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></a></td>
+                    '.$mas.'
                     <td><br><form action="editar_reporte.php" method="post"><input type="hidden" name="id_reporte" value="'.$id_reporte.'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>
                   </tr>';  
          
