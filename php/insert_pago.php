@@ -183,7 +183,8 @@ if ($entra == "Si") {
   $array =  array('ENERO' => '02','FEBRERO' => '03', 'MARZO' => '04','ABRIL' => '05', 'MAYO' => '06', 'JUNIO' => '07', 'JULIO' => '08', 'AGOSTO' => '09', 'SEPTIEMBRE' => '10', 'OCTUBRE' => '11', 'NOVIEMBRE' => '12',  'DICIEMBRE' => '01');
     
   $N_Mes = $array[$Mes];
-  
+  #COMO ES DICIEMBRE ADELANTAMOS UN AÑO PORQUE LA FECHA DE CORTE YA ES EL SIGUINETE AÑO PAGO TODO DICIEMBRE
+  if ($Mes == 'DICIEMBRE') {  $Año ++; }
   #FECHA DE CORTE SEGUN EL MES Y AÑO SELECCIONADO
   $FechaCorte = date($Año.'-'.$N_Mes.'-05');  
 
@@ -212,7 +213,11 @@ if ($entra == "Si") {
     $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $IdCliente"));
     if($cliente['fecha_corte']<$FechaCorte){
         mysqli_query($conn, "UPDATE clientes SET fecha_corte='$FechaCorte' WHERE id_cliente='$IdCliente'");
+
       }
+    echo '<script>M.toast({html:"Ha ocurrido un error.'.$cliente['fecha_corte'].' < '.$FechaCorte.'", classes: "rounded"})</script>';  
+
+
       $id_mensualidad=$cliente['paquete'];
       $mensualidad = mysqli_fetch_array(mysqli_query($conn, "SELECT mensualidad FROM paquetes WHERE id_paquete='$id_mensualidad'"));
       $dif = $mensualidad['mensualidad']-$Cantidad;
