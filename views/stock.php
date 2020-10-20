@@ -20,7 +20,7 @@ include('../php/cobrador.php');
         <?php
         #SELECCIONAMOS TODOS LOS USUARIOS CON EL ROL DE REDES Y LOS QUE TENGAN ID 25, 28, 49 QUE SON LOS USARIOS QUE PUEDEN TENER MATERIAL A SU CARGO (STOCK)
         $usuarios = mysqli_query($conn, "SELECT * FROM users WHERE area = 'Redes' OR user_id IN (25, 28, 49)");
-        $#VERIFICAMOS SI ENCONTRAMOS MAS DE UN USUARIO
+        #VERIFICAMOS SI ENCONTRAMOS MAS DE UN USUARIO
         if (mysqli_num_rows($usuarios) > 0) {
           #SI ENCONTRAMOS USARIOS CREAMOS UNA TABLA CON ESTOS MISMOS
         ?>        
