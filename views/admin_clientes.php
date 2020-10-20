@@ -21,7 +21,7 @@ include('fredyNav.php');
         }, function(mensaje) {
             $("#Continuar").html(mensaje);
         }); 
-	  };
+	 };
 </script>
 </head>
 <body onload="buscar();">
