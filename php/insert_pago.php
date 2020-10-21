@@ -213,16 +213,14 @@ if ($entra == "Si") {
     $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $IdCliente"));
     if($cliente['fecha_corte']<$FechaCorte){
         mysqli_query($conn, "UPDATE clientes SET fecha_corte='$FechaCorte' WHERE id_cliente='$IdCliente'");
-
-      }
-    echo '<script>M.toast({html:"Ha ocurrido un error.'.$cliente['fecha_corte'].' < '.$FechaCorte.'", classes: "rounded"})</script>';  
+    }
 
 
-      $id_mensualidad=$cliente['paquete'];
-      $mensualidad = mysqli_fetch_array(mysqli_query($conn, "SELECT mensualidad FROM paquetes WHERE id_paquete='$id_mensualidad'"));
-      $dif = $mensualidad['mensualidad']-$Cantidad;
-      if ($Cantidad == ($mensualidad['mensualidad']*10)) {
-      }else{
+    $id_mensualidad=$cliente['paquete'];
+    $mensualidad = mysqli_fetch_array(mysqli_query($conn, "SELECT mensualidad FROM paquetes WHERE id_paquete='$id_mensualidad'"));
+    $dif = $mensualidad['mensualidad']-$Cantidad;
+    if ($Cantidad == ($mensualidad['mensualidad']*10)) {
+    }else{
       if ($dif < -50) {
         $Descrip = "AUMENTAR PAQUETE pago: ".$Cantidad." por: ".$Descripcion;
         if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha) VALUES ($IdCliente, '$Descrip', '$Fecha_hoy')")) {
@@ -234,7 +232,7 @@ if ($entra == "Si") {
           echo '<script>M.toast({html:"Se registro el reporte (DISMINUIR)", classes: "rounded"})</script>';
         }
       }
-      }    
+    }    
     ?>
     <script>
       id_cliente = <?php echo $IdCliente; ?>;

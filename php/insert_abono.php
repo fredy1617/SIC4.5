@@ -162,6 +162,7 @@ $Saldo = $abono['suma']-$deuda['suma'];
               <th>Fecha</th>
               <th>Descripcion</th>
               <th>Usuario</th>
+              <th>Liquid.</th>
             </tr>
           </thead>
           <tbody>
@@ -179,6 +180,7 @@ $Saldo = $abono['suma']-$deuda['suma'];
               <td><?php echo $resultados['fecha_deuda'];?></td>
               <td><?php echo $resultados['descripcion'];?></td>
               <td><?php echo $user['user_name'];?></td>
+              <td><?php echo ($resultados['liquidada'] == 1)?'<span class="new badge green" data-badge-caption=""></span>':'<span class="new badge red" data-badge-caption=""></span>';?></td>
             </tr>
             <?php 
              }//fin while
