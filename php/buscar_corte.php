@@ -33,6 +33,7 @@ $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE use
 	$totalClientes= 0;
 	$totalbanco = 0;
 	$totalcredito = 0;
+	$totaldeducible = 0;
 	while($cortes = mysqli_fetch_array($resultado_cortes)){
 		$id_corte =$cortes['id_corte'];
 		$pagos = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM detalles WHERE id_corte = $id_corte"));
@@ -43,7 +44,7 @@ $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE use
 	    <td>$<?php echo $cortes['cantidad'];?></td>
 	    <td>$<?php echo $cortes['banco'];?></td>
 	    <td>$<?php echo $cortes['credito'];?></td>
-	    <td>$<?php echo $deducibles['cantidad'].'<br>'.$deducibles['descripcion'];?></td>
+	    <td>$<?php echo ($deducibles['cantidad']== '')? 0:$deducibles['cantidad'].'<br>'.$deducibles['descripcion'];?></td>
 	    <td><?php echo $cortes['fecha'];?></td>
 	    <td><?php echo $cortes['hora'];?></td>
 	    <td><?php echo $pagos['count(*)'];?></td>
@@ -53,6 +54,7 @@ $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE use
 	  $total = $total+$cortes['cantidad'];
 	  $totalbanco = $totalbanco+$cortes['banco'];
 	  $totalcredito = $totalcredito+$cortes['credito'];
+	  $totaldeducible = $totaldeducible+$deducibles['cantidad'];
 	  $totalClientes = $totalClientes+$pagos['count(*)'];
 	  $aux--;
 	}
@@ -61,7 +63,8 @@ $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE use
 	  	<td><h5>TOTAL:</h5></td>
 	  	<td><h5>$<?php echo $total; ?></h5></td>
 	  	<td><h5>$<?php echo $totalbanco; ?></h5></td>
-	  	<td><h5>$<?php echo $totalcredito; ?></h5></td><td></td><td></td>
+	  	<td><h5>$<?php echo $totalcredito; ?></h5></td>
+	  	<td><h5>$<?php echo $totaldeducible; ?></h5></td><td></td>
 	  	<td><h5>TOTAL:</h5></td>
 	  	<td><h5><?php echo $totalClientes;?></h5></td>
 	  	<td></td>

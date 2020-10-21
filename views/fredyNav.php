@@ -49,14 +49,14 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    <li><a href="reporte_pagos_ST.php" class="black-text"><i class="material-icons">list</i>Reporte Pagos</a></li>
 				    <li><a href="rep_refacciones.php" class="black-text"><i class="material-icons">list</i>Rep. Refacciones</a></li>    			 
  				 </ul>
-				<li><a class='dropdown-button' data-target='dropdown2'><i class="material-icons left">language</i>Redes<span class=" new badge pink" data-badge-caption=""><?php echo $instalaciones['count(*)']+$reportes['count(*)']+$tel['count(*)']+$rutas['count(*)'];?></span><i class="material-icons right">arrow_drop_down</i></a></li>
+				<li><a class='dropdown-button' data-target='dropdown2'><i class="material-icons left">language</i>Redes<span class=" new badge pink" data-badge-caption=""><?php echo $instalaciones['count(*)']+$reportes['count(*)']+$reportesEsp['count(*)']+$Ordenes_R['count(*)']+$Mantenimiento['count(*)'];?></span><i class="material-icons right">arrow_drop_down</i></a></li>
 				<ul id='dropdown2' class='dropdown-content'>
 				    <li><a href="../views/form_instalacion.php" class="black-text"><i class="material-icons">add</i>Nueva Instalación</a></li>    
 					<li><a href="form_esperiales.php" class="black-text"><i class="material-icons">add_circle_outline</i>Nuevo Mantimiento</a></li>
 					<li><a href="form_orden.php" class="black-text"><i class="material-icons">add_circle</i>Nueva Orden</a></li>
 					 <li><a href="clientes.php" class="black-text"><i class="material-icons">people</i>Clientes </a></li>
 				    <li><a href="../views/instalaciones.php" class="black-text"><i class="material-icons">list</i>Instalaciones <span class=" new badge pink" data-badge-caption=""><?php echo $instalaciones['count(*)']?></span></a></li>
-				    <li><a href="stock.php" class="black-text"> <i class="material-icons">assignment_ind</i>Sotck </a></li>
+				    <li><a href="stock.php" class="black-text"> <i class="material-icons">assignment_ind</i>Stock </a></li>
 				    <li><a href="reportes.php" class="black-text"><i class="material-icons">perm_scan_wifi</i>Reportes <span class="new badge pink" data-badge-caption=""><?php echo $reportes['count(*)'];?></span></a></li>			    
 				    <li><a href="ordenes_servicio.php" class="black-text"><i class="material-icons">assignment</i>Orden Servicio<span class="new badge pink" data-badge-caption=""><?php echo $reportesEsp['count(*)']+$Ordenes_R['count(*)'];?></span></a></li>			    
 				    <li><a href="mantenimiento.php" class="black-text"><i class="material-icons">build</i>Mantenimiento <span class="new badge pink" data-badge-caption=""><?php echo $Mantenimiento['count(*)'];?></span></a></li>			    
@@ -160,7 +160,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 					 			  <li><a href="form_esperiales.php"><i class="material-icons">add_circle_outline</i>Nuevo Mantenimiento</a></li>
 								  <li><a href="form_orden.php"><i class="material-icons">add_circle</i>Nueva Orden</a></li>
 					 			  <li><a href="clientes.php"><i class="material-icons">people</i>Clientes </a></li>
-				    			  <li><a href="stock.php" class="black-text"> <i class="material-icons">assignment_ind</i>Sotck </a></li>
+				    			  <li><a href="stock.php" class="black-text"> <i class="material-icons">assignment_ind</i>Stock </a></li>
 			      				  <li><a href="../views/instalaciones.php"><i class="material-icons">list</i>Instalaciones <span class="new badge pink" data-badge-caption=""><?php echo $instalaciones['count(*)'];?></span></a></li>
 						    	  <li><a href="reportes.php"><i class="material-icons">perm_scan_wifi</i>Reportes <span class=" new badge pink" data-badge-caption=""><?php echo $reportes['count(*)'];?></span></a></li>
 						    	  <li><a href="ordenes_servicio.php"><i class="material-icons">assignment</i>Orden Servicio<span class=" new badge pink" data-badge-caption=""><?php echo $reportesEsp['count(*)']+$Ordenes_R['count(*)'];?></span></a></li>

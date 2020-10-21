@@ -70,6 +70,7 @@
                         <th>Servicio</th>
                         <th>Telefono</th>
                         <th>Lugar</th>
+                        <th>Fecha Registro</th>
     					          <th>Registro</th>
                         <?php if($area['area'] != "Cobrador"){ ?>
                         <th>Alta</th>
@@ -99,6 +100,7 @@
                         <td><b><?php echo $pendientes['servicio'];?></b></td>
                         <td><?php echo $pendientes['telefono'];?></td>
                         <td><?php echo $comuni;?></td>
+                        <td><?php echo $pendientes['fecha_registro'];?></td>
     					          <td><?php echo $pendientes['registro'];?></td>
                         <?php if($area['area'] != "Cobrador"){ ?>                        
                         <td><form method="post" action="../views/alta_instalacion.php"><input type="hidden" name="id_cliente" value="<?php echo $pendientes['id_cliente'];?>"><button button type="submit" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">done</i></button></form></td>

@@ -77,6 +77,7 @@ if ($filas == 0) {
 	                    <th>Nombre</th>
 	                    <th>Servicio</th>
 	                    <th>Telefono</th>
+	                    <th>Fecha Registro</th>
 	                    <th>Registró</th>
 	                  </tr>
 	                </thead>
@@ -90,6 +91,7 @@ if ($filas == 0) {
 	                    <td><?php echo $Instalacion['nombre']; ?></td>
 	                    <td><?php echo $Instalacion['servicio']; ?></td>
 	                    <td><?php echo $Instalacion['telefono']; ?></td>
+	                    <td><?php echo $Instalacion['fecha_registro']; ?></td>
 	                    <td><?php echo $Instalacion['registro']; ?></td>
 	                  </tr>
 	                <?php } //FIN WHILE ?>
