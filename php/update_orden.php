@@ -11,7 +11,9 @@ $id = $conn->real_escape_string($_POST['valorIdOrden']);
 $FechaAtendido = date('Y-m-d');
 $Hora = date('H:i:s');
 
-if ($EstatusI == 'Revisar') {
+if ($EstatusI == 'PorConfirmar') {
+	$sql = "UPDATE orden_servicios SET estatus = '$Estatus' WHERE id = '$id'";
+}elseif ($EstatusI == 'Revisar') {
 
 	$Trabajo = $conn->real_escape_string($_POST['valorTrabajo']);
 	$Material = $conn->real_escape_string($_POST['valorMaterial']);

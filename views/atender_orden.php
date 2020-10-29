@@ -45,7 +45,17 @@ function update_orden() {
     var textoEstatusI = $("input#estatusI").val();
     var textoIdOrden = $("input#id_orden").val();
 
-    if (textoEstatusI == 'Revisar') {
+    if (textoEstatusI == 'PorConfirmar') {
+     
+        $.post("../php/update_orden.php", {
+          valorIdOrden: textoIdOrden,
+          valorEstatus: textoEstatus,
+          valorEstatusI: textoEstatusI
+        }, function(mensaje) {
+            $("#resultado_update_orden").html(mensaje);
+        });
+
+    }else if (textoEstatusI == 'Revisar') {
       var textoTrabajo = $("textarea#trabajo").val();
       var textoMaterial = $("textarea#mat").val();
 
