@@ -28,10 +28,10 @@ if (isset($_POST['id_tecnico']) == false) {
 ?>
 <script>
   //FUNCION QUE VERIFICARA LA EMIMINACION DE MATERIAL Y ABRIRA EL MODAL PARA PEDRI EL MOTIVO (OPCION RESTRINGIDA)
-  function verificar_eliminar(){   
-    var textoSerie = $("input#serie").val();
+  function verificar_eliminar(serie){
+    textoSerie = serie;
     $.post("../php/verificar_eliminar_material.php", {
-          valorSerie: textoSerie,
+          valorSerieV: textoSerie,
         }, function(mensaje) {
             $("#Continuar").html(mensaje);
         }); 
@@ -176,8 +176,7 @@ if (isset($_POST['id_tecnico']) == false) {
                 <td><?php echo $unidad['serie']; ?></td>
                 <td><?php echo $unidad['ruta']; ?></td>
                 <?php if(in_array($_SESSION['user_id'], array(59, 66, 49))){ ?>
-                <input id="serie" name="serie" type="hidden" value="<?php echo $unidad['serie'] ?>">
-                <td><a onclick="verificar_eliminar()" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
+                <td><a onclick="verificar_eliminar('<?php echo $unidad['serie'] ?>')" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
                 <?php } ?>
               </tr>
             <?php

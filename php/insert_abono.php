@@ -228,7 +228,6 @@ $Saldo = $abono['suma']-$deuda['suma'];
           </tbody>
         </table>
       </div>		
-
 <?php 
 mysqli_close($conn);
 ?>

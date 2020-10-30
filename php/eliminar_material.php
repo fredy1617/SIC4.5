@@ -67,8 +67,7 @@ if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM historial_stock WHERE seri
               <td><?php echo $unidad['serie']; ?></td>
               <td><?php echo $unidad['ruta']; ?></td>
               <?php if(in_array($_SESSION['user_id'], array(59, 66, 49))){ ?>
-              <input id="serie" name="serie" type="hidden" value="<?php echo $unidad['serie'] ?>">
-              <td><a onclick="verificar_eliminar()" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
+              <td><a onclick="verificar_eliminar('<?php echo $unidad['serie'] ?>')"class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
           	  <?php } ?>
             </tr>
           <?php
