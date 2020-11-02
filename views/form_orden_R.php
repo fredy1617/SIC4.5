@@ -9,8 +9,8 @@ if (isset($_POST['no_cliente']) == false) {
   ?>
   <script>    
     function atras() {
-      M.toast({html: "Regresando a centrales.", classes: "rounded"})
-      setTimeout("location.href='centrales.php'", 800);
+      M.toast({html: "SIN CLIENTE...", classes: "rounded"})
+      setTimeout("location.href='form_orden.php'", 800);
     };
     atras();
   </script>

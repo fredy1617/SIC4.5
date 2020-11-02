@@ -20,7 +20,6 @@ $Hora = date('H:i:s');
 $user = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$id_user'"));
 $Usuario = $user['firstname'];
 
-
 if($Anticipo > $CostoTotal){
     echo  '<script >M.toast({html:"Solo puedes descontar $'.$CostoTotal.'.00 pesos.", classes: "rounded"})</script>';
 }else{
@@ -44,36 +43,40 @@ if($Anticipo > $CostoTotal){
 	 		
 			if(mysqli_query($conn, $sql)){
 				echo '<script >M.toast({html:"La instalación se dió de alta satisfactoriamente.", classes: "rounded"})</script>';	
-		    if ($Anticipo != 0) {	
-		    	$rs = mysqli_query($conn, "SELECT MAX(id_cliente) AS id FROM clientes");
-		        $row = mysqli_fetch_row($rs);
-				$IdCliente = $row[0];
-				$Descripcion = "Anticipo de Instalación";
-				$Tipo = "Anticipo";
-				if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND descripcion = '$Descripcion' AND cantidad='$Anticipo'"))>0){
-					echo '<script>M.toast({html:"Ya se encuentra un pago registrado con los mismos valores.", classes: "rounded"})</script>';
-				}else{
-				$sql2 = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, tipo, id_user, corte, tipo_cambio) VALUES ($IdCliente, '$Descripcion', '$Anticipo', '$Fecha_hoy', '$Tipo', $id_user, 0, '$Tipo_Campio')";
-				if(mysqli_query($conn, $sql2)){
-					echo '<script>M.toast({html:"El pago se dió de alta satisfcatoriamente.", classes: "rounded"})</script>';
+				$ver = $conn->real_escape_string($_POST['valorVer']);
+				if ($ver = 'Cancelado') {
+					$id = $conn->real_escape_string($_POST['valorId']);
+					if (mysqli_query($conn, "DELETE FROM canceladas WHERE id_cliente = $id")) {
+						echo '<script >M.toast({html:"Se borro el cliente de cancelados.", classes: "rounded"})</script>';	
+					}
 				}
+			    if ($Anticipo != 0) {	
+			    	$rs = mysqli_query($conn, "SELECT MAX(id_cliente) AS id FROM clientes");
+			        $row = mysqli_fetch_row($rs);
+					$IdCliente = $row[0];
+					$Descripcion = "Anticipo de Instalación";
+					$Tipo = "Anticipo";
+					if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND descripcion = '$Descripcion' AND cantidad='$Anticipo'"))>0){
+						echo '<script>M.toast({html:"Ya se encuentra un pago registrado con los mismos valores.", classes: "rounded"})</script>';
+					}else{
+					$sql2 = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, tipo, id_user, corte, tipo_cambio) VALUES ($IdCliente, '$Descripcion', '$Anticipo', '$Fecha_hoy', '$Tipo', $id_user, 0, '$Tipo_Campio')";
+					if(mysqli_query($conn, $sql2)){
+						echo '<script>M.toast({html:"El pago se dió de alta satisfcatoriamente.", classes: "rounded"})</script>';
+					}
+					}
 				}
-			}
-			echo "<script>window.open('../php/folioCliente.php', '_blank')</script>";
-			?>
-			  <script>    
-			    var a = document.createElement("a");
-			      a.href = "../views/instalaciones.php";
-			      a.click();
-			  </script>
-			<?php
+				echo "<script>window.open('../php/folioCliente.php', '_blank')</script>";
+				?>
+				  <script>    
+				    var a = document.createElement("a");
+				      a.href = "../views/instalaciones.php";
+				      a.click();
+				  </script>
+				<?php
 			}else{
 				echo '<script >M.toast({html:"Ha ocurrido un error.", classes: "rounded"})</script>';	
 			}
 	 	}
 }
-
-
-
 mysqli_close($conn);
 ?>
