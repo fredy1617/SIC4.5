@@ -132,6 +132,8 @@ function insert_pago() {
         M.toast({html: 'Seleccione un mes.', classes: 'rounded'});
     }else if (textoAño == 0) {
         M.toast({html: 'Seleccione un año.', classes: 'rounded'});
+    }else if (document.getElementById('banco').checked==true && textoRef == "") {
+        M.toast({html: 'Los pagos en banco deben de llevar una referencia.', classes: 'rounded'});
     }else {
         $.post("../php/insert_pago.php" , { 
             valorPromo: textoPromo,

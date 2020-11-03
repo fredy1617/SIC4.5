@@ -8,6 +8,7 @@ $Cantidad = $conn->real_escape_string($_POST['valorCantidad']);
 $Descripcion = $conn->real_escape_string($_POST['valorDescripcion']);
 $IdCliente = $conn->real_escape_string($_POST['valorIdCliente']);
 $id_user = $_SESSION['user_id'];
+$ReferenciaB = $conn->real_escape_string($_POST['valorRef']);
 $Respuesta = $conn->real_escape_string($_POST['valorRespuesta']);
 $entra = 'No';
 if ($Respuesta == 'Ver') {
@@ -110,6 +111,10 @@ if ($entra == "Si") {
     echo '<script>M.toast({html:"El pago se dió de alta satisfcatoriamente.", classes: "rounded"})</script>';
     $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos WHERE id_cliente = $IdCliente"));            
     $id_pago = $ultimo['id'];
+    // Si el pago es de banco guardar la referencia....
+    if ($Tipo_Campio == 'Banco' AND $ReferenciaB != '') {
+      mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion) VALUES ('$id_pago', '$ReferenciaB')");
+    }
     ?>
     <script>
     id_pago = <?php echo $id_pago; ?>;

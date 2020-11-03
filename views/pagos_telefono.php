@@ -46,7 +46,7 @@ function insert_pago() {
   var textoCantidad = $("input#cantidad").val();
   var tipoPago = $("select#selectTipo").val();
   var textoMes = $("select#mes").val();
-
+  var textoRef = $("input#ref").val();
 
   if(document.getElementById('banco_tel').checked==true){
     textoTipo_Campio = "Banco";
@@ -70,11 +70,14 @@ function insert_pago() {
       M.toast({html: 'El campo Cantidad se encuentra vacío o en 0.', classes: 'rounded'});
   }else  if (entra == 'No') {
       M.toast({html: 'Seleccione un mes.', classes: 'rounded'});
-  }else{
+  }else if (document.getElementById('banco_tel').checked==true && textoRef == "") {
+        M.toast({html: 'Los pagos en banco deben de llevar una referencia.', classes: 'rounded'});
+    }else{
       $.post("../php/insert_pago_tel.php" , { 
           valorTipo_Campio:textoTipo_Campio,
           valorCantidad: textoCantidad,
           valorMes: textoMes,
+          valorRef: textoRef,
           valorIdCliente: textoIdCliente,
           valorTipoTel: tipoPago,
           valorRespuesta: textoRespuesta
@@ -164,7 +167,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
               <option value="Min-extra">Minutos extra</option>
             </select>
           </div>
-          <div class="input-field col s5 m3 l3">
+          <div class="input-field col s5 m2 l2">
           <i class="material-icons prefix">payment</i>
           <input id="cantidad" type="number" class="validate" data-length="6" required>
           <label for="cantidad">Cantidad: </label>
@@ -189,12 +192,18 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
         <?php if ($user_id == 59 OR $user_id == 38 OR $user_id == 10 OR $user_id == 56 OR $user_id == 49 OR $user_id == 70) { 
            $Ser = '';
         }else{ $Ser = 'disabled="disabled"';}?>
-        <div class="col s6 m2 l2">
+        <div class="col s6 m1 l1">
           <p>
             <br>
             <input type="checkbox" id="banco_tel" <?php echo $Ser;?>/>
             <label for="banco_tel">Banco</label>
           </p>
+        </div>
+         <div class="col s6 m2 l2">
+          <div class="input-field">
+            <input id="ref" type="text" class="validate" data-length="15" required value="">
+            <label for="ref">Referencia:</label>
+          </div>
         </div>
         <div class="col s6 m2 l2">
           <p>

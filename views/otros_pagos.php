@@ -46,6 +46,7 @@ function insert_pago() {
   textoTipo = "Otros Pagos";
   var textoCantidad = $("input#cantidad3").val();
   var textoDescripcion = $("input#descripcion3").val();
+  var textoRef = $("input#ref").val();
 
   if(document.getElementById('banco_otro').checked==true){
     textoTipo_Campio = "Banco";
@@ -60,12 +61,17 @@ function insert_pago() {
 
   if (textoCantidad == "" || textoCantidad ==0) {
       M.toast({html: 'El campo Cantidad se encuentra vacío o en 0.', classes: 'rounded'});
+  }else if (textoDescripcion == "") {
+      M.toast({html: 'El campo Descripción se encuentra vacío .', classes: 'rounded'});
+  }else if (document.getElementById('banco_otro').checked==true && textoRef == "") {
+        M.toast({html: 'Los pagos en banco deben de llevar una referencia.', classes: 'rounded'});
   }else {
       $.post("../php/insert_otros_pagos.php" , {
           valorTipo_Campio: textoTipo_Campio,
           valorTipo: textoTipo,
           valorCantidad: textoCantidad,
           valorDescripcion: textoDescripcion,
+          valorRef: textoRef,
           valorIdCliente: textoIdCliente,
           valorRespuesta: textoRespuesta
         }, function(mensaje) {
@@ -142,7 +148,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
           <label for="cantidad3">Cantidad:</label>
         </div>
       </div>
-      <div class="row col s12 m5 l5">
+      <div class="row col s12 m4 l4">
         <div class="input-field">
           <i class="material-icons prefix">description</i>
           <input id="descripcion3" type="text" class="validate" data-length="100" required>
@@ -152,12 +158,18 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
       <?php if ($user_id == 59 OR $user_id == 38 OR $user_id == 10 OR $user_id == 56  OR $user_id == 49 OR $user_id == 70) { 
           $Ser = '';
         }else{ $Ser = 'disabled="disabled"';}?>
-        <div class="col s6 m2 l2">
+        <div class="col s6 m1 l1">
           <p>
             <br>
             <input type="checkbox" id="banco_otro" <?php echo $Ser;?>/>
             <label for="banco_otro">Banco</label>
           </p>
+        </div>
+        <div class="col s6 m2 l2">
+          <div class="input-field">
+            <input id="ref" type="text" class="validate" data-length="15" required value="">
+            <label for="ref">Referencia:</label>
+          </div>
         </div>
         <div class="col s6 m2 l2">
           <p>

@@ -8,6 +8,7 @@ $Tipo_Campio = $conn->real_escape_string($_POST['valorTipo_Campio']);
 $Cantidad = $conn->real_escape_string($_POST['valorCantidad']);
 $Mes = $conn->real_escape_string($_POST['valorMes']);
 $IdCliente = $conn->real_escape_string($_POST['valorIdCliente']);
+$ReferenciaB = $conn->real_escape_string($_POST['valorRef']);
 $Tipo = $conn->real_escape_string($_POST['valorTipoTel']);
 $Cotejamiento = 1;
 $Respuesta = $conn->real_escape_string($_POST['valorRespuesta']);
@@ -157,6 +158,10 @@ if ($entra == "Si") {
     mysqli_query($conn,$sql2);
     $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos WHERE id_cliente = $IdCliente"));            
     $id_pago = $ultimo['id'];
+    // Si el pago es de banco guardar la referencia....
+    if ($Tipo_Campio == 'Banco' AND $ReferenciaB != '') {
+      mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion) VALUES ('$id_pago', '$ReferenciaB')");
+    }
     ?>
     <script>
     id_pago = <?php echo $id_pago; ?>;
