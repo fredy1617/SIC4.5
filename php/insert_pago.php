@@ -205,7 +205,7 @@ if ($entra == "Si") {
   if(mysqli_query($conn, $sql)){
     echo '<script>M.toast({html:"El pago se dió de alta satisfcatoriamente.", classes: "rounded"})</script>';
     // Si el pago es de banco guardar la referencia....
-    if ($Tipo_Campio == 'Banco' AND $ReferenciaB != '') {
+    if (($Tipo_Campio == 'Banco' OR $Tipo_Campio == 'SAN') AND $ReferenciaB != '') {
       $ultimoPago =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos WHERE id_cliente = $IdCliente"));            
       $id_pago = $ultimoPago['id'];
       mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion) VALUES ('$id_pago', '$ReferenciaB')");

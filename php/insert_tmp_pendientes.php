@@ -27,7 +27,7 @@ if($numero_columnas==0){
 	if(mysqli_query($conn, $sql_insert)){
 		echo '<script>M.toast({html:"Se agrego a la ruta.", classes: "rounded"})</script>';	
 	}else{
-		$mensaje = '<script>M.toast({html:"Hubo un error al insertar ruta.", classes: "rounded"})</script>';
+		$mensaje = '<script>M.toast({html:"Hubo un error al insertar en ruta.", classes: "rounded"})</script>';
 	}
 }else{
 	$mensaje = '<script>M.toast({html:"Ya se encuentra esta instalación en ruta.", classes: "rounded"})</script>';

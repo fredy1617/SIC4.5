@@ -52,6 +52,8 @@ function insert_pago() {
     textoTipo_Campio = "Banco";
   }else if (document.getElementById('credito_otro').checked==true) {
     textoTipo_Campio = "Credito";
+  }else if (document.getElementById('san_otro').checked==true) {
+    textoTipo_Campio = "SAN";
   }else{
     textoTipo_Campio = "Efectivo"; 
   }
@@ -63,7 +65,7 @@ function insert_pago() {
       M.toast({html: 'El campo Cantidad se encuentra vacío o en 0.', classes: 'rounded'});
   }else if (textoDescripcion == "") {
       M.toast({html: 'El campo Descripción se encuentra vacío .', classes: 'rounded'});
-  }else if (document.getElementById('banco_otro').checked==true && textoRef == "") {
+  }else if ((document.getElementById('banco_otro').checked==true || document.getElementById('san_otro').checked==true) && textoRef == "") {
         M.toast({html: 'Los pagos en banco deben de llevar una referencia.', classes: 'rounded'});
   }else {
       $.post("../php/insert_otros_pagos.php" , {
@@ -148,7 +150,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
           <label for="cantidad3">Cantidad:</label>
         </div>
       </div>
-      <div class="row col s12 m4 l4">
+      <div class="row col s12 m3 l3">
         <div class="input-field">
           <i class="material-icons prefix">description</i>
           <input id="descripcion3" type="text" class="validate" data-length="100" required>
@@ -163,6 +165,13 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
             <br>
             <input type="checkbox" id="banco_otro" <?php echo $Ser;?>/>
             <label for="banco_otro">Banco</label>
+          </p>
+        </div>
+        <div class="col s6 m1 l1">
+          <p>
+            <br>
+            <input type="checkbox" id="san_otro" <?php echo $Ser;?>/>
+            <label for="san_otro">SAN</label>
           </p>
         </div>
         <div class="col s6 m2 l2">

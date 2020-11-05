@@ -43,7 +43,7 @@ class PDF extends FPDF{
             $this->Ln(1);
             $this->MultiCell(60,4,utf8_decode('Tipo de Cambio: '.$fila['tipo_cambio']),0,'L',true);
             $this->Ln(1);
-            if ($fila['tipo_cambio'] == 'Banco') {
+            if ($fila['tipo_cambio'] == 'Banco' OR $fila['tipo_cambio'] == 'SAN') {
                 $sqlR = mysqli_query($conn, "SELECT * FROM referencias WHERE id_pago = $id_pago");
                 if (mysqli_num_rows($sqlR) == 0) {
                   $refe = "Sin";

@@ -7,13 +7,7 @@
   include ('../php/cobrador.php');
   include ('../php/superAdmin.php');
 ?>
-<style type="text/css">
-  .select-dropdown{
-    overflow-y: auto !important;
-}
-</style>
 <title>SIC | Reporte Pagos</title>
-
 <script>
 function buscar_pagos(tipo) {
   entra = "Si";
@@ -36,9 +30,7 @@ function buscar_pagos(tipo) {
       entra = "No";    
     }    
   }
-  if (entra == "No") {
-
-  }else{
+  if (entra == "Si") {
       $.post("../php/buscar_pagos.php", {
           valorDe: textoDe,
           valorA: textoA,
@@ -93,7 +85,7 @@ function buscar_pagos(tipo) {
             </div>
             <br><br><br>
             <div>
-                <button class="btn waves-light waves-effect right pink" onclick="buscar_pagos(0);"><i class="material-icons prefix">send</i></button>
+              <button class="btn waves-light waves-effect right pink" onclick="buscar_pagos(0);"><i class="material-icons prefix">send</i></button>
             </div>
           </div>
         </div>
@@ -108,17 +100,18 @@ function buscar_pagos(tipo) {
                 <label for="fecha_a2">A:</label>
                 <input id="fecha_a2"  type="date">
             </div>
-
             <div class="input-field col s12 l4 m4">
               <select id="tipo" class="browser-default">
                 <option value="" selected>Seleccione un tipo:</option>
                 <option value="Banco">BANCO</option>
                 <option value="Efectivo">EFECTIVO</option>
+                <option value="Credito">CREDITO</option>
+                <option value="SAN">SAN</option>
               </select>
             </div>
             <br><br><br>
             <div>
-                <button class="btn waves-light waves-effect right pink" onclick="buscar_pagos(1);"><i class="material-icons prefix">send</i></button>
+              <button class="btn waves-light waves-effect right pink" onclick="buscar_pagos(1);"><i class="material-icons prefix">send</i></button>
             </div>
           </div>
         </div>

@@ -33,7 +33,7 @@ if ($Usuario != "") {
         ?>
         <th>Cambio</th>
         <?php
-        }elseif ($Tipo == 'Banco') {
+        }elseif ($Tipo == 'Banco'  OR $Tipo == 'SAN') {
         ?>
         <th>Referencia</th>        
         <th>Registró</th>
@@ -61,7 +61,7 @@ while($pagos = mysqli_fetch_array($sql_pagos)){
   $cliente= mysqli_fetch_array($sql);
   $id_user = $pagos['id_user'];
   $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$id_user'"));
-  if ($pagos['tipo_cambio'] == 'Banco') {
+  if ($pagos['tipo_cambio'] == 'Banco' OR $pagos['tipo_cambio'] == 'SAN') {
     $id = $pagos['id_pago'];
     $sqlR = mysqli_query($conn, "SELECT * FROM referencias WHERE id_pago = $id");  
     $filas2 = mysqli_num_rows($sqlR);
@@ -83,9 +83,9 @@ while($pagos = mysqli_fetch_array($sql_pagos)){
     <?php
     if ($Usuario != "") {
     ?>
-    <td><?php echo $pagos['tipo_cambio'];?><br><?php if ($pagos['tipo_cambio'] == 'Banco') { echo $refe; } ?></td>
+    <td><?php echo $pagos['tipo_cambio'];?><br><?php if ($pagos['tipo_cambio'] == 'Banco' OR $pagos['tipo_cambio'] == 'SAN') { echo $refe; } ?></td>
     <?php
-    }elseif ($Tipo == 'Banco') {
+    }elseif ($Tipo == 'Banco' OR $Tipo == 'SAN') {
      ?>
     <td><?php echo $refe;?></td>
     <td><?php echo $usuario['firstname'];?></td>

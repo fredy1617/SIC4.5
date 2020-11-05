@@ -52,6 +52,8 @@ function insert_pago() {
     textoTipo_Campio = "Banco";
   }else if (document.getElementById('credito_tel').checked==true) {
     textoTipo_Campio = "Credito";
+  }else if (document.getElementById('san_tel').checked==true) {
+    textoTipo_Campio = "SAN";
   }else{
     textoTipo_Campio = "Efectivo"; 
   }
@@ -70,9 +72,9 @@ function insert_pago() {
       M.toast({html: 'El campo Cantidad se encuentra vacío o en 0.', classes: 'rounded'});
   }else  if (entra == 'No') {
       M.toast({html: 'Seleccione un mes.', classes: 'rounded'});
-  }else if (document.getElementById('banco_tel').checked==true && textoRef == "") {
+  }else if ((document.getElementById('banco_tel').checked==true || document.getElementById('san_tel').checked==true)&& textoRef == "") {
         M.toast({html: 'Los pagos en banco deben de llevar una referencia.', classes: 'rounded'});
-    }else{
+  }else{
       $.post("../php/insert_pago_tel.php" , { 
           valorTipo_Campio:textoTipo_Campio,
           valorCantidad: textoCantidad,
@@ -199,7 +201,14 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
             <label for="banco_tel">Banco</label>
           </p>
         </div>
-         <div class="col s6 m2 l2">
+        <div class="col s6 m1 l1">
+          <p>
+            <br>
+            <input type="checkbox" id="san_tel" <?php echo $Ser;?>/>
+            <label for="san_tel">SAN</label>
+          </p>
+        </div>
+        <div class="col s6 m2 l2">
           <div class="input-field">
             <input id="ref" type="text" class="validate" data-length="15" required value="">
             <label for="ref">Referencia:</label>

@@ -159,7 +159,7 @@ if ($entra == "Si") {
     $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos WHERE id_cliente = $IdCliente"));            
     $id_pago = $ultimo['id'];
     // Si el pago es de banco guardar la referencia....
-    if ($Tipo_Campio == 'Banco' AND $ReferenciaB != '') {
+    if (($Tipo_Campio == 'Banco' OR $Tipo_Campio == 'SAN') AND $ReferenciaB != '') {
       mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion) VALUES ('$id_pago', '$ReferenciaB')");
     }
     ?>

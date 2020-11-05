@@ -119,6 +119,8 @@ function insert_pago() {
       textoTipo_Campio = "Banco";
     }else if (document.getElementById('credito').checked==true) {
       textoTipo_Campio = "Credito";
+    }else if (document.getElementById('san').checked==true) {
+      textoTipo_Campio = "SAN";
     }else{
       textoTipo_Campio = "Efectivo";
     } 
@@ -132,8 +134,8 @@ function insert_pago() {
         M.toast({html: 'Seleccione un mes.', classes: 'rounded'});
     }else if (textoAño == 0) {
         M.toast({html: 'Seleccione un año.', classes: 'rounded'});
-    }else if (document.getElementById('banco').checked==true && textoRef == "") {
-        M.toast({html: 'Los pagos en banco deben de llevar una referencia.', classes: 'rounded'});
+    }else if ((document.getElementById('banco').checked==true || document.getElementById('san').checked==true) && textoRef == "") {
+        M.toast({html: 'Los pagos en banco y san deben de llevar una referencia.', classes: 'rounded'});
     }else {
         $.post("../php/insert_pago.php" , { 
             valorPromo: textoPromo,
@@ -298,11 +300,18 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
         <?php if ($user_id == 59 OR $user_id == 38 OR $user_id == 10 OR $user_id == 56 OR $user_id == 49 OR $user_id == 70) { 
           $Ser = '';
         }else{ $Ser = 'disabled="disabled"';}?>
-        <div class="col s6 m2 l2">
+        <div class="col s6 m1 l1">
           <p>
             <br>
             <input type="checkbox" id="banco" <?php echo $Ser;?>/>
             <label for="banco">Banco</label>
+          </p>
+        </div>
+        <div class="col s6 m1 l1">
+          <p>
+            <br>
+            <input type="checkbox" id="san" <?php echo $Ser;?>/>
+            <label for="san">SAN</label>
           </p>
         </div>
         <div class="col s6 m2 l2">
