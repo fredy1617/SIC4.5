@@ -67,6 +67,8 @@ function insert_pago() {
       M.toast({html: 'El campo Descripción se encuentra vacío .', classes: 'rounded'});
   }else if ((document.getElementById('banco_otro').checked==true || document.getElementById('san_otro').checked==true) && textoRef == "") {
         M.toast({html: 'Los pagos en banco deben de llevar una referencia.', classes: 'rounded'});
+  }else if (document.getElementById('banco_otro').checked==false && document.getElementById('san_otro').checked==false && textoRef != "") {
+        M.toast({html: 'Pusiste referencia y no elegiste Banco o SAN.', classes: 'rounded'});
   }else {
       $.post("../php/insert_otros_pagos.php" , {
           valorTipo_Campio: textoTipo_Campio,

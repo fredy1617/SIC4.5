@@ -136,6 +136,8 @@ function insert_pago() {
         M.toast({html: 'Seleccione un año.', classes: 'rounded'});
     }else if ((document.getElementById('banco').checked==true || document.getElementById('san').checked==true) && textoRef == "") {
         M.toast({html: 'Los pagos en banco y san deben de llevar una referencia.', classes: 'rounded'});
+    }else if (document.getElementById('banco').checked==false && document.getElementById('san').checked==false && textoRef != "") {
+        M.toast({html: 'Pusiste referencia y no elegiste Banco o SAN.', classes: 'rounded'});
     }else {
         $.post("../php/insert_pago.php" , { 
             valorPromo: textoPromo,

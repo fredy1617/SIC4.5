@@ -74,6 +74,8 @@ function insert_pago() {
       M.toast({html: 'Seleccione un mes.', classes: 'rounded'});
   }else if ((document.getElementById('banco_tel').checked==true || document.getElementById('san_tel').checked==true)&& textoRef == "") {
         M.toast({html: 'Los pagos en banco deben de llevar una referencia.', classes: 'rounded'});
+  }else if (document.getElementById('banco_tel').checked==false && document.getElementById('san_tel').checked==false && textoRef != "") {
+        M.toast({html: 'Pusiste referencia y no elegiste Banco o SAN.', classes: 'rounded'});
   }else{
       $.post("../php/insert_pago_tel.php" , { 
           valorTipo_Campio:textoTipo_Campio,
