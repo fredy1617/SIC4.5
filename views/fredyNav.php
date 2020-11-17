@@ -101,6 +101,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    </ul>
 				    <li><a href="reporte_x_fecha.php" class="black-text"><i class="material-icons">assignment_turned_in</i>Trabajos Realizados</a></li>
 				    <li><a href="en_cajas.php" class="black-text"><i class="material-icons">monetization_on</i>En Cajas</a></li>
+				    <li><a href="calendario.php" class="black-text"><i class="material-icons">date_range</i>Calendario</a></li>
 				    <li><a href="CORTES_FULL.php" class="black-text"><i class="material-icons left">signal_wifi_off</i>Cortes Full</a></li>	
 				    <li><a href="activos.php" class="black-text"><i class="material-icons left">import_export</i>Activos</a></li>	
  				 </ul>
@@ -202,6 +203,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    				<li><a href="rep_ruta.php"><i class="material-icons">location</i>Reporte Rutas</a></li>    	
 				    				<li><a href="canceladas.php"><i class="material-icons">do_not_disturb</i>Canceladas</a></li>  	
 								    <li><a href="reporte_x_fecha.php"><i class="material-icons">assignment_turned_in</i>Trabajo Realizado</a></li>
+				    				<li><a href="calendario.php"><i class="material-icons">date_range</i>Calendario</a></li>
 								    <li><a href="en_cajas.php"><i class="material-icons">monetization_on</i>En Cajas</a></li>
 								    <li><a href="reporte_deudas.php"><i class="material-icons">list</i>Reporte Deudas</a></li>
 						    	 	<li><a href="CORTES_FULL.php"><i class="material-icons">signal_wifi_off</i>Cortes Full</a></li>
