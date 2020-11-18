@@ -18,11 +18,6 @@ if ($TerminoContrato > $Fecha) {
 }
 if(mysqli_query($conn, "INSERT INTO reportes (id_cliente, descripcion, fecha) VALUES ($id_cliente, '$Descripcion', '$Fecha')")){
 	echo '<script>M.toast({html: "El reporte se dio de alta con exito.", classes: "rounded"})</script>';
-	if (mysqli_query($conn, "UPDATE clientes SET contrato = 0 WHERE id_cliente = '$id_cliente'")) {
-		echo '<script>M.toast({html: "Se actualizo el cliente correctamente.", classes: "rounded"})</script>';
-	}else{
-		echo '<script>M.toast({html: "Ocurrio un error al actualizar el cliente", classes: "rounded"})</script>';
-	}
 }else{
 	echo '<script>M.toast({html: "Ocurrio un error, no se registro el reporte.", classes: "rounded"})</script>';
 }
