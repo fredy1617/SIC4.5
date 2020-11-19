@@ -1,6 +1,8 @@
 <?php
 #INCLUIMOS EL ARCHIVO CON LA CONEXION A LA BASE DE DATOS
 include('../php/conexion.php');
+#INCLUIMOS EL ARCHIVO CON LA INFORMACION DE LOS CHATS BOT
+include('../php/infoBots.php');
 
 #FUNCION QUE SIRVE PARA ENVIAR EL MENSAJE A TELEGRAM DESDE EL BOT CORTES
 function sendMessage($id, $msj, $website){
@@ -8,13 +10,7 @@ function sendMessage($id, $msj, $website){
     $url = $website.'/sendMessage?chat_id='.$id.'&parse_mode=HTML&text='.urlencode($msj);
     #SE ENCARGA DE IR A EL URL Y ENVIAR EL MENSAJE DESDE EL BOT
     file_get_contents($url);
-}
-$bot_Token = '918836101:AAGGaH2MIoTjqdhOmRs_34G1Yjgx5VkwgFI';//TOKEN UNICO DEL BOT CORTES (ID PARA IDENTIFICAR AL BOT Y PODER ENVIAR EL MENSAJE DESDE EL BOT)
-$website = 'https://api.telegram.org/bot'.$bot_Token;//DIRECCION A LA QUE SE TIENE QUE ACCEDER LA FUNCION PARA PODER ENVIAR EL MENSAJE DESDE EL BOT
-$id_Chat = '1087049979';//ID Fredy ES COMO UN NUMERO TELEFONICO CON EL QUE EL BOT IDENTIFICA A QUIEN ENVIAR EL MENSAJE
-$id_Chat2 = '1080437366';//ID Gabriel ES COMO UN NUMERO TELEFONICO CON EL QUE EL BOT IDENTIFICA A QUIEN ENVIAR EL MENSAJE
-$id_Chat3 = '1140290694';//ID Mayra ES COMO UN NUMERO TELEFONICO CON EL QUE EL BOT IDENTIFICA A QUIEN ENVIAR EL MENSAJE
-            
+}          
 
 #-------------------------------------------------------------------
 #ENVIAR MENSAJES SI HAY ERROR CON LOS SERVIDORES DE MIKROTIK
@@ -57,7 +53,7 @@ if(mysqli_num_rows($sql_corte) > 0){
           #CREAMOS EL MENSAJE CON LA INFORMACION QUE HAY QUE ENVIAR POR TELEGRAM
           $Mensaje = "Corte del Dia: ".$Corte['fecha'].", Hora: ".$Corte['hora'].". \nCon folio: <b>".$corte."</b> y usuario: <b>'".$cobrador['firstname']."(".$cobrador['user_name'].")"."'.</b> \n  <b> -Adeudo = $".$Adeudo.". \n  -Deducibles = $".$Deducir.".\n   -</b>".$descripcion_v." \n<b>ENTREGO:\n  *Banco = $".$banco.". \n  *Efectivo = $".$cantidad.". \n  *Credito = $".$credito.". \n \n Relizado por: ".$Corte['realizo'].". \n \n  <a href ='189.197.184.252:6288/SIC4.5/php/reimprimir_corte.php?id=".$corte."'>  -- DESCARGAR -- </a></b>";
       }
-      if(!sendMessage($id_Chat, $Mensaje, $website) AND !sendMessage($id_Chat2, $Mensaje, $website) AND !sendMessage($id_Chat3, $Mensaje, $website)){
+      if(!sendMessage($id_Chat_Fredy, $Mensaje, $website_Corte) AND !sendMessage($id_Chat_Gabriel, $Mensaje, $website_Corte) AND !sendMessage($id_Chat_Mayra, $Mensaje, $website_Corte)){
         #Si se ENVIA el mensaje modificar msj a 1 para comprobar que se envio el msj
    			mysqli_query($conn, "UPDATE cortes SET msj = 1 WHERE id_corte = '$corte'");
       }

@@ -93,29 +93,31 @@
                 </tr>
             </thead>
             <tbody>
-        <?php
-          $aux = 0;
-         while($pagos = mysqli_fetch_array($sql_pagos)){
-          $aux ++;
-          $id_cliente = $pagos['id_cliente'];
-          if ((mysqli_num_rows(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"))) == 0) {
-            $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente = $id_cliente"));
-          }else{
-              $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"));
-          }
-            ?>
-            <tr>
-              <th><?php echo $aux; ?></th> 
-              <td><?php echo $id_cliente; ?></td>
-              <td><?php echo $cliente['nombre']; ?></td>
-              <td><?php echo $pagos['descripcion']; ?></td>
-              <td><?php echo $pagos['tipo']; ?></td>
-              <td><?php echo $pagos['fecha']; ?></td>
-              <td>$<?php echo $pagos['cantidad'];?>.00</td>
-            </tr>
             <?php
-         }
-        ?>
+              $aux = 0;
+             while($pagos = mysqli_fetch_array($sql_pagos)){
+              $aux ++;
+              $id_cliente = $pagos['id_cliente'];
+              if ($pagos['tipo'] == 'Abono Corte') {
+                  $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_cliente"));
+              }else if ((mysqli_num_rows(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"))) == 0) {
+                $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente = $id_cliente"));
+              }else{
+                  $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"));
+              }
+                ?>
+                <tr>
+                  <th><?php echo $aux; ?></th> 
+                  <td><?php echo $id_cliente; ?></td>
+                  <td><?php echo ($pagos['tipo'] == 'Abono Corte')?'USUARIO: '.$cliente['firstname'].' '.$cliente['lastname']:$cliente['nombre']; ?></td>
+                  <td><?php echo $pagos['descripcion']; ?></td>
+                  <td><?php echo $pagos['tipo']; ?></td>
+                  <td><?php echo $pagos['fecha']; ?></td>
+                  <td>$<?php echo $pagos['cantidad'];?>.00</td>
+                </tr>
+                <?php
+             }
+            ?>
             </tbody>
         </table>
         </div>
@@ -148,16 +150,18 @@
           while($pagos = mysqli_fetch_array($sql_banco)){
           $aux ++;
           $id_cliente = $pagos['id_cliente'];
-          if ((mysqli_num_rows(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"))) == 0) {
-            $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente = $id_cliente"));
+          if ($pagos['tipo'] == 'Abono Corte') {
+              $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_cliente"));
+          }else if ((mysqli_num_rows(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"))) == 0) {
+              $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente = $id_cliente"));
           }else{
               $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"));
           }
-            ?>
+          ?>
             <tr>
               <th><?php echo $aux; ?></th> 
               <td><?php echo $id_cliente; ?></td>
-              <td><?php echo $cliente['nombre']; ?></td>
+              <td><?php echo ($pagos['tipo'] == 'Abono Corte')?'USUARIO: '.$cliente['firstname'].' '.$cliente['lastname']:$cliente['nombre']; ?></td>
               <td><?php echo $pagos['descripcion']; ?></td>
               <td><?php echo $pagos['tipo']; ?></td>
               <td><?php echo $pagos['fecha']; ?></td>

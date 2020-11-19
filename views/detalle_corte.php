@@ -65,15 +65,17 @@ if (isset($_POST['id_corte']) == false) {
 		    	if ($fila > 0) {
 		    	$pagox1 = mysqli_fetch_array($sql);
 		    	$id_cliente = $pagox1['id_cliente'];
-		        if ((mysqli_num_rows(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"))) == 0) {
+		        if ($pagox1['tipo'] == 'Abono Corte') {
+                  $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_cliente"));
+              	}else if ((mysqli_num_rows(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"))) == 0) {
 		          	$cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente = $id_cliente"));
 		        }else{
 		            $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"));
 		        }
-		      ?>
-		      <tr>
-		        <td><?php echo $pagox1['id_pago'];?></td>
-		        <td><?php echo $cliente['nombre'];?></td>
+		  	?>	
+		  	  <tr>
+			    <td><?php echo $pagox1['id_pago'];?></td>
+                <td><?php echo ($pagox1['tipo'] == 'Abono Corte')?'USUARIO: '.$cliente['firstname'].' '.$cliente['lastname']:$cliente['nombre']; ?></td>
 		        <td><?php echo $pagox1['descripcion'];?></td>   
 		        <td><?php echo $pagox1['tipo'];?></td>
 		        <td><?php echo $pagox1['fecha'];?></td>
@@ -123,7 +125,9 @@ if (isset($_POST['id_corte']) == false) {
 		  		if ($filas > 0) {
 		  		$pago = mysqli_fetch_array($sql);
 		  		$id_cliente = $pago['id_cliente'];
-		  		if ((mysqli_num_rows(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"))) == 0) {
+		  		if ($pago['tipo'] == 'Abono Corte') {
+                  $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_cliente"));
+              	}else if ((mysqli_num_rows(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"))) == 0) {
 		          	$cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente = $id_cliente"));
 		        }else{
 		            $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $id_cliente"));
@@ -131,7 +135,7 @@ if (isset($_POST['id_corte']) == false) {
 		  	?>	
 		  		<tr>
 			  		<td><?php echo $pago['id_pago'];?></td>
-			  		<td><?php echo $cliente['nombre']; ?></td>
+                	<td><?php echo ($pago['tipo'] == 'Abono Corte')?'USUARIO: '.$cliente['firstname'].' '.$cliente['lastname']:$cliente['nombre']; ?></td>
 			  		<td><?php echo $pago['descripcion']; ?></td>
 			  		<td><?php echo $pago['tipo']; ?></td>
 			  		<td><?php echo $pago['fecha']; ?></td>
