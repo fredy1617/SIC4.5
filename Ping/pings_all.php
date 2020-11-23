@@ -47,20 +47,20 @@ if(mysqli_num_rows($sql_servers) > 0){
 	        		$IP = $Central['ip'];
 	        		$API->write('/ping',false);
 	    			$API->write('=address='.$IP,false);#IP A REALIZAR EL PING
-	    			$API->write('=count=5',false);#NUMERO DE PINGS
+	    			$API->write('=count=6',false);#NUMERO DE PINGS
 	    			$API->write('=interval=1');
 	    			$READ = $API->read(false);
 	    			$ARRAY = $API->parse_response($READ);
-	    			#SI PING ES MAYOR A 0 LOS ALGUNO DE LOS 5 PINGS SE REALIZAN Y ES UN PING CORRECTO
+	    			#SI PING ES MAYOR A 0 LOS ALGUNO DE LOS 3 PINGS SE REALIZAN Y ES UN PING CORRECTO
 				    $PING = 0;
-				    #RECORREMOS EL ARRAY CON LOS 5 PINGS
+				    #RECORREMOS EL ARRAY CON LOS 3 PINGS
 				    foreach ($ARRAY as $key => $value) {
-				        #TOMAMOS EL PING A VER SI HAY PERDIDA O NO SI HACE PING INCREMENTA LA VARIABLE $PING EN 1 SI ALMENOS HACE 1 PING DE 5 SE TOMA COMO CORRECTO
+				        #TOMAMOS EL PING A VER SI HAY PERDIDA O NO SI HACE PING INCREMENTA LA VARIABLE $PING EN 1 SI ALMENOS HACE 1 PING DE 3 SE TOMA COMO CORRECTO
 				        if($value['packet-loss'] == 0){
 				            $PING ++;// SI SE REALIZO EL PING A LA IP SE INCREMENTA EN 1
 				        }
 				    }
-					#VERIFICAR SI UBO PERDIDAS DE PAQUETES AL HACER EL PING SI ALMENOS HACE 1 PING DE 5 SE TOMA COMO CORRECTO
+					#VERIFICAR SI UBO PERDIDAS DE PAQUETES AL HACER EL PING SI ALMENOS HACE 1 PING DE 3 SE TOMA COMO CORRECTO
 					if($PING > 0){
 				        echo "<br>HIZO PING IP: ".$IP."<br>";
 
@@ -72,11 +72,11 @@ if(mysqli_num_rows($sql_servers) > 0){
 	       					#SI SE ENCONTRO ESTA IP REGISTRADA 
 	       					$error_pendiente_conecto = mysqli_fetch_array($sql_e1);
 	       					$id_e1 = $error_pendiente_conecto['id'];
-	       					if ($error_pendiente_conecto['contador'] < 5) {
-	       						#BORRARA ERROR PORQUE COMO EL CONTADOR ES MENOR A 5 NO SE CONSIDERA COMO ERROR
+	       					if ($error_pendiente_conecto['contador'] < 3) {
+	       						#BORRARA ERROR PORQUE COMO EL CONTADOR ES MENOR A 3 NO SE CONSIDERA COMO ERROR
 	       						mysqli_query($conn, "DELETE FROM errores_pings WHERE id = '$id_e1'");
 	       					}else{
-	       						#COMO EL CONTADOR ES MAYOR A 5 PERO REALIZO EL PING CAMBIAR ESTATUS A Solucionado
+	       						#COMO EL CONTADOR ES MAYOR A 3 PERO REALIZO EL PING CAMBIAR ESTATUS A Solucionado
 	       						mysqli_query($conn, "UPDATE errores_pings SET estatus = 'Solucionado', hora_s = '$Hora', fecha_s = '$Fecha' WHERE id = '$id_e1'");	
 	       					}
 	       				}
