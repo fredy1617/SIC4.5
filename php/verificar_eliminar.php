@@ -12,8 +12,7 @@ $IdCliente = $conn->real_escape_string($_POST['valorIdCliente']);
     var textoIdCliente = $("input#id_cliente").val();
     $.post("../php/eliminar_instalacion.php", {
           valorMotivo: textoMotivo,
-          valorIdCliente: textoIdCliente,
-          valorInstalada: "Si"
+          valorIdCliente: textoIdCliente
         }, function(mensaje) {
             $("#respuesta").html(mensaje);
     });

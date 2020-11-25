@@ -10,7 +10,7 @@ $mensaje = "";
 //Comprueba si $consultaBusqueda está seteado
 if (isset($consultaBusqueda)) {
 	
-	//Selecciona todo de la tabla mmv001 
+	//Selecciona todo de la tabla instalacion 
 	//donde el nombre sea igual a $consultaBusqueda, 
 	//o el apellido sea igual a $consultaBusqueda, 
 	//o $consultaBusqueda sea igual a nombre + (espacio) + apellido

@@ -24,11 +24,12 @@ include('../php/cobrador.php');
 						<th>Referencia</th>	
 						<th>Fecha Cancelacion</th>
 						<th>Motivo</th>
+						<th>Eliminó</th>
 					</tr>
 				</thead>
 				<tbody>
 				<?php
-				$sql = mysqli_query($conn, "SELECT * FROM canceladas");
+				$sql = mysqli_query($conn, "SELECT * FROM canceladas ORDER BY fecha DESC");
 				$filas =  mysqli_num_rows($sql);
 				if ($filas <= 0) {
 					echo "<center><b><h5>No se encontraron instalaciones canceladas</h5></b></center>";
@@ -48,6 +49,7 @@ include('../php/cobrador.php');
 						<td><?php echo $resultados['referencia']; ?></td>			
 						<td><?php echo $resultados['fecha']; ?></td>			
 						<td><?php echo $resultados['motivo']; ?></td>		
+						<td><?php echo $resultados['usuario']; ?></td>		
 					</tr>
 				<?php
 				}

@@ -23,14 +23,13 @@
     $("#delete").html(mensaje);
     }); 
   };
-  function eliminar_instalacion(id_cliente){
-    $.post("../php/eliminar_instalacion.php", { 
-            valorIdCliente: id_cliente,
-            valorInstalada: "No"
-    }, function(mensaje) {
-    $("#cliente_borrado").html(mensaje);
-    }); 
-  };
+  function verificar_eliminar(id_cliente){      
+    $.post("../php/verificar_eliminar.php", {
+          valorIdCliente: id_cliente,
+        }, function(mensaje) {
+            $("#Continuar").html(mensaje);
+        }); 
+   };
   function ruta(id_cliente) {
       if (id_cliente == "") {
         M.toast({html:"Ocurrio un error al seleccionar el cliente.", classes: "rounded"});
@@ -53,7 +52,7 @@
 <main>
 <body>
 	<div class="container">            
-    <div id="borrar_inst"></div>
+    <div id="Continuar"></div>
     <div id="reporte_borrar"></div>
     <div id="cliente_borrado"></div>
             <div class="row" >
@@ -108,7 +107,7 @@
                         <td><form method="post" action="../views/abonar_instalacion.php"><input type="hidden" name="id_cliente" value="<?php echo $pendientes['id_cliente'];?>"><button button type="submit" class="btn btn-floating indigo darken-1 waves-effect waves-light"><i class="material-icons">attach_money</i></button></form></td>
                         <?php if($area['area'] != "Cobrador"){ ?>
                         <td><a onclick="ruta(<?php echo $pendientes['id_cliente'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></a></td>
-                        <td><a onclick="eliminar_instalacion(<?php echo $pendientes['id_cliente']; ?>)" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
+                        <td><a onclick="verificar_eliminar(<?php echo $pendientes['id_cliente']; ?>)" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
                         <?php } ?>
                     </tr>
                     <?php
