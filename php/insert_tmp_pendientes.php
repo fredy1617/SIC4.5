@@ -1,6 +1,8 @@
 <?php 
 include('../php/conexion.php');
 include('is_logged.php');
+date_default_timezone_set('America/Mexico_City');
+$Hora = date('H:i:s');
 $id_user = $_SESSION['user_id'];
 $id_cliente = $conn->real_escape_string($_POST['valorIdCliente']);
 $mensaje = '';
@@ -22,7 +24,7 @@ if($numero_columnas==0){
 	$cliente_paquete = $cliente['paquete'];
 	$cliente_fecha =  $cliente['fecha_registro'];	
 
-	$sql_insert = "INSERT INTO tmp_pendientes (id_cliente, nombre, telefono, lugar, direccion, referencia, total, dejo, pagar, paquete, fecha_registro, usuario) VALUES ($cliente_id, '$cliente_nombre', '$cliente_telefono', '$cliente_lugar', '$cliente_direccion', '$cliente_referencia', $cliente_total, $cliente_dejo, $cliente_pagar, $cliente_paquete, '$cliente_fecha', '$id_user')";
+	$sql_insert = "INSERT INTO tmp_pendientes (id_cliente, nombre, telefono, lugar, direccion, referencia, total, dejo, pagar, paquete, fecha_registro, usuario, hora) VALUES ($cliente_id, '$cliente_nombre', '$cliente_telefono', '$cliente_lugar', '$cliente_direccion', '$cliente_referencia', $cliente_total, $cliente_dejo, $cliente_pagar, $cliente_paquete, '$cliente_fecha', '$id_user', '$Hora')";
 
 	if(mysqli_query($conn, $sql_insert)){
 		echo '<script>M.toast({html:"Se agrego a la ruta.", classes: "rounded"})</script>';	

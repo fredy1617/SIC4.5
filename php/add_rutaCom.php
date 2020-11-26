@@ -5,6 +5,7 @@ include ("../php/conexion.php");
 date_default_timezone_set('America/Mexico_City');
 #GENERAMOS UNA FECHA DEL DIA EN CURSO REFERENTE A LA ZONA HORARIA
 $Hoy = date('Y-m-d');
+$Hora = date('H:i:s');
 
 #RECIBIMOS EL LA VARIABLE valorIdComunidad CON EL METODO POST DEL DOCUMENTO ruta_comunidad.php PARA HACER LA INSERCION DE LOS REPORTES E INSTALACIONES
 $IdComunidad = $conn->real_escape_string($_POST['valorIdComunidad']);
@@ -30,7 +31,7 @@ if ($SiRep > 0) {
       echo "<script>M.toast({html: 'Ya se encuentra este reporte en ruta.', classes: 'rounded'});</script>";
     }else{
       #SI NO ESTA AGREGADA LA ID DE A tmp_reportes  LA AGREGAMOS Y VERIFICAMOS
-      if (mysqli_query($conn, "INSERT INTO tmp_reportes (id_reporte, usuario) VALUES ('$id_reporte', '$id_user')")) {
+      if (mysqli_query($conn, "INSERT INTO tmp_reportes (id_reporte, usuario, hora) VALUES ('$id_reporte', '$id_user', '$Hora')")) {
         $Rep ++;//SI SE AGREGA CORRECATMENTE EL REPORTE A tmp_reportes INCREMENTAMOS EN 1 AL CONTADOR 
       }
     }
@@ -63,7 +64,7 @@ if ($SiInst > 0) {
   		$paquete = $instalacion['paquete'];
   		$fecha = $instalacion['fecha_registro'];
       #SE INSERTE Y SE VERIFICA SI ES AGREGADA CORRECTAMENTE
-  		if (mysqli_query($conn, "INSERT INTO tmp_pendientes (id_cliente, nombre, telefono, lugar, direccion, referencia, total, dejo, pagar, paquete, fecha_registro, usuario) VALUES ($id_cliente, '$nombre', '$telefono', '$lugar', '$direccion', '$referencia', $total, $dejo, $pagar, $paquete, '$fecha', '$id_user')")) {
+  		if (mysqli_query($conn, "INSERT INTO tmp_pendientes (id_cliente, nombre, telefono, lugar, direccion, referencia, total, dejo, pagar, paquete, fecha_registro, usuario, hora) VALUES ($id_cliente, '$nombre', '$telefono', '$lugar', '$direccion', '$referencia', $total, $dejo, $pagar, $paquete, '$fecha', '$id_user', '$Hora')")) {
   			$inst ++;//SI LA INSTALACION ES AGREGADA CORRECTAENTE A tmp_pendientes EL CONTADOR DE INCREMENTA EN 1
   		}  
     }else{

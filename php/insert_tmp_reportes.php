@@ -1,12 +1,14 @@
 <?php 
 include('../php/conexion.php');
 include('is_logged.php');
+date_default_timezone_set('America/Mexico_City');
+$Hora = date('H:i:s');
 $id_user = $_SESSION['user_id'];
 $id_Reporte = $conn->real_escape_string($_POST['valorIdReporte']);
 
 $sql_buscar = mysqli_query($conn, "SELECT * FROM tmp_reportes WHERE id_reporte = '$id_Reporte'");
 $EnCampo = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = '$id_Reporte'"));
-if ($id_Reporte >= 10000) {
+if ($id_Reporte >= 100000) {
     $EnCampo['campo']= 1;
 }
 if ($EnCampo['campo']==0 ) {
@@ -15,7 +17,7 @@ if ($EnCampo['campo']==0 ) {
     if(mysqli_num_rows($sql_buscar)>0){
     	echo '<script>M.toast({html:"Ya se encuentra este reporte en ruta.", classes: "rounded"})</script>';
     }else{
-    	if(mysqli_query($conn, "INSERT INTO tmp_reportes (id_reporte, usuario) VALUES ('$id_Reporte', '$id_user')")){
+    	if(mysqli_query($conn, "INSERT INTO tmp_reportes (id_reporte, usuario, hora) VALUES ('$id_Reporte', '$id_user', '$Hora')")){
     		echo '<script>M.toast({html:"Reporte agregado correctamente a la ruta.", classes: "rounded"})</script>';
     	}	
     }
