@@ -12,8 +12,6 @@ $sql = mysqli_query($conn, "SELECT * FROM deudas WHERE hasta is not null");
 
 if (mysqli_num_rows($sql)>0) {
 	while ($deuda = mysqli_fetch_array($sql)) {
-		$Hasta = $deuda['hasta'];
-		$Tipo = $deuda['tipo'];
 		$Id_deuda = $deuda['id_deuda'];
 		$IdCliente = $deuda['id_cliente'];
 		$fecha_corte = mysqli_fetch_array(mysqli_query($conn, 'SELECT * FROM clientes WHERE id_cliente='.$IdCliente));
@@ -22,7 +20,7 @@ if (mysqli_num_rows($sql)>0) {
 		$FechaCorte = date('Y-m-05', $nuevafecha);
 		$Pago = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM pagos WHERE id_deuda= $Id_deuda"));
 		$Id_Pago = $Pago['id_pago'];
-		if ($Hasta <= $Hoy AND $Tipo = 'Mensualidad') {
+		if ($deuda['hasta'] <= $Hoy AND $deuda['tipo'] = 'Mensualidad') {
 			#  CREA EL REPORTE.....
 			mysqli_query($conn,"INSERT INTO reportes (id_cliente, descripcion, fecha) VALUES ($IdCliente, 'Cortar servicio, INCUMPLIO EN SU PROMESA DE PAGO.', '$Hoy')");
 			#  BORRA EL PAGO.......
@@ -37,6 +35,25 @@ if (mysqli_num_rows($sql)>0) {
 }
 #__________________________________________________________
 #__________________________________________________________
+#_________CHECAR SI DESPUES DE AGREGAR A TMP HAYA PASADO MAS DE 1 HORA Y LA RUTA ESTE EN 0___________
+$Hora_1 = strtotime('-1 hour', strtotime(date('H:i:s')));
+$Hora_1 = date('H:i:s', $Hora_1);
+
+$sql_tmp_rep = mysqli_query($conn, "SELECT * FROM tmp_reportes WHERE ruta = 0 AND hora <= '$Hora_1' AND hora > '2020-01-01'");
+if (mysqli_num_rows($sql_tmp_rep)>0) {
+	while ($reporte = mysqli_fetch_array($sql_tmp_rep)) {
+		$IdReporte = $reporte['id_reporte'];
+		mysqli_query($conn, "DELETE FROM `tmp_reportes` WHERE `tmp_reportes`.`id_reporte` = $IdReporte");
+	}
+}
+
+$sql_tmp_inst = mysqli_query($conn, "SELECT * FROM tmp_pendientes WHERE ruta_inst = 0 AND hora <= '$Hora_1' AND hora > '2020-01-01'");
+if (mysqli_num_rows($sql_tmp_rep)>0) {
+	while ($instalacion = mysqli_fetch_array($sql_tmp_inst)) {
+		$IdCliente = $instalacion['id_cliente'];
+		mysqli_query($conn, "DELETE FROM `tmp_pendientes` WHERE `tmp_pendientes`.`id_cliente` = $IdCliente");
+	}
+}
 ?>
 <script >
 	function buscar() {
