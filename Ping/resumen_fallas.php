@@ -63,7 +63,7 @@ if (mysqli_num_rows($Centrales)>0) {
 		}
 	}
 	#CUANDO RECORRIMOS TODAS LAS CENTRALES Y GENERAMOS EL FORMATO DEL MEENSAJE -> $MSJ PROCEDEMOS A ENVIAR EL MENSAJE
-	if(!sendMessage($id_Chat, $Mensaje, $website) AND !sendMessage($id_Chat2, $Mensaje, $website) AND !sendMessage($id_Chat3, $Mensaje, $website)){
+	if(!sendMessage($id_Chat, $MSJ, $website) AND !sendMessage($id_Chat2, $MSJ, $website) AND !sendMessage($id_Chat3, $MSJ, $website)){
         #Si se ENVIA el mensaje modificar msj_error a 1 para comprobar que se envio el msj
    		echo "MENSAJE ENVIADO!!!";
     }
