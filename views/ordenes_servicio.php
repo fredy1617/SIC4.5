@@ -1,4 +1,4 @@
-<html>
+ <html>
 <head>
 	<title>SIC | Ordenes de Servicio</title>
 <?php 
@@ -6,7 +6,6 @@ include('fredyNav.php');
 include('../php/conexion.php');
 include ('../php/cobrador.php');
 $id_user = $_SESSION['user_id'];
-
 ?>
 <!--Inicia Script de reportes tmp-->
 <script>
@@ -45,227 +44,70 @@ $id_user = $_SESSION['user_id'];
 <!--Termina script dispositivos-->
 </head>
 <main>
-<body onload="buscar_rep();">
+<body>
 <div class="container">
   <div class="row">
       <br><br>
-      <h3 class="hide-on-med-and-down col l9">Ordenes de Servicio En Proceso</h3>
-      <h5 class="hide-on-large-only col s12 m9 l9">Ordenes de Servicio En Proceso</h5>
+      <h3 class="hide-on-med-and-down col l9">Ordenes de Servicio </h3>
+      <h5 class="hide-on-large-only col s12 m9 l9">Ordenes de Servicio </h5>
         <div class="col s4 m3 l3"><br>
           <a class="waves-effect waves-light btn pink" href="../views/ordenes_pendientes.php"><i class="material-icons prefix right">send</i>Pendientes</a>
-        </div>      
+        </div>        
     </div>
+  <?php
+  #<!-- ************  VISTA PARA REDES Y ADMINISTRADORES  ****************** -->
+
+  #VERIFICAMOS QUE EL USUARIO LOGEADO PERTENEZCA A LOS SUPER ADMINISTRADORES O SEA DEL DEPARTAMENTO DE REDES
+  if ((($id_user == 49 OR $id_user == 10 OR $id_user == 56) AND $area['area'] == "Administrador") OR $area['area'] == 'Redes' OR $id_user == 25 OR $id_user == 28) {
+    #SI SI PERTENECE MOSTRAR TODAS LAS ORDENES SEPARADAS POR DEPARTAMENTO
+  ?>
     <div class="row">
-      <p><div id="resultado_reporte_pendiente">
-        <table class="bordered  highlight responsive-table">
-          <thead>
-            <tr>
-                <th>Dias</th>
-                <th>#Orden</th>
-                <th>Cliente</th>
-                <th>Descripción</th>
-                <th>Fecha</th>
-                <th>Comunidad</th>
-                <th>Técnico</th>
-                <th>Registró</th>
-                <th>Atender</th>
-                <th>+Ruta</th>
-                <th>Editar</th>
-            </tr>
-          </thead>
-          <tbody>
-          <?php
-          date_default_timezone_set('America/Mexico_City');
-          $Hoy = date('Y-m-d');
-          $consulta = mysqli_query($conn,"SELECT * FROM reportes  WHERE  ((fecha_visita = '$Hoy'  AND atender_visita = 0) OR (fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR atendido != 1 OR atendido IS NULL) AND id_cliente > 10000 AND descripcion LIKE 'Reporte Especial:%' ORDER BY fecha ");
-          //Obtiene la cantidad de filas que hay en la consulta
-          $filas = mysqli_num_rows($consulta);
-          //Si no existe ninguna fila que sea igual a $consultaBusqueda, entonces mostramos el siguiente mensaje
-          if ($filas <= 0) {
-            echo '<script>M.toast({html:"No se encontraron reportes.", classes: "rounded"})</script>';
-          } else {
-            while($resultados = mysqli_fetch_array($consulta)) {
-              $id_reporte = $resultados['id_reporte'];
-              $id_cliente = $resultados['id_cliente'];
-              $id_user1=$resultados['registro'];
-              $EnCampo = ($resultados['campo'] == 1) ? 'En Campo' : '';
-              if ($resultados['apoyo'] != 0) {
-                $id_apoyo = $resultados['apoyo'];
-                $A = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $id_apoyo"));
-                $Apoyo = ', Apoyo: '.$A['firstname'];
-              }else{
-                $Apoyo = '';
-              }
-              if ($id_user1 == 0) {
-                $Usuario = "Sistema";
-              }else{
-                $users = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$id_user1"));
-                $Usuario = $users['firstname'];
-              }
-              $sql = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente");
-              $filas = mysqli_num_rows($sql);
-              if ($filas == 0) {
-                $sql = mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente");
-              }
-              $cliente = mysqli_fetch_array($sql);
-              $id_comunidad = $cliente['lugar'];
-              $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunidades WHERE id_comunidad=$id_comunidad"));
-              if($resultados['tecnico']==''){
-                $tecnico1[0] = '';
-                $tecnico1[1] = 'Sin tecnico';
-              }else{
-                $id_tecnico = $resultados['tecnico'];
-                $tecnico1 = mysqli_fetch_array(mysqli_query($conn, "SELECT user_id, user_name FROM users WHERE user_id=$id_tecnico"));  
-              }
-              $Estatus2= 0;
-              if ($resultados['fecha']<$Hoy) {
-                $date1 = new DateTime($Hoy);
-                $date2 = new DateTime($resultados['fecha']);
-                //Le restamos a la fecha date1-date2
-                $diff = $date1->diff($date2);
-                $Estatus2= $diff->days;
-              }
-              $estatus=$Estatus2;
-              if ($resultados['estatus']>$Estatus2) { $estatus = $resultados['estatus']; }
-              $color = "green";
-              if ($estatus== 1) { $color = "yellow darken-2";
-              }elseif ($estatus == 2) { $color = "orange darken-4";
-              }elseif ($estatus >= 3) { $color = "red accent-4"; }
-              if ($cliente['mantenimiento'] == 0) {
+      <h4 class="hide-on-med-and-down col l9">Redes Ordenes Pendientes</h4>
+      <h5 class="hide-on-large-only col s12 m9 l9">Redes Ordenes Pendientes</h5>
+      <?php 
+      #CONTENIDO DE REDES
+      $sql_orden = mysqli_query($conn,"SELECT * FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar', 'Ejecutar')  AND dpto = 1 ORDER BY fecha");
 
-              echo '
-                  <tr>
-                    <td><span class="new badge '.$color.'" data-badge-caption="">'.$estatus.'</span>'.$EnCampo.'</td>
-                    <td><b>'.$id_reporte.'</b></td>
-                    <td><a class="tooltipped" data-position="top" data-tooltip=" Telefono: '.$cliente['telefono'].'  Comunidad: '.$comunidad['nombre'].'">'.$cliente['nombre'].'</a></td>
-                    <td>'.$resultados['descripcion'].'</td>
-                    <td>'.$resultados['fecha'].'</td>
-                    <td>'.$comunidad['nombre'].'</td>
-                    <td>'.$tecnico1[1].$Apoyo.'</td>
-                    <td>'.$Usuario.'</td>
-                    <td><br><form action="atender_reporte.php" method="post"><input type="hidden" name="id_reporte" value="'.$id_reporte.'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">send</i></button></form></td>
-                    <td><a onclick="ruta('.$id_reporte.');" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></a></td>
-                    <td><br><form action="editar_reporte.php" method="post"><input type="hidden" name="id_reporte" value="'.$id_reporte.'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>
-                  </tr>';
-              }       
-            }//Fin while $resultados
-          } //Fin else $filas
-            ?>
-          </tbody>
-        </table>
-      </div></p>
+      include ('../php/tabla_ordenes_pendientes.php');
+      ?>
     </div>
-  <div class="row">
-      <p><div id="resultado_reporte_pendiente">
-        <table class="bordered  highlight responsive-table">
-          <thead>
-            <tr>
-                <th>Dias</th>
-                <th>#Orden</th>
-                <th>Cliente</th>
-                <th>Descripción</th>
-                <th>Fecha</th>
-                <th>Comunidad</th>
-                <th>Registró</th>
-                <th>Estatus</th>
-                <th>Realizo</th>
-                <th>Atender</th>
-                <th>+Ruta</th>
-            </tr>
-          </thead>
-          <tbody>
-          <?php
-          $sql_orden = mysqli_query($conn,"SELECT * FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar', 'Cotizar', 'Cotizado', 'Pedir', 'Realizar')  AND dpto = 1 ORDER BY fecha");
-          //Obtiene la cantidad de filas que hay en la sql_orden
-          $filas = mysqli_num_rows($sql_orden);
-          //Si no existe ninguna fila que sea igual a $sql_ordenBusqueda, entonces mostramos el siguiente mensaje
-          if ($filas <= 0) {
-            echo '<script>M.toast({html:"No se encontraron ordenes de servico.", classes: "rounded"})</script>';
-          } else {
-            while($resultados = mysqli_fetch_array($sql_orden)) {
-              $id_cliente = $resultados['id_cliente'];
-              $id_usuario=$resultados['registro'];
+  <?php } //CIERRA IF 
+ 
+  #<!-- *************  VISTA PARA TALLER Y ADMINISTRADORES  **************** -->
 
-              $users = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$id_usuario"));
-              $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente"));
-              $id_comunidad = $cliente['lugar'];
-              $comunidad2 = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunidades WHERE id_comunidad=$id_comunidad"));
-              $Dias= 0;
-              if ($resultados['fecha']<$Hoy) {
-                $date1 = new DateTime($Hoy);
-                $date2 = new DateTime($resultados['fecha']);
-                //Le restamos a la fecha date1-date2
-                $diff = $date1->diff($date2);
-                $Dias= $diff->days;
-              }
-              $color = "green";
-              if ($Dias>= 2 AND $Dias < 4) { $color = "yellow darken-2";
-              }elseif ($Dias == 4 OR $Dias == 5) { $color = "orange darken-4";
-              }elseif ($Dias >= 6) { $color = "red accent-4"; }
-              $Descripción = $resultados['trabajo'];
+  #VERIFICAMOS QUE EL USUARIO LOGEADO PERTENEZCA A LOS SUPER ADMINISTRADORES O SEA DEL DEPARTAMENTO DE TALLER
+  if ((($id_user == 49 OR $id_user == 10 OR $id_user == 56) AND $area['area'] == "Administrador") OR $area['area'] == 'Taller') {
+    #SI SI PERTENECE MOSTRAR TODAS LAS ORDENES SEPARADAS POR DEPARTAMENTO
+  ?>
+    <div class="row">
+      <h4 class="hide-on-med-and-down col l9">Taller Ordenes Pendientes</h4>
+      <h5 class="hide-on-large-only col s12 m9 l9">Taller Ordenes Pendientes</h5>
+      <?php 
+        #CONTENIDO TALLER
+      $sql_orden = mysqli_query($conn,"SELECT * FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar', 'Ejecutar')  AND dpto = 2 ORDER BY fecha");
 
-              $Realizo = $resultados['tecnicos_r'];
-              if ($Realizo == '') {
-                $Realizo = 'SIN';
-              }
-              if ($resultados['estatus'] == 'Cotizar') {
-                $color_e = 'red darken-4';
-              }else if($resultados['estatus'] == 'Cotizado') {
-                $color_e = 'orange darken-4';
-                $user_id = $resultados['cotizo'];
-                if ($user_id == '') {
-                  $Realizo = 'SIN';
-                }else {  
-                  $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));
-                  $Realizo = $usuario['firstname'];
-                }
-              }else if($resultados['estatus'] == 'Pedir') {
-                $color_e = 'yellow darken-2';
-                $user_id = $resultados['confirmo'];
-                if ($user_id == '') {
-                  $Realizo = 'SIN';
-                }else {  
-                  $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));
-                  $Realizo = $usuario['firstname'];
-                }
-              }else if($resultados['estatus'] == 'Realizar') {
-                $color_e = 'green darken-3';
-                $user_id = $resultados['compro'];
-                if ($user_id == '') {
-                  $Realizo = 'SIN';
-                }else {  
-                  $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));
-                  $Realizo = $usuario['firstname'];
-                }
-              }else if($resultados['estatus'] == 'PorConfirmar') {
-                $color_e = 'black';
-                $Realizo = 'SIN';
-              }else{
-                $Descripción = $resultados['solicitud'];
-                $color_e = 'blue darken-3';
-              }
-              echo '
-                  <tr>
-                    <td><span class="new badge '.$color.'" data-badge-caption="">'.$Dias.'</span></td>
-                    <td><b>'.$resultados['id'].'</b></td>
-                    <td>'.$cliente['nombre'].'</td>
-                    <td>'.$Descripción.'</td>
-                    <td>'.$resultados['fecha'].'</td>
-                    <td>'.$comunidad2['nombre'].'</td>
-                    <td>'.$users['firstname'].'</td>
-                    <td><span class="new badge '.$color_e.'" data-badge-caption=""><b>'.$resultados['estatus'].'</b></span></td>
-                    <td>'.$Realizo.'</td>
-                    <td><br><form action="atender_orden.php" method="post"><input type="hidden" name="id_orden" value="'.$resultados['id'].'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">send</i></button></form></td>
-                    <td><a onclick="ruta('.$resultados['id'].');" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></a></td>
-                  </tr>';
-
-            }
-          }
-          ?>
-          </tbody>
-        </table>
-      </div></p>
+      include ('../php/tabla_ordenes_pendientes.php');
+      ?>
     </div>
+  <?php } //CIERRA IF 
+
+  #<!-- *************  VISTA PARA VENTAS Y ADMINISTRADORES  **************** -->
+
+  #VERIFICAMOS QUE EL USUARIO LOGEADO PERTENEZCA A LOS SUPER ADMINISTRADORES O SEA DEL DEPARTAMENTO DE VENTAS
+  if ((($id_user == 49 OR $id_user == 10 OR $id_user == 56) AND $area['area'] == "Administrador") OR $id_user == 59 OR $id_user == 66 OR $id_user == 70) {
+    #SI SI PERTENECE MOSTRAR TODAS LAS ORDENES SEPARADAS POR DEPARTAMENTO
+  ?>
+    <div class="row">
+      <h4 class="hide-on-med-and-down col l9">Ventas Ordenes Pendientes</h4>
+      <h5 class="hide-on-large-only col s12 m9 l9">Ventas Ordenes Pendientes</h5>
+      <?php 
+        #CONTENIDO DE VENTAS
+      $sql_orden = mysqli_query($conn,"SELECT * FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Cotizar', 'Cotizado', 'Autorizado(Pedir)') ORDER BY fecha");
+
+      include ('../php/tabla_ordenes_pendientes.php');
+      ?>
+    </div>
+  <?php } //CIERRA IF ?>
 
   <br><br><br>
   <div id="delete">

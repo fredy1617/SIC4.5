@@ -56,8 +56,7 @@ if (mysqli_num_rows($Centrales)>0) {
 			while ($Error = mysqli_fetch_array($sql_Errores)) {
 				$AUX++;
 				#MOSTRAMOS AUX HORA ERROR, HORA SOLUCION, TIEMPO TRANSCURRIDO
-				$hora_s = ($Error['hora_s'] == "")? '<b>Pendiente</b>':$Error['hora_s'];
-				$MSJ.= $AUX." --- ".$Error['hora_e']." --- ".$hora_s." ---- ".$Error['contador']." min. --\n";//LO AGREGAMOS AL FORMATO DEL MENSAJE				
+				$hora_s = ($Error['hora_s'] == "")? '<b>Pendiente</b>':$Error['hora_s'];			
 			}
 			$MSJ.= "________________________________________\n\n";//CERRAR ERRORES
 		}

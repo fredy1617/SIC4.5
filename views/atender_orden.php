@@ -7,7 +7,8 @@
 include ('fredyNav.php');
 include('../php/conexion.php');
 include('../php/cobrador.php');
-if (isset($_POST['id_orden']) == false) {
+$id_user = $_SESSION['user_id'];
+if (isset($_GET['id_orden']) == false) {
   ?>
   <script>    
     function atras() {
@@ -18,7 +19,7 @@ if (isset($_POST['id_orden']) == false) {
   </script>
   <?php
 }else{
-  $id_orden = $_POST['id_orden'];
+  $id_orden = $_GET['id_orden'];
   $tecnico = $_SESSION['user_name'];
 ?>
 <script>
@@ -104,7 +105,7 @@ function update_orden() {
             $("#resultado_update_orden").html(mensaje);
         });
       }
-    }else if (textoEstatusI == 'Cotizado' || textoEstatusI == 'Pedir') {
+    }else if (textoEstatusI == 'Cotizado' || textoEstatusI == 'Autorizado(Pedir)') {
       var textoSolucion = $("input#solucion").val();
 
       if (textoSolucion == "") {
@@ -119,7 +120,7 @@ function update_orden() {
             $("#resultado_update_orden").html(mensaje);
         });
       }
-    }else if (textoEstatusI == 'Realizar') {
+    }else if (textoEstatusI == 'Ejecutar') {
       var textoSolucion = $("input#solucion").val();
 
       textoTecnico = '<?php echo $tecnico;?>';
@@ -149,6 +150,21 @@ function update_orden() {
       }
     }
 };
+ function subir(id){
+    var textoNombre = $("input#nombre").val();
+    $.post("../views/modal_doc.php", { 
+            valorId: id
+    }, function(mensaje) {
+    $("#documento").html(mensaje);
+    });
+  };
+  function editar(id){
+    $.post("../views/editar_doc.php", { 
+            valorId: id
+    }, function(mensaje) {
+    $("#documento").html(mensaje);
+    });
+  };
 </script>
 <body>
 	<div class="container">
@@ -179,8 +195,15 @@ function update_orden() {
                 <?php if ($orden['estatus'] != 'Revisar') { ?>             
                 <b>Trabajo: </b><?php echo $orden['trabajo'];?><br>                
                 <b>Material: </b><?php echo $orden['material'];?><br> 
-                <?php } ?>   
-                <b>Cotizacion: </b> $<?php echo $orden['precio'];?><br> 
+                <?php } //FIN IF  ?> 
+                <div id="documento"></div>  
+                <div class="row col s10"><br>
+                  <b>Cotizacion: </b> $<?php echo $orden['precio'];?>  -  <b>Documento: </b><a href = "../files/cotizaciones/<?php echo $orden['cotizacion_n'];?>" target = "blank"><?php echo $orden['cotizacion_n'];?></a> 
+                  <div class="right">
+                    <a onclick="editar(<?php echo $id_orden; ?>);" class="btn-small pink waves-effect waves-light <?php echo ($orden['cotizacion_n'] == '')? 'disabled': ''; ?> rigth"><i class="material-icons">edit</i></a>
+                    <a onclick="subir(<?php echo $id_orden; ?>);" class="btn-small green waves-effect waves-light <?php echo ($orden['cotizacion_n'] != '')? 'disabled': ''; ?> rigth"><i class="material-icons">file_upload</i></a>
+                  </div>
+                </div><br><br><br><br>
                 <div id="extra">
                   <?php
                   $totalE = 0;
@@ -214,7 +237,7 @@ function update_orden() {
       </div>
     	<form class="col s12">
         <div class="row">
-          <?php if ($orden['estatus'] == 'Realizar') { ?>
+          <?php if ($orden['estatus'] == 'Ejecutar') { ?>
           <div class="row col s12">
             <div class="col s12 m2 l2">
               <h4 class="hide-on-med-and-down">Extras:</h4>
@@ -244,7 +267,7 @@ function update_orden() {
            <div class="input-field col s12 l6 m6">
              <i class="material-icons prefix">touch_app</i>
              <textarea id="trabajo" class="materialize-textarea validate" data-length="150" required><?php echo $orden['trabajo'];?></textarea> 
-             <label for="trabajo">Trabajo (ej: Se realizara...):</label>
+             <label for="trabajo">Trabajo (ej: Se Ejecutara...):</label>
            </div>
            <div class="input-field col s12 l6 m6">
              <i class="material-icons prefix">assignment</i>
@@ -281,7 +304,7 @@ function update_orden() {
               <label for="solucion">Solucion (Descripcion de que se hizo):</label>
            </div>
           </div>
-          <?php }elseif ($orden['estatus'] == 'Cotizado' OR $orden['estatus'] == 'Pedir' OR $orden['estatus'] == 'Realizar') { ?>
+          <?php }elseif ($orden['estatus'] == 'Cotizado' OR $orden['estatus'] == 'Autorizado(Pedir)' OR $orden['estatus'] == 'Ejecutar') { ?>
           <div class="col s12 l9 m9"><br>
            <div class="input-field col s12 l4 m4">
               <h5><b>Total = $<?php echo $orden['precio']+$totalE;?></b></h5>
@@ -292,7 +315,7 @@ function update_orden() {
               <label for="solucion">Solucion (Descripcion de que se hizo):</label>
            </div>
 
-          <?php if ($orden['estatus'] == 'Realizar') { ?>
+          <?php if ($orden['estatus'] == 'Ejecutar') { ?>
             <label>APOYO (solo toma uno):</label>
             <p>
             <?php
@@ -320,9 +343,15 @@ function update_orden() {
                 <option value="Revisar">Revisar</option> 
                 <option value="Cotizar">Cotizar</option> 
                 <option value="Cotizado">Cotizado</option> 
-                <option value="Pedir">Pedir</option> 
-                <option value="Realizar">Realizar</option> 
+                <?php if ($id_user == 56 OR $id_user == 10 OR $id_user == 49) { ?>
+                <option value="Autorizado(Pedir)">Autorizado(Pedir)</option> 
+                <?php 
+                } //FIN IF PARA AUTORIZADO
+                if ($orden['estatus'] == 'Autorizado(Pedir)' OR $orden['estatus'] == 'Ejecutar') {
+                ?>
+                <option value="Ejecutar">Ejecutar</option> 
                 <option value="Facturar">Facturar</option> 
+                <?php }//FIN DEL IF ?>
                 <option value="Pendiente">Pendiente</option> 
                 <option value="Cancelada">Cancelada</option> 
               </select>

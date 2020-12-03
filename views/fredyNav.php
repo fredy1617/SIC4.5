@@ -4,12 +4,18 @@ include('../php/is_logged.php');
 #INCLUIMOS EL ARCHIVO CON LOS DATOS Y CONEXXION A LA BASE DE DATOS
 include('../php/conexion.php');
 #GENERAMOS UNA FECHA DEL DIA EN CURSO REFERENTE A LA ZONA HORARIA
+#TOMAMOS EL ID DEL USUARIO CON LA SESSION INICIADA
+$id = $_SESSION['user_id'];
+#TOMAMOS LA INFORMACION DEL USUARIO (PARA SABER A QUE AREA PERTENECE)
+$area = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$id"));
 $Hoy = date('Y-m-d');
 $instalaciones = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes WHERE instalacion IS NULL"));
 $reportes = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE ((fecha_visita = '$Hoy'  AND atender_visita = 0) OR (fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR atendido != 1 OR atendido IS NULL) AND id_cliente < 10000"));
 $reportesEsp = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE ((fecha_visita = '$Hoy'  AND atender_visita = 0) OR (fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR atendido != 1 OR atendido IS NULL) AND id_cliente > 10000 AND descripcion LIKE 'Reporte Especial:%'"));
-$Ordenes_R = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar', 'Cotizar', 'Cotizado', 'Pedir', 'Realizar')  AND dpto = 1"));
-$Ordenes_T = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar', 'Cotizar', 'Cotizado', 'Pedir', 'Realizar')  AND dpto = 2"));
+$Ordenes_Redes = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar', 'Realizar')  AND dpto = 1"));
+$Ordenes_Taller = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar' , 'Realizar')  AND dpto = 2"));
+$Ordenes_Ventas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Cotizar', 'Cotizado', 'Pedir')"));
+if ($area['area'] == 'Taller') { $Orden = $Ordenes_Taller['count(*)']; }elseif ($id == 49 OR $id == 10 OR $id == 56) { $Orden = $Ordenes_Taller['count(*)']+$Ordenes_Ventas['count(*)']+$Ordenes_Redes['count(*)']; }elseif ( $area['area'] == 'Redes' OR $id == 25 OR $id == 28) {  $Orden = $Ordenes_Redes['count(*)'];  }else{ $Orden = $Ordenes_Ventas['count(*)']; }
 $Mantenimiento = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE ((fecha_visita = '$Hoy'  AND atender_visita = 0) OR (fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR atendido != 1 OR atendido IS NULL) AND id_cliente > 10000 AND descripcion LIKE 'Mantenimiento:%'"));
 $tel = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM pagos WHERE Cotejado =1"));
 $pendientes = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM dispositivos WHERE estatus IN ('Cotizado','En Proceso','Pendiente') AND fecha > '2019-01-01'"));
@@ -44,12 +50,11 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    <li><a href="dispositivos.php" class="black-text"><i class="material-icons">phonelink</i>Disp. En General </a></li>
 				    <li><a href="ver_almacen.php" class="black-text"><i class="material-icons">dashboard</i>Almacen <span class="new badge pink" data-badge-caption=""><?php echo $almacen['count(*)'];?></span> </a></li>
 				    <li><a href="listos.php" class="black-text"><i class="material-icons">assignment_turned_in</i>Listos <span class="new badge pink" data-badge-caption=""><?php echo $listos['count(*)'];?></span> </a></li>
-				    <li><a href="pendientes.php" class="black-text"><i class="material-icons">assignment_late</i>Pendientes <span class="new badge pink" data-badge-caption=""><?php echo $pendientes['count(*)'];?></span> </a></li>
-				    <li><a href="ordenes_servicio_t.php" class="black-text"><i class="material-icons">assignment</i>Orden Servicio<span class="new badge pink" data-badge-caption=""><?php echo $Ordenes_T['count(*)'];?></span></a></li>
+				    <li><a href="pendientes.php" class="black-text"><i class="material-icons">assignment_late</i>Pendientes <span class="new badge pink" data-badge-caption=""><?php echo $pendientes['count(*)'];?></span> </a></li>    
 				    <li><a href="reporte_pagos_ST.php" class="black-text"><i class="material-icons">list</i>Reporte Pagos</a></li>
 				    <li><a href="rep_refacciones.php" class="black-text"><i class="material-icons">list</i>Rep. Refacciones</a></li>    			 
  				 </ul>
-				<li><a class='dropdown-button' data-target='dropdown2'><i class="material-icons left">language</i>Redes<span class=" new badge pink" data-badge-caption=""><?php echo $instalaciones['count(*)']+$reportes['count(*)']+$reportesEsp['count(*)']+$Ordenes_R['count(*)']+$Mantenimiento['count(*)'];?></span><i class="material-icons right">arrow_drop_down</i></a></li>
+				<li><a class='dropdown-button' data-target='dropdown2'><i class="material-icons left">language</i>Redes<span class=" new badge pink" data-badge-caption=""><?php echo $instalaciones['count(*)']+$reportes['count(*)']+$reportesEsp['count(*)']+$Orden+$Mantenimiento['count(*)'];?></span><i class="material-icons right">arrow_drop_down</i></a></li>
 				<ul id='dropdown2' class='dropdown-content'>
 				    <li><a href="../views/form_instalacion.php" class="black-text"><i class="material-icons">add</i>Nueva Instalación</a></li>    
 					<li><a href="form_esperiales.php" class="black-text"><i class="material-icons">add_circle_outline</i>Nuevo Mantimiento</a></li>
@@ -58,7 +63,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    <li><a href="../views/instalaciones.php" class="black-text"><i class="material-icons">list</i>Instalaciones <span class=" new badge pink" data-badge-caption=""><?php echo $instalaciones['count(*)']?></span></a></li>
 				    <li><a href="stock.php" class="black-text"> <i class="material-icons">assignment_ind</i>Stock </a></li>
 				    <li><a href="reportes.php" class="black-text"><i class="material-icons">perm_scan_wifi</i>Reportes <span class="new badge pink" data-badge-caption=""><?php echo $reportes['count(*)'];?></span></a></li>			    
-				    <li><a href="ordenes_servicio.php" class="black-text"><i class="material-icons">assignment</i>Orden Servicio<span class="new badge pink" data-badge-caption=""><?php echo $reportesEsp['count(*)']+$Ordenes_R['count(*)'];?></span></a></li>			    
+				    <li><a href="ordenes_servicio.php" class="black-text"><i class="material-icons">assignment</i>Orden Servicio<span class="new badge pink" data-badge-caption=""><?php echo $Orden; ?></span></a></li>			    
 				    <li><a href="mantenimiento.php" class="black-text"><i class="material-icons">build</i>Mantenimiento <span class="new badge pink" data-badge-caption=""><?php echo $Mantenimiento['count(*)'];?></span></a></li>			    
 				    <li><a href="tel.php" class="black-text"><i class="material-icons">phone</i>Teléfono <span class=" new badge pink" data-badge-caption=""><?php echo $tel['count(*)'];?></span></a></li>
 				    <li><a href="menu_rutas.php" class="black-text"><i class="material-icons">near_me</i>Rutas<span class="new badge pink" data-badge-caption=""><?php echo $rutas['count(*)'];?></span></a></li>
@@ -140,7 +145,6 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    			  <li><a href="ver_almacen.php"><i class="material-icons">dashboard</i>Almacen <span class="new badge pink" data-badge-caption=""><?php echo $almacen['count(*)'];?></span> </a></li>
 			      				  <li><a href="listos.php"><i class="material-icons">assignment_turned_in</i>Listos <span class="new badge pink" data-badge-caption=""><?php echo $listos['count(*)'];?></span> </a></li>
 						    	  <li><a href="pendientes.php"><i class="material-icons">assignment_late</i>Pendientes<span class="new badge pink" data-badge-caption=""><?php echo $pendientes['count(*)'];?></span></a></li>
-						    	  <li><a href="ordenes_servicio_t.php"><i class="material-icons">assignment</i>Orden Servicio<span class="new badge pink" data-badge-caption=""><?php echo $Ordenes_T['count(*)'];?></span></a></li>
 						    	  <li><a href="reporte_pagos_ST.php"><i class="material-icons">list</i>Reporte Pagos</a></li>
 						    	  <li><a href="rep_refacciones.php"><i class="material-icons">list</i>Reporte Refacciones</a></li>
 					    		</ul>
@@ -164,7 +168,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    			  <li><a href="stock.php" class="black-text"> <i class="material-icons">assignment_ind</i>Stock </a></li>
 			      				  <li><a href="../views/instalaciones.php"><i class="material-icons">list</i>Instalaciones <span class="new badge pink" data-badge-caption=""><?php echo $instalaciones['count(*)'];?></span></a></li>
 						    	  <li><a href="reportes.php"><i class="material-icons">perm_scan_wifi</i>Reportes <span class=" new badge pink" data-badge-caption=""><?php echo $reportes['count(*)'];?></span></a></li>
-						    	  <li><a href="ordenes_servicio.php"><i class="material-icons">assignment</i>Orden Servicio<span class=" new badge pink" data-badge-caption=""><?php echo $reportesEsp['count(*)']+$Ordenes_R['count(*)'];?></span></a></li>
+						    	  <li><a href="ordenes_servicio.php"><i class="material-icons">assignment</i>Orden Servicio<span class=" new badge pink" data-badge-caption=""><?php echo $Orden; ?></span></a></li>
 						    	  <li><a href="mantenimiento.php"><i class="material-icons">build</i>Mantenimiento<span class="new badge pink" data-badge-caption=""><?php echo $Mantenimiento['count(*)'];?></span></a></li>
 						    	  <li><a href="tel.php"><i class="material-icons">phone</i>Teléfono <span class=" new badge pink" data-badge-caption=""><?php echo $tel['count(*)'];?></span></a></li>
 						    	  <li><a href="menu_rutas.php"><i class="material-icons">near_me</i>Rutas <span class=" new badge pink" data-badge-caption=""><?php echo $rutas['count(*)'];?></span></a></li>
