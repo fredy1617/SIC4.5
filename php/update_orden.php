@@ -28,17 +28,17 @@ if ($EstatusI == 'PorConfirmar') {
 		mysqli_query($conn, "UPDATE orden_servicios SET cotizo = $user_id WHERE id = '$id'");
 	}
 
-}elseif ($EstatusI == 'Cotizado' or $EstatusI == 'Pedir') {
+}elseif ($EstatusI == 'Cotizado' or $EstatusI == 'Autorizado(Pedir)') {
 
 	$Solucion = $conn->real_escape_string($_POST['valorSolucion']);
 	$sql = "UPDATE orden_servicios SET solucion = '$Solucion', estatus = '$Estatus' WHERE id = '$id'";
-	if ($Estatus == 'Pedir') {
+	if ($Estatus == 'Autorizado(Pedir)') {
 		mysqli_query($conn, "UPDATE orden_servicios SET confirmo = $user_id WHERE id = '$id'");
-	}elseif ($Estatus == 'Realizar') {
+	}elseif ($Estatus == 'Ejecutar') {
 		mysqli_query($conn, "UPDATE orden_servicios SET compro = $user_id WHERE id = '$id'");
 	}
 
-}elseif ($EstatusI == 'Realizar') {
+}elseif ($EstatusI == 'Ejecutar') {
 
 	$Solucion = $conn->real_escape_string($_POST['valorSolucion']);
 	$sql = "UPDATE orden_servicios SET solucion = '$Solucion', estatus = '$Estatus' WHERE id = '$id'";
