@@ -49,7 +49,7 @@ $id_user = $_SESSION['user_id'];
   <div class="row">
       <br><br>
       <h3 class="hide-on-med-and-down col l9">Ordenes de Servicio </h3>
-      <h5 class="hide-on-large-only col s12 m9 l9">Ordenes de Servicio </h5>
+      <h5>Ordenes de Servicio </h5>
         <div class="col s4 m3 l3"><br>
           <a class="waves-effect waves-light btn pink" href="../views/ordenes_pendientes.php"><i class="material-icons prefix right">send</i>Pendientes</a>
         </div>        
@@ -62,14 +62,14 @@ $id_user = $_SESSION['user_id'];
     #SI SI PERTENECE MOSTRAR TODAS LAS ORDENES SEPARADAS POR DEPARTAMENTO
   ?>
     <div class="row">
-      <h4 class="hide-on-med-and-down col l9">Redes Ordenes Pendientes</h4>
-      <h5 class="hide-on-large-only col s12 m9 l9">Redes Ordenes Pendientes</h5>
+      <h5>Redes Ordenes Pendientes</h5>
+      <div class="row">
       <?php 
       #CONTENIDO DE REDES
       $sql_orden = mysqli_query($conn,"SELECT * FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar', 'Ejecutar')  AND dpto = 1 ORDER BY fecha");
-
       include ('../php/tabla_ordenes_pendientes.php');
       ?>
+      </div>
     </div>
   <?php } //CIERRA IF 
  
@@ -80,8 +80,7 @@ $id_user = $_SESSION['user_id'];
     #SI SI PERTENECE MOSTRAR TODAS LAS ORDENES SEPARADAS POR DEPARTAMENTO
   ?>
     <div class="row">
-      <h4 class="hide-on-med-and-down col l9">Taller Ordenes Pendientes</h4>
-      <h5 class="hide-on-large-only col s12 m9 l9">Taller Ordenes Pendientes</h5>
+      <h5>Taller Ordenes Pendientes</h5>
       <?php 
         #CONTENIDO TALLER
       $sql_orden = mysqli_query($conn,"SELECT * FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar', 'Ejecutar')  AND dpto = 2 ORDER BY fecha");
@@ -98,8 +97,7 @@ $id_user = $_SESSION['user_id'];
     #SI SI PERTENECE MOSTRAR TODAS LAS ORDENES SEPARADAS POR DEPARTAMENTO
   ?>
     <div class="row">
-      <h4 class="hide-on-med-and-down col l9">Ventas Ordenes Pendientes</h4>
-      <h5 class="hide-on-large-only col s12 m9 l9">Ventas Ordenes Pendientes</h5>
+      <h5>Ventas Ordenes Pendientes</h5>
       <?php 
         #CONTENIDO DE VENTAS
       $sql_orden = mysqli_query($conn,"SELECT * FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Cotizar', 'Cotizado', 'Autorizado(Pedir)') ORDER BY fecha");

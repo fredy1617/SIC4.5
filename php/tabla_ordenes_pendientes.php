@@ -1,6 +1,4 @@
-    <?php  
-    echo '
-    <p><div id="resultado_reporte_pendiente">
+    <p><div>
         <table class="bordered  highlight responsive-table">
           <thead>
             <tr>
@@ -17,7 +15,8 @@
                 <th>+Ruta</th>
             </tr>
           </thead>
-          <tbody>';                  
+          <tbody>
+          <?php                   
           //Obtiene la cantidad de filas que hay en la sql_orden
           $filas = mysqli_num_rows($sql_orden);
           //Si no existe ninguna fila que sea igual a $sql_ordenBusqueda, entonces mostramos el siguiente mensaje
@@ -86,23 +85,24 @@
                 $Descripción = $resultados['solicitud'];
                 $color_e = 'blue darken-3';
               }
-              echo '
+              ?>
                   <tr>
-                    <td><span class="new badge '.$color.'" data-badge-caption="">'.$Dias.'</span></td>
-                    <td><b>'.$resultados['id'].'</b></td>
-                    <td>'.$cliente['nombre'].'</td>
-                    <td>'.$Descripción.'</td>
-                    <td>'.$resultados['fecha'].'</td>
-                    <td>'.$comunidad2['nombre'].'</td>
-                    <td>'.$users['firstname'].'</td>
-                    <td><span class="new badge '.$color_e.'" data-badge-caption=""><b>'.$resultados['estatus'].'</b></span></td>
-                    <td>'.$Realizo.'</td>
-                    <td><a href="atender_orden.php?id_orden='.$resultados['id'].'" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">send</i></a></td>
-                    <td><a onclick="ruta('.$resultados['id'].');" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></a></td>
-                  </tr>';
+                    <td><span class="new badge <?php echo $color; ?>" data-badge-caption=""><?php echo $Dias; ?></span></td>
+                    <td><b><?php echo $resultados['id']; ?></b></td>
+                    <td><?php echo $cliente['nombre']; ?></td>
+                    <td><?php echo $Descripción; ?></td>
+                    <td><?php echo $resultados['fecha']; ?></td>
+                    <td><?php echo $comunidad2['nombre']; ?></td>
+                    <td><?php echo $users['firstname']; ?></td>
+                    <td><span class="new badge <?php echo $color_e; ?>" data-badge-caption=""><b><?php echo $resultados['estatus']; ?></b></span></td>
+                    <td><?php echo $Realizo; ?></td>
+                    <td><a href="atender_orden.php?id_orden=<?php echo $resultados['id']; ?>" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">send</i></a></td>
+                    <td><a onclick="ruta(<?php echo $resultados['id']; ?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></a></td>
+                  </tr>
+            <?php
             }
           }
-          echo '
+          ?>
           </tbody>
         </table>
-      </div></p>';
+      </div></p>
