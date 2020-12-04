@@ -48,8 +48,7 @@ $id_user = $_SESSION['user_id'];
 <div class="container">
   <div class="row">
       <br><br>
-      <h3 class="hide-on-med-and-down col l9">Ordenes de Servicio </h3>
-      <h5>Ordenes de Servicio </h5>
+      <h3>Ordenes de Servicio </h3>
         <div class="col s4 m3 l3"><br>
           <a class="waves-effect waves-light btn pink" href="../views/ordenes_pendientes.php"><i class="material-icons prefix right">send</i>Pendientes</a>
         </div>        
