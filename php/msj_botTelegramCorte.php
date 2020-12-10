@@ -53,7 +53,7 @@ if(mysqli_num_rows($sql_corte) > 0){
           #CREAMOS EL MENSAJE CON LA INFORMACION QUE HAY QUE ENVIAR POR TELEGRAM
           $Mensaje = "Corte del Dia: ".$Corte['fecha'].", Hora: ".$Corte['hora'].". \nCon folio: <b>".$corte."</b> y usuario: <b>'".$cobrador['firstname']."(".$cobrador['user_name'].")"."'.</b> \n  <b> -Adeudo = $".$Adeudo.". \n  -Deducibles = $".$Deducir.".\n   -</b>".$descripcion_v." \n<b>ENTREGO:\n  *Banco = $".$banco.". \n  *Efectivo = $".$cantidad.". \n  *Credito = $".$credito.". \n \n Relizado por: ".$Corte['realizo'].". \n \n  <a href ='189.197.184.252:6288/SIC4.5/php/reimprimir_corte.php?id=".$corte."'>  -- DESCARGAR -- </a></b>";
       }
-      if(!sendMessage($id_Chat_Fredy, $Mensaje, $website_Corte) AND !sendMessage($id_Chat_Gabriel, $Mensaje, $website_Corte) AND !sendMessage($id_Chat_Mayra, $Mensaje, $website_Corte)){
+      if(!sendMessage($id_Chat_Fredy, $Mensaje, $website_Corte) AND !sendMessage($id_Chat_Gabriel, $Mensaje, $website_Corte)){
         #Si se ENVIA el mensaje modificar msj a 1 para comprobar que se envio el msj
    			mysqli_query($conn, "UPDATE cortes SET msj = 1 WHERE id_corte = '$corte'");
       }
