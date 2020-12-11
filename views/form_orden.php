@@ -121,6 +121,7 @@ function create_orden() {
 		            <option value="0" selected>Estatus:</option>
 		            <option value="PorConfirmar">Por Confirmar</option>		            
 		            <option value="Revisar">Revisar</option>		            
+		            <option value="Cotizar">Cotizar</option>		            
 		          </select>
 		        </div>   
 		    </div>
@@ -130,6 +131,7 @@ function create_orden() {
 		            <option value="0" selected>Departamento:</option>
 		            <option value="1">Redes</option>		            
 		            <option value="2">Taller</option>		            
+		            <option value="3">Ventas</option>		            
 		          </select>
 		        </div>   
 		    </div>

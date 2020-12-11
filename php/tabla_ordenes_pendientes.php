@@ -51,6 +51,9 @@
               }
               if ($resultados['estatus'] == 'Cotizar') {
                 $color_e = 'red darken-4';
+                if ($resultados['trabajo'] == '') {
+                  $Descripción = $resultados['solicitud'];
+                }
               }else if($resultados['estatus'] == 'Cotizado') {
                 $color_e = 'orange darken-4';
                 $user_id = $resultados['cotizo'];
@@ -60,8 +63,9 @@
                   $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));
                   $Realizo = $usuario['firstname'];
                 }
-              }else if($resultados['estatus'] == 'Autorizado(Pedir)') {
-                $color_e = 'yellow darken-2';
+                
+              }else if($resultados['estatus'] == 'Pedir') {
+                $color_e = 'purple darken-2';
                 $user_id = $resultados['confirmo'];
                 if ($user_id == '') {
                   $Realizo = 'SIN';
@@ -81,6 +85,15 @@
               }else if($resultados['estatus'] == 'PorConfirmar') {
                 $color_e = 'black';
                 $Realizo = 'SIN';
+              }else if($resultados['estatus'] == 'Autorizado') {
+                $color_e = 'yellow darken-2';
+                $user_id = $resultados['confirmo'];
+                if ($user_id == '') {
+                  $Realizo = 'SIN';
+                }else {  
+                  $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id=$user_id"));
+                  $Realizo = $usuario['firstname'];
+                }
               }else{
                 $Descripción = $resultados['solicitud'];
                 $color_e = 'blue darken-3';

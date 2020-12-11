@@ -105,8 +105,8 @@ function update_orden() {
                           </tr>';
                     }
                     echo '  </tbody>
-                        </table>'; 
-                  } ?><br><br><br><br><br><br>
+                        </table><br><br><br><br><br><br>'; 
+                  } ?><br>
                 <b>TOTAL: $<?php echo $orden['precio']+$totalE;?></b><br> 
                 <hr>
               </p>
@@ -134,7 +134,8 @@ function update_orden() {
             <input id="id_orden" value="<?php echo htmlentities($id_orden);?>" type="hidden">
             <input id="id_cliente" value="<?php echo htmlentities($id_cliente);?>" type="hidden">
             <input id="liquidar" value="<?php echo htmlentities($orden['liquidada']);?>" type="hidden"><br>
-            <a onclick="update_orden();" class="waves-effect waves-light btn pink right"><i class="material-icons right">check</i>FACTURADO</a> <br>
+            <a onclick="update_orden();" class="waves-effect waves-light btn pink"><i class="material-icons right">check</i>FACTURADO</a> 
+            <a href = "../php/ticket_orden.php?Id=<?php echo $id_orden;?>" target = "blank" class="waves-effect waves-light btn pink right"><i class="material-icons right">print</i>TIKET</a><br>
       </div>  
     </form>   	
     </div>

@@ -43,6 +43,7 @@ function insert_extra(orden){
 };
 function update_orden() {
     var textoEstatus = $("select#estatus").val();
+    var textoDepartamento = $("select#dpto").val();
     var textoEstatusI = $("input#estatusI").val();
     var textoIdOrden = $("input#id_orden").val();
 
@@ -50,6 +51,7 @@ function update_orden() {
      
         $.post("../php/update_orden.php", {
           valorIdOrden: textoIdOrden,
+          valorDepartamento: textoDepartamento,
           valorEstatus: textoEstatus,
           valorEstatusI: textoEstatusI
         }, function(mensaje) {
@@ -83,6 +85,7 @@ function update_orden() {
           valorMaterial:textoMaterial,
           valorTecnicos:textoTecnicos,
           valorEstatus: textoEstatus,
+          valorDepartamento: textoDepartamento,
           valorEstatusI: textoEstatusI
         }, function(mensaje) {
             $("#resultado_update_orden").html(mensaje);
@@ -99,13 +102,14 @@ function update_orden() {
           valorIdOrden: textoIdOrden,
           valorPrecio: textoPrecio,
           valorSolucion: textoSolucion,
+          valorDepartamento: textoDepartamento,
           valorEstatus: textoEstatus,
           valorEstatusI: textoEstatusI
         }, function(mensaje) {
             $("#resultado_update_orden").html(mensaje);
         });
       }
-    }else if (textoEstatusI == 'Cotizado' || textoEstatusI == 'Autorizado(Pedir)') {
+    }else if (textoEstatusI == 'Cotizado' || textoEstatusI == 'Autorizado' || textoEstatusI == 'Pedir') {
       var textoSolucion = $("input#solucion").val();
 
       if (textoSolucion == "") {
@@ -114,6 +118,7 @@ function update_orden() {
         $.post("../php/update_orden.php", {
           valorIdOrden: textoIdOrden,
           valorSolucion: textoSolucion,
+          valorDepartamento: textoDepartamento,
           valorEstatus: textoEstatus,
           valorEstatusI: textoEstatusI
         }, function(mensaje) {
@@ -142,6 +147,7 @@ function update_orden() {
           valorIdOrden: textoIdOrden,
           valorTecnicos:textoTecnicos,          
           valorSolucion: textoSolucion,
+          valorDepartamento: textoDepartamento,
           valorEstatus: textoEstatus,
           valorEstatusI: textoEstatusI
         }, function(mensaje) {
@@ -304,7 +310,7 @@ function update_orden() {
               <label for="solucion">Solucion (Descripcion de que se hizo):</label>
            </div>
           </div>
-          <?php }elseif ($orden['estatus'] == 'Cotizado' OR $orden['estatus'] == 'Autorizado(Pedir)' OR $orden['estatus'] == 'Ejecutar') { ?>
+          <?php }elseif ($orden['estatus'] == 'Cotizado' OR $orden['estatus'] == 'Pedir' OR $orden['estatus'] == 'Ejecutar' OR $orden['estatus'] == 'Autorizado') { ?>
           <div class="col s12 l9 m9"><br>
            <div class="input-field col s12 l4 m4">
               <h5><b>Total = $<?php echo $orden['precio']+$totalE;?></b></h5>
@@ -344,16 +350,26 @@ function update_orden() {
                 <option value="Cotizar">Cotizar</option> 
                 <option value="Cotizado">Cotizado</option> 
                 <?php if ($id_user == 56 OR $id_user == 10 OR $id_user == 49) { ?>
-                <option value="Autorizado(Pedir)">Autorizado(Pedir)</option> 
+                <option value="Autorizado">Autorizado</option> 
                 <?php 
                 } //FIN IF PARA AUTORIZADO
-                if ($orden['estatus'] == 'Autorizado(Pedir)' OR $orden['estatus'] == 'Ejecutar') {
+                if ($orden['estatus'] == 'Pedir' OR $orden['estatus'] == 'Autorizado' OR $orden['estatus'] == 'Ejecutar') {
                 ?>
+                <option value="Pedir">Pedir</option> 
                 <option value="Ejecutar">Ejecutar</option> 
                 <option value="Facturar">Facturar</option> 
                 <?php }//FIN DEL IF ?>
                 <option value="Pendiente">Pendiente</option> 
                 <option value="Cancelada">Cancelada</option> 
+              </select>
+           </div>
+           <div class="input-field">
+           <label>Departamento:</label><br><br>
+              <select id="dpto" class="browser-default" required>
+                <option selected value="<?php echo $orden['dpto'];?>"><?php if ($orden['dpto'] == 1) { echo 'Redes'; }elseif ($orden['dpto'] == 2) { echo "Taller"; }else{ echo "Ventas"; } ?></option>
+                <option value="1">Redes</option> 
+                <option value="2">Taller</option> 
+                <option value="3">Ventas</option> 
               </select>
            </div>
             <input id="id_orden" value="<?php echo htmlentities($id_orden);?>" type="hidden"><br><br>

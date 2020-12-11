@@ -65,7 +65,7 @@ $id_user = $_SESSION['user_id'];
       <div class="row">
       <?php 
       #CONTENIDO DE REDES
-      $sql_orden = mysqli_query($conn,"SELECT * FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar', 'Ejecutar')  AND dpto = 1 ORDER BY fecha");
+      $sql_orden = mysqli_query($conn,"SELECT * FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar', 'Cotizar', 'Cotizado', 'Autorizado', 'Pedir', 'Ejecutar')  AND dpto = 1 ORDER BY fecha");
       include ('../php/tabla_ordenes_pendientes.php');
       ?>
       </div>
@@ -82,7 +82,7 @@ $id_user = $_SESSION['user_id'];
       <h5>Taller Ordenes Pendientes</h5>
       <?php 
         #CONTENIDO TALLER
-      $sql_orden = mysqli_query($conn,"SELECT * FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar', 'Ejecutar')  AND dpto = 2 ORDER BY fecha");
+      $sql_orden = mysqli_query($conn,"SELECT * FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar', 'Cotizar', 'Cotizado', 'Autorizado', 'Pedir', 'Ejecutar')  AND dpto = 2 ORDER BY fecha");
 
       include ('../php/tabla_ordenes_pendientes.php');
       ?>
@@ -99,7 +99,7 @@ $id_user = $_SESSION['user_id'];
       <h5>Ventas Ordenes Pendientes</h5>
       <?php 
         #CONTENIDO DE VENTAS
-      $sql_orden = mysqli_query($conn,"SELECT * FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Cotizar', 'Cotizado', 'Autorizado(Pedir)') ORDER BY fecha");
+      $sql_orden = mysqli_query($conn,"SELECT * FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar', 'Cotizar', 'Cotizado', 'Autorizado', 'Pedir', 'Ejecutar')  AND dpto = 3 ORDER BY fecha");
 
       include ('../php/tabla_ordenes_pendientes.php');
       ?>
