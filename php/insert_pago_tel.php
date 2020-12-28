@@ -18,7 +18,7 @@ if ($Tipo == 'Min-extra') {
   $MASS = " AND fecha='$Fecha_hoy'";
 }else{
   $MASS = "";
-  $Pago = mysqli_fetch_array(mysqli_query($conn, "SELECT descripcion FROM pagos WHERE id_cliente = '$IdCliente'  AND tipo IN ('Min-extra', 'Mes-Tel') ORDER BY id_pago DESC LIMIT 1"));
+  $Pago = mysqli_fetch_array(mysqli_query($conn, "SELECT descripcion FROM pagos WHERE id_cliente = '$IdCliente'  AND tipo IN ('Mes-Tel') ORDER BY id_pago DESC LIMIT 1"));
   $ver = explode(" ", $Pago['descripcion']);
   if ($ver[1] <= date('Y')){
     if ($ver[0] == 'DICIEMBRE') {
