@@ -37,20 +37,24 @@ include ('../php/superAdmin.php');
                 	$id_user = $tmp['user_id'];
 					$efectivo = mysqli_fetch_array(mysqli_query($conn,"SELECT SUM(cantidad)  AS suma FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Efectivo'"));					
 					$banco = mysqli_fetch_array(mysqli_query($conn,"SELECT SUM(cantidad)  AS suma FROM pagos WHERE id_user=$id_user AND corte = 0 AND tipo_cambio='Banco'"));
-					$deuda = mysqli_fetch_array(mysqli_query($conn,"SELECT SUM(cantidad)  AS suma FROM deudas_cortes WHERE cobrador=$id_user AND liquidada = 0"));
-
-					$Efectivo = $efectivo['suma']; 
-					$Banco = $banco['suma'];
-					$Deuda = $deuda['suma'];
+					// SACAMOS LA SUMA DE TODAS LAS DEUDAS Y ABONOS ....
+				    $deuda = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS suma FROM deudas_cortes WHERE cobrador = $id"));
+				    $abono = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS suma FROM pagos WHERE id_cliente = $id AND tipo = 'Abono Corte'"));
+				    //COMPARAMOS PARA VER SI LOS VALORES ESTAN VACOIOS::
+				    if ($deuda['suma'] == "") {
+				      $deuda['suma'] = 0;
+				    }elseif ($abono['suma'] == "") {
+				      $abono['suma'] = 0;
+				    }
+				    //SE RESTAN DEUDAS DE ABONOS Y SI EL SALDO ES NEGATIVO SE CAMBIA DE COLOR
+				    $Saldo = $abono['suma']-$deuda['suma'];
 					if ($Efectivo =='') {
 						$Efectivo= 0;
 					}
 					if ($Banco =='') {
 						$Banco= 0;
 					}
-					if($Deuda != ''){
-						$Efectivo = $Efectivo+$Deuda;
-					}
+					$Efectivo = $Efectivo+$Saldo;
                 ?>
 					<tr>
 						<td><?php echo $tmp['firstname']; ?></td>
