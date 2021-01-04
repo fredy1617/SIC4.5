@@ -48,6 +48,7 @@ include ('../php/superAdmin.php');
 				    }
 				    //SE RESTAN DEUDAS DE ABONOS Y SI EL SALDO ES NEGATIVO SE CAMBIA DE COLOR
 				    $Saldo = $abono['suma']-$deuda['suma'];
+					$Efectivo = $efectivo['suma']; 
 					if ($Efectivo =='') {
 						$Efectivo= 0;
 					}
@@ -55,6 +56,7 @@ include ('../php/superAdmin.php');
 						$Banco= 0;
 					}
 					$Efectivo = $Efectivo+$Saldo;
+					
                 ?>
 					<tr>
 						<td><?php echo $tmp['firstname']; ?></td>
