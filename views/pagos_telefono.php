@@ -46,6 +46,7 @@ function insert_pago() {
   var textoCantidad = $("input#cantidad").val();
   var tipoPago = $("select#selectTipo").val();
   var textoMes = $("select#mes").val();
+    var textoAño = $("select#añot").val();
   var textoRef = $("input#ref").val();
 
   if(document.getElementById('banco_tel').checked==true){
@@ -72,6 +73,8 @@ function insert_pago() {
       M.toast({html: 'El campo Cantidad se encuentra vacío o en 0.', classes: 'rounded'});
   }else  if (entra == 'No') {
       M.toast({html: 'Seleccione un mes.', classes: 'rounded'});
+  }else if (textoAño == 0 && entra == 'No') {
+        M.toast({html: 'Seleccione un año.', classes: 'rounded'});
   }else if ((document.getElementById('banco_tel').checked==true || document.getElementById('san_tel').checked==true)&& textoRef == "") {
         M.toast({html: 'Los pagos en banco deben de llevar una referencia.', classes: 'rounded'});
   }else if (document.getElementById('banco_tel').checked==false && document.getElementById('san_tel').checked==false && textoRef != "") {
@@ -80,6 +83,7 @@ function insert_pago() {
       $.post("../php/insert_pago_tel.php" , { 
           valorTipo_Campio:textoTipo_Campio,
           valorCantidad: textoCantidad,
+          valorAño: textoAño,
           valorMes: textoMes,
           valorRef: textoRef,
           valorIdCliente: textoIdCliente,
@@ -176,7 +180,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
           <input id="cantidad" type="number" class="validate" data-length="6" required>
           <label for="cantidad">Cantidad: </label>
         </div>
-        <div class="row col s7 m3 l3"><br>
+        <div class="row col s7 m2 l2"><br>
           <select id="mes" class="browser-default">
             <option value="0" selected>Seleccione Mes</option>
             <option value="ENERO">Enero</option>
@@ -191,6 +195,16 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
             <option value="OCTUBRE">Octubre</option>
             <option value="NOVIEMBRE">Noviembre</option>
             <option value="DICIEMBRE">Diciembre</option>
+          </select>
+        </div>
+         <div class="row col s7 m2 l2"><br>
+          <select id="añot" class="browser-default">
+            <option value="0" selected>Seleccione Año</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
           </select>
         </div>  
         <?php if ($user_id == 59 OR $user_id == 38 OR $user_id == 10 OR $user_id == 56 OR $user_id == 49 OR $user_id == 70) { 

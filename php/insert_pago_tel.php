@@ -7,6 +7,7 @@ $id_user = $_SESSION['user_id'];
 $Tipo_Campio = $conn->real_escape_string($_POST['valorTipo_Campio']);
 $Cantidad = $conn->real_escape_string($_POST['valorCantidad']);
 $Mes = $conn->real_escape_string($_POST['valorMes']);
+$Año = $conn->real_escape_string($_POST['valorAño']);
 $IdCliente = $conn->real_escape_string($_POST['valorIdCliente']);
 $ReferenciaB = $conn->real_escape_string($_POST['valorRef']);
 $Tipo = $conn->real_escape_string($_POST['valorTipoTel']);
@@ -18,24 +19,7 @@ if ($Tipo == 'Min-extra') {
   $MASS = " AND fecha='$Fecha_hoy'";
 }else{
   $MASS = "";
-  $Pago = mysqli_fetch_array(mysqli_query($conn, "SELECT descripcion FROM pagos WHERE id_cliente = '$IdCliente'  AND tipo IN ('Mes-Tel') ORDER BY id_pago DESC LIMIT 1"));
-  $ver = explode(" ", $Pago['descripcion']);
-  if ($ver[1] <= date('Y')){
-    if ($ver[0] == 'DICIEMBRE') {
-      $AÑO = date('Y');
-      $AÑO1 = strtotime('+1 year', strtotime($AÑO));
-      $año = date('Y', $AÑO1);
-    }else{
-      $año = date('Y');
-    }
-  }else{
-    if ($ver[1]>2018) {
-      $año = $ver[1];
-    }else{
-      $año = date('Y');
-    }
-  }
-  $Descripcion = $Mes.' '.$año;
+  $Descripcion = $Mes.' '.$Año;
 }
 $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = '$IdCliente'"));
 
@@ -44,12 +28,8 @@ $dia =  date("d", $fechaEntero);
 $diaCorte = $dia;
 $array =  array('ENERO' => '02','FEBRERO' => '03', 'MARZO' => '04','ABRIL' => '05', 'MAYO' => '06', 'JUNIO' => '07', 'JULIO' => '08', 'AGOSTO' => '09', 'SEPTIEMBRE' => '10', 'OCTUBRE' => '11', 'NOVIEMBRE' => '12',  'DICIEMBRE' => '01');
 $MesCorte = $array[$Mes];
-if ($Mes == 'DICIEMBRE') {
-  $AÑO1 = strtotime('+1 year', strtotime($año));
-  $año = date('Y', $AÑO1);
-}
 if ($Tipo == 'Mes-Tel') {
-  $FechaCorte = date($año.'-'.$MesCorte.'-'.$diaCorte);
+  $FechaCorte = date($Año.'-'.$MesCorte.'-'.$diaCorte);
   if ($FechaCorte > date('Y-m-d')) {
     $Cortado = "tel_cortado = 0, ";
   }else {
