@@ -107,7 +107,7 @@
                     <td><?php echo $resultados['fecha']; ?></td>
                     <td><?php echo $comunidad2['nombre']; ?></td>
                     <td><?php echo $users['firstname']; ?></td>
-                    <td><span class="new badge <?php echo $color_e; ?>" data-badge-caption=""><b><?php echo $resultados['estatus']; ?></b></span></td>
+                    <td><span class="new badge <?php echo $color_e; ?>" data-badge-caption=""><b><?php echo $resultados['estatus']; ?></b></span> <?php echo $resultados['modificacion']; ?></td>
                     <td><?php echo $Realizo; ?></td>
                     <td><a href="atender_orden.php?id_orden=<?php echo $resultados['id']; ?>" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">send</i></a></td>
                     <td><a onclick="ruta(<?php echo $resultados['id']; ?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></a></td>

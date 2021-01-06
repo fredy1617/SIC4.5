@@ -161,7 +161,6 @@ function insert_pago() {
 <main>
 <body>
 <?php
-
 $sql = "SELECT * FROM clientes WHERE id_cliente=$no_cliente";
 $datos = mysqli_fetch_array(mysqli_query($conn, $sql));
 //Sacamos la mensualidad

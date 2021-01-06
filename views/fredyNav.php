@@ -12,9 +12,9 @@ $Hoy = date('Y-m-d');
 $instalaciones = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes WHERE instalacion IS NULL"));
 $reportes = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE ((fecha_visita = '$Hoy'  AND atender_visita = 0) OR (fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR atendido != 1 OR atendido IS NULL) AND id_cliente < 10000"));
 $reportesEsp = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE ((fecha_visita = '$Hoy'  AND atender_visita = 0) OR (fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR atendido != 1 OR atendido IS NULL) AND id_cliente > 10000 AND descripcion LIKE 'Reporte Especial:%'"));
-$Ordenes_Redes = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar', 'Realizar')  AND dpto = 1"));
-$Ordenes_Taller = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar' , 'Realizar')  AND dpto = 2"));
-$Ordenes_Ventas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Cotizar', 'Cotizado', 'Pedir')"));
+$Ordenes_Redes = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar', 'Ejecutar', 'Cotizar', 'Cotizado', 'Pedir', 'Autorizado')  AND dpto = 1"));
+$Ordenes_Taller = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar', 'Ejecutar', 'Cotizar', 'Cotizado', 'Pedir', 'Autorizado')  AND dpto = 2"));
+$Ordenes_Ventas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM orden_servicios  WHERE  estatus IN ('PorConfirmar', 'Revisar', 'Ejecutar', 'Cotizar', 'Cotizado', 'Pedir', 'Autorizado') AND dpto = 3"));
 if ($area['area'] == 'Taller') { $Orden = $Ordenes_Taller['count(*)']; }elseif ($id == 49 OR $id == 10 OR $id == 56) { $Orden = $Ordenes_Taller['count(*)']+$Ordenes_Ventas['count(*)']+$Ordenes_Redes['count(*)']; }elseif ( $area['area'] == 'Redes' OR $id == 25 OR $id == 28) {  $Orden = $Ordenes_Redes['count(*)'];  }else{ $Orden = $Ordenes_Ventas['count(*)']; }
 $Mantenimiento = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM reportes WHERE ((fecha_visita = '$Hoy'  AND atender_visita = 0) OR (fecha_visita < '$Hoy' AND atender_visita = 0 AND visita = 1) OR atendido != 1 OR atendido IS NULL) AND id_cliente > 10000 AND descripcion LIKE 'Mantenimiento:%'"));
 $tel = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM pagos WHERE Cotejado =1"));
@@ -71,17 +71,18 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    <ul id='sub-dropdown4' class='dropdown-content'>
 				    	<li><a href="facturar_p.php" class="black-text"><i class="material-icons">assignment_late</i>Pendientes </a></li>   
 				    	<li><a href="facturar_l.php" class="black-text"><i class="material-icons">assignment_turned_in</i>Listas </a></li>
-				    </ul>
-				    <li><a class='dropdown-btn1 black-text' data-target='sub-dropdown1'><i class="material-icons left">add_box</i> MAS <i class="material-icons right">chevron_right</i></a></li>
-				    <ul id='sub-dropdown1' class='dropdown-content'>
-				    	<li><a href="centrales_pings.php" class="black-text"><i class="material-icons">settings_input_antenna</i>Centrales Pings </a></li>   
-				    	<li><a href="paquetes.php" class="black-text"><i class="material-icons">import_export</i>Paquetes </a></li>   
-				    	<li><a href="comunidades.php" class="black-text"><i class="material-icons">business</i>Comunidades </a></li>
-				    	<li><a href="servidores.php" class="black-text"><i class="material-icons">router</i>Servidores </a></li>
-				    	<li><a href="centrales.php" class="black-text"><i class="material-icons">satellite</i>Centrales </a></li>
-				    	<li><a href="fichas.php" class="black-text"><i class="material-icons">tap_and_play</i>Fichas </a></li>
 				    </ul>	    
  				 </ul>
+ 				<li><a class='dropdown-button' data-target='dropdown5'><i class="material-icons left">add</i>Mas <i class="material-icons right">arrow_drop_down</i></a></li>
+				<ul id='dropdown5' class='dropdown-content'>
+					<li><a href="centrales_pings.php" class="black-text"><i class="material-icons">settings_input_antenna</i>Centrales Pings </a></li>   
+				    <li><a href="paquetes.php" class="black-text"><i class="material-icons">import_export</i>Paquetes </a></li>   
+				    <li><a href="comunidades.php" class="black-text"><i class="material-icons">business</i>Comunidades </a></li>
+				    <li><a href="servidores.php" class="black-text"><i class="material-icons">router</i>Servidores </a></li>
+				    <li><a href="centrales.php" class="black-text"><i class="material-icons">satellite</i>Centrales </a></li>
+				    <li><a href="fichas.php" class="black-text"><i class="material-icons">tap_and_play</i>Fichas </a></li>
+				    <li><a href="pedidos.php" class="black-text"><i class="material-icons">assignment</i>Pedidos </a></li>
+				</ul>
 				<li><a class='dropdown-button' data-target='dropdown3'><i class="material-icons left">account_circle</i>Admin <i class="material-icons right">arrow_drop_down</i></a></li>
 				<ul id='dropdown3' class='dropdown-content'>
 				    <li><a href="admin_clientes.php" class="black-text"> <i class="material-icons">search</i>Clientes </a></li>
@@ -179,6 +180,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 						    	  <li><a href="servidores.php"><i class="material-icons">router</i>Servidores</a></li>
 				    			  <li><a href="centrales.php"><i class="material-icons">satellite</i>Centrales </a></li>
 				    			  <li><a href="fichas.php"><i class="material-icons">tap_and_play</i>Fichas </a></li>
+				    			  <li><a href="pedidos.php"><i class="material-icons">assignment</i>Pedidos </a></li>
 					    		</ul>
 					          </span>
 		      			  </div>    			

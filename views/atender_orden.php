@@ -202,6 +202,28 @@ function update_orden() {
                 <b>Trabajo: </b><?php echo $orden['trabajo'];?><br>                
                 <b>Material: </b><?php echo $orden['material'];?><br> 
                 <?php } //FIN IF  ?> 
+                <div class="row col s10"><br>
+                  <?php
+                  $sql_pedido = mysqli_query($conn, "SELECT * FROM pedidos WHERE id_orden = $id_orden LIMIT 1");
+                  $Hay = mysqli_num_rows($sql_pedido);
+                  if($Hay > 0){
+                    $Pedido = mysqli_fetch_array($sql_pedido);
+                    $folio = $Pedido['folio'];
+                    $LISTOS = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM detalles_pedidos WHERE folio = $folio AND listo = 1"));
+                    $TOTAL = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM detalles_pedidos WHERE folio = $folio"));
+                    $color = ($LISTOS == $TOTAL)? 'green':'red';
+                    $Estatus = '<b class="'.$color.'-text">'.$LISTOS.' / '.$TOTAL.'</b>';
+                  }
+                  ?>
+                  <b>Pedido : </b><?php echo ($Hay > 0)? 'No.'.$Pedido['folio']:'Ninguno';?>  -  <b>Estatus: </b><?php echo ($Hay > 0)? $Estatus:'Ninguno';?> 
+                  <div class="right">
+                    <?php  if ($Hay > 0) {  ?>
+                      <a href="../views/detalles_pedido.php?folio=<?php echo $folio;?>" class="waves-effect waves-light btn pink"><i class="material-icons right">visibility</i>VER PEDIDO</a>                    
+                    <?php }else {  // FIN IF $Hay ?>
+                      <form method="post" action="../php/insert_pedidos.php"><input type="hidden" name="valorNombre" value="<?php echo $datos['nombre'];?>"><input type="hidden" name="valorOrden" value="<?php echo $id_orden;?>"><button button type="submit" class="btn pink waves-effect waves-light"><i class="material-icons right">file_upload</i>CREAR PEDIDO</button></form>
+                    <?php } // FIN ELSE ?>                    
+                  </div>
+                </div>
                 <div id="documento"></div>  
                 <div class="row col s10"><br>
                   <b>Cotizacion: </b> $<?php echo $orden['precio'];?>  -  <b>Documento: </b><a href = "../files/cotizaciones/<?php echo $orden['cotizacion_n'];?>" target = "blank"><?php echo $orden['cotizacion_n'];?></a> 
@@ -209,7 +231,7 @@ function update_orden() {
                     <a onclick="editar(<?php echo $id_orden; ?>);" class="btn-small pink waves-effect waves-light <?php echo ($orden['cotizacion_n'] == '')? 'disabled': ''; ?> rigth"><i class="material-icons">edit</i></a>
                     <a onclick="subir(<?php echo $id_orden; ?>);" class="btn-small green waves-effect waves-light <?php echo ($orden['cotizacion_n'] != '')? 'disabled': ''; ?> rigth"><i class="material-icons">file_upload</i></a>
                   </div>
-                </div><br><br><br><br>
+                </div><br><br><br><br><br><br><br>
                 <div id="extra">
                   <?php
                   $totalE = 0;
@@ -337,7 +359,59 @@ function update_orden() {
               $bandera++;
             }$bandera--;
             ?>
-            </p>
+            </p><br><br><br><br>
+            <div class="input-field col s12 m4 l4">
+                <i class="material-icons col s2">satellite<br></i>
+                <select id="antena" class="browser-default col s10" required>
+                    <option value="0" selected >Antena:</option>
+                    <option value="N/A">Ninguna</option>
+                    <?php
+                      $sql = mysqli_query($conn,"SELECT * FROM stock_tecnicos WHERE tipo = 'Antena' AND disponible = 0 AND tecnico = $id_user");
+                      while($antena = mysqli_fetch_array($sql)){
+                      ?>
+                        <option value="<?php echo $antena['serie'];?>"><?php echo $antena['nombre'];?> (Serie: <?php echo $antena['serie'];?>)</option>
+                        <?php
+                      } 
+                      ?>
+                </select>
+            </div>
+            <div class="input-field col s12 m4 l4">
+                <i class="material-icons col s2">router<br></i>
+                <select id="router" class="browser-default col s10" required>
+                    <option value="0" selected >Router:</option>
+                    <option value="N/A">Ninguno</option>
+                    <?php
+                      $sql = mysqli_query($conn,"SELECT * FROM stock_tecnicos WHERE tipo = 'Router' AND disponible = 0 AND tecnico = $id_user");
+                      while($router = mysqli_fetch_array($sql)){
+                      ?>
+                        <option value="<?php echo $router['serie'];?>"><?php echo $router['nombre'];?> (Serie: <?php echo $router['serie'];?>)</option>
+                      <?php
+                      } 
+                      ?>
+                </select>
+            </div>
+            <?php
+            $bobina = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM stock_tecnicos WHERE disponible = 0 AND tecnico = $id_user  AND tipo = 'Bobina'"));
+            $CantidadB = $bobina['cantidad']-$bobina['uso'];
+            $totalC = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS total FROM stock_tecnicos WHERE disponible = 0 AND tecnico = $id_user  AND tipo = 'Tubo(s)'"));
+            $totalU = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(uso) AS total FROM stock_tecnicos WHERE disponible = 0 AND tecnico = $id_user  AND tipo = 'Tubo(s)'"));
+            $Tubos = $totalC['total']-$totalU['total'];
+            ?>
+            <div class="input-field col s12 m4 l4">
+                <i class="material-icons prefix">settings_input_hdmi</i>
+                <input id="cable" type="number" class="validate" data-length="15" required>
+                <label for="cable">Cable Red (metros) <?php echo $CantidadB;?>:</label>
+            </div>
+            <div class="input-field col s12 m4 l4">
+                <i class="material-icons prefix">priority_high</i>
+                <input id="tubos" type="number" class="validate" data-length="15" value="0" required>
+                <label for="tubos">Tubos (piezas) <?php echo $Tubos;?>:</label>
+            </div>
+            <div class="input-field col s12 m8 l8">
+                <i class="material-icons prefix">add</i>
+                <input id="mas" type="text" class="validate" data-length="15" value="<?php echo $orden['material']; ?>" required>
+                <label for="mas">Otros ¿Cuales? (ej: 3 Camaras, 1 Grabador, etc.):</label>
+            </div>
           <?php } ?>           
           </div>
           <?php } ?>

@@ -1,0 +1,43 @@
+<?php
+include ("../php/conexion.php");
+
+$Texto = $conn->real_escape_string($_POST['texto']);
+
+$mensaje = '';
+$sql = "SELECT * FROM pedidos ORDER BY folio DESC";
+if ($Texto != "") {
+	$sql = "SELECT * FROM pedidos WHERE nombre LIKE '%$Texto%' OR folio = '$Texto'  ORDER BY folio DESC";
+}
+
+$consulta =mysqli_query($conn, $sql);
+$filas = mysqli_num_rows($consulta);
+
+if ($filas == 0) {
+	$mensaje = '<script>M.toast({html:"No se encontraron pedidos.", classes: "rounded"})</script>';
+}else{
+	//La variable $resultados contiene el array que se genera en la consulta, asi que obtenemos los datos y los mostramos en un bucle.
+	while($resultados = mysqli_fetch_array($consulta)){
+		$usuario = $resultados['usuario'];
+        $datos = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $usuario"));
+        $folio = $resultados['folio'];
+	    $LISTOS = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM detalles_pedidos WHERE folio = $folio AND listo = 1"));
+	    $TOTAL = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM detalles_pedidos WHERE folio = $folio"));
+	    $color = ($LISTOS == $TOTAL)? 'green':'red';
+		//Output / Salida
+		$mensaje .= '
+			<tr>
+				<td><b class="'.$color.'-text">'.$LISTOS.' / '.$TOTAL.'</b></td>
+				<td>'.$folio.'</td>
+		        <td>'.$resultados['nombre'].'</td>
+		        <td>'.$resultados['id_orden'].'</td>
+		        <td>'.$resultados['fecha'].'</td>
+		        <td>'.$resultados['hora'].'</td>
+		        <td>'.$datos['firstname'].'</td>
+		        <td><a href = "../views/detalles_pedido.php?folio='.$folio.'" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">visibility</i></a></td>
+		        <td><a onclick="borrar('.$folio.');" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
+		    </tr>';
+	}//Fin while $resultados
+} //Fin else $filas
+echo $mensaje;
+mysqli_close($conn);
+?>

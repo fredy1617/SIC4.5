@@ -13,18 +13,18 @@ $FechaAtendido = date('Y-m-d');
 $Hora = date('H:i:s');
 
 if ($EstatusI == 'PorConfirmar') {
-	$sql = "UPDATE orden_servicios SET estatus = '$Estatus', dpto = '$Departamento' WHERE id = '$id'";
+	$sql = "UPDATE orden_servicios SET modificacion = '$FechaAtendido', estatus = '$Estatus', dpto = '$Departamento' WHERE id = '$id'";
 }elseif ($EstatusI == 'Revisar') {
 
 	$Trabajo = $conn->real_escape_string($_POST['valorTrabajo']);
 	$Material = $conn->real_escape_string($_POST['valorMaterial']);
 	$Tecnicos = $conn->real_escape_string($_POST['valorTecnicos']);
-	$sql = "UPDATE orden_servicios SET trabajo = '$Trabajo', material = '$Material',  estatus = '$Estatus', tecnicos_r = '$Tecnicos', fecha_r = '$FechaAtendido', hora_r = '$Hora', dpto = '$Departamento' WHERE id = '$id'";
+	$sql = "UPDATE orden_servicios SET modificacion = '$FechaAtendido', trabajo = '$Trabajo', material = '$Material',  estatus = '$Estatus', tecnicos_r = '$Tecnicos', fecha_r = '$FechaAtendido', hora_r = '$Hora', dpto = '$Departamento' WHERE id = '$id'";
 }elseif ($EstatusI == 'Cotizar') {
 
 	$Precio = $conn->real_escape_string($_POST['valorPrecio']);
 	$Solucion = $conn->real_escape_string($_POST['valorSolucion']);
-	$sql = "UPDATE orden_servicios SET precio = $Precio, solucion = '$Solucion', estatus = '$Estatus', dpto = '$Departamento' WHERE id = '$id'";
+	$sql = "UPDATE orden_servicios SET modificacion = '$FechaAtendido', precio = $Precio, solucion = '$Solucion', estatus = '$Estatus', dpto = '$Departamento' WHERE id = '$id'";
 	if ($Estatus == 'Cotizado') {
 		mysqli_query($conn, "UPDATE orden_servicios SET cotizo = $user_id WHERE id = '$id'");
 	}
@@ -32,7 +32,7 @@ if ($EstatusI == 'PorConfirmar') {
 }elseif ($EstatusI == 'Cotizado' OR $EstatusI == 'Autorizado' OR $EstatusI == 'Pedir') {
 
 	$Solucion = $conn->real_escape_string($_POST['valorSolucion']);
-	$sql = "UPDATE orden_servicios SET solucion = '$Solucion', estatus = '$Estatus', dpto = '$Departamento' WHERE id = '$id'";
+	$sql = "UPDATE orden_servicios SET modificacion = '$FechaAtendido', solucion = '$Solucion', estatus = '$Estatus', dpto = '$Departamento' WHERE id = '$id'";
 	if ($Estatus == 'Pedir') {
 		mysqli_query($conn, "UPDATE orden_servicios SET confirmo = $user_id WHERE id = '$id'");
 	}elseif ($Estatus == 'Ejecutar') {
@@ -42,12 +42,12 @@ if ($EstatusI == 'PorConfirmar') {
 }elseif ($EstatusI == 'Ejecutar') {
 
 	$Solucion = $conn->real_escape_string($_POST['valorSolucion']);
-	$sql = "UPDATE orden_servicios SET solucion = '$Solucion', estatus = '$Estatus', dpto = '$Departamento' WHERE id = '$id'";
+	$sql = "UPDATE orden_servicios SET modificacion = '$FechaAtendido', solucion = '$Solucion', estatus = '$Estatus', dpto = '$Departamento' WHERE id = '$id'";
 
 	if ($Estatus == 'Facturar') {
 		#ACTUALIZAR LOS TECNICOS FECHA Y HORA DE SOLUCION 
 		$Tecnicos = $conn->real_escape_string($_POST['valorTecnicos']);
-		$sql = "UPDATE orden_servicios SET  solucion = '$Solucion',  estatus = '$Estatus', tecnicos_s = '$Tecnicos', fecha_s = '$FechaAtendido', hora_s = '$Hora', dpto = '$Departamento' WHERE id = '$id'";
+		$sql = "UPDATE orden_servicios SET modificacion = '$FechaAtendido',  solucion = '$Solucion',  estatus = '$Estatus', tecnicos_s = '$Tecnicos', fecha_s = '$FechaAtendido', hora_s = '$Hora', dpto = '$Departamento' WHERE id = '$id'";
 		
 		#CREAR TICKET
 		?>
