@@ -56,8 +56,7 @@ include ('../php/superAdmin.php');
 					if ($Banco =='') {
 						$Banco= 0;
 					}
-					$Efectivo = $Efectivo+$Saldo;
-					
+					$Efectivo = $Efectivo+$Saldo;					
                 ?>
 					<tr>
 						<td><?php echo $tmp['firstname']; ?></td>

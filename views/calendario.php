@@ -66,7 +66,7 @@
   <div class="container">
   <?php 
   $btn = 'disable';
-  if($area['area']=="Administrador" and ($area['user_id'] == 10 or $area['user_id']==49)){
+  if($area['area']=="Administrador" and ($area['user_id'] == 10 OR $area['user_id']==49 OR $area['user_id']==25)){
     $btn = '';
   ?>
     <div class="row" >
