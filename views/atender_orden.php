@@ -423,7 +423,7 @@ function update_orden() {
                 <option value="Revisar">Revisar</option> 
                 <option value="Cotizar">Cotizar</option> 
                 <option value="Cotizado">Cotizado</option> 
-                <?php if ($id_user == 56 OR $id_user == 10 OR $id_user == 49) { ?>
+                <?php if ($id_user == 56 OR $id_user == 10 OR $id_user == 49 OR $id_user == 25) { ?>
                 <option value="Autorizado">Autorizado</option> 
                 <?php 
                 } //FIN IF PARA AUTORIZADO

@@ -73,11 +73,62 @@ function borrar(folio){
               <div class="input-field col s12">
                 <i class="material-icons prefix">search</i>
                 <input id="busqueda" name="busqueda" type="text" class="validate" onkeyup="buscar_pedidos();">
-                <label for="busqueda">Buscar(#Folio, Nombre de Cliente)</label>
+                <label for="busqueda">Buscar 'Solo Busca en Autorizados' (ej: #Folio, Nombre de Cliente)</label>
               </div>
             </div>
           </form>
       </div>
+
+      <h4 class="hide-on-med-and-down col s12 m6 l6">No Autorizados</h4>
+      <h6 class="hide-on-large-only col s12 m6 l6">No Autorizados</h6>
+      <table class="bordered highlight responsive-table">
+          <thead>
+            <tr>
+              <th>Estatus</th>
+              <th>Folio</th>
+              <th>Nombre</th>
+              <th>Orden</th>
+              <th>Fecha</th>
+              <th>Hora</th>
+              <th>Registró</th>
+              <th>Ver</th>
+              <th>Borrar</th>
+            </tr>
+          </thead>
+          <tbody>
+          <?php
+          $consulta = mysqli_query($conn,"SELECT * FROM pedidos WHERE estatus = 'No Autorizado' ORDER BY folio DESC");
+
+          if (mysqli_num_rows($consulta) <= 0) {
+            echo '<h5 class = "center">No se encontraron pedidos (No Autorizados)</h5>';
+          }else{
+            //La variable $resultados contiene el array que se genera en la consulta, asi que obtenemos los datos y los mostramos en un bucle.
+            while($pedido = mysqli_fetch_array($consulta)){
+              $usuario = $pedido['usuario'];
+              $datos = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $usuario"));
+              $folio = $pedido['folio'];
+              $color = ($pedido['cerrado'] == 0)? 'red': 'green';
+          ?>
+            <tr>
+              <td><span class="new badge <?php echo $color?>" data-badge-caption=""><?php echo  ($pedido['cerrado'] == 0)? 'PENDIENTE': 'CERRADO'; ?></span></td>
+              <td><?php echo  $folio; ?></td>
+              <td><?php echo  $pedido['nombre']; ?></td>
+              <td><?php echo  $pedido['id_orden']; ?></td>
+              <td><?php echo  $pedido['fecha']; ?></td>
+              <td><?php echo  $pedido['hora']; ?></td>
+              <td><?php echo  $datos['firstname']; ?></td>
+              <td><a href = "../views/detalles_pedido.php?folio=<?php echo  $folio; ?>" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">visibility</i></a></td>
+              <td><a onclick="borrar(<?php echo  $folio; ?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
+            </tr>
+          <?php 
+            } //FIN WHILE 
+          } // FIN ELSE
+          ?>
+          </tbody>
+      </table><br><br>
+
+      <h4 class="hide-on-med-and-down col s12 m6 l6">Autorizados</h4>
+      <h6 class="hide-on-large-only col s12 m6 l6">Autorizados</h6>
       <table class="bordered highlight responsive-table">
           <thead>
             <tr>

@@ -19,6 +19,7 @@ if (isset($_GET['folio']) == false) {
 date_default_timezone_set('America/Mexico_City');
 $Fecha_Hoy = date('Y-m-d');
 $folio = $_GET['folio'];
+$user_id = $_SESSION['user_id'];
 $Pedido = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM pedidos WHERE folio = $folio"));
 ?>
 <script>
@@ -57,6 +58,13 @@ function borrar(id){
   $("#materialALL").html(mensaje);
   }); 
 };
+function selCerrar(){
+  $(document).ready(function(){
+      $('#cerrar').modal();
+      $('#cerrar').modal('open'); 
+  });
+};
+  
 </script>
 <body>
 <div class="container">
@@ -70,8 +78,19 @@ function borrar(id){
             <b>Orden: </b><?php echo $Pedido['id_orden'];?><br>
             <b>Fecha: </b><?php echo $Pedido['fecha'];?><br>
             <b>Hora: </b><?php echo $Pedido['hora'];?><br>
+            <div class="row col s10"><br>
+              <b>Acción : </b>
+              <div class="right">
+              <?php  if ($Pedido['cerrado'] == 0) {  ?>
+                <a onclick="selCerrar();" class="waves-effect waves-light btn pink <?php echo ($user_id == $Pedido['usuario'])? '':'disabled'; ?>"><i class="material-icons right">lock</i>CERRAR PEDIDO</a> 
+              <?php } else if ($Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'No Autorizado')  {  // FIN IF $Hay ?>
+                <form method="post" action="../php/autorizar_pedido.php"><input type="hidden" name="folio" value="<?php echo $folio;?>"><button type="submit" class="btn pink waves-effect waves-light <?php echo($user_id == 10 OR $user_id == 49 OR $user_id == 56)? '':'disabled'; ?>"><i class="material-icons right">check</i>Autorizar Pedido</button></form>
+              <?php } // FIN IF ?>                    
+              </div>
+            </div>
         </li>
     </ul><br>
+    <?php if (($Pedido['cerrado'] == 0) OR ($Pedido['cerrado'] == 1 AND ($user_id == 10 OR $user_id == 49))) { ?>
     <h5>Agregar Material</h5>
     <form class="row">
     	<div class="col s1"><br></div>
@@ -83,18 +102,18 @@ function borrar(id){
         <a onclick="add_material();" class="waves-effect waves-light btn pink"><i class="material-icons right">send</i>Agregar</a> 
     </form>
     <?php
+    } //FIN IF MATERIAL
     $LISTOS = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM detalles_pedidos WHERE folio = $folio AND listo = 1"));
     $detalles_pedido = mysqli_query($conn, "SELECT * FROM detalles_pedidos WHERE folio = $folio");
     $TOTAL = mysqli_num_rows($detalles_pedido);
     $color = ($LISTOS == $TOTAL)? 'green':'red';
-    $user_id = $_SESSION['user_id'];
     $user = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $user_id"));
     $Check = 'disabled';
     $Button = 'disabled';
-    if ($user_id == 10 OR $user_id == 49 OR $user_id == 25 OR $user_id == 28 OR $user['area'] == 'Redes') {
+    if ((($user_id == 10 OR $user_id == 49 OR $user_id == 25 OR $user_id == 28 OR $user['area'] == 'Redes') AND $Pedido['cerrado'] == 0) OR ($Pedido['cerrado'] == 1 AND ($user_id == 10 OR $user_id == 49))) {
       $Button = '';
     }
-    if ($user_id == 10 OR $user_id == 49 OR $user_id == 66 OR $user_id == 56) {
+    if (($user_id == 10 OR $user_id == 49 OR $user_id == 66 OR $user_id == 56) AND $Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'Autorizado') {
       $Check = '';
     }
     ?>
@@ -134,6 +153,19 @@ function borrar(id){
     </form>  
   </div> 
 </div>
+<!-- Modal CERRAR PEDIDO IMPOTANTE! -->
+<div id="cerrar" class="modal"><br>
+  <div class="modal-content">
+    <h4 class="red-text darken-2 center"><b>¿ESTAS SEGURO DE CERRAR EL PEDIDO?</b></h4><br>
+    <h6 class="red-text darken-1 "><b>Una vez cerrado el pedido no se podra modificar (ni agregar, ni eliminar material)</b></h6>
+  </div><br>
+  <div class="modal-footer">
+      <form method="post" action="../php/cerrar_pedido.php" class="right"><input name="folio" type="hidden" value="<?php echo $folio; ?>"><button type="submit" class="btn green accent-4 waves-effect waves-light"><i class="material-icons right">send</i>ACEPTAR</button></form>
+      <a href="#" class="modal-action modal-close waves-effect waves-green btn red accent-4">CANCELAR<i class="material-icons right">close</i></a>
+  </div><br>
+</div>
+<!--Cierre modal CERRAR PEDIDO IMPOTANTE! -->
 </body>
 <?php } ?>  
 </html>
+

@@ -4,16 +4,15 @@ include ("../php/conexion.php");
 $Texto = $conn->real_escape_string($_POST['texto']);
 
 $mensaje = '';
-$sql = "SELECT * FROM pedidos ORDER BY folio DESC";
+$sql = "SELECT * FROM pedidos WHERE estatus = 'Autorizado'  ORDER BY folio DESC";
 if ($Texto != "") {
-	$sql = "SELECT * FROM pedidos WHERE nombre LIKE '%$Texto%' OR folio = '$Texto'  ORDER BY folio DESC";
+	$sql = "SELECT * FROM pedidos WHERE estatus = 'Autorizado' AND (nombre LIKE '%$Texto%' OR folio = '$Texto')  ORDER BY folio DESC";
 }
 
 $consulta =mysqli_query($conn, $sql);
-$filas = mysqli_num_rows($consulta);
 
-if ($filas == 0) {
-	$mensaje = '<script>M.toast({html:"No se encontraron pedidos.", classes: "rounded"})</script>';
+if (mysqli_num_rows($consulta) <= 0) {
+    echo '<h5 class = "center">No se encontraron pedidos (Autorizados)</h5>';
 }else{
 	//La variable $resultados contiene el array que se genera en la consulta, asi que obtenemos los datos y los mostramos en un bucle.
 	while($resultados = mysqli_fetch_array($consulta)){

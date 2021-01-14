@@ -23,7 +23,6 @@ $id_reporte = $_POST['id_reporte'];
 $resultado = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $id_reporte"));
 $id_cliente = $resultado['id_cliente'];
 ?>
-
 <script>
 function encender(){
   if(document.getElementById('enciende').checked==true){
@@ -163,7 +162,6 @@ function update_reporte(bandera, contador, antender) {
 <div class="container">
 <?php
 //Cliente, reporte y comunidad
-
 $sql = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente");
 $filas = mysqli_num_rows($sql);
 $esp= "no";
@@ -239,8 +237,31 @@ if($resultado['tecnico']==''){
                       </label>
                     </div>
                   <?php
-                   }
+                   }else{
                   ?>
+                  <div class="row col s10"><br>
+                    <?php
+                    $sql_pedido = mysqli_query($conn, "SELECT * FROM pedidos WHERE id_orden = $id_reporte LIMIT 1");
+                    $Hay = mysqli_num_rows($sql_pedido);
+                    if($Hay > 0){
+                      $Pedido = mysqli_fetch_array($sql_pedido);
+                      $folio = $Pedido['folio'];
+                      $LISTOS = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM detalles_pedidos WHERE folio = $folio AND listo = 1"));
+                      $TOTAL = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM detalles_pedidos WHERE folio = $folio"));
+                      $color = ($LISTOS == $TOTAL)? 'green':'red';
+                      $Estatus = '<b class="'.$color.'-text">'.$LISTOS.' / '.$TOTAL.'</b>';
+                    }
+                    ?>
+                    <b>Pedido : </b><?php echo ($Hay > 0)? 'No.'.$Pedido['folio']:'Ninguno';?>  -  <b>Estatus: </b><?php echo ($Hay > 0)? $Estatus:'Ninguno';?> 
+                    <div class="right">
+                      <?php  if ($Hay > 0) {  ?>
+                        <a href="../views/detalles_pedido.php?folio=<?php echo $folio;?>" class="waves-effect waves-light btn pink"><i class="material-icons right">visibility</i>VER PEDIDO</a>                    
+                      <?php }else {  // FIN IF $Hay ?>
+                        <form method="post" action="../php/insert_pedidos.php"><input type="hidden" name="valorNombre" value="<?php echo $cliente['nombre'];?>"><input type="hidden" name="valorOrden" value="<?php echo $id_reporte;?>"><button button type="submit" class="btn pink waves-effect waves-light"><i class="material-icons right">file_upload</i>CREAR PEDIDO</button></form>
+                      <?php } // FIN ELSE ?>                    
+                    </div>
+                  </div><br><br>
+                  <?php } // FIN ELSE ?>                 
                  <span class="new badge pink hide-on-med-and-up" data-badge-caption="<?php echo $resultado['fecha'];?>"></span>
                  <br><br><hr>
                  <b>Descripción: </b><?php echo $resultado['descripcion'];?><br>
