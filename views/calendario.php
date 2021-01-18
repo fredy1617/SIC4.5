@@ -4,7 +4,6 @@
 <?php
   date_default_timezone_set('America/Mexico_City');
   include('fredyNav.php');
-  include('../php/superAdmin.php');
   $current_day = date("N");//NUMERO DEL DIA DEL 1 AL 7 DE LUNES A DOMINGO RESPECTIVAMENTE
   $days_from_lunes = $current_day - 1;//DIAS QUE HAN PASADOS DESDE EL LUNES PUDEN PSAR DE 0 A 6 DIAS HASTA EL DOMINGO
   $days_to_domingo = 7 - $current_day;//DIAS QUE FALTAN PARA LLEGAR AL DOMINGO PUEDEN FALTAR de 6 A 0 DIAS
