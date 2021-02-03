@@ -64,6 +64,15 @@ function selCerrar(){
       $('#cerrar').modal('open'); 
   });
 };
+function selObservacion(id){
+  textoFolio = <?php echo $folio; ?>;
+  $.post("../views/modal_observacion.php", { 
+          valorFolio:textoFolio,
+          valorID: id
+  }, function(mensaje) {
+  $("#materialALL").html(mensaje);
+  }); 
+};
   
 </script>
 <body>
@@ -71,13 +80,26 @@ function selCerrar(){
   <div id="materialALL"></div>
    <div class="row"><br><br>
    <ul class="collection">
+        <?php
+        $id_orden = $Pedido['id_orden'];
+        if ($id_orden >= 100000) {
+          #ES UNA ORDEN DE SERVICIO
+          $orden = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM orden_servicios WHERE id = $id_orden"));
+          $Hacer = $orden['solicitud'];
+          $accion = '<a href="atender_orden.php?id_orden='.$id_orden.'" class="">'.$id_orden.'</a> - ('.$orden['solicitud'].').';
+        }else{
+          #ES UN MANTENIMIENTO
+          $mantenimiento = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $id_orden"));
+          $accion = '<form action="atender_reporte.php" method="post"><input type="hidden" name="id_reporte" value="'.$id_orden.'"><button type="submit" class="">'.$id_orden.'</button> - ('.$mantenimiento['descripcion'].').</form>';
+        }
+        ?>
         <li class="collection-item avatar">
             <img src="../img/cliente.png" alt="" class="circle">
             <span class="title"><b>No. Folio: </b><?php echo $folio;?></span><br>
             <b>Cliente: </b><?php echo $Pedido['nombre'];?><br>
-            <b>Orden: </b><?php echo $Pedido['id_orden'];?><br>
-            <b>Fecha: </b><?php echo $Pedido['fecha'];?><br>
-            <b>Hora: </b><?php echo $Pedido['hora'];?><br>
+            <b>Orden: </b><?php echo $accion;?><br>
+            <b>Fecha de Creación: </b><?php echo $Pedido['fecha'];?><br>
+            <b>Hora de Creación: </b><?php echo $Pedido['hora'];?><br>
             <div class="row col s10"><br>
               <b>Acción : </b>
               <div class="right">
@@ -88,6 +110,7 @@ function selCerrar(){
               <?php } // FIN IF ?>                    
               </div>
             </div>
+            <a href="../php/imprimir_pedido.php?folio=<?php echo $folio;?>" target="blank" class="waves-effect waves-light btn pink right"><i class="material-icons right">print</i>IMPRIMIR PEDIDO</a>
         </li>
     </ul><br>
     <?php if (($Pedido['cerrado'] == 0) OR ($Pedido['cerrado'] == 1 AND ($user_id == 10 OR $user_id == 49))) { ?>
@@ -124,7 +147,9 @@ function selCerrar(){
     			<tr>
     				<th>Listo</th>
             <th>Descripcion</th>
-    				<th>Registro</th>
+            <th>Registro</th>
+            <th>Observacion</th>
+    				<th>Observo</th>
     				<th>Borrar</th>
     			</tr>
     		</thead>
@@ -134,6 +159,8 @@ function selCerrar(){
     			while($material = mysqli_fetch_array($detalles_pedido)){
             $user_id_mat = $material['usuario']; 
             $user_mat = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $user_id_mat"));
+            $user_id_o = $material['observo']; 
+            $user_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $user_id_o"));
     		?>
     			<tr>
     				<td><p>
@@ -142,6 +169,10 @@ function selCerrar(){
          			</p></td>
             <td><?php echo $material['descripcion']; ?></td>
     				<td><?php echo $user_mat['firstname']; ?></td>
+            <td><?php if ($Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'No Autorizado' AND ($user_id == 10 OR $user_id == 49 OR $user_id == 56)) { 
+              echo ($material['observacion'] == 'N/A')? '<a onclick="selObservacion('.$material['id'].');" class="waves-effect waves-light btn-small pink"><i class="material-icons left">edit</i>AGREGAR</a> ': $material['observacion']; 
+              }else{ echo  'N/A';}?></td>
+            <td><?php echo $user_o['firstname']; ?></td>
     				<td><a onclick="borrar(<?php echo $material['id'] ?>);" class="btn btn-floating red darken-1 waves-effect waves-light <?php echo $Button; ?>"><i class="material-icons">delete</i></a></td>
     			</tr>    			
     		<?php

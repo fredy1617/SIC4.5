@@ -29,8 +29,9 @@ if (mysqli_num_rows($consulta) <= 0) {
 				<td>'.$folio.'</td>
 		        <td>'.$resultados['nombre'].'</td>
 		        <td>'.$resultados['id_orden'].'</td>
-		        <td>'.$resultados['fecha'].'</td>
-		        <td>'.$resultados['hora'].'</td>
+		        <td>'.$resultados['fecha'].' '.$resultados['hora'].'</td>
+		        <td>'.$resultados['fecha_cerrado'].'</td>
+		        <td>'.$resultados['fecha_autorizado'].'</td>
 		        <td>'.$datos['firstname'].'</td>
 		        <td><a href = "../views/detalles_pedido.php?folio='.$folio.'" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">visibility</i></a></td>
 		        <td><a onclick="borrar('.$folio.');" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>

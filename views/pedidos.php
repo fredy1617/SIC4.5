@@ -22,7 +22,7 @@ function insert_pedidos() {
       textoOrden = "N/A";
     }
     if (textoNombre == "") {
-      M.toast({html :"Ingresa un nombre de cliente al pedido.", classes: "rounded"})
+      M.toast({html :"Ingresa un nombre de cliente al pedido.", classes: "rounded"});
     }else{
       $.post("../php/insert_pedidos.php", {
           valorNombre: textoNombre,
@@ -88,8 +88,8 @@ function borrar(folio){
               <th>Folio</th>
               <th>Nombre</th>
               <th>Orden</th>
-              <th>Fecha</th>
-              <th>Hora</th>
+              <th>Fecha Y Hora Creacion</th>
+              <th>Fecha Cerrado</th>
               <th>Registró</th>
               <th>Ver</th>
               <th>Borrar</th>
@@ -114,8 +114,8 @@ function borrar(folio){
               <td><?php echo  $folio; ?></td>
               <td><?php echo  $pedido['nombre']; ?></td>
               <td><?php echo  $pedido['id_orden']; ?></td>
-              <td><?php echo  $pedido['fecha']; ?></td>
-              <td><?php echo  $pedido['hora']; ?></td>
+              <td><?php echo  $pedido['fecha']; ?> <?php echo  $pedido['hora']; ?></td>
+              <td><?php echo  $pedido['fecha_cerrado']; ?></td>
               <td><?php echo  $datos['firstname']; ?></td>
               <td><a href = "../views/detalles_pedido.php?folio=<?php echo  $folio; ?>" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">visibility</i></a></td>
               <td><a onclick="borrar(<?php echo  $folio; ?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
@@ -136,14 +136,65 @@ function borrar(folio){
               <th>Folio</th>
               <th>Nombre</th>
               <th>Orden</th>
-              <th>Fecha</th>
-              <th>Hora</th>
+              <th>Fecha Y Hora Creacion</th>
+              <th>Fecha Cerrado</th>
+              <th>Fecha Autorizado</th>
               <th>Registró</th>
               <th>Ver</th>
               <th>Borrar</th>
             </tr>
           </thead>
           <tbody id="PedidosALL">
+          </tbody>
+      </table><br><br>
+
+      <h4 class="hide-on-med-and-down col s12 m6 l6">Surtidos</h4>
+      <h6 class="hide-on-large-only col s12 m6 l6">Surtidos</h6>
+      <table class="bordered highlight responsive-table">
+          <thead>
+            <tr>
+              <th>Folio</th>
+              <th>Nombre</th>
+              <th>Orden</th>              
+              <th>Fecha Y Hora Creacion</th>
+              <th>Fecha Cerrado</th>
+              <th>Fecha Autorizado</th>
+              <th>Fecha Surtido</th>
+              <th>Registró</th>
+              <th>Ver</th>
+              <th>Entregar</th>
+            </tr>
+          </thead>
+          <tbody>
+          <?php
+          $consulta = mysqli_query($conn,"SELECT * FROM pedidos WHERE estatus = 'Completo' ORDER BY folio DESC");
+
+          if (mysqli_num_rows($consulta) <= 0) {
+            echo '<h5 class = "center">No se encontraron pedidos (Completados)</h5>';
+          }else{
+            //La variable $resultados contiene el array que se genera en la consulta, asi que obtenemos los datos y los mostramos en un bucle.
+            while($pedido = mysqli_fetch_array($consulta)){
+              $usuario = $pedido['usuario'];
+              $datos = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $usuario"));
+              $folio = $pedido['folio'];
+              $color = ($pedido['cerrado'] == 0)? 'red': 'green';
+          ?>
+            <tr>
+              <td><?php echo  $folio; ?></td>
+              <td><?php echo  $pedido['nombre']; ?></td>
+              <td><?php echo  $pedido['id_orden']; ?></td>
+              <td><?php echo  $pedido['fecha']; ?><?php echo  $pedido['hora']; ?></td>
+              <td><?php echo  $pedido['fecha_cerrado']; ?></td>
+              <td><?php echo  $pedido['fecha_autorizado']; ?></td>
+              <td><?php echo  $pedido['fecha_completo']; ?></td>
+              <td><?php echo  $datos['firstname']; ?></td>
+              <td><a href = "../views/detalles_pedido.php?folio=<?php echo  $folio; ?>" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">visibility</i></a></td>
+              <td><a onclick="" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">exit_to_app</i></a></td>
+            </tr>
+          <?php 
+            } //FIN WHILE 
+          } // FIN ELSE
+          ?>
           </tbody>
       </table><br><br>
     </div>
