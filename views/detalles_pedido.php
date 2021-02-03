@@ -170,7 +170,7 @@ function selObservacion(id){
             <td><?php echo $material['descripcion']; ?></td>
     				<td><?php echo $user_mat['firstname']; ?></td>
             <td><?php if ($Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'No Autorizado' AND ($user_id == 10 OR $user_id == 49 OR $user_id == 56)) { 
-                echo "string";
+              echo ($material['observacion'] == 'N/A')? '<a onclick="selObservacion('.$material['id'].');" class="waves-effect waves-light btn-small pink"><i class="material-icons left">edit</i>AGREGAR</a> ': $material['observacion']; 
               }else{ echo  'N/A';}?></td>
             <td><?php echo $user_o['firstname']; ?></td>
     				<td><a onclick="borrar(<?php echo $material['id'] ?>);" class="btn btn-floating red darken-1 waves-effect waves-light <?php echo $Button; ?>"><i class="material-icons">delete</i></a></td>
