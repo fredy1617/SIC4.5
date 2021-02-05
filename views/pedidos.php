@@ -39,6 +39,14 @@ function borrar(folio){
   $("#resultado_pedido").html(mensaje);
   }); 
 };
+function entregar(folio){
+  M.toast({html :"FOLIO: "+folio, classes: "rounded"});
+  $.post("../php/entregar_pedido.php", { 
+          valorFolio: folio
+  }, function(mensaje) {
+  $("#resultado_pedido").html(mensaje);
+  }); 
+};
 </script>
 </head>
 <main>
@@ -73,7 +81,7 @@ function borrar(folio){
               <div class="input-field col s12">
                 <i class="material-icons prefix">search</i>
                 <input id="busqueda" name="busqueda" type="text" class="validate" onkeyup="buscar_pedidos();">
-                <label for="busqueda">Buscar 'Solo Busca en Autorizados' (ej: #Folio, Nombre de Cliente)</label>
+                <label for="busqueda">Buscar 'Solo Busca en Autorizados' (ej: #Folio, Nombre de Cliente, IdOrden)</label>
               </div>
             </div>
           </form>
@@ -189,7 +197,7 @@ function borrar(folio){
               <td><?php echo  $pedido['fecha_completo']; ?></td>
               <td><?php echo  $datos['firstname']; ?></td>
               <td><a href = "../views/detalles_pedido.php?folio=<?php echo  $folio; ?>" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">visibility</i></a></td>
-              <td><a onclick="" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">exit_to_app</i></a></td>
+              <td><a onclick="entregar(<?php echo  $folio; ?>)" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">exit_to_app</i></a></td>
             </tr>
           <?php 
             } //FIN WHILE 

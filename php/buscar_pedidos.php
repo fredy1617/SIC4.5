@@ -6,7 +6,7 @@ $Texto = $conn->real_escape_string($_POST['texto']);
 $mensaje = '';
 $sql = "SELECT * FROM pedidos WHERE estatus = 'Autorizado'  ORDER BY folio DESC";
 if ($Texto != "") {
-	$sql = "SELECT * FROM pedidos WHERE estatus = 'Autorizado' AND (nombre LIKE '%$Texto%' OR folio = '$Texto')  ORDER BY folio DESC";
+	$sql = "SELECT * FROM pedidos WHERE estatus = 'Autorizado' AND (nombre LIKE '%$Texto%' OR folio = '$Texto' OR id_orden = '$Texto')  ORDER BY folio DESC";
 }
 
 $consulta =mysqli_query($conn, $sql);

@@ -9,11 +9,6 @@ $id_user = $_SESSION['user_id'];
 $Fecha_hoy = date('Y-m-d');
 $Hora = date('H:i:s');
 
-$sql_pedido = "SELECT * FROM pedidos WHERE nombre = '$Nombre' AND fecha = '$Fecha_hoy'";
-if(mysqli_num_rows(mysqli_query($conn, $sql_pedido))>0){
-    echo '<script>M.toast({html :"Ya se encuentra un pedidio con la misa informacion.", classes: "rounded"})</script>';
-}else{
-//o $consultaBusqueda sea igual a nombre + (espacio) + apellido
 $sql = "INSERT INTO pedidos (nombre, id_orden, fecha, hora, usuario) VALUES('$Nombre', '$Orden', '$Fecha_hoy', '$Hora', '$id_user')";
 if(mysqli_query($conn, $sql)){
 	echo '<script>M.toast({html :"el pedido se registró satisfactoriamente.", classes: "rounded"})</script>';
@@ -34,6 +29,6 @@ if(mysqli_query($conn, $sql)){
     </script>
     <?php	
 }
-}
+
 mysqli_close($conn);
 ?>

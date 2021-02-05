@@ -25,10 +25,12 @@ $Pedido = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM pedidos WHERE fo
 <script>
 function add_material(){
   var textoDescripcion = $("input#descripcion").val();
+  var textoProveedor = $("input#proveedor").val();
   textoFolio = <?php echo $folio; ?>;
 
   $.post("../php/add_material.php", { 
         valorDescripcion: textoDescripcion,
+        valorProveedor: textoProveedor,
         valorFolio:textoFolio
   }, function(mensaje) {
   $("#materialALL").html(mensaje);
@@ -116,13 +118,17 @@ function selObservacion(id){
     <?php if (($Pedido['cerrado'] == 0) OR ($Pedido['cerrado'] == 1 AND ($user_id == 10 OR $user_id == 49))) { ?>
     <h5>Agregar Material</h5>
     <form class="row">
-    	<div class="col s1"><br></div>
-    	<div class="input-field col s12 m6 l6">
-            <i class="material-icons prefix">edit</i>
-            <input id="descripcion" type="text" class="validate" data-length="6" required>
-            <label for="descripcion">Maretrial (Nombre y descripcion):</label>
-        </div>
-        <a onclick="add_material();" class="waves-effect waves-light btn pink"><i class="material-icons right">send</i>Agregar</a> 
+    	<div class="input-field col s12 m5 l5">
+          <i class="material-icons prefix">edit</i>
+          <input id="descripcion" type="text" class="validate" data-length="100" required>
+          <label for="descripcion">Maretrial (Nombre y descripcion):</label>
+      </div>
+      <div class="input-field col s12 m4 l4">
+          <i class="material-icons prefix">contact_mail</i>
+          <input id="proveedor" type="text" class="validate" required>
+          <label for="proveedor">Proveedor Sujerido:</label>
+      </div>
+      <a onclick="add_material();" class="waves-effect waves-light btn pink"><i class="material-icons right">send</i>Agregar</a> 
     </form>
     <?php
     } //FIN IF MATERIAL
@@ -147,6 +153,7 @@ function selObservacion(id){
     			<tr>
     				<th>Listo</th>
             <th>Descripcion</th>
+            <th>Proveedor</th>
             <th>Registro</th>
             <th>Observacion</th>
     				<th>Observo</th>
@@ -168,6 +175,7 @@ function selObservacion(id){
 		            <label for="todos<?php echo $material['id'] ?>"></label>
          			</p></td>
             <td><?php echo $material['descripcion']; ?></td>
+            <td><?php echo $material['proveedor']; ?></td>
     				<td><?php echo $user_mat['firstname']; ?></td>
             <td><?php if ($Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'No Autorizado' AND ($user_id == 10 OR $user_id == 49 OR $user_id == 56)) { 
               echo ($material['observacion'] == 'N/A')? '<a onclick="selObservacion('.$material['id'].');" class="waves-effect waves-light btn-small pink"><i class="material-icons left">edit</i>AGREGAR</a> ': $material['observacion']; 

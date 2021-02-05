@@ -68,7 +68,26 @@
     ?>
 	<div class="container">
     <h3 class="hide-on-med-and-down">Pagos realizados por: <?php echo $usuario['user_name'];?></h3>
-    <h5 class="hide-on-large-only">Pagos realizados por: <?php echo $usuario['user_name'];?></h5><br><br>
+    <h5 class="hide-on-large-only">Pagos realizados por: <?php echo $usuario['user_name'];?></h5>
+    <?php
+      // SACAMOS LA SUMA DE TODAS LAS DEUDAS Y ABONOS ....
+      $deuda = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS suma FROM deudas_cortes WHERE cobrador = $id_user"));
+      $abono = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS suma FROM pagos WHERE id_cliente = $id_user AND tipo = 'Abono Corte'"));
+      //COMPARAMOS PARA VER SI LOS VALORES ESTAN VACOIOS::
+      if ($deuda['suma'] == "") {
+        $deuda['suma'] = 0;
+      }elseif ($abono['suma'] == "") {
+        $abono['suma'] = 0;
+      }
+      //SE RESTAN DEUDAS DE ABONOS
+      $Saldo = $deuda['suma']-$abono['suma'];
+      if ($Saldo > 0) {
+    ?>
+      <h4 class="hide-on-med-and-down right red-text">Saldo Pendiente de: $<?php echo $Saldo;?> <form method="post" action="../views/saldo_cobrador.php"><input name="id" type="hidden" value="<?php echo $id_user; ?>"><button type="submit" class="btn btn-tiny waves-effect waves-light pink"><i class="material-icons  right">send</i>VER</button></form></h4>
+      <h5 class="hide-on-large-only right red-text">Saldo Pendiente de: $<?php echo $Saldo;?> <form method="post" action="../views/saldo_cobrador.php"><input name="id" type="hidden" value="<?php echo $id_user; ?>"><button type="submit" class="btn btn-tiny waves-effect waves-light pink"><i class="material-icons  right">send</i>VER</button></form></h5>
+    <br><br>
+    <?php }//FIN IF ?>
+    <br><br>
     <div>
      <div id="resultado_corte"></div> 
       <h4 class="row"><b><< Internet >></b></h4>
