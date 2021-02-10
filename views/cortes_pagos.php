@@ -48,8 +48,6 @@
 
     if (textoId <= 0) {
         M.toast({html:"Ingese un Id de corte.", classes: "rounded"});
-    }else if (textoCantidad <= 0) {
-        M.toast({html:"Ingrese una cantidad mayor a 0", classes: "rounded"});
     }else{
         $.post("../php/confirmar_corte.php", {
               valorId: textoId,
@@ -449,7 +447,8 @@
         </div>
 
 <!-- VISTA DE CONFIRMAR PAGO  -->
-    <div class="row" id="resultado_confirmar"><br><br>
+    <div id="resultado_confirmar"></div>
+    <div class="row"><br><br>
       <h3 class="hide-on-med-and-down">Confirmar Corte:</h3>
       <h5 class="hide-on-large-only">Confirmar Corte:</h5>
       <form class="col s12"><br>     
