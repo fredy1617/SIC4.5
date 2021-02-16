@@ -54,13 +54,20 @@ class PDF extends FPDF{
                 $this->MultiCell(60,4,utf8_decode('Referencia: '.$refe),0,'L',true);
                 $this->Ln(1);
             }
-            $this->Cell(20,4,utf8_decode('Cantidad: $'.$fila['cantidad'].'.00'),0,0,'L',true);
             if (($id_user == 47 OR $id_user == 42 OR $id_user == 31 OR $id_user == 52 OR $id_user == 67 OR $id_user == 57 OR $id_user == 63 OR $id_user == 24 OR $id_user == 55 OR $id_user == 29 OR $id_user == 64) AND $tipo_pago != 'Otros Pagos') {
+                $this->Cell(20,4,utf8_decode($fila['tipo'].': $'.$fila['cantidad'].'.00'),0,0,'L',true);
                 $this->Ln(5);
-                $this->Cell(20,4,utf8_decode('Comisión: + $10.00'),0,0,'L',true);   
+                $this->Cell(20,4,utf8_decode('Comisión: + $10.00'),0,0,'L',true); 
+                $this->Ln(5);
+                $Total = $fila['cantidad']+10;
+                $this->Cell(20,4,utf8_decode(' TOTAL:  $'.$Total.'.00'),0,0,'L',true);    
+            }else{
+                $this->Cell(20,4,utf8_decode('Cantidad:  $'.$fila['cantidad'].'.00'),0,0,'L',true);
+                $this->Ln(5);                
+                $this->Cell(20,4,utf8_decode(' TOTAL:  $'.$fila['cantidad'].'.00'),0,0,'L',true);  
+                $this->Ln(5);                 
+                $this->Cell(20,4,utf8_decode('Tipo: '.$fila['tipo']),0,0,'L',true);
             }
-            $this->Ln(5);
-            $this->Cell(20,4,utf8_decode('Tipo: '.$fila['tipo']),0,0,'L',true);
             $this->Ln(5);
             if ($tipo_pago == 'Abono' AND $fila['descripcion'] != 'Abono de instalacion') {
                 // SACAMOS LA SUMA DE TODAS LAS DEUDAS Y ABONOS ....
