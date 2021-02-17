@@ -20,6 +20,7 @@ include('../php/cobrador.php');
 	          <th>Estatus</th>
 	          <th>Ing(s)</th>
 	          <th>Detalles</th>  				
+	          <th>Editar</th>  				
   			</thead>
   			<tbody>
   			<?php
@@ -41,8 +42,8 @@ include('../php/cobrador.php');
   			  <td><?php echo $ruta['fecha']; ?></td>
   			  <td><?php echo $Estatus; ?></td>
   			  <td><?php echo $ruta['responsable']; ?>, <?php echo $ruta['acompanante']; ?></td>
-  			  <td>
-  			  <form method="post" action="../views/detalles_ruta.php"><input id="id_ruta" name="id_ruta" type="hidden" value="<?php echo $ruta['id_ruta']; ?>"><button class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></button></form></td>
+  			  <td><form method="post" action="../views/detalles_ruta.php"><input id="id_ruta" name="id_ruta" type="hidden" value="<?php echo $ruta['id_ruta']; ?>"><button class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">add</i></button></form></td>
+  			  <td><form action="editar_ruta.php" method="post" class="col s4"><input id="id_ruta" name="id_ruta" type="hidden" value="<?php echo $ruta['id_ruta']; ?>"><button type="submit" class="btn-floating btn-tiny btn waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>
   			</tr>
   			<?php
 			}
