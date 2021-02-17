@@ -115,7 +115,7 @@ include('../php/cobrador.php');
 					    <h5 class="header">Ruta No. <?php echo $id_ruta; ?></h5>
 					    <div class="card horizontal">
 					      <div class="card-image">
-					        <img class="responsive-img" src="img/som.png">
+					        <img class="responsive-img" src="../img/som.png">
 					      </div>
 					      <div class="card-stacked">
 					        <div class="card-content">

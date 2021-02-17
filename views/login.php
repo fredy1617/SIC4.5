@@ -1,10 +1,10 @@
 	<!--Import material-icons.css-->
-      <link href="css/material-icons.css" rel="stylesheet">
-      <!--Import materialize.css-->
-      <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
-      <!--Let browser know website is optimized for mobile-->
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-      <link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+    <link href="css/material-icons.css" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
 <?php
 include('../php/conexion.php');
 // Checamos la version de PHP
@@ -31,10 +31,8 @@ if ($login->isUserLoggedIn() == true){
 
 <html lang="es">
 <head>
-
-<video autoplay="autoplay" loop="loop" id="video_background" preload="auto" volume="50"/>
-  <source src="../img/fondo.mp4" type="video/mp4" />
-</video/>
+  <!-- FONDO DE PANTALLA DE LOGIN -->  
+  <img id="video_background"  src="../img/home.jpg">
 
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
@@ -85,8 +83,7 @@ if ($login->isUserLoggedIn() == true){
                 <input class="form-control" placeholder="Usuario" name="user_name" type="text" value="" autofocus="" required><br>
                 <input class="form-control" placeholder="Contraseña" name="user_password" type="password" value="" autocomplete="off" required><br><br>
                 <button type="submit" class="btn waves-effect waves-light pink" name="login" id="submit">Iniciar Sesión</button>
-            </form>
-            
+            </form>            
         </div><!-- /card-contenerdor -->
     </div><!-- /contenedor -->
   </body>

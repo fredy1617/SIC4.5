@@ -39,7 +39,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 	<div class="navbar-fixed">
 	<nav class="indigo darken-4">
 		<div class="nav-wrapper container">
-			<a  class="brand-logo"><img  class="responsive-img" style="width: 60px; height: 56px;" src="img/logo_menu.jpg"></a>
+			<a  class="brand-logo"><img  class="responsive-img" style="width: 60px; height: 56px;" src="../img/logo.jpg"></a>
 			<a href="#" data-target="menu-responsive" class="sidenav-trigger">
 				<i class="material-icons">menu</i>
 			</a>

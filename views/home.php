@@ -10,7 +10,7 @@
 <main>
 <body>
 	<div class="row">
-		 <img class="materialboxed" width="100%" src="../img/slider_home/home.jpg">
+		 <img class="materialboxed" width="100%" src="../img/home.jpg">
 	</div>
  	<div class="row container">
  		<h4 class="center-align">Servicios Integrales de Computación</h4>
