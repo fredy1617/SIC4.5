@@ -50,11 +50,17 @@ if ($Fecha_visita != 0) {
 	$mas= ", visita = 1, fecha_visita = '$Fecha_visita', descripcion = '".$Nombre." Tienes una visita el día de HOY. Problema : *".$descripcion." ' , atender_visita = '$Atender_Visita'";
 }
 $resultado = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $IdReporte"));
-//Variable vacía (para evitar los E_NOTICE)
-$mensaje = "";
-	$sql = "UPDATE reportes SET falla = '$Falla', solucion = '$Solucion', tecnico = '$Tecnico', apoyo = '$Apoyo', atendido = '$Atendido', atender_visita = '$Atender_Visita',  fecha_solucion = '$FechaAtendido'".$mas." ,hora_atendido = '$Hora', campo = '$Campo' WHERE id_reporte = $IdReporte";
-	if(mysqli_query($conn, $sql)){
-		$mensaje = '<script>M.toast({html:"Reporte actualizado correctamente.", classes: "rounded"})</script>';
+
+$sql = "UPDATE reportes SET falla = '$Falla', solucion = '$Solucion', tecnico = '$Tecnico', apoyo = '$Apoyo', atendido = '$Atendido', atender_visita = '$Atender_Visita',  fecha_solucion = '$FechaAtendido'".$mas." ,hora_atendido = '$Hora', campo = '$Campo' WHERE id_reporte = $IdReporte";
+if(mysqli_query($conn, $sql)){
+		echo '<script>M.toast({html:"Reporte actualizado correctamente.", classes: "rounded"})</script>';
+		if ($IdCliente > 10000) {
+			$Es = 'Mantenimiento';
+			$ir ='mantenimiento.php';
+		}else{
+			$Es = 'Reporte';
+			$ir = 'reportes.php';
+		}
 		if ($Campo == 1 AND $Atendido == 2) {
 			$sql2 = "UPDATE reportes SET fecha_d = '$FechaAtendido', hora_d = '$Hora', tecnico_d = '$Tecnico' WHERE id_reporte = '$IdReporte'";
 			if(mysqli_query($conn, $sql2)){
@@ -73,8 +79,8 @@ $mensaje = "";
 
 			#------------COSTO DEL SERVICIO--------------
 			$Costo = $conn->real_escape_string($_POST['valorCosto']);
-			if ($Costo != '' OR $Costo > 0) {
-				# Insertar pago e imprimir ticket
+			if (($Costo != '' OR $Costo > 0) AND $Es == 'Reporte') {
+				# Insertar pago e imprimir ticket SOLO REPORTE
 				$Mat = '';
 				if ($ManoObra != '') { $Mano = 'MANO DE OBRA ('.$ManoObra.')'; }
 				if ($Antena != '') { $Mat.= $Antena.', '; }
@@ -110,8 +116,8 @@ $mensaje = "";
 				}else{
 					echo '<script>M.toast({html:"Ocurrio un error en el pago.", classes: "rounded"})</script>';
 				}
-			}else{
-				#Imprimir ticket SIN COSTO
+			}elseif ($Es == 'Reporte') {
+				#Imprimir ticket SIN COSTO SI ES REPORTE
 				?>
 				<script>
 					IdCliente = <?php echo $IdCliente; ?>;
@@ -125,11 +131,7 @@ $mensaje = "";
 			if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM materiales WHERE id_cliente='$IdCliente' AND antena='$Antena' AND router='$Router' AND cable='$Cable' AND tubos='$Tubos' AND extras='$Extras' AND fecha='$FechaAtendido' AND usuarios='$Tecnicos' AND tipo='$Tipo'"))>0){
 	 			echo '<script >M.toast({html:"Ya se encuentran valores similares registrados el dia de hoy.", classes: "rounded"})</script>';
 			}else{
-				if ($IdCliente > 10000) {
-					$Es = 'Mantenimiento';
-				}else{
-					$Es = 'Reporte';
-				}
+				
 
 				include('is_logged.php');
 				$IdTecnico = $_SESSION['user_id'];
@@ -201,13 +203,12 @@ $mensaje = "";
 			}
 		}
 		echo '<script>
-				location.href="../views/reportes.php";
+				location.href="../views/'.$ir.'";
 			 </script>';
-	}else{
-		$mensaje = '<script>M.toast({html:"Ha ocurrido un error UPDATE.", classes: "rounded"})</script>';	
-	}
+}else{
+		echo '<script>M.toast({html:"Ha ocurrido un error UPDATE.", classes: "rounded"})</script>';	
+}
 
-echo $mensaje;
 echo mysqli_error($conn);
 mysqli_close($conn);
 ?>
