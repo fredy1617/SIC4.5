@@ -43,7 +43,7 @@
 		$filas2 = mysqli_num_rows($consulta);
 	}
 	if ($filas2 == 0) {
-			$mensaje = '<script>M.toast({html:"No se encontraron clientes.", classes: "rounded"})</script>';
+			echo '<script>M.toast({html:"No se encontraron clientes.", classes: "rounded"})</script>';
 		
 	} else {
 		//La variable $resultado contiene el array que se genera en la consulta, así que obtenemos los datos y los mostramos en un bucle		
@@ -51,23 +51,19 @@
 			$id_comunidad = $resultados['lugar'];
 			$sql_comunidad = mysqli_fetch_array(mysqli_query($conn,"SELECT nombre FROM comunidades WHERE id_comunidad = $id_comunidad"));
 			$no_cliente = $resultados['id_cliente'];
-			$nombre = $resultados['nombre'];
 			if ($no_cliente > 10000) {
 				$servicio = 'Internet';
 			}else{
 				$servicio = $resultados['servicio'];
 			}
-			$lugar = $sql_comunidad['nombre'];
-			$telefono = $resultados['telefono'];
-			$ip = $resultados['ip'];
 
 			//Output
 			$mensaje .= '			
 		          <tr>
 		            <td>'.$no_cliente.'</td>
-		            <td><b>'.$nombre.'</b></td>
+		            <td><b>'.$resultados['nombre'].'</b></td>
 		            <td><b>'.$servicio.'</b></td>
-		            <td>'.$lugar.'</td>
+		            <td>'.$sql_comunidad['nombre'].'</td>
 		            <td><a class="btn-floating btn-tiny waves-effect waves-light pink modal-trigger" href="#" onclick="selCliente('.$no_cliente.')"><i class="material-icons">payment</i></a></td>
 		            <td><form method="post" action="../views/form_reportes.php"><input id="no_cliente" name="no_cliente" type="hidden" value="'.$no_cliente.'"><button class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">report_problem</i></button></form></td>
 		            <td><form method="post" action="../views/credito.php"><input id="no_cliente" name="no_cliente" type="hidden" value="'.$no_cliente.'"><button class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">credit_card</i></button></form></td>
