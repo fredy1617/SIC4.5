@@ -417,7 +417,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
         </thead>
       <tbody>
       <?php
-      $sql_pagos = "SELECT * FROM pagos WHERE id_cliente = ".$datos['id_cliente']."  ORDER BY id_pago DESC";
+      $sql_pagos = "SELECT * FROM pagos WHERE id_cliente = ".$datos['id_cliente']." AND tipo != 'Dispositivo' ORDER BY id_pago DESC";
       $resultado_pagos = mysqli_query($conn, $sql_pagos);
       $aux = mysqli_num_rows($resultado_pagos);
       if($aux>0){
