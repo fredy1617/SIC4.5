@@ -426,7 +426,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
         $user = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id = '$id_user'"));
         ?> 
         <tr>
-          <td><b><?php echo $aux;?></b></td>
+          <td><b><?php echo $pagos['id_cliente'];?></b></td>
           <td>$<?php echo $pagos['cantidad'];?></td>
           <td><?php echo $pagos['tipo'];?></td>
           <td><?php echo $pagos['descripcion'];?></td>
