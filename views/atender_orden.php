@@ -204,24 +204,30 @@ function update_orden() {
                 <?php } //FIN IF  ?> 
                 <div class="row col s10"><br>
                   <?php
-                  $sql_pedido = mysqli_query($conn, "SELECT * FROM pedidos WHERE id_orden = $id_orden LIMIT 1");
+                  $sql_pedido = mysqli_query($conn, "SELECT * FROM pedidos WHERE id_orden = $id_orden");
                   $Hay = mysqli_num_rows($sql_pedido);
+
                   if($Hay > 0){
-                    $Pedido = mysqli_fetch_array($sql_pedido);
-                    $folio = $Pedido['folio'];
-                    $LISTOS = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM detalles_pedidos WHERE folio = $folio AND listo = 1"));
-                    $TOTAL = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM detalles_pedidos WHERE folio = $folio"));
-                    $color = ($LISTOS == $TOTAL)? 'green':'red';
-                    $Estatus = '<b class="'.$color.'-text">'.$LISTOS.' / '.$TOTAL.'</b>';
+                    while ($Pedido = mysqli_fetch_array($sql_pedido)) {
+                      $folio = $Pedido['folio'];
+                      $LISTOS = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM detalles_pedidos WHERE folio = $folio AND listo = 1"));
+                      $TOTAL = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM detalles_pedidos WHERE folio = $folio"));
+                      $color = ($LISTOS == $TOTAL)? 'green':'red';
+                      $Estatus = '<b class="'.$color.'-text">'.$LISTOS.' / '.$TOTAL.'</b>';
+                  ?>
+                      <div class="row col s8">
+                        <b>Pedido : </b><?php echo ($Hay > 0)? ' <b>No.</b>'.$Pedido['folio']:'Ninguno';?>  -  <b>Estatus: </b><?php echo ($Hay > 0)? $Estatus:'Ninguno';?> 
+
+                        <a href="../views/detalles_pedido.php?folio=<?php echo $folio;?>" class="waves-effect waves-light btn pink right"><i class="material-icons right">visibility</i>VER PEDIDO</a>  
+                      </div>                  
+                  <?php 
+                    } // FIN WHILE  
+                  }else{// FIN IF $Hay
+                    echo '<b>Pedido :</b>     <b>No.</b> Ninguno      <b>Estatus:</b> Ninguno </b>';
                   }
                   ?>
-                  <b>Pedido : </b><?php echo ($Hay > 0)? 'No.'.$Pedido['folio']:'Ninguno';?>  -  <b>Estatus: </b><?php echo ($Hay > 0)? $Estatus:'Ninguno';?> 
                   <div class="right">
-                    <?php  if ($Hay > 0) {  ?>
-                      <a href="../views/detalles_pedido.php?folio=<?php echo $folio;?>" class="waves-effect waves-light btn pink"><i class="material-icons right">visibility</i>VER PEDIDO</a>                    
-                    <?php }else {  // FIN IF $Hay ?>
-                      <form method="post" action="../php/insert_pedidos.php"><input type="hidden" name="valorNombre" value="<?php echo $datos['nombre'];?>"><input type="hidden" name="valorOrden" value="<?php echo $id_orden;?>"><button button type="submit" class="btn pink waves-effect waves-light"><i class="material-icons right">file_upload</i>CREAR PEDIDO</button></form>
-                    <?php } // FIN ELSE ?>                    
+                      <form method="post" action="../php/insert_pedidos.php"><input type="hidden" name="valorNombre" value="<?php echo $datos['nombre'];?>"><input type="hidden" name="valorOrden" value="<?php echo $id_orden;?>"><button button type="submit" class="btn pink waves-effect waves-light"><i class="material-icons right">file_upload</i>CREAR PEDIDO</button></form>                  
                   </div>
                 </div>
                 <div id="documento"></div>  

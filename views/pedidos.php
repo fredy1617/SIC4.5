@@ -15,6 +15,14 @@ function buscar_pedidos(){
         $("#PedidosALL").html(mensaje);
   });
 };
+function buscar_pedidos2(){
+  var texto = $("input#busqueda2").val();
+  $.post("../php/buscar_pedidos2.php", {
+      texto: texto,
+    }, function(mensaje){
+        $("#pedidosNo").html(mensaje);
+  });
+};
 function insert_pedidos() {
     var textoNombre = $("input#nombre").val();
     var textoOrden = $("input#orden").val();
@@ -50,7 +58,7 @@ function entregar(folio){
 </script>
 </head>
 <main>
-<body onload="buscar_pedidos();">
+<body onload="buscar_pedidos();buscar_pedidos2();">
   <div class="container">
     <div class="row" >
       <h3 class="hide-on-med-and-down">Nuevo Pedido</h3>
@@ -75,20 +83,21 @@ function entregar(folio){
     <div id="resultado_pedido">
       <div class="row"> <br><br>
           <h3 class="hide-on-med-and-down col s12 m6 l6">Pedidos</h3>
-          <h5 class="hide-on-large-only col s12 m6 l6">Pedidos</h5>
-          <form class="col s12 m6 l6">
-            <div class="row">
-              <div class="input-field col s12">
-                <i class="material-icons prefix">search</i>
-                <input id="busqueda" name="busqueda" type="text" class="validate" onkeyup="buscar_pedidos();">
-                <label for="busqueda">Buscar 'Solo Busca en Autorizados' (ej: #Folio, Nombre de Cliente, IdOrden)</label>
-              </div>
-            </div>
-          </form>
+          <h5 class="hide-on-large-only col s12 m6 l6">Pedidos</h5>          
       </div>
-
-      <h4 class="hide-on-med-and-down col s12 m6 l6">No Autorizados</h4>
-      <h6 class="hide-on-large-only col s12 m6 l6">No Autorizados</h6>
+      <div class="row"> <br><br>
+        <h4 class="hide-on-med-and-down col s12 m6 l6">No Autorizados</h4>
+        <h6 class="hide-on-large-only col s12 m6 l6">No Autorizados</h6>
+        <form class="col s12 m6 l6">
+          <div class="row">
+            <div class="input-field col s12">
+              <i class="material-icons prefix">search</i>
+              <input id="busqueda2" name="busqueda2" type="text" class="validate" onkeyup="buscar_pedidos2();">
+              <label for="busqueda2">Buscar No Autorizados (ej: #Folio, Nombre de Cliente, IdOrden)</label>
+            </div>
+          </div>
+        </form>
+      </div>
       <table class="bordered highlight responsive-table">
           <thead>
             <tr>
@@ -103,40 +112,24 @@ function entregar(folio){
               <th>Borrar</th>
             </tr>
           </thead>
-          <tbody>
-          <?php
-          $consulta = mysqli_query($conn,"SELECT * FROM pedidos WHERE estatus = 'No Autorizado' ORDER BY folio DESC");
-
-          if (mysqli_num_rows($consulta) <= 0) {
-            echo '<h5 class = "center">No se encontraron pedidos (No Autorizados)</h5>';
-          }else{
-            //La variable $resultados contiene el array que se genera en la consulta, asi que obtenemos los datos y los mostramos en un bucle.
-            while($pedido = mysqli_fetch_array($consulta)){
-              $usuario = $pedido['usuario'];
-              $datos = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $usuario"));
-              $folio = $pedido['folio'];
-              $color = ($pedido['cerrado'] == 0)? 'red': 'green';
-          ?>
-            <tr>
-              <td><span class="new badge <?php echo $color?>" data-badge-caption=""><?php echo  ($pedido['cerrado'] == 0)? 'PENDIENTE': 'CERRADO'; ?></span></td>
-              <td><?php echo  $folio; ?></td>
-              <td><?php echo  $pedido['nombre']; ?></td>
-              <td><?php echo  $pedido['id_orden']; ?></td>
-              <td><?php echo  $pedido['fecha']; ?> <?php echo  $pedido['hora']; ?></td>
-              <td><?php echo  $pedido['fecha_cerrado']; ?></td>
-              <td><?php echo  $datos['firstname']; ?></td>
-              <td><a href = "../views/detalles_pedido.php?folio=<?php echo  $folio; ?>" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">visibility</i></a></td>
-              <td><a onclick="borrar(<?php echo  $folio; ?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
-            </tr>
-          <?php 
-            } //FIN WHILE 
-          } // FIN ELSE
-          ?>
+          <tbody id="pedidosNo">
+            
           </tbody>
       </table><br><br>
 
-      <h4 class="hide-on-med-and-down col s12 m6 l6">Autorizados</h4>
-      <h6 class="hide-on-large-only col s12 m6 l6">Autorizados</h6>
+      <div class="row"> <br><br>
+        <h4 class="hide-on-med-and-down col s12 m6 l6">Autorizados</h4>
+        <h6 class="hide-on-large-only col s12 m6 l6">Autorizados</h6>
+        <form class="col s12 m6 l6">
+          <div class="row">
+            <div class="input-field col s12">
+              <i class="material-icons prefix">search</i>
+              <input id="busqueda" name="busqueda" type="text" class="validate" onkeyup="buscar_pedidos();">
+              <label for="busqueda">Buscar Autorizados (ej: #Folio, Nombre de Cliente, IdOrden)</label>
+            </div>
+          </div>
+        </form>
+      </div>
       <table class="bordered highlight responsive-table">
           <thead>
             <tr>

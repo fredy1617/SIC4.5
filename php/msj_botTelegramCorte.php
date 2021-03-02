@@ -11,13 +11,14 @@ function sendMessage($id, $msj, $website){
     #SE ENCARGA DE IR A EL URL Y ENVIAR EL MENSAJE DESDE EL BOT
     file_get_contents($url);
 }          
-
+echo "VERRRRR <br>";
 #-------------------------------------------------------------------
 #ENVIAR MENSAJES SI HAY ERROR CON LOS SERVIDORES DE MIKROTIK
 #-------------------------------------------------------------------
 #BUSCAMOS ERRORES CON ESTATUS  Mikrotik y msj_error en 0
 $sql_corte = mysqli_query($conn, "SELECT * FROM cortes WHERE msj = 0");
 if(mysqli_num_rows($sql_corte) > 0){
+  echo "ENTRE <br>";
    	#SI SE ENCONTRARON ERRORES SE RECORREN CADA UNO...
    	while($Corte = mysqli_fetch_array($sql_corte)){
       #DEFINIMOS UNA ZONA HORARIA
@@ -51,11 +52,15 @@ if(mysqli_num_rows($sql_corte) > 0){
       #VERIFICAMOS SI EN EL CORTE ECHO NO ESTEN TODAS LAS CANTIDADES VACIAS
       if ($cantidad > 0 OR $banco > 0 OR $credito > 0) {
           #CREAMOS EL MENSAJE CON LA INFORMACION QUE HAY QUE ENVIAR POR TELEGRAM
-          $Mensaje = "Corte del Dia: ".$Corte['fecha'].", Hora: ".$Corte['hora'].". \nCon folio: <b>".$corte."</b> y usuario: <b>'".$cobrador['firstname']."(".$cobrador['user_name'].")"."'.</b> \n  <b> -Adeudo = $".$Adeudo.". \n  -Deducibles = $".$Deducir.".\n   -</b>".$descripcion_v." \n<b>ENTREGO:\n  *Banco = $".$banco.". \n  *Efectivo = $".$cantidad.". \n  *Credito = $".$credito.". \n \n Relizado por: ".$Corte['realizo'].". \n \n  <a href ='189.197.184.252:6288/SIC4.5/php/reimprimir_corte.php?id=".$corte."'>  -- DESCARGAR -- </a></b>";
+          $Mensaje = "Corte del Dia: ".$Corte['fecha'].", Hora: ".$Corte['hora'].". \nCon folio: <b>".$corte."</b> y usuario: <b>'".$cobrador['firstname']."(".$cobrador['user_name'].")'.</b> \n  <b> -Adeudo = $".$Adeudo.". \n  -Deducibles = $".$Deducir.".\n   -</b>".$descripcion_v." \n<b>ENTREGO:\n  *Banco = $".$banco.". \n  *Efectivo = $".$cantidad.". \n  *Credito = $".$credito.". \n \n Relizado por: ".$Corte['realizo'].". \n \n  <a href ='189.197.184.252:6288/SIC4.5/php/reimprimir_corte.php?id=".$corte."'>  -- DESCARGAR -- </a></b>";
+          $Aviso = "Corte del Dia: ".$Corte['fecha'].", Hora: ".$Corte['hora'].". \nCon folio: <b>".$corte."</b> y usuario: <b>'".$cobrador['firstname']."(".$cobrador['user_name'].")'.</b> ";
       }
-      if(!sendMessage($id_Chat_Fredy, $Mensaje, $website_Corte) AND !sendMessage($id_Chat_Gabriel, $Mensaje, $website_Corte)){
+      if( !sendMessage($id_Chat_Fredy, $Aviso, $website_Aviso)  AND !sendMessage($id_Chat_Rocio, $Aviso, $website_Aviso) AND !sendMessage($id_Chat_Fredy, $Mensaje, $website_Corte) AND !sendMessage($id_Chat_Gabriel, $Mensaje, $website_Corte)){
         #Si se ENVIA el mensaje modificar msj a 1 para comprobar que se envio el msj
    			mysqli_query($conn, "UPDATE cortes SET msj = 1 WHERE id_corte = '$corte'");
+        echo "SALE Y VALE";
+      }else{
+        echo "NO NEL";
       }
     }
 }
