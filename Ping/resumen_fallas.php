@@ -10,11 +10,6 @@ function sendMessage($id, $msj, $website){
     #SE ENCARGA DE IR A EL URL Y ENVIAR EL MENSAJE DESDE EL BOT
     file_get_contents($url);
 }
-$bot_Token = '1353311525:AAEv95sHfBzsyK3WNVSkBRXxm6wqcIgHoTY';//TOKEN UNICO DEL BOT RESUMEN_FALLAS (ID PARA IDENTIFICAR AL BOT Y PODER ENVIAR EL MENSAJE DESDE EL BOT)
-$website = 'https://api.telegram.org/bot'.$bot_Token;//DIRECCION A LA QUE SE TIENE QUE ACCEDER LA FUNCION PARA PODER ENVIAR EL MENSAJE DESDE EL BOT
-$id_Chat = '1087049979';//ID Fredy ES COMO UN NUMERO TELEFONICO CON EL QUE EL BOT IDENTIFICA A QUIEN ENVIAR EL MENSAJE
-$id_Chat2 = '1080437366';//ID Gabriel ES COMO UN NUMERO TELEFONICO CON EL QUE EL BOT IDENTIFICA A QUIEN ENVIAR EL MENSAJE
-$id_Chat3 = '972701200'; //ID Luis ES COMO UN NUMERO TELEFONICO CON EL QUE EL BOT IDENTIFICA A QUIEN ENVIAR EL MENSAJE
     
 #SELECCIONAMOS TODAS LAS CENTRALES REGISTRADAS EN LA  TABLA CENTRALES PINGS
 $Centrales = mysqli_query($conn, "SELECT * FROM centrales_pings");
@@ -62,7 +57,7 @@ if (mysqli_num_rows($Centrales)>0) {
 		}
 	}
 	#CUANDO RECORRIMOS TODAS LAS CENTRALES Y GENERAMOS EL FORMATO DEL MEENSAJE -> $MSJ PROCEDEMOS A ENVIAR EL MENSAJE
-	if(!sendMessage($id_Chat, $MSJ, $website) AND !sendMessage($id_Chat2, $MSJ, $website) AND !sendMessage($id_Chat3, $MSJ, $website)){
+	if(!sendMessage($id_Chat_Fredy, $MSJ, $website_Resumenwebsite_Resumen) AND !sendMessage($id_Chat_Gabriel, $MSJ, $website_Resumen) AND !sendMessage($id_Chat_Luis, $MSJ, $website_Resumen)){
         #Si se ENVIA el mensaje modificar msj_error a 1 para comprobar que se envio el msj
    		echo "MENSAJE ENVIADO!!!";
     }
