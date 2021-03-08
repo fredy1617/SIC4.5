@@ -12,10 +12,14 @@
 function buscar_pagos(tipo) {
   entra = "Si";
   if (tipo == 1) {
-    textoUsuario = "";
     var textoDe = $("input#fecha_de2").val();
     var textoA = $("input#fecha_a2").val();
     var textoTipo = $("select#tipo").val();
+    var textoUsuario = $("select#usuario2").val();
+    if (textoUsuario == "") {
+      M.toast({html:"Seleccione un usuario.", classes: "rounded"});      
+      entra = "No";    
+    }  
     if (textoTipo == "") {
       M.toast({html:"Seleccione un tipo de cambio.", classes: "rounded"});  
       entra = "No";    
@@ -54,7 +58,7 @@ function buscar_pagos(tipo) {
       <div class="col s12">
         <ul id="tabs-swipe-demo" class="tabs">
           <li class="tab col s6"><a class="active black-text" href="#test-swipe-1">Por Usuarios</a></li>
-          <li class="tab col s6"><a class="black-text" href="#test-swipe-2">Por Tipo de Cambio</a></li>
+          <li class="tab col s6"><a class="black-text" href="#test-swipe-2">Por Tipo de Cambio Y USUARIO</a></li>
         </ul>
       </div>
       <br><br><br><br>
@@ -100,13 +104,26 @@ function buscar_pagos(tipo) {
                 <label for="fecha_a2">A:</label>
                 <input id="fecha_a2"  type="date">
             </div>
-            <div class="input-field col s12 l4 m4">
+            <div class="input-field col s12 l2 m2">
               <select id="tipo" class="browser-default">
                 <option value="" selected>Seleccione un tipo:</option>
                 <option value="Banco">BANCO</option>
                 <option value="Efectivo">EFECTIVO</option>
                 <option value="Credito">CREDITO</option>
                 <option value="SAN">SAN</option>
+              </select>
+            </div>
+            <div class="input-field col s12 l2 m2">
+              <select id="usuario2" class="browser-default">
+                <option value="" selected>Seleccione un usuario</option>
+                <?php 
+                $sql_tecnico = mysqli_query($conn,"SELECT * FROM users ");
+                while($tecnico = mysqli_fetch_array($sql_tecnico)){
+                  ?>
+                    <option value="<?php echo $tecnico['user_id'];?>"><?php echo $tecnico['user_name'];?></option>
+                  <?php
+                }
+                ?>
               </select>
             </div>
             <br><br><br>

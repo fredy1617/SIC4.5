@@ -4,15 +4,15 @@ $ValorDe = $conn->real_escape_string($_POST['valorDe']);
 $ValorA = $conn->real_escape_string($_POST['valorA']);
 $Usuario = $conn->real_escape_string($_POST['valorUsuario']);
 $Tipo = $conn->real_escape_string($_POST['valorTipo']);
-if ($Usuario != "") {
+if ($Usuario != "" AND $Tipo == "") {
   $usuario = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$Usuario'"));
   $total = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM pagos WHERE fecha>='$ValorDe' AND fecha<='$ValorA' AND id_user='$Usuario'"));
   $sql_pagos = mysqli_query($conn, "SELECT * FROM pagos WHERE fecha>='$ValorDe' AND fecha<='$ValorA' AND id_user='$Usuario' ORDER BY id_pago DESC");
   $head = $usuario['firstname'].' '.$usuario['lastname'].':  .  TOTAL = $'.$total['precio'];
 }else{
-  $total = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM pagos WHERE fecha>='$ValorDe' AND fecha<='$ValorA' AND tipo_cambio='$Tipo'"));
+  $total = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM pagos WHERE fecha>='$ValorDe' AND fecha<='$ValorA' AND id_user='$Usuario' AND tipo_cambio='$Tipo'"));
   $head = $Tipo.':  .  TOTAL = $'.$total['precio'];
-  $sql_pagos = mysqli_query($conn, "SELECT * FROM pagos WHERE fecha>='$ValorDe' AND fecha<='$ValorA' AND tipo_cambio = '$Tipo' ORDER BY id_pago DESC");
+  $sql_pagos = mysqli_query($conn, "SELECT * FROM pagos WHERE fecha>='$ValorDe' AND fecha<='$ValorA' AND id_user='$Usuario' AND tipo_cambio = '$Tipo' ORDER BY id_pago DESC");
 }
 ?>
 
@@ -29,7 +29,7 @@ if ($Usuario != "") {
         <th>Descripción</th>
         <th>Fecha</th>
         <?php
-        if ($Usuario != "") {
+        if ($Usuario != "" AND $Tipo == "") {
         ?>
         <th>Cambio</th>
         <?php
@@ -81,7 +81,7 @@ while($pagos = mysqli_fetch_array($sql_pagos)){
     <td><?php echo $pagos['descripcion'];?></td>
     <td><?php echo $pagos['fecha'];?></td>
     <?php
-    if ($Usuario != "") {
+    if ($Usuario != "" AND $Tipo == "") {
     ?>
     <td><?php echo $pagos['tipo_cambio'];?><br><?php if ($pagos['tipo_cambio'] == 'Banco' OR $pagos['tipo_cambio'] == 'SAN') { echo $refe; } ?></td>
     <?php
