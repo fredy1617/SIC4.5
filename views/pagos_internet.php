@@ -32,6 +32,14 @@ function imprimir(id_pago){
       a.href = "../php/imprimir.php?IdPago="+id_pago;
       a.click();
 };
+function irconsumo(){  
+  textoIdCliente = <?php echo $no_cliente; ?>;
+  $.post("../php/ir_consumo.php", { 
+    valorCliente:textoIdCliente,
+  }, function(mensaje) {
+  $("#consumo_ir").html(mensaje);
+  }); 
+};
 function borrar(IdPago){
   var textoIdCliente = $("input#id_cliente").val();
   $.post("../php/borrar_pago.php", { 
@@ -211,6 +219,7 @@ if ($datos['fecha_corte'] < $Fecha_Hoy ) {
 $user_id = $_SESSION['user_id'];
 $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE user_id='$user_id'"));
 ?>
+<div id="consumo_ir"></div>
 <div class="container">
   <h3 class="hide-on-med-and-down">Realizando pago del cliente:</h3>
   <h5 class="hide-on-large-only">Realizando pago del cliente:</h5>
@@ -227,8 +236,8 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
          <b>Dirección: </b><?php echo $datos['direccion'];?><br>
          <b>Referencia: </b><?php echo $datos['referencia'];?><br>
          <?php }?>
-         <b>Fecha Corte: </b><span id="corte"><?php echo $datos['fecha_corte'];?></span><br>
-         <b>Fecha Corte Mensual: <?php echo $corteInt['fecha'];?></b><br>
+         <b>Fecha Corte: </b><span id="corte"><?php echo $datos['fecha_corte'];?></span><br> 
+         <b>Fecha Corte Mensual: <?php echo $corteInt['fecha'];?></b><a onclick="irconsumo();" class="waves-effect waves-light btn pink right"><i class="material-icons right">equalizer</i>CONSUMO</a> <br>
          <?php if ($area['area'] != 'Cobrador') { ?>
          <b>Fecha de Instalación: </b><?php echo $Instalacion;?><br>
          <?php

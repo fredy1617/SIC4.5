@@ -29,6 +29,6 @@ if (mysqli_query($conn, "UPDATE cortes SET confirmar = 1 WHERE id_corte = $Id"))
 	    a.href = "../views/cortes_pagos.php";
         a.click();
     </script>
-     <?php
+    <?php
 }
 ?>

@@ -98,9 +98,17 @@
                 while($fila = mysqli_fetch_array($sql_bancoI)){
                     //insertar pagos de corte...
                     $id_pago = $fila['id_pago'];
+                    $sqlR = mysqli_query($conn, "SELECT * FROM referencias WHERE id_pago = $id_pago");  
+                    $filas2 = mysqli_num_rows($sqlR);
+                    if ($filas2 == 0) {
+                      $refe = "Sin";
+                    }else{
+                      $referecia = mysqli_fetch_array($sqlR);
+                      $refe = $referecia['descripcion'];
+                    }
                     mysqli_query($conn,"INSERT INTO detalles(id_corte, id_pago) VALUES ($corte, $id_pago )");
                     $this->SetX(6);
-                    $this->MultiCell(70,4,utf8_decode("Cliente: # ".$fila['id_cliente'].'; '.$fila['descripcion'].'; Tipo: '.$fila['tipo']),0,'L',true);
+                    $this->MultiCell(70,4,utf8_decode("Cliente: # ".$fila['id_cliente'].'; '.$fila['descripcion'].'; Tipo: '.$fila['tipo'].' ('.$refe.')'),0,'L',true);
                     $this->MultiCell(70,4,utf8_decode("$ ". $fila['cantidad'].'.00'),0,'R',true);
                     $this->Ln(5);
                 }

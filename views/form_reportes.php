@@ -23,6 +23,7 @@ include('fredyNav.php');
       element2.style.display='none';
     }      
   };
+
   function verificar_reporte() {  
     var textoNombre = $("input#nombres").val();
     var textoTelefono = $("input#telefono").val();
@@ -128,7 +129,18 @@ $datos = mysqli_fetch_array($sql);
 $id_comunidad = $datos['lugar'];
 $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunidades WHERE id_comunidad='$id_comunidad'"));
 ?>
+<script>
+  function irconsumo(){  
+    textoIdCliente = <?php echo $no_cliente; ?>;
+    $.post("../php/ir_consumo.php", { 
+      valorCliente:textoIdCliente,
+    }, function(mensaje) {
+    $("#consumo_ir").html(mensaje);
+    }); 
+  };
+</script>
 <body>
+  <div id="consumo_ir"></div>
 <div class="container row" id="Continuar" >
   <div class="row" >
       <h3 class="hide-on-med-and-down">Creando Reporte para el cliente:</h3>
@@ -173,7 +185,7 @@ $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunida
           </div>
          </div><br>
          <b>Comunidad: </b><?php echo $comunidad['nombre'];?><br>
-         <b>Fecha de Instalación: </b><?php echo $datos['fecha_instalacion'];?><br>
+         <b>Fecha de Instalación: </b><?php echo $datos['fecha_instalacion'];?><a onclick="irconsumo();" class="waves-effect waves-light btn pink right"><i class="material-icons right">equalizer</i>CONSUMO</a><br>
          <?php
          if ($datos['id_cliente'] < 10000) {
           $Pago = mysqli_fetch_array(mysqli_query($conn, "SELECT descripcion FROM pagos WHERE id_cliente = '$no_cliente'  AND tipo = 'Mensualidad' ORDER BY id_pago DESC LIMIT 1"));
