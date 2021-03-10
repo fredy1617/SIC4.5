@@ -24,6 +24,14 @@ $resultado = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reportes WHER
 $id_cliente = $resultado['id_cliente'];
 ?>
 <script>
+  function irconsumo(){  
+    textoIdCliente = <?php echo $id_cliente; ?>;
+    $.post("../php/ir_consumo.php", { 
+      valorCliente:textoIdCliente,
+    }, function(mensaje) {
+    $("#consumo_ir").html(mensaje);
+    }); 
+  };
 function encender(){
   if(document.getElementById('enciende').checked==true){
     textoOrden = "Encender";  
@@ -159,6 +167,7 @@ function update_reporte(bandera, contador, antender) {
 </script>
 
 <body>
+  <div id="consumo_ir"></div>
 <div class="container">
 <?php
 //Cliente, reporte y comunidad
@@ -216,7 +225,7 @@ if($resultado['tecnico']==''){
                 </div>
               </div>
 
-                 <b>Comunidad: </b><?php echo $comunidad['nombre'];?><br>
+                 <b>Comunidad: </b><?php echo $comunidad['nombre'];?><a onclick="irconsumo();" class="waves-effect waves-light btn pink right"><i class="material-icons right">equalizer</i>CONSUMO</a><br>
                  <b>IP: </b><a href="http://<?php echo $cliente['ip'];?>" target="_blank"><?php echo $cliente['ip'];?></a><br>
                   <!-- Switch -->
                  <?php 
