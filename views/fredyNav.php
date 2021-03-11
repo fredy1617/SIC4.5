@@ -53,6 +53,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    <li><a href="pendientes.php" class="black-text"><i class="material-icons">assignment_late</i>Pendientes <span class="new badge pink" data-badge-caption=""><?php echo $pendientes['count(*)'];?></span> </a></li>    
 				    <li><a href="reporte_pagos_ST.php" class="black-text"><i class="material-icons">list</i>Reporte Pagos</a></li>
 				    <li><a href="rep_refacciones.php" class="black-text"><i class="material-icons">list</i>Rep. Refacciones</a></li>    			 
+				    <li><a href="bitacora_taller.php" class="black-text"><i class="material-icons">list</i>Trabajo Taller</a></li>    			 
  				 </ul>
 				<li><a class='dropdown-button' data-target='dropdown2'><i class="material-icons left">language</i>Redes<span class=" new badge pink" data-badge-caption=""><?php echo $instalaciones['count(*)']+$reportes['count(*)']+$reportesEsp['count(*)']+$Orden+$Mantenimiento['count(*)'];?></span><i class="material-icons right">arrow_drop_down</i></a></li>
 				<ul id='dropdown2' class='dropdown-content'>
@@ -148,6 +149,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 						    	  <li><a href="pendientes.php"><i class="material-icons">assignment_late</i>Pendientes<span class="new badge pink" data-badge-caption=""><?php echo $pendientes['count(*)'];?></span></a></li>
 						    	  <li><a href="reporte_pagos_ST.php"><i class="material-icons">list</i>Reporte Pagos</a></li>
 						    	  <li><a href="rep_refacciones.php"><i class="material-icons">list</i>Reporte Refacciones</a></li>
+				    			  <li><a href="bitacora_taller.php"><i class="material-icons">list</i>Trabajo Taller</a></li>  			 
 					    		</ul>
 					          </span>
 		      			  </div>    			

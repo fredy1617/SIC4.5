@@ -1,6 +1,7 @@
 <?php
 include ('conexion.php');
 include ('is_logged.php');
+date_default_timezone_set('America/Mexico_City');
 $Link = $conn->real_escape_string($_POST['valorLink']);
 $Obsevaciones = $conn->real_escape_string($_POST['valorObservaciones']);
 $ManoObra = $conn->real_escape_string($_POST['valorManoObra']);
@@ -10,6 +11,8 @@ $Refacciones = $conn->real_escape_string($_POST['valorRefacciones']);
 $Extras = $conn->real_escape_string($_POST['valorExtras']);
 $Contra = $conn->real_escape_string($_POST['valorContra']);
 $FechaHoy = date('Y-m-d');
+$Hora = date('H:i:s');
+
 $Tecnico = $_SESSION['user_id'];
 
 $xRefa = explode(",", $Refacciones);
@@ -31,15 +34,30 @@ if (mysqli_num_rows($sql)>0) {
 		$T_Refa += $refas['cantidad'];
 	}
 }
+#REGISTRAMOS LA ACTIVIDAD DE SI ES COTIZADO EN PROCESO O SI SE MANDO A LISTOS CON FECHA Y HORA SI YA SE REGISTRO ANTES LA ACTIVIDAD SOLO SE ACTUALIZA FECHA Y HORA
+if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM actividades_taller WHERE dispositivo = '$IdDispositivo' AND accion = '$Estatus'"))<=0){
+    mysqli_query($conn, "INSERT INTO actividades_taller (dispositivo, accion, fecha, hora, tecnico) VALUES('$IdDispositivo', '$Estatus', '$FechaHoy', '$Hora', '$Tecnico')");
+}else{
+    mysqli_query($conn, "UPDATE actividades_taller SET fecha = '$FechaHoy', hora = '$Hora', tecnico = '$Tecnico' WHERE dispositivo = '$IdDispositivo' AND accion = '$Estatus'");
+}
 
-$sql = "UPDATE dispositivos SET link = '$Link', observaciones = '$Obsevaciones', tecnico = '$Tecnico', estatus = '$Estatus', fecha_salida = '$FechaHoy', precio = 0, mano_obra = '$ManoObra', t_refacciones = '$T_Refa', extras = '$Extras', contra = '$Contra' WHERE id_dispositivo = '$IdDispositivo'";
+$sql = "UPDATE dispositivos SET link = '$Link', observaciones = '$Obsevaciones', tecnico = '$Tecnico', estatus = '$Estatus', precio = 0, mano_obra = '$ManoObra', t_refacciones = '$T_Refa', extras = '$Extras', contra = '$Contra' WHERE id_dispositivo = '$IdDispositivo'";
 if (mysqli_query($conn, $sql)) {
 	echo '<script>M.toast({html:"Se ha actualizado correctamente el folio.", classes: "rounded"})</script>';
 }else{
 	echo '<script>M.toast({html:"Ha ocurrido un error...", classes: "rounded"})</script>';
 }
+if ($Estatus == 'Listo' OR $Estatus == 'Listo (No Reparado)') {
+  ?>
+    <script>
+      var a = document.createElement("a");
+      a.href = "../views/listos.php";
+      a.click();   
+    </script>
+    <?php
+}
 ?>
-	<div>
+	<div id="refrescar">
     <div class="row">
         <h3 class="hide-on-med-and-down">Atender Dispositivo:</h3>
         <h5 class="hide-on-large-only">Atender Dispositivo:</h5>

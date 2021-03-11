@@ -22,10 +22,11 @@
 		//La variable $resultado contiene el array que se genera en la consulta, así que obtenemos los datos y los mostramos en un bucle
 		while($resultados = mysqli_fetch_array($consulta)) {
 		  $id_dispositivo = $resultados['id_dispositivo'];
-	      $nombre = $resultados['nombre'];
+          $listo = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM actividades_taller WHERE dispositivo = '$id_dispositivo' AND (accion = 'Listo' OR accion = 'Listo (No Reparado)')"));
+          if ($listo == '') {
+          	$listo['fecha'] = 'NULL';
+          }
 	      $dispositivo = $resultados['tipo'].' '.$resultados['marca'];
-	      $falla = $resultados['falla'];
-	      $fecha = $resultados['fecha'];
 	      $observacion = $resultados['observaciones'];
 	      if ($resultados['precio'] == 0) {
 	      	$total = $resultados['mano_obra']+$resultados['t_refacciones'];
@@ -37,12 +38,12 @@
 			
 		          <tr>
 		            <td>'.$id_dispositivo.'</td>
-		            <td><b>'.$nombre.'</b></td>
+		            <td><b>'.$resultados['nombre'].'</b></td>
 		            <td>'.$dispositivo.'</td>	            
-		            <td>'.$falla.'</td>
+		            <td>'.$resultados['falla'].'</td>
 		            <td>'.$observacion.'</td>
-		            <td>'.$total.'</td>
-		            <td>'.$resultados['fecha_salida'].'</td>
+		            <td>$'.$total.'</td>
+		            <td>'.$listo['fecha'].'</td>
 		            <td><form method="post" action="../views/salidas.php"><input id="id_dispositivo" name="id_dispositivo" type="hidden" value="'. $id_dispositivo.'"><button class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">exit_to_app</i></button></form></td>
 		             <td><a onclick="almacen('.$id_dispositivo.');" class="btn btn-floating pink  waves-effect waves-light"><i class="material-icons">dashboard</i></a></td>
 		          </tr>';

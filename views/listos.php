@@ -54,7 +54,7 @@ include('../php/cobrador.php');
           <th>Falla</th>
           <th>Observación</th>
           <th>Total</th>
-          <th>FechaSalida</th>
+          <th>Fecha Listo</th>
           <th>Salida</th>
           <th>Almacen</th>
       </tr>

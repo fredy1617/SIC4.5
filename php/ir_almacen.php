@@ -1,11 +1,11 @@
 <?php 
 include('../php/conexion.php');
 include('is_logged.php');
-date_default_timezone_set('America/Mexico_City');
+$FechaSalida = date('Y-m-d');
 
 $IdDispocitivo = $conn->real_escape_string($_POST['valorIdDispocitivo']);
 
-if (mysqli_query ($conn, "UPDATE dispositivos SET  estatus='Almacen'WHERE id_dispositivo ='$IdDispocitivo'")){
+if (mysqli_query ($conn, "UPDATE dispositivos SET  estatus = 'Almacen', fecha_salida = '$FechaSalida'  WHERE id_dispositivo ='$IdDispocitivo'")){
 	echo '<script >M.toast({html:"El folio se envio a Almacen: '.$IdDispocitivo.'.", classes: "rounded"})</script>';
 	?>
 	<script>
