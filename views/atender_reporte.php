@@ -472,6 +472,7 @@ if($resultado['tecnico']==''){
         <th>Reporte No.</th>
         <th>Cliente</th>
         <th>Descripción</th>
+        <th>Diagnostico</th>
         <th>Solución</th>
         <th>Fecha</th>
         <th>Comunidad</th>
@@ -504,6 +505,7 @@ if($resultado['tecnico']==''){
                     <td><b><?php echo $id_reporte;?></b></td>
                     <td><a class="tooltipped" data-position="top" data-tooltip="<?php echo 'Telefono: '. $cliente['telefono']; echo '  Comunidad: '.$comunidad['nombre'];?>"><?php echo $cliente['nombre'];?></a></td>
                     <td><?php echo $resultados['descripcion'];?></td>
+                    <td><?php echo $resultados['falla'];?></td>
                     <td><?php echo $resultados['solucion'];?></td>
                     <td><?php echo $resultados['fecha'];?></td>
                     <td><?php echo $comunidad['nombre'];?></td>
