@@ -94,7 +94,7 @@ if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM stock_tecnicos WHERE seri
           </thead>
           <tbody>
           <?php
-          $tab = mysqli_query($conn, "SELECT * FROM stock_tecnicos WHERE tipo IN ('Antena', 'Router') AND disponible = 0 AND tecnico = $IdTecnico");
+          $tab = mysqli_query($conn, "SELECT * FROM stock_tecnicos WHERE tipo IN ('Antena', 'Router') AND disponible = 0 AND tecnico = $IdTecnico AND ruta IS NOT NULL");
           while($unidad = mysqli_fetch_array($tab)){
             ?>
             <tr>
