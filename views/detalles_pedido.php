@@ -108,7 +108,7 @@ function selObservacion(id){
               <?php  if ($Pedido['cerrado'] == 0) {  ?>
                 <a onclick="selCerrar();" class="waves-effect waves-light btn pink <?php echo ($user_id == $Pedido['usuario'])? '':'disabled'; ?>"><i class="material-icons right">lock</i>CERRAR PEDIDO</a> 
               <?php } else if ($Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'No Autorizado')  {  // FIN IF $Hay ?>
-                <form method="post" action="../php/autorizar_pedido.php"><input type="hidden" name="folio" value="<?php echo $folio;?>"><button type="submit" class="btn pink waves-effect waves-light <?php echo($user_id == 10 OR $user_id == 49 OR $user_id == 56)? '':'disabled'; ?>"><i class="material-icons right">check</i>Autorizar Pedido</button></form>
+                <form method="post" action="../php/autorizar_pedido.php"><input type="hidden" name="folio" value="<?php echo $folio;?>"><button type="submit" class="btn pink waves-effect waves-light <?php echo($user_id == 10 OR $user_id == 49 OR $user_id == 75)? '':'disabled'; ?>"><i class="material-icons right">check</i>Autorizar Pedido</button></form>
               <?php } // FIN IF ?>                    
               </div>
             </div>
@@ -142,7 +142,7 @@ function selObservacion(id){
     if ((($user_id == 10 OR $user_id == 49 OR $user_id == 25 OR $user_id == 28 OR $user['area'] == 'Redes') AND $Pedido['cerrado'] == 0) OR ($Pedido['cerrado'] == 1 AND ($user_id == 10 OR $user_id == 49))) {
       $Button = '';
     }
-    if (($user_id == 10 OR $user_id == 49 OR $user_id == 66 OR $user_id == 56) AND $Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'Autorizado') {
+    if (($user_id == 10 OR $user_id == 49 OR $user_id == 66 OR $user_id == 75) AND $Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'Autorizado') {
       $Check = '';
     }
     ?>
@@ -177,7 +177,7 @@ function selObservacion(id){
             <td><?php echo $material['descripcion']; ?></td>
             <td><?php echo $material['proveedor']; ?></td>
     				<td><?php echo $user_mat['firstname']; ?></td>
-            <td><?php if ($Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'No Autorizado' AND ($user_id == 10 OR $user_id == 49 OR $user_id == 56)) { 
+            <td><?php if ($Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'No Autorizado' AND ($user_id == 10 OR $user_id == 49 OR $user_id == 75)) { 
               echo ($material['observacion'] == 'N/A')? '<a onclick="selObservacion('.$material['id'].');" class="waves-effect waves-light btn-small pink"><i class="material-icons left">edit</i>AGREGAR</a> ': $material['observacion']; 
               }else{ echo  'N/A';}?></td>
             <td><?php echo $user_o['firstname']; ?></td>
