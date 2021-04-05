@@ -8,12 +8,13 @@ $Cantidad = $conn->real_escape_string($_POST['valorCantidad']);
 $Descripcion = $conn->real_escape_string($_POST['valorDescripcion']);
 $IdCliente = $conn->real_escape_string($_POST['valorId']);
 $Fecha_hoy = date('Y-m-d');
+$Hora = date('H:i:s');
 $id_user = $_SESSION['user_id'];
 
 if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND descripcion = '$Descripcion' AND  tipo = 'Abono Corte' AND cantidad='$Cantidad' AND fecha='$Fecha_hoy'"))>0){
 	echo '<script>M.toast({html:"Ya se encuentra un abono registrado con los mismos valores el día de hoy.", classes: "rounded"})</script>';
 }else{ 
-	$sql = "INSERT INTO pagos (id_cliente, cantidad, fecha, descripcion , tipo_cambio, id_user, tipo, corte) VALUES ($IdCliente, '$Cantidad', '$Fecha_hoy', '$Descripcion', '$Tipo_Campio', '$id_user', 'Abono Corte', 0)";
+	$sql = "INSERT INTO pagos (id_cliente, cantidad, fecha, hora, descripcion , tipo_cambio, id_user, tipo, corte) VALUES ($IdCliente, '$Cantidad', '$Fecha_hoy', '$Hora', '$Descripcion', '$Tipo_Campio', '$id_user', 'Abono Corte', 0)";
 	if(mysqli_query($conn, $sql)){
           
     $Ver = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM deudas_cortes WHERE cobrador = $IdCliente AND liquidada = 0 limit 1"));

@@ -129,7 +129,7 @@
                   <td><?php echo ($pagos['tipo'] == 'Abono Corte')?'USUARIO: '.$cliente['firstname'].' '.$cliente['lastname']:$cliente['nombre']; ?></td>
                   <td><?php echo $pagos['descripcion']; ?></td>
                   <td><?php echo $pagos['tipo']; ?></td>
-                  <td><?php echo $pagos['fecha']; ?></td>
+                  <td><?php echo $pagos['fecha'].' '.$pagos['hora']; ?></td>
                   <td>$<?php echo $pagos['cantidad'];?>.00</td>
                 </tr>
                 <?php
@@ -181,7 +181,7 @@
               <td><?php echo ($pagos['tipo'] == 'Abono Corte')?'USUARIO: '.$cliente['firstname'].' '.$cliente['lastname']:$cliente['nombre']; ?></td>
               <td><?php echo $pagos['descripcion']; ?></td>
               <td><?php echo $pagos['tipo']; ?></td>
-              <td><?php echo $pagos['fecha']; ?></td>
+              <td><?php echo $pagos['fecha'].' '.$pagos['hora']; ?></td>
               <td>$<?php echo $pagos['cantidad'];?>.00</td>
             </tr>
           <?php
@@ -231,7 +231,7 @@
               <td><?php echo $cliente['nombre']; ?></td>
               <td><?php echo $pagos['descripcion']; ?></td>
               <td><?php echo $pagos['tipo']; ?></td>
-              <td><?php echo $pagos['fecha']; ?></td>
+              <td><?php echo $pagos['fecha'].' '.$pagos['hora']; ?></td>
               <td>$<?php echo $pagos['cantidad'];?>.00</td>
             </tr>
           <?php
@@ -282,7 +282,7 @@
               <td><?php echo $cliente['nombre']; ?></td>
               <td><?php echo $pagos['descripcion']; ?></td>
               <td><?php echo $pagos['tipo']; ?></td>
-              <td><?php echo $pagos['fecha']; ?></td>
+              <td><?php echo $pagos['fecha'].' '.$pagos['hora']; ?></td>
               <td>$<?php echo $pagos['cantidad'];?>.00</td>
             </tr>
             <?php
@@ -327,7 +327,7 @@
               <td><?php echo $cliente['nombre']; ?></td>
               <td><?php echo $pagos['descripcion']; ?></td>
               <td><?php echo $pagos['tipo']; ?></td>
-              <td><?php echo $pagos['fecha']; ?></td>
+              <td><?php echo $pagos['fecha'].' '.$pagos['hora']; ?></td>
               <td>$<?php echo $pagos['cantidad'];?>.00</td>
             </tr>
           <?php
@@ -380,7 +380,7 @@
               <td><?php echo $cliente['nombre']; ?></td>
               <td><?php echo $pagos['descripcion']; ?></td>
               <td><?php echo $pagos['tipo']; ?></td>
-              <td><?php echo $pagos['fecha']; ?></td>
+              <td><?php echo $pagos['fecha'].' '.$pagos['hora']; ?></td>
               <td>$<?php echo $pagos['cantidad'];?>.00</td>
             </tr>
             <?php
@@ -427,7 +427,7 @@
               <td><?php echo $cliente['nombre']; ?></td>
               <td><?php echo $pagos['descripcion']; ?></td>
               <td><?php echo $pagos['tipo']; ?></td>
-              <td><?php echo $pagos['fecha']; ?></td>
+              <td><?php echo $pagos['fecha'].' '.$pagos['hora']; ?></td>
               <td>$<?php echo $pagos['cantidad'];?>.00</td>
             </tr>
           <?php

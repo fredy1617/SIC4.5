@@ -79,7 +79,7 @@ while($pagos = mysqli_fetch_array($sql_pagos)){
     <td>$<?php echo $pagos['cantidad'];?></td>
     <td><?php echo $pagos['tipo'];?></td>
     <td><?php echo $pagos['descripcion'];?></td>
-    <td><?php echo $pagos['fecha'];?></td>
+    <td><?php echo $pagos['fecha'].' '.$pagos['hora'];?></td>
     <?php
     if ($Usuario != "" AND $Tipo == "") {
     ?>

@@ -7,8 +7,9 @@ $id_user = $_SESSION['user_id'];
 $Tipo_Campio = $conn->real_escape_string($_POST['valorTipo_Cambio']);
 $Cantidad = $conn->real_escape_string($_POST['valorCantidad']);
 $Fecha = date('Y-m-d');
+$Hora = date('H:i:s');
 
-$sql = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, tipo, id_user, corte, tipo_cambio) VALUES ('$IdCliente', 'Abono de instalacion', '$Cantidad', '$Fecha', 'Abono Instalacion', '$id_user', 0, '$Tipo_Campio')";
+$sql = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, tipo_cambio) VALUES ('$IdCliente', 'Abono de instalacion', '$Cantidad', '$Fecha', '$Hora', 'Abono Instalacion', '$id_user', 0, '$Tipo_Campio')";
 if (mysqli_query($conn, $sql)){
 	$cliente = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM clientes WHERE id_cliente = $IdCliente"));
 	$Dejo = $cliente['dejo'];

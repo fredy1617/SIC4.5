@@ -78,7 +78,7 @@ if (isset($_POST['id_corte']) == false) {
                 <td><?php echo ($pagox1['tipo'] == 'Abono Corte')?'USUARIO: '.$cliente['firstname'].' '.$cliente['lastname']:$cliente['nombre']; ?></td>
 		        <td><?php echo $pagox1['descripcion'];?></td>   
 		        <td><?php echo $pagox1['tipo'];?></td>
-		        <td><?php echo $pagox1['fecha'];?></td>
+		        <td><?php echo $pagox1['fecha'].' '.$pagox1['hora'];?></td>
 	       		<td>$<?php echo $pagox1['cantidad'];?></td>
 		      </tr>
 		      <?php
@@ -138,7 +138,7 @@ if (isset($_POST['id_corte']) == false) {
                 	<td><?php echo ($pago['tipo'] == 'Abono Corte')?'USUARIO: '.$cliente['firstname'].' '.$cliente['lastname']:$cliente['nombre']; ?></td>
 			  		<td><?php echo $pago['descripcion']; ?></td>
 			  		<td><?php echo $pago['tipo']; ?></td>
-			  		<td><?php echo $pago['fecha']; ?></td>
+			  		<td><?php echo $pago['fecha'].' '.$pagox1['hora']; ?></td>
 			  		<td><?php echo $pago['cantidad']; ?></td>
 		  		</tr>
 		  	<?php
@@ -192,7 +192,7 @@ if (isset($_POST['id_corte']) == false) {
 			  		<td><?php echo $cliente['nombre']; ?></td>
 			  		<td><?php echo $pago['descripcion']; ?></td>
 			  		<td><?php echo $pago['tipo']; ?></td>
-			  		<td><?php echo $pago['fecha']; ?></td>
+			  		<td><?php echo $pago['fecha'].' '.$pagox1['hora']; ?></td>
 			  		<td><?php echo $pago['cantidad']; ?></td>
 		  		</tr>
 		  	<?php
@@ -245,7 +245,7 @@ if (isset($_POST['id_corte']) == false) {
 		        <td><?php echo $cliente['nombre'];?></td>
 		        <td><?php echo $pagox1['descripcion'];?></td>   
 		        <td><?php echo $pagox1['tipo'];?></td>
-		        <td><?php echo $pagox1['fecha'];?></td>
+		        <td><?php echo $pagox1['fecha'].' '.$pagox1['hora'];?></td>
 	       		<td>$<?php echo $pagox1['cantidad'];?></td>
 		      </tr>
 		      <?php
@@ -297,7 +297,7 @@ if (isset($_POST['id_corte']) == false) {
 			  		<td><?php echo $cliente['nombre']; ?></td>
 			  		<td><?php echo $pago['descripcion']; ?></td>
 			  		<td><?php echo $pago['tipo']; ?></td>
-			  		<td><?php echo $pago['fecha']; ?></td>
+			  		<td><?php echo $pago['fecha'].' '.$pagox1['hora']; ?></td>
 			  		<td><?php echo $pago['cantidad']; ?></td>
 		  		</tr>
 		  	<?php
@@ -350,7 +350,7 @@ if (isset($_POST['id_corte']) == false) {
 		        <td><?php echo $cliente['nombre'];?></td>
 		        <td><?php echo $pagox1['descripcion'];?></td>   
 		        <td><?php echo $pagox1['tipo'];?></td>
-		        <td><?php echo $pagox1['fecha'];?></td>
+		        <td><?php echo $pagox1['fecha'].' '.$pagox1['hora'];?></td>
 	       		<td>$<?php echo $pagox1['cantidad'];?></td>
 		      </tr>
 		      <?php
@@ -402,7 +402,7 @@ if (isset($_POST['id_corte']) == false) {
 			  		<td><?php echo $cliente['nombre']; ?></td>
 			  		<td><?php echo $pago['descripcion']; ?></td>
 			  		<td><?php echo $pago['tipo']; ?></td>
-			  		<td><?php echo $pago['fecha']; ?></td>
+			  		<td><?php echo $pago['fecha'].' '.$pagox1['hora']; ?></td>
 			  		<td><?php echo $pago['cantidad']; ?></td>
 		  		</tr>
 		  	<?php

@@ -439,7 +439,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
           <td><?php echo $pagos['tipo'];?></td>
           <td><?php echo $pagos['descripcion'];?></td>
           <td><?php echo $user['user_name'];?></td>
-          <td><?php echo $pagos['fecha'];?></td>
+          <td><?php echo $pagos['fecha'].' '.$pagos['hora'];?></td>
           <td><?php echo $pagos['tipo_cambio']; ?></td>
           <td><a onclick="imprimir(<?php echo $pagos['id_pago'];?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a>
           </td>

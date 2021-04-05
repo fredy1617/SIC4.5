@@ -220,7 +220,7 @@ function salida(){
                     <tr>
                       <td><?php echo $aux; ?></td>
                       <td><?php echo $anticipo['descripcion']; ?></td>
-                      <td><?php echo $anticipo['fecha']; ?></td>
+                      <td><?php echo $anticipo['fecha'].' '.$anticipo['hora']; ?></td>
                       <td>$<?php echo $anticipo['cantidad']; ?></td>
                       <td><a onclick="borrar(<?php echo $anticipo['id_pago']; ?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
                     </tr>

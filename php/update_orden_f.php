@@ -4,6 +4,7 @@ date_default_timezone_set('America/Mexico_City');
 session_start();
 $id_user = $_SESSION['user_id'];
 $Fecha_hoy = date('Y-m-d');
+$Hora = date('H:i:s');
 $id = $conn->real_escape_string($_POST['valorIdOrden']);
 $LiquidarS = $conn->real_escape_string($_POST['valorLiquidarS']);
 $IdCliente = $conn->real_escape_string($_POST['valorIdCliente']);
@@ -27,7 +28,7 @@ if ($LiquidarS <= 0) {
 		if(mysqli_num_rows($sql_ver)>0){
 		    echo '<script>M.toast({html:"Ya se encuentra un pago con los mismos datos.", classes: "rounded"})</script>';
 		}else{
-			$sql = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, tipo, id_user, corte, tipo_cambio) VALUES ($IdCliente, '$Descripcion', '$LiquidarS', '$Fecha_hoy', 'Orden Servicio', $id_user, 0, '$TipoE')";
+			$sql = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, tipo_cambio) VALUES ($IdCliente, '$Descripcion', '$LiquidarS', '$Fecha_hoy', '$Hora', 'Orden Servicio', $id_user, 0, '$TipoE')";
 			if (mysqli_query($conn, $sql)) {
 				$ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos WHERE id_cliente = $IdCliente"));            
     			$id_pago = $ultimo['id'];
