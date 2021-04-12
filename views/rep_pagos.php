@@ -24,6 +24,16 @@ function buscar_pagos(tipo) {
       M.toast({html:"Seleccione un tipo de cambio.", classes: "rounded"});  
       entra = "No";    
     }
+  }else if (tipo == 2 ) {
+    var textoDe = $("input#fecha_de3").val();
+    var textoA = $("input#fecha_a3").val();
+    var textoTipo = $("select#tipo3").val();
+    var textoUsuario = $("select#usuario2").val();
+    
+    if (textoTipo == "") {
+      M.toast({html:"Seleccione un tipo de cambio.", classes: "rounded"});  
+      entra = "No";    
+    }
   }else{
     textoTipo = "";
     var textoDe = $("input#fecha_de").val();
@@ -57,8 +67,9 @@ function buscar_pagos(tipo) {
     <div class="row">
       <div class="col s12">
         <ul id="tabs-swipe-demo" class="tabs">
-          <li class="tab col s6"><a class="active black-text" href="#test-swipe-1">Por Usuarios</a></li>
-          <li class="tab col s6"><a class="black-text" href="#test-swipe-2">Por Tipo de Cambio Y USUARIO</a></li>
+          <li class="tab col s4"><a class="active black-text" href="#test-swipe-1">Por Usuarios</a></li>
+          <li class="tab col s4"><a class="black-text" href="#test-swipe-2">Por Tipo de Cambio Y USUARIO</a></li>
+          <li class="tab col s4"><a class="black-text" href="#test-swipe-3">Por Tipo de Cambio</a></li>
         </ul>
       </div>
       <br><br><br><br>
@@ -129,6 +140,32 @@ function buscar_pagos(tipo) {
             <br><br><br>
             <div>
               <button class="btn waves-light waves-effect right pink" onclick="buscar_pagos(1);"><i class="material-icons prefix">send</i></button>
+            </div>
+          </div>
+        </div>
+        <!-- ----------------------------  FORMULARIO 3 Tabs  ---------------------------------------->
+        <div  id="test-swipe-3" class="col s12">
+          <div class="row">
+            <div class="col s12 l4 m4">
+                <label for="fecha_de3">De:</label>
+                <input id="fecha_de3" type="date">    
+            </div>
+            <div class="col s12 l4 m4">
+                <label for="fecha_a3">A:</label>
+                <input id="fecha_a3"  type="date">
+            </div>
+            <div class="input-field col s12 l4 m4">
+              <select id="tipo3" class="browser-default">
+                <option value="" selected>Seleccione un tipo:</option>
+                <option value="Banco">BANCO</option>
+                <option value="Efectivo">EFECTIVO</option>
+                <option value="Credito">CREDITO</option>
+                <option value="SAN">SAN</option>
+              </select>
+            </div>
+            <br><br><br>
+            <div>
+              <button class="btn waves-light waves-effect right pink" onclick="buscar_pagos(2);"><i class="material-icons prefix">send</i></button>
             </div>
           </div>
         </div>

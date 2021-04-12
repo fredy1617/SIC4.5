@@ -9,6 +9,10 @@ if ($Usuario != "" AND $Tipo == "") {
   $total = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM pagos WHERE fecha>='$ValorDe' AND fecha<='$ValorA' AND id_user='$Usuario'"));
   $sql_pagos = mysqli_query($conn, "SELECT * FROM pagos WHERE fecha>='$ValorDe' AND fecha<='$ValorA' AND id_user='$Usuario' ORDER BY id_pago DESC");
   $head = $usuario['firstname'].' '.$usuario['lastname'].':  .  TOTAL = $'.$total['precio'];
+}elseif ($Tipo != "" AND $Usuario == "") {
+  $total = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM pagos WHERE fecha>='$ValorDe' AND fecha<='$ValorA' AND tipo_cambio='$Tipo'"));
+  $head = $Tipo.':  .  TOTAL = $'.$total['precio'];
+  $sql_pagos = mysqli_query($conn, "SELECT * FROM pagos WHERE fecha>='$ValorDe' AND fecha<='$ValorA' AND tipo_cambio = '$Tipo' ORDER BY id_pago DESC");
 }else{
   $total = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS precio FROM pagos WHERE fecha>='$ValorDe' AND fecha<='$ValorA' AND id_user='$Usuario' AND tipo_cambio='$Tipo'"));
   $head = $Tipo.':  .  TOTAL = $'.$total['precio'];
