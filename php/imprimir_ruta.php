@@ -186,6 +186,7 @@ RESPONSABLE DE RUTA: '.$ruta['responsable']),1,'C',false);
     }
     function footer(){  }
 }
+//Ver
 
 //Creación del objeto de la clase heredada
 $pdf=new PDF();
