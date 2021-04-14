@@ -1,20 +1,18 @@
 <script>
    function consulta(){
-<?php
-include ('../php/conexion.php');
-$rep = mysqli_query($conn, "SELECT * FROM tmp_reportes WHERE ruta = 0");
-$inst = mysqli_query($conn, "SELECT id_cliente FROM tmp_pendientes WHERE ruta_inst = 0");
+    <?php
+    include ('../php/conexion.php');
+    $rep = mysqli_query($conn, "SELECT * FROM tmp_reportes WHERE ruta = 0");
+    $inst = mysqli_query($conn, "SELECT id_cliente FROM tmp_pendientes WHERE ruta_inst = 0");
 
-if(mysqli_num_rows($rep) == 0 AND mysqli_num_rows($inst) == 0){
-  $No = 0;
-}else{
-  $No = 1;
-}
-?>
-}
-</script>
-<script>
-   function crear_ruta(){
+    if(mysqli_num_rows($rep) == 0 AND mysqli_num_rows($inst) == 0){
+      $No = 0;
+    }else{
+      $No = 1;
+    }
+    ?>
+   }
+   function crear_ruta(es){
     Entra = <?php echo $No; ?>;
     if (Entra == 0) {
         M.toast({html:"Agrege una Reporte o una Instalacion para poder crear la ruta.", classes: "rounded"});
@@ -22,7 +20,6 @@ if(mysqli_num_rows($rep) == 0 AND mysqli_num_rows($inst) == 0){
       var textoResponsable = $("select#responsable").val();
       var textoAcompañante = $("input#acompañante").val();
       var textoVehiculo = $("input#vehiculo").val();
-      var textoMaterial = $("textarea#material").val();
       if(document.getElementById('bobina').checked==true){
         textoBonina = 1;
       }else{
@@ -33,18 +30,21 @@ if(mysqli_num_rows($rep) == 0 AND mysqli_num_rows($inst) == 0){
       }else{
         textoVale = 0;
       }
-
+      if (es == 1) {
+        ir = 'crear_ruta.php';
+      }else{
+        ir = 'crear_ruta_pedido.php'
+      }
       if (textoResponsable == 0) {
         M.toast({html:"Selecciones un responsable de ruta.", classes: "rounded"});
       }else if (textoVehiculo == "") {
         M.toast({html:"El campo Vehiculo(s) no puede ir vacío.", classes: "rounded"});
       }else{
         M.toast({html:"Creando ruta...", classes: "rounded"});
-        $.post("../php/crear_ruta.php", {
+        $.post("../php/"+ir, {
               valorResponsable: textoResponsable,
               valorAcompañante: textoAcompañante,
               valorVehiculo: textoVehiculo,
-              valorMaterial: textoMaterial,
               valorBobina: textoBonina,
               valorVale: textoVale
             }, function(mensaje) {
@@ -141,49 +141,45 @@ function recargar10() {
       <p class="center red-text"><b>Al crear la ruta se mostrará un PDF en una nueva pestaña y se crear la ruta.</b></p><br>
      <h5>Tecnico(s) que ira(n) a la ruta:</h5> 
       <form class="row">
-      <div class="input-field col s6 m3 l3">
-          <select id="responsable" class="browser-default">
-            <option value="0" selected>Responsable:</option>
-            <option value="MARCOS">MARCOS</option>
-            <option value="RUBEN">RUBEN</option>
-            <option value="ULISES">ULISES</option>
-            <option value="LUIS">LUIS</option>
-            <option value="ALFREDO">ALFREDO</option>
-            <option value="VICTOR">VICTOR</option>
-            <option value="MIGUEL">MIGUEL</option>
-          </select>
-      </div>
-      <div class="input-field col s6 m6 l6">
-          <i class="material-icons prefix">people</i>
-          <input id="acompañante" type="text" class="validate" data-length="30" required>
-          <label for="acompañante">Acompañante(s): Ej. (MARCOS, MIGUEL)</label>
-      </div>
-      <div class="col s5 m3 l3">
-        <p><br>
-          <input type="checkbox" id="bobina"/>
-          <label for="bobina">Bobina Nueva</label>
-        </p>
-      </div>
-      <div class="input-field col s10 m4 l4">
-          <i class="material-icons prefix">directions_car</i>
-          <input id="vehiculo" type="text" class="validate" data-length="30" required>
-          <label for="vehiculo">Vehiculo(s): </label>
-      </div>
-      <div class="col s7 m3 l3">
-        <p><br>
-          <input type="checkbox" id="vale"/>
-          <label for="vale">Vale de Gasolina</label>
-        </p>
-      </div>
-      <div class="input-field col s10 m5 l5">
-          <textarea id="material" class="
-         materialize-textarea validate" data-length="100" required></textarea>
-          <label for="material">Material (1 Antena, 1 Router)</label>
+        <div class="input-field col s6 m3 l3">
+            <select id="responsable" class="browser-default">
+              <option value="0" selected>Responsable:</option>
+              <option value="MARCOS">MARCOS</option>
+              <option value="RUBEN">RUBEN</option>
+              <option value="ULISES">ULISES</option>
+              <option value="LUIS">LUIS</option>
+              <option value="ALFREDO">ALFREDO</option>
+              <option value="VICTOR">VICTOR</option>
+              <option value="MIGUEL">MIGUEL</option>
+            </select>
+        </div>
+        <div class="input-field col s6 m6 l6">
+            <i class="material-icons prefix">people</i>
+            <input id="acompañante" type="text" class="validate" data-length="30" required>
+            <label for="acompañante">Acompañante(s): Ej. (MARCOS, MIGUEL)</label>
+        </div>
+        <div class="col s5 m3 l3">
+          <p><br>
+            <input type="checkbox" id="bobina"/>
+            <label for="bobina">Bobina Nueva</label>
+          </p>
+        </div>
+        <div class="input-field col s10 m4 l4">
+            <i class="material-icons prefix">directions_car</i>
+            <input id="vehiculo" type="text" class="validate" data-length="30" required>
+            <label for="vehiculo">Vehiculo(s): </label>
+        </div>
+        <div class="col s7 m3 l3">
+          <p><br>
+            <input type="checkbox" id="vale"/>
+            <label for="vale">Vale de Gasolina</label>
+          </p>
         </div>
       </form>
     </div>
     <div class="modal-footer container">
-    <a class="modal-action modal-close waves-effect waves-green btn-flat" onclick="consulta();crear_ruta();recargar();">Crear<i class="material-icons right">done</i></a>
+    <a class="modal-action modal-close waves-effect waves-green btn-flat" onclick="consulta();crear_ruta(1);">Crear Ruta<i class="material-icons right">done</i></a>
+    <a class="modal-action modal-close waves-effect waves-green btn-flat" onclick="consulta();crear_ruta(2);">Crear Ruta y pedido<i class="material-icons right">done</i></a>
       <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Cancelar<i class="material-icons right">close</i></a>
     </div>
 </div>

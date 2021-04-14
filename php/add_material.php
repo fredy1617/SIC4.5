@@ -6,6 +6,7 @@ date_default_timezone_set('America/Mexico_City');
 $Descripcion = $conn->real_escape_string($_POST['valorDescripcion']);
 $Proveedor = $conn->real_escape_string($_POST['valorProveedor']);
 $Folio = $conn->real_escape_string($_POST['valorFolio']);
+$Ruta = $conn->real_escape_string($_POST['valorRuta']);
 
 $id_user = $_SESSION['user_id'];
 $Fecha_hoy = date('Y-m-d');
@@ -21,8 +22,10 @@ if(mysqli_query($conn, $sql)){
 ?>
 <script>
     folio = <?php echo $Folio ?>;
-    setTimeout("location.href='detalles_pedido.php?folio='+folio", 800);
+  	var ruta = $("input#ruta").val();
+    setTimeout("location.href=ruta+'?folio='+folio", 500);
 </script>
+<input id="ruta" type="hidden" value="<?php echo $Ruta; ?>">
 <?php
 
 mysqli_close($conn);

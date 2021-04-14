@@ -116,21 +116,68 @@ class PDF extends FPDF{
 }else{
     $MATERIAL = '';
 }
+$ListPedidos = '';
+$Pedidos = array();// CREAMOS UN ARRAY DONDE IREMOS ALMACENANDO LOS PEDIDOS PARA DESPUES MOSTRARLOS
+#HACEMOS UNA CONSULTA DE SI HAY MANTENIMIENTOS EN LA RUTA
+$sql_mant = mysqli_query($conn,"SELECT tmp_reportes.id_reporte FROM tmp_reportes INNER JOIN reportes ON tmp_reportes.id_reporte = reportes.id_reporte WHERE (tmp_reportes.ruta = $Id AND reportes.descripcion LIKE 'Mantenimiento:%')");
+#VERIFICAMOS SI HAY MENTENIMIENTOS
+if (mysqli_num_rows($sql_mant)>0) {
+  #SI TIENE MANTENIMEINTOS VER SI TIENEN PEDIDOS';
+  while ($mant = mysqli_fetch_array($sql_mant)) {
+    $id_rep = $mant['id_reporte'];#ID DEL TMP REPORTE EN TURNO
+    $sql_pedidos = mysqli_query($conn,"SELECT * FROM pedidos WHERE id_orden = $id_rep");
+    if (mysqli_num_rows($sql_pedidos)) {
+      while ($pedido = mysqli_fetch_array($sql_pedidos)) {
+        $Pedidos[$pedido['folio']] = $pedido['id_orden'];//AGREFAMOS UN ELEMENTO AL ARRAY (UN PEDIDO DEL MANTENIMIENTO)
+      }//FIN WHILE PEDIDOS
+    }//FIN IF PEDIDOS
+  }//FIN WHILE MANTENIMIENTOS
+}//FIN IF MANTENIMIENTOS
+#HACEMOS UNA CONSULTA DE SI HAY ORDENES DE SERVICO EN LA RUTA
+$sql_orden = mysqli_query($conn,"SELECT id_reporte FROM tmp_reportes WHERE (ruta = $Id AND id_reporte > 100000)");
+#VERIFICAMOS SI HAY ORDENES DE SERVICIO
+if (mysqli_num_rows($sql_orden)) {
+  #SI TIENE ORDENES DE SERVICIO VER SI TIENEN PEDIDOS
+  while ($orden = mysqli_fetch_array($sql_orden)) {
+    $id_orden = $orden['id_reporte'];#ID DEL TMP REPORTE EN TURNO
+    $sql_pedidos = mysqli_query($conn,"SELECT * FROM pedidos WHERE id_orden = $id_orden");
+    if (mysqli_num_rows($sql_pedidos)) {
+      while ($pedido = mysqli_fetch_array($sql_pedidos)) {
+        $Pedidos[$pedido['folio']] = $pedido['id_orden'];//AGREFAMOS UN ELEMENTO AL ARRAY (UN PEDIDO DEL ORDENES DE SERVISIO)
+      }//FIN WHILE PEDIDOS
+    }//FIN IF PEDIDOS
+  }//FIN WHILE ORDENES DE SERVICIO
+}//FIN IF ORDENES DE SERVISIO
+
+$sql_pedidos_r = mysqli_query($conn,"SELECT * FROM pedidos WHERE id_orden = $Id");
+if (mysqli_num_rows($sql_pedidos_r)) {
+    while ($pedido = mysqli_fetch_array($sql_pedidos_r)) {
+      $Pedidos[$pedido['folio']] = $pedido['id_orden'];//AGREFAMOS UN ELEMENTO AL ARRAY (UN PEDIDO DEL ORDENES DE SERVISIO)
+    }//FIN WHILE PEDIDOS DE RUTA
+}//FIN IF PEDIDOS DE RUTA
+if (count($Pedidos) > 0) {
+    foreach ($Pedidos as $clave => $valor) {
+        $es= ($valor > 100000)?'Orden de Servicio':'Mantenimiento';
+        $es= ($valor < 5000)?'Ruta No':$es;
+        $ListPedidos .= 'Pedido no.'.$clave.' ('.$es.': '.$valor.')
+        ';
+    }
+}
         if ($rep_ruta['bobina'] == 1 AND $rep_ruta['vale'] == 1){
-            $this->MultiCell(155,10,utf8_decode($MATERIAL.'1.- OTORGAR BOBINA NUEVA PARA LA RUTA ('.$Id.') A NOMBRE DE: '.$ruta['responsable'].'
+            $this->MultiCell(155,10,utf8_decode($ListPedidos.$MATERIAL.'1.- OTORGAR BOBINA NUEVA PARA LA RUTA ('.$Id.') A NOMBRE DE: '.$ruta['responsable'].'
 2.- OTORGAR VALE DE GASOLINA PARA LA RUTA ('.$Id.') EN EL VEHICULO: '.$rep_ruta['vehiculo'].'
   _____________________________
 RESPONSABLE DE RUTA: '.$ruta['responsable']),1,'C',false);
         }else if ($rep_ruta['bobina'] == 1) {
-            $this->MultiCell(155,10,utf8_decode($MATERIAL.'1.- OTORGAR BOBINA NUEVA PARA LA RUTA ('.$Id.') A NOMBRE DE: '.$ruta['responsable'].'
+            $this->MultiCell(155,10,utf8_decode($ListPedidos.$MATERIAL.'1.- OTORGAR BOBINA NUEVA PARA LA RUTA ('.$Id.') A NOMBRE DE: '.$ruta['responsable'].'
   _____________________________
 RESPONSABLE DE RUTA: '.$ruta['responsable']),1,'C',false);
         }else if ($rep_ruta['vale'] == 1) {
-            $this->MultiCell(155,10,utf8_decode($MATERIAL.'1.- OTORGAR VALE DE GASOLINA PARA LA RUTA ('.$Id.') EN EL VEHICULO: '.$rep_ruta['vehiculo'].'
+            $this->MultiCell(155,10,utf8_decode($ListPedidos.$MATERIAL.'1.- OTORGAR VALE DE GASOLINA PARA LA RUTA ('.$Id.') EN EL VEHICULO: '.$rep_ruta['vehiculo'].'
   _____________________________
 RESPONSABLE DE RUTA: '.$ruta['responsable']),1,'C',false);
         }else{
-            $this->MultiCell(155,10,utf8_decode($MATERIAL.'
+            $this->MultiCell(155,10,utf8_decode($ListPedidos.$MATERIAL.'
   _____________________________
 RESPONSABLE DE RUTA: '.$ruta['responsable']),1,'C',false);
         }

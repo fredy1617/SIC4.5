@@ -25,16 +25,29 @@ if($aux<=0 or $aux==null){
 		//modificar pendientes y reportes agregar id_ruta
 	    mysqli_query($conn, "UPDATE tmp_pendientes SET ruta_inst = $ultima_ruta WHERE ruta_inst = 0 AND usuario = $id_user");
 	    mysqli_query($conn, "UPDATE tmp_reportes SET ruta = $ultima_ruta WHERE ruta = 0 AND usuario = $id_user");
-		?>
-		<script>
-			id = <?php echo $ultima_ruta; ?>;    
-		    var a = document.createElement("a");
-		      a.target="_blank"
-		      a.href = "../php/ruta.php?id="+id;
-		      a.click();
-		    setTimeout("location.href='../views/menu_rutas.php'", 800);
-		</script>
-		<?php
+	    
+	    $Nombre = 'Ruta No.'.$ultima_ruta;
+
+		$sql = "INSERT INTO pedidos (nombre, id_orden, fecha, hora, usuario) VALUES('$Nombre', '$ultima_ruta', '$Fecha', '$Hora', '$id_user')";
+		if(mysqli_query($conn, $sql)){
+			echo '<script>M.toast({html :"el pedido se registró satisfactoriamente.", classes: "rounded"})</script>';
+		    $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(folio) AS folio FROM pedidos WHERE usuario = $id_user"));            
+		    $folio = $ultimo['folio'];
+		    ?>
+		    <script>
+		        var a = document.createElement("a");
+		        a.href = "../views/detalles_pedido_r.php?folio="+<?php echo $folio; ?>;
+		        a.click();
+		    </script>
+		    <?php
+		}else{
+			echo '<script>M.toast({html :"Ha ocurrido un error.", classes: "rounded"})</script>';
+		    ?>
+		    <script>
+		        setTimeout("location.href='menu_rutas.php", 500);
+		    </script>
+		    <?php	
+		}
 	}else{
 		echo '<script>M.toast({html : "Ocurrio un error en la creación.", classes: "rounded"})</script>';
 	}

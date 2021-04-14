@@ -49,6 +49,11 @@ if(mysqli_query($conn, "UPDATE rutas SET estatus = 1  WHERE id_ruta = $id_ruta")
 	}//FIN IF INSTALACIONES
 	#UNA VEZ REALIZADAS TODAS LAS MODIFICACIONES MANDAMOS EL MENSAJE DE ALERTA
 	echo '<script>M.toast({html:"La ruta se actualizado correctamente.", classes: "rounded"})</script>';
+	?>
+	<script>
+		setTimeout("location.href='../views/menu_rutas.php'", 800);
+	</script>
+	<?php
 }else{
 	#SI NO SE PUDO HACER LA MODIFICACION DEL ESTATUS MANDAMOS LA ALERTA
 	echo '<script>M.toast({html:"Ocurrio un error y no se actualizo.", classes: "rounded"})</script>';
