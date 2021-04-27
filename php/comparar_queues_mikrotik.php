@@ -68,7 +68,7 @@ if (mysqli_num_rows($ARRAYQUEUES)>0) {
 		</thead>
 		<tbody>
 		<?php
-			#echo $Tabla_si;
+			echo $Tabla_si;
 		?>
 		</tbody>
 	  </table>
