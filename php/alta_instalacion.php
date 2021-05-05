@@ -59,16 +59,17 @@ if (filter_var($IP, FILTER_VALIDATE_IP)) {
 		    $API = new routeros_api();
 		    $API->debug = false;
 		    if ($API->connect($ServerList, $Username, $Pass, $Port)) {
-		       $API->write("/queue/simple/getall",false);
-		       $API->write('?name='.$name,true);
-		       $READ = $API->read(false);
-		       $ARRAY = $API->parse_response($READ); 
+		        $API->write("/queue/simple/getall",false);
+		        $API->write('?name='.$name,true);
+		        $READ = $API->read(false);
+		        $ARRAY = $API->parse_response($READ); 
 		        if(count($ARRAY)>0){ // si el nombre de usuario "ya existe" lo edito
-					$API->write("/queue/simple/set",false);  
-					$API->write("=.id=".$ARRAY[0]['.id'],false);
-		            $API->write('=max-limit='.$maxlimit,true);   //   2M/2M   [TX/RX]			
-					$READ = $API->read(false);
-					$ARRAY = $API->parse_response($READ);
+		        	//COFIGO PARA EDITAR EL QUEUE
+					#$API->write("/queue/simple/set",false);  
+					#$API->write("=.id=".$ARRAY[0]['.id'],false);
+		            #$API->write('=max-limit='.$maxlimit,true);   //   2M/2M   [TX/RX]			
+					#$READ = $API->read(false);
+					#$ARRAY = $API->parse_response($READ);
 		            echo '<script >M.toast({html:"No se puede registrar dos Queues al mismo cliente.", classes: "rounded"})</script>';
 		        }else{
 		            $API->write("/queue/simple/add",false);

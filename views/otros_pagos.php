@@ -26,6 +26,17 @@ if (isset($_POST['resp']) == false) {
 }
 ?>
 <script>
+function showContent() {
+    element = document.getElementById("content");
+    var textoDesc = $("select#descripcion3").val();
+
+    if (textoDesc == 'Otra Opcion') {
+      element.style.display='block';
+    }
+    else {
+      element.style.display='none';
+    }   
+};
 function imprimir(id_pago){
   var a = document.createElement("a");
       a.target = "_blank";
@@ -45,7 +56,7 @@ function borrar(IdPago){
 function insert_pago() {  
   textoTipo = "Otros Pagos";
   var textoCantidad = $("input#cantidad3").val();
-  var textoDescripcion = $("input#descripcion3").val();
+  var textoDescripcion = $("select#descripcion3").val();
   var textoRef = $("input#ref").val();
 
   if(document.getElementById('banco_otro').checked==true){
@@ -57,14 +68,22 @@ function insert_pago() {
   }else{
     textoTipo_Campio = "Efectivo"; 
   }
+  if (textoDescripcion == 'AUMENTAR PAQUETE') {
+    textoDescripcion = textoDescripcion+': Diferencia ($'+textoCantidad+')';
+  }else if (textoDescripcion == 'Otra Opcion') {
+    var textoDescripcion = $("input#otra3").val();
+    if (textoDescripcion == '') {
+      textoDescripcion = 0;
+    }
+  }
 
   var textoIdCliente = $("input#id_cliente").val();
   var textoRespuesta = $("input#respuesta").val();
 
   if (textoCantidad == "" || textoCantidad ==0) {
       M.toast({html: 'El campo Cantidad se encuentra vacío o en 0.', classes: 'rounded'});
-  }else if (textoDescripcion == "") {
-      M.toast({html: 'El campo Descripción se encuentra vacío .', classes: 'rounded'});
+  }else if (textoDescripcion == 0) {
+      M.toast({html: 'Seleccione una Descripción o escriba alguna .', classes: 'rounded'});
   }else if ((document.getElementById('banco_otro').checked==true || document.getElementById('san_otro').checked==true) && textoRef == "") {
         M.toast({html: 'Los pagos en banco deben de llevar una referencia.', classes: 'rounded'});
   }else if (document.getElementById('banco_otro').checked==false && document.getElementById('san_otro').checked==false && textoRef != "") {
@@ -145,20 +164,29 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
       <div class="row">
       <form class="col s12">
       <br>
+        <div class="input-field row">
+          <i class="col s1"> <br></i>
+          <select id="descripcion3" class="browser-default col s12 m3 l3" required onchange="javascript:showContent()">
+            <option value="0" selected >Descripcion:</option>
+            <option value="AUMENTAR PAQUETE" >Aumentar Megas</option>
+            <option value="Cambio De Domicilio" >Cambio De Domicilio</option>
+            <option value="Cambio De Contraseña" >Cambio De Contraseña</option>
+            <option value="Otra Opcion" >Otra Opcion</option>
+          </select>
+          <div class="input-field col s12 m3 l3" id="content" style="display: none;">
+            <input id="otra3" type="text" class="validate" data-length="100" required>
+            <label for="otra3">Descripcion Pago:</label>
+        </div>
+      </div>
+      <i class="col s1"> <br></i>
         <div class="row col s12 m3 l3">
-        <div class="input-field">
-          <i class="material-icons prefix">payment</i>
-          <input id="cantidad3" type="number" class="validate" data-length="6" value="0" required>
-          <label for="cantidad3">Cantidad:</label>
+          <div class="input-field">
+            <i class="material-icons prefix">payment</i>
+            <input id="cantidad3" type="number" class="validate" data-length="6" value="0" required>
+            <label for="cantidad3">Cantidad:</label>
+          </div>
         </div>
-      </div>
-      <div class="row col s12 m3 l3">
-        <div class="input-field">
-          <i class="material-icons prefix">description</i>
-          <input id="descripcion3" type="text" class="validate" data-length="100" required>
-          <label for="descripcion3">Descripción:</label>
-        </div>
-      </div>
+      
       <?php if ($user_id == 59 OR $user_id == 38 OR $user_id == 10 OR $user_id == 56  OR $user_id == 49 OR $user_id == 70) { 
           $Ser = '';
         }else{ $Ser = 'disabled="disabled"';}?>
