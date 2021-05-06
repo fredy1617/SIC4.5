@@ -116,8 +116,10 @@ if ($entra == "Si") {
     if (($Tipo_Campio == 'Banco' OR $Tipo_Campio == 'SAN') AND $ReferenciaB != '') {
       mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion) VALUES ('$id_pago', '$ReferenciaB')");
     }
-    if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha) VALUES ($IdCliente, '$Descripcion', '$Fecha_hoy')")) {
-        echo '<script>M.toast({html:"Se registro el reporte (AUMENTAR)", classes: "rounded"})</script>';
+    if (strpos($Descripcion, 'AUMENTAR PAQUETE') !== false) {
+      if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, '$Descripcion', '$Fecha_hoy', $id_user)")) {
+          echo '<script>M.toast({html:"Se registro el reporte (AUMENTAR)", classes: "rounded"})</script>';
+      }
     }
     ?>
     <script>

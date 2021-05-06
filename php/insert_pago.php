@@ -202,7 +202,6 @@ if ($entra == "Si") {
   }
    
   //SE INSERTA EL PAGO -----------
-
   if(mysqli_query($conn, $sql)){
     echo '<script>M.toast({html:"El pago se dió de alta satisfcatoriamente.", classes: "rounded"})</script>';
     // Si el pago es de banco guardar la referencia....
@@ -221,12 +220,12 @@ if ($entra == "Si") {
     }else{
       if ($dif < -50) {
         $Descrip = "AUMENTAR PAQUETE pago: ".$Cantidad." por: ".$Descripcion;
-        if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha) VALUES ($IdCliente, '$Descrip', '$Fecha_hoy')")) {
+        if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, '$Descrip', '$Fecha_hoy', $id_user)")) {
           echo '<script>M.toast({html:"Se registro el reporte (AUMENTAR)", classes: "rounded"})</script>';
         }
       }elseif ($dif > 0) {
         $Descrip = "DISMINUIR PAQUETE pago: ".$Cantidad." por: ".$Descripcion;
-        if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha) VALUES ($IdCliente, '$Descrip', '$Fecha_hoy')")) {
+        if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, '$Descrip', '$Fecha_hoy', $id_user)")) {
           echo '<script>M.toast({html:"Se registro el reporte (DISMINUIR)", classes: "rounded"})</script>';
         }
       }
