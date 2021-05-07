@@ -62,6 +62,7 @@
           var textoTelefono = $("input#telefono").val();
           var textoDireccion = $("input#direccion").val();
           var textoReferencia = $("input#referencia").val();
+          var textoCoordenada = $("input#coordenada").val();
           var textoIdReporte = $("input#id_reporte").val();
           var textoFalla = $("textarea#falla").val();
           var textoSolucion = $("textarea#solucion").val();
@@ -153,6 +154,7 @@
                 valorTelefono:textoTelefono,
                 valorDierccion:textoDireccion,
                 valorReferencia: textoReferencia,
+                valorCoordenada: textoCoordenada,
                 valorIdReporte: textoIdReporte,
                 valorFalla: textoFalla,
                 valorSolucion: textoSolucion,
@@ -231,6 +233,12 @@
                 <b class="col s4 m2 l2">Referencia: </b>
                 <div class="col s12 m9 l9">
                   <input type="text" id="referencia" name="referencia" value="<?php echo $cliente['referencia'];?>">
+                </div>
+              </div>
+              <div class="col s12">
+                <b class="col s4 m2 l2">Coordenada: </b>
+                <div class="col s12 m9 l9">
+                  <input type="text" id="coordenada" name="coordenada" value="<?php echo $cliente['coordenadas'];?>">
                 </div>
               </div>
               <b>Comunidad: </b><?php echo $comunidad['nombre'];?><a onclick="irconsumo();" class="waves-effect waves-light btn pink right"><i class="material-icons right">equalizer</i>CONSUMO</a><br>
