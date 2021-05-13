@@ -60,7 +60,7 @@ if ($Orden == "Encender") {
   	        if(count($ARRAY) == 0){
                 echo "<script >M.toast({html: 'El internet fue Encencido/Reactivado.(".$ID.")', classes: 'rounded'})</script>";
             }else{ // si no existe lo creo
-                $sql = "INSERT INTO reportes (id_cliente, descripcion, fecha) VALUES ('$IdCliente', 'SE USO BOTON DE ENCENDIDO Y NO SE ACTIVO EL INTERNET ERROR DE API.', '$Fecha_hoy')";
+                $sql = "INSERT INTO reportes (id_cliente, descripcion, fecha) VALUES ('$Cliente', 'SE USO BOTON DE ENCENDIDO Y NO SE ACTIVO EL INTERNET ERROR DE API.', '$Fecha_hoy')";
                 if(mysqli_query($conn, $sql)){
                   echo "<script >M.toast({html: 'El reporte se dió de alta satisfcatoriamente.', classes: 'rounded'})</script>";
                 }
