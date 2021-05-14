@@ -11,8 +11,8 @@ include('Mailer/src/Exception.php');
 	$mail->SMTPSecure = 'tls';
 	$mail->Host = 'smtp.gmail.com';
 	$mail->Port = 587;
-	$mail->Username = 'alfredomartinez6510@gmail.com';
-	$mail->Password = 'n1Fredy17@';
+	$mail->Username = 'sic.redes.som@gmail.com';
+	$mail->Password = 'Respif_rede5';
 
 	$mail->setFrom('no-replay@gmail.com', 'Cortes SIC');
 	$mail->addAddress('alfredo.martinez@sicsom.com');
