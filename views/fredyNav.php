@@ -89,17 +89,19 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				<li><a class='dropdown-button' data-target='dropdown3'><i class="material-icons left">account_circle</i>Admin <i class="material-icons right">arrow_drop_down</i></a></li>
 				<ul id='dropdown3' class='dropdown-content'>
 				    <li><a href="admin_clientes.php" class="black-text"> <i class="material-icons">search</i>Clientes </a></li>
-				    <li><a href="Estatus_contratos.php" class="black-text"><i class="material-icons">assignment</i>Contratos Vencidos</a></li>
-				    <li><a href="cortes_pagos.php" class="black-text"><i class="material-icons">attach_money</i>Cortes Pagos </a></li><li><a class='dropdown-btn black-text' data-target='sub-dropdown'><i class="material-icons left">assignment</i>Reportes <i class="material-icons right">chevron_right</i></a></li>
+				    <li><a class='dropdown-btn black-text' data-target='sub-dropdown'><i class="material-icons left">assignment</i>Reportes <i class="material-icons right">chevron_right</i></a></li>
 				    <ul id='sub-dropdown' class='dropdown-content'>
 				    	<li><a href="rep_pagos.php" class="black-text"><i class="material-icons">report</i>Reporte Pagos </a></li>
 				    	<li><a href="reportes_atendidos.php" class="black-text"><i class="material-icons">done</i>Reportes Atendidos </a></li>
 				    	<li><a href="rep_instalaciones.php" class="black-text"><i class="material-icons">format_list_numbered</i>Rep. Instalaciones</a></li>
 				    	<li><a href="reporte_deudas.php" class="black-text"><i class="material-icons">list</i>Reporte Deudas</a></li>    	
 				    	<li><a href="reporte_material.php" class="black-text"><i class="material-icons">router</i>Reporte Material</a></li>    	
-				    	<li><a href="rep_ruta.php" class="black-text"><i class="material-icons">location</i>Reporte Rutas</a></li>    	
+				    	<li><a href="rep_ruta.php" class="black-text"><i class="material-icons">location_on</i>Reporte Rutas</a></li>    	
 				    	<li><a href="canceladas.php" class="black-text"><i class="material-icons">do_not_disturb</i>Canceladas</a></li>    	
-				    </ul>   
+				    	<li><a href="reporte_pedidos_entregados.php" class="black-text"><i class="material-icons">list</i>Pedidos Entregados</a></li>    	
+				    </ul> 
+				    <li><a href="cortes_pagos.php" class="black-text"><i class="material-icons">attach_money</i>Cortes Pagos </a></li>		  
+				    <li><a href="Estatus_contratos.php" class="black-text"><i class="material-icons">assignment</i>Contratos Vencidos</a></li>
 				    <li><a href="usuarios.php" class="black-text"><i class="material-icons">people</i>Usuarios </a></li>
 				    <li><a class='dropdown-btn black-text' data-target='sub-dropdown2'><i class="material-icons left">content_cut</i> CORTES <i class="material-icons right">chevron_right</i></a></li>
 				    <ul id='sub-dropdown2' class='dropdown-content'>
@@ -211,8 +213,9 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 								    <li><a href="rep_instalaciones.php"><i class="material-icons">format_list_numbered</i>Reporte Instalaciones</a></li>
 								    <li><a href="reportes_atendidos.php"><i class="material-icons">done</i>Reportes Atendidos</a></li>
 				    				<li><a href="reporte_material.php"><i class="material-icons">router</i>Reporte Material</a></li>  	
-				    				<li><a href="rep_ruta.php"><i class="material-icons">location</i>Reporte Rutas</a></li>    	
-				    				<li><a href="canceladas.php"><i class="material-icons">do_not_disturb</i>Canceladas</a></li>  	
+				    				<li><a href="rep_ruta.php"><i class="material-icons">location_on</i>Reporte Rutas</a></li>    	
+				    				<li><a href="canceladas.php"><i class="material-icons">do_not_disturb</i>Canceladas</a></li>
+				    				<li><a href="reporte_pedidos_entregados.php"><i class="material-icons">list</i>Pedidos Entregados</a></li>    
 								    <li><a href="reporte_x_fecha.php"><i class="material-icons">assignment_turned_in</i>Trabajo Realizado</a></li>
 				    				<li><a href="calendario.php"><i class="material-icons">date_range</i>Calendario</a></li>
 								    <li><a href="en_cajas.php"><i class="material-icons">monetization_on</i>En Cajas</a></li>

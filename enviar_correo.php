@@ -21,5 +21,4 @@ include('Mailer/src/Exception.php');
 	$mail->isHTML(true);
 	$mail->Subject = $asunto;
 	$mail->Body = $Mensaje;
-
 ?>
