@@ -178,6 +178,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 						    	  <li><a href="mantenimiento.php"><i class="material-icons">build</i>Mantenimiento<span class="new badge pink" data-badge-caption=""><?php echo $Mantenimiento['count(*)'];?></span></a></li>
 						    	  <li><a href="tel.php"><i class="material-icons">phone</i>Teléfono <span class=" new badge pink" data-badge-caption=""><?php echo $tel['count(*)'];?></span></a></li>
 						    	  <li><a href="menu_rutas.php"><i class="material-icons">near_me</i>Rutas <span class=" new badge pink" data-badge-caption=""><?php echo $rutas['count(*)'];?></span></a></li>
+				    			  <li><a href="form_actividad.php"><i class="material-icons">assignment_turned_in</i>Actividad </a></li>
 						    	  <li><a href="facturar_p.php"><i class="material-icons">assignment_late</i>Fac. Pendientes </a></li>   
 				    			  <li><a href="facturar_l.php"><i class="material-icons">assignment_turned_in</i>Fac. Listas </a></li>
 						    	  <li><a href="paquetes.php"><i class="material-icons">import_export</i>Paquetes</a></li>
@@ -187,7 +188,6 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    			  <li><a href="fichas.php"><i class="material-icons">tap_and_play</i>Fichas </a></li>
 				    			  <li><a href="pedidos.php"><i class="material-icons">assignment</i>Pedidos </a></li>
 				    			  <li><a href="sistema_mikrotik.php"><i class="material-icons">router</i>Mikrotik </a></li>
-				    			  <li><a href="form_actividad.php"><i class="material-icons">assignment_turned_in</i>Actividad </a></li>
 					    		</ul>
 					          </span>
 		      			  </div>    			
