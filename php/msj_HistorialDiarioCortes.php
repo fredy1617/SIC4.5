@@ -22,20 +22,21 @@ $mail->setFrom('no-replay@gmail.com', 'HISTORIAL CORTES DIARIO');
 $mail->addAddress('alfredo.martinez@sicsom.com');
 $mail->addAddress('gabriel.valles@sicsom.com');
 
+$Mensaje = '';//SE CREA LA VARIABLE MSH¡J VACIA PARA AGREGAR EL HISTORIAL DE CORTES MAS EL RESUMEN DE LA CAJA CHICA
+
 #------------------------------------------------------------------------------------
-#HAY QUE GENERAR EL MENSAJE Y EL ASUNTO CON LA INFORMACION DE LOS CORTES DIARIOS
+#HAY QUE AGREGAR EL HISTORIAL DE CORTES AL MENSAJE CON LOS CORTES DIARIOS
 #------------------------------------------------------------------------------------
 #DEFINIMOS UNA ZONA HORARIA
 date_default_timezone_set('America/Mexico_City');
 $Fecha_hoy = date('Y-m-d');//CREAMOS UNA FECHA DEL DIA EN CURSO SEGUN LA ZONA HORARIA
-#SELECCIONAMOS TODOS LOS CORRTES REALIZADOS CON LA FECHA DE HOY
+#SELECCIONAMOS TODOS LOS CORTES REALIZADOS CON LA FECHA DE HOY
 $sql_cortes = mysqli_query($conn, "SELECT * FROM cortes WHERE fecha = '$Fecha_hoy'");
 #VERIFICAMOS SI SE ENCONTRARON CORTES
-
 if(mysqli_num_rows($sql_cortes) > 0){
-    echo "ENTRE <br>";
+    #echo "ENTRE <br>";
     #INICIAMOS A CREAR EL MENSAJE A ENVIAR CABECERA
-    $Mensaje = "<b>HISTORIAL DIARIO DE CORTES:<br>
+    $Mensaje .= "<b>HISTORIAL DIARIO DE CORTES:<br>
                   Fecha: ".$Fecha_hoy.".</b><br><br>";
     $Total_Credito = 0;
     $Total_Banco = 0;
@@ -85,14 +86,68 @@ if(mysqli_num_rows($sql_cortes) > 0){
                  <b> | > TOTAL CREDITO = $".$Total_Credito."<br>
                   | > TOTAL BANCO = $".$Total_Banco."<br>
                   | > TOTAL EFECTIVO = $".$Total_Efectivo."<br></b>
-                 ///////////////////////////////////////////////////////////";
+                 ///////////////////////////////////////////////////////////<br>";
     #echo $Mensaje;
+}// FIN DEL IF CORTES
+
+// SACAMOS EL RESUMEN DE LA CAJA CHICA DIARIO
+#-----------------------------------------------------------------
+# AGREGAMOS EL RESUMEN DE LA CAJA CHICA DE CORTES AL MENSAJE 
+#-----------------------------------------------------------------
+#INICIAMOS A CREAR LA CABECERA DEL RESUMEN CAJA
+$Mensaje .= "<br><b>RESUMEN DIARIO DE CAJA CHICA:<br>
+              Fecha: ".$Fecha_hoy.".</b><br><br>";
+#SELECCIONAMOS TODOS LOS CORRTES REALIZADOS CON LA FECHA DE HOY
+$sql_caja = mysqli_query($conn, "SELECT * FROM historila_caja_ch WHERE fecha = '$Fecha_hoy'");
+#VERIFICAMOS SI SE ENCONTRARON REGISTROS
+if(mysqli_num_rows($sql_caja) > 0){
+  $Total_Ingresos = 0;
+  $Total_Egresos = 0;
+  $ingresos = '';
+  $egresos = '';
+  #SI SE ENCONTRARON REGISTROS EN CAJA SE RECORE UNO POR UNO...
+  while($registro = mysqli_fetch_array($sql_caja)){  
+    $Tipo = $registro['tipo'];
+    $id_user = $registro['usuario'];
+    $user = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id = '$id_user'"));
+    if ($Tipo == 'Ingreso') {
+      $ingresos .= " ** Usuario: ".$user['user_name'].", Cantidad: $".$registro['cantidad']."<br>";
+      $Total_Ingresos += $registro['cantidad'];
+    }else{
+      $egresos .= " ** Usuario: ".$user['user_name'].", Cantidad: $".$registro['cantidad']."<br>
+                     .... Descripcion:".$registro['descripcion']."<br>";
+      $Total_Egresos += $registro['cantidad'];
+    }
+  }// FIN WHLE
+  $Total_Caja = $Total_Ingresos-$Total_Egresos;
+  $Mensaje .= "#-------------------------------------------------------------------------<br>
+               <b> > INGRESOS: <br>".$ingresos."</b>
+               #-------------------------------------------------------------------------<br>
+               <b> > EGRESOSO: <br>".$egresos."</b>
+               #-------------------------------------------------------------------------<br>
+               <b> > --- SubTotal Diario = + $".$Total_Caja."<br></b>";
+}else{// FIN IF CAJA
+  $Mensaje .= "-- Sin Movimientos--<br><br>";
+}
+// SACAMOS LA SUMA DE TODOS LOS EGRESOSO E INGRESOSO DE LA CAJA CHICA
+$Suma_Ingresos = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS suma FROM historila_caja_ch WHERE tipo = 'Ingreso'"));
+$Suma_Egresoso = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS suma FROM historila_caja_ch WHERE tipo = 'Egreso'"));
+//SE HACE EL CALCULO DEL TOTAL DE LA CAJA CHICA
+$Total = $Suma_Ingresos['suma']-$Suma_Egresoso['suma'];
+$Mensaje.= "<br>/////////////////////////////////////////////////////////<br>
+            <b> | > TOTAL CAJA CHICA = $".$Total."<br></b>
+            /////////////////////////////////////////////////////////<br>";
+
+#-----------------------------------------------------------------
+# VERIFICAMOS QUE EL $Mensaje NO ESTE VACIO Y ENVIAMOS EL CORREO 
+#-----------------------------------------------------------------
+if ($Mensaje != '') {
     $mail->isHTML(true);
-    $mail->Subject = 'Historial Fecha: '.$Fecha_hoy;
+    $mail->Subject = 'Historial Fecha: '.$Fecha_hoy;// SE CREA EL ASUNTO DEL CORREO
     $mail->Body = $Mensaje;
     if (!$mail->send()) {
       echo "NO SE ENVIO";
     }else{
       echo "CORREO ENVIADO CON EXITO !!!";
     }
-}// FIN DEL IF
+}

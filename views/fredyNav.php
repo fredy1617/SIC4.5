@@ -111,7 +111,11 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    	<li><a href="cobradores_list.php" class="black-text"><i class="material-icons">attach_money</i>Saldo Cobradores </a></li>  	
 				    </ul>
 				    <li><a href="reporte_x_fecha.php" class="black-text"><i class="material-icons">assignment_turned_in</i>Trabajos Realizados</a></li>
-				    <li><a href="en_cajas.php" class="black-text"><i class="material-icons">monetization_on</i>En Cajas</a></li>
+				    <li><a class='dropdown-btn black-text' data-target='sub-dropdown3'><i class="material-icons left">monetization_on</i>CAJA<i class="material-icons right">chevron_right</i></a></li>
+				    <ul id='sub-dropdown3' class='dropdown-content'>
+				   		<li><a href="en_cajas.php" class="black-text"><i class="material-icons">archive</i>En Cajas</a></li> 	
+				   		<li><a href="caja_chica.php" class="black-text"><i class="material-icons">attach_money</i>Caja Chica</a></li> 	
+				    </ul>
 				    <li><a href="calendario.php" class="black-text"><i class="material-icons">date_range</i>Calendario</a></li>
 				    <li><a href="CORTES_FULL.php" class="black-text"><i class="material-icons left">signal_wifi_off</i>Cortes Full</a></li>	
 				    <li><a href="activos.php" class="black-text"><i class="material-icons left">import_export</i>Activos</a></li>	
@@ -218,7 +222,8 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    				<li><a href="reporte_pedidos_entregados.php"><i class="material-icons">list</i>Pedidos Entregados</a></li>    
 								    <li><a href="reporte_x_fecha.php"><i class="material-icons">assignment_turned_in</i>Trabajo Realizado</a></li>
 				    				<li><a href="calendario.php"><i class="material-icons">date_range</i>Calendario</a></li>
-								    <li><a href="en_cajas.php"><i class="material-icons">monetization_on</i>En Cajas</a></li>
+								    <li><a href="en_cajas.php"><i class="material-icons">archive</i>En Cajas</a></li>
+								    <li><a href="caja_chica.php"><i class="material-icons">attach_money</i>Caja Chica</a></li>
 								    <li><a href="reporte_deudas.php"><i class="material-icons">list</i>Reporte Deudas</a></li>
 						    	 	<li><a href="CORTES_FULL.php"><i class="material-icons">signal_wifi_off</i>Cortes Full</a></li>
 						    	 	<li><a href="Activos.php"><i class="material-icons">import_export</i>Activos</a></li>
