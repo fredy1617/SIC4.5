@@ -18,7 +18,7 @@ if ($result_of_login_check->num_rows == 1) {
     // the hash of that user's password
     if (password_verify($usu_password, $result_row->user_password_hash)) {
       // write user data into PHP SESSION (a file on your server)
-      echo json_encode($result_row,JSON_UNESCAPED_UNICODE);
+      
     } else {
       echo "Usuario y/o contraseña no coinciden.";
     }
