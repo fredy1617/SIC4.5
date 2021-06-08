@@ -14,7 +14,7 @@ $sentencia->bind_param('ss',$usu_usuario,$valorUserPassword_hash);
 $sentencia->execute();
 
 $resultado = $sentencia->get_result();
-if ($fila = $resultado->fetch_assoc()) {
+if (true) {
   echo json_encode($fila,JSON_UNESCAPED_UNICODE);
 }
 $sentencia->close();
