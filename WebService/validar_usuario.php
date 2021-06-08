@@ -3,10 +3,8 @@
 include('../php/conexion.php');
 include_once("../php/password_compatibility_library.php");
 
-
 $usu_usuario=$_POST['usuario'];//$usu_usuario='Juanito';
 $usu_password=$_POST['password'];//$usu_password='12345678';
-
 
 $sql = "SELECT user_id, user_name, user_email, user_password_hash
         FROM users
@@ -20,6 +18,7 @@ if ($result_of_login_check->num_rows == 1) {
     // the hash of that user's password
     if (password_verify($usu_password, $result_row->user_password_hash)) {
       // write user data into PHP SESSION (a file on your server)
+      $fila = $result_of_login_check->fetch_assoc();
       echo json_encode($fila,JSON_UNESCAPED_UNICODE);
     } else {
       echo "Usuario y/o contraseña no coinciden.";
@@ -28,7 +27,6 @@ if ($result_of_login_check->num_rows == 1) {
       echo "Usuario y/o contraseña no coinciden.";
 }
 #$valorUserPassword_hash = password_hash($usu_password, PASSWORD_DEFAULT);
-
 $sentencia->close();
 $conn->close();
 ?>
