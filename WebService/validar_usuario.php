@@ -12,7 +12,7 @@ $sentencia->execute();
 
 $resultado = $sentencia->get_result();
 if ($fila = $resultado->fetch_assoc()) {
-  if (password_verify($usu_password, $resultado->user_password_hash)) {
+  if (password_verify($usu_password, $fila->user_password_hash)) {
     echo json_encode($fila,JSON_UNESCAPED_UNICODE);
   } else {
     echo "Usuario y/o contraseña no coinciden.";
