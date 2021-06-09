@@ -2,7 +2,7 @@
 #INCLUIMOS EL ARCHIVO CON LA CONEXION A LA BASE DE DATOS
 include('../php/conexion.php');
 
-$sql = "SELECT id_cliente, nombre, telefono, coordenadas FROM clientes";
+$sql = "SELECT * FROM clientes";
 $query = $conn->query($sql);
 
 $datos = array();

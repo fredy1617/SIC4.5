@@ -5,7 +5,7 @@ include('../php/conexion.php');
 $codigo=$_GET['codigo'];// RECIBIMOS EL ID DE LA RUTA POR GET
 
 #CONSULTAMOS TODAS LAS INSTALACIONES QUE ALLA DE ESTA RUTA
-$resultado = $conn->query("SELECT * FROM tmp_pendientes WHERE ruta_inst ='$codigo'");
+$resultado = $conn->query("SELECT * FROM tmp_pendientes WHERE ruta_inst =$codigo");
 
 #RECORREMOS CADA INTSLACION CON UN CICLO Y LO VACIAMOS EN UN ARRAY 
 while($fila=$resultado -> fetch_array()){
