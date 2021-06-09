@@ -8,7 +8,7 @@ $usu_password=$_POST['password'];//$usu_password='12345678';0
 $valorUserPassword_hash = password_hash($usu_password, PASSWORD_DEFAULT);
 
 $sentencia=$conn->prepare("SELECT * FROM users WHERE user_name=?");
-$sentencia->bind_param('ss',$usu_usuario);
+$sentencia->bind_param('s',$usu_usuario);
 $sentencia->execute();
 
 $resultado = $sentencia->get_result();
