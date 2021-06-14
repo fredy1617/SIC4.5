@@ -4,7 +4,7 @@
     <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="icon" href="../img/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="../img/logo.jpg" type="image/x-icon" />
 <?php
 include('../php/conexion.php');
 // Checamos la version de PHP
