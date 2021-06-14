@@ -32,7 +32,7 @@ $tel = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*) FROM clientes WHER
       </thead>
       <tbody>
       <?php
-      $sql = "SELECT * FROM pagos WHERE Cotejado =1 Order by fecha";
+      $sql = "SELECT * FROM pagos WHERE Cotejado =1 Order by id_cliente";
       $consulta = mysqli_query($conn, $sql);
       //Obtiene la cantidad de filas que hay en la consulta
       $filas = mysqli_num_rows($consulta);
