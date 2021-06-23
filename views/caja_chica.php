@@ -19,6 +19,12 @@
           element2.style.display='none';
         }
       };
+      function imprimir(id){
+        var a = document.createElement("a");
+            a.target = "_blank";
+            a.href = "../php/ticket_caja_ch.php?Id="+id;
+            a.click();
+      };
       function insert_caja(){ 
         var textoCantidad = $("input#cantidad").val();  
         var textoOp = $("select#opcion").val();
@@ -106,6 +112,7 @@
                   <th>Fecha y Hora</th>
                   <th>Descripcion</th>
                   <th>Usuario</th>
+                  <th>Imprimir</th>
                   <th>Borrar</th>
                 </tr>
             </thead>
@@ -124,6 +131,7 @@
                     <td><?php echo $ingreso['fecha'].' '.$ingreso['hora'];?></td>
                     <td><?php echo $ingreso['descripcion'];?></td>
                     <td><?php echo $user['user_name'];?></td>
+                    <td><a onclick="imprimir(<?php echo $ingreso['id']; ?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>
                     <td><a onclick="borrar_caja(<?php echo $ingreso['id']; ?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
                   </tr>
                 <?php 
@@ -145,6 +153,7 @@
                   <th>Fecha y Hora</th>
                   <th>Descripcion</th>
                   <th>Usuario</th>
+                  <th>Imprimir</th>
                   <th>Borrar</th>
                 </tr>
             </thead>
@@ -163,6 +172,7 @@
                     <td><?php echo $egreso['fecha'].' '.$egreso['hora'];?></td>
                     <td><?php echo $egreso['descripcion'];?></td>
                     <td><?php echo $user['user_name'];?></td>
+                    <td><a onclick="imprimir(<?php echo $egreso['id']; ?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>
                     <td><a onclick="borrar_caja(<?php echo $egreso['id']; ?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
                   </tr>
                 <?php 

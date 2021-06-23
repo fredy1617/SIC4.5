@@ -2,13 +2,13 @@
 #INCLUIMOS EL ARCHIVO CON LA CONEXION A LA BASE DE DATOS era (Buscar)
 include('../php/conexion.php');
 
-$codigo=$_GET['codigo'];// RECIBIMOS EL ID DE LA RUTA POR GET
+$codigo='1365';// RECIBIMOS EL ID DE LA RUTA POR GET
 
 #CONSULTAMOS TODAS LAS INSTALACIONES QUE ALLA DE ESTA RUTA
 $resultado = $conn->query("SELECT * FROM tmp_reportes WHERE ruta =$codigo");
 
 #RECORREMOS CADA INTSLACION CON UN CICLO Y LO VACIAMOS EN UN ARRAY 
-$arr = array();//CREAMOS UN ARRAY VACIO PARA COLOCAR LA INFORAMCION NECESARIA (id_reporte, id_cliente, clientes.nombre, telefono, comunidades.nombre, referencia, coordenadas, reporte.descripcion, diagnostico, reporte.fecha)
+$arr = array();//CREAMOS UN ARRAY VACI PARA COLOCAR LA INFORAMCION NESESARIA (id_reporte, id_cliente, clientes.nombre, telefono, comunidades.nombre, referencia, coordenadas, reporte.descripcion, diagnostico, reporte.fecha)
 while($listado=$resultado -> fetch_array()){
 	$id_reporte = $listado['id_reporte'];                   
     if ((mysqli_num_rows(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $id_reporte"))) == 0){
