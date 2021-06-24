@@ -2,7 +2,7 @@
 #INCLUIMOS EL ARCHIVO CON LA CONEXION A LA BASE DE DATOS era (Buscar2)
 include('../php/conexion.php');
 
-$codigo='1361';// RECIBIMOS EL ID DE LA RUTA POR GET
+$codigo=$_GET['codigo'];;// RECIBIMOS EL ID DE LA RUTA POR GET
 
 #CONSULTAMOS TODAS LAS INSTALACIONES QUE ALLA DE ESTA RUTA
 $resultado = $conn->query("SELECT * FROM tmp_pendientes INNER JOIN clientes ON tmp_pendientes.id_cliente = clientes.id_cliente WHERE ruta_inst =$codigo");
