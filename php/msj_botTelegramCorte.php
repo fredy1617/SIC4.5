@@ -1,4 +1,5 @@
 <?php
+#Falla
 #INCLUIMOS EL ARCHIVO CON LA CONEXION A LA BASE DE DATOS
 include('../php/conexion.php');
 
