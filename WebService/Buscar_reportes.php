@@ -7,7 +7,7 @@ $codigo=$_GET['codigo'];// RECIBIMOS EL ID DE LA RUTA POR GET
 #CONSULTAMOS TODAS LAS INSTALACIONES QUE ALLA DE ESTA RUTA
 $resultado = $conn->query("SELECT * FROM tmp_reportes WHERE ruta =$codigo");
 
-#RECORREMOS CADA INTSLACION CON UN CICLO Y LO VACIAMOS EN UN ARRAY 
+#RECORREMOS CADA REPORTE CON UN CICLO Y LO VACIAMOS EN UN ARRAY 
 $arr = array();//CREAMOS UN ARRAY VACIO PARA COLOCAR LA INFORAMCION NECESARIA (id_reporte, id_cliente, clientes.nombre, telefono, comunidades.nombre, referencia, coordenadas, reporte.descripcion, diagnostico, reporte.fecha)
 while($listado=$resultado -> fetch_array()){
 	$id_reporte = $listado['id_reporte'];                   
@@ -35,7 +35,7 @@ while($listado=$resultado -> fetch_array()){
     $id_comunidad = $cliente['lugar'];
     $sql_comunidad = mysqli_fetch_array(mysqli_query($conn,"SELECT nombre FROM comunidades WHERE id_comunidad='$id_comunidad'"));
 
-	#LLEMANMOS NUESRTRO ARRAY POR CADA REPORTE ENCONTRADO
+	#LLEMANMOS NUESTRO ARRAY POR CADA REPORTE ENCONTRADO
 	$arr['id_reporte'] =$id_reporte;
 	$arr['es'] =$Es;
 	$arr['id_cliente'] =$id_cliente;

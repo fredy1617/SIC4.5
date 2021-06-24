@@ -8,14 +8,14 @@ $codigo=$_GET['codigo'];;// RECIBIMOS EL ID DE LA RUTA POR GET
 $resultado = $conn->query("SELECT * FROM tmp_pendientes INNER JOIN clientes ON tmp_pendientes.id_cliente = clientes.id_cliente WHERE ruta_inst =$codigo");
 
 $arr = array();//CREAMOS UN ARRAY VACIO PARA COLOCAR LA INFORAMCION NECESARIA
-#RECORREMOS CADA INTSLACION CON UN CICLO Y LO VACIAMOS EN UN ARRAY 
+#RECORREMOS CADA INSTALACION CON UN CICLO Y LO VACIAMOS EN UN ARRAY 
 while($cliente=$resultado -> fetch_array()){	
     $id_comunidad = $cliente['lugar'];
     $sql_comunidad = mysqli_fetch_array(mysqli_query($conn,"SELECT nombre FROM comunidades WHERE id_comunidad='$id_comunidad'"));
     $id_paquete = $cliente['paquete'];
     $paquete = mysqli_fetch_array(mysqli_query($conn, "SELECT subida, bajada, mensualidad FROM paquetes WHERE id_paquete=$id_paquete"));
     $Apagar = $cliente['total']-$cliente['dejo'];
-	#LLEMANMOS NUESRTRO ARRAY POR CADA REPORTE ENCONTRADO
+	#LLEMANMOS NUESTRO ARRAY POR CADA REPORTE ENCONTRADO
 	$arr['id_cliente'] =$cliente['id_cliente'];
 	$arr['nombre'] =$cliente['nombre'];
 	$arr['servicio'] =$cliente['servicio'];
