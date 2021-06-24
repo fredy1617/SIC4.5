@@ -1,7 +1,10 @@
 <?php
-#Falla
 #INCLUIMOS EL ARCHIVO CON LA CONEXION A LA BASE DE DATOS
 include('../php/conexion.php');
+#INCLUIMOS TODAS LAS LIBRERIAS  DE MAILER PARA PODER ENVIAR CORREOS DE ESTE ARCHIVO
+include('../Mailer/src/PHPMailer.php');
+include('../Mailer/src/SMTP.php');
+include('../Mailer/src/Exception.php');
 
 #INCLUIMOS EL ARCHIVO CON LA INFORMACION DE LOS CHATS BOT
 #include('../php/infoBots.php');
@@ -52,7 +55,7 @@ if(mysqli_num_rows($sql_corte) > 0){
       $credito = $Corte['credito'];
       $Mensaje = '';
       #VERIFICAMOS SI EN EL CORTE ECHO NO ESTEN TODAS LAS CANTIDADES VACIAS
-      if ($cantidad > 0 OR $banco > 0 OR $credito > 0) {
+      if ($cantidad >= 0 OR $banco > 0 OR $credito > 0) {
           #CREAMOS EL MENSAJE CON LA INFORMACION QUE HAY QUE ENVIAR POR TELEGRAM
           $Mensaje = "Corte del Dia: ".$Corte['fecha'].", Hora: ".$Corte['hora'].". <br>Con folio: <b>".$corte."</b> y usuario: <b>'".$cobrador['firstname']."(".$cobrador['user_name'].")'.</b> <br>  <b> -Adeudo = $".$Adeudo.". <br>  -Deducibles = $".$Deducir.".<br>   -</b>".$descripcion_v." <br><b>ENTREGO:<br>  *Banco = $".$banco.". <br>  *Efectivo = $".$cantidad.". <br>  *Credito = $".$credito.". <br> <br> Relizado por: ".$Corte['realizo'];
           $Aviso = "Corte del Dia: ".$Corte['fecha'].", Hora: ".$Corte['hora'].". <br>Con folio: <b>".$corte."</b> y usuario: <b>'".$cobrador['firstname']."(".$cobrador['user_name'].")'.</b> ";
