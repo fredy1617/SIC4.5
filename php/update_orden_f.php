@@ -28,7 +28,7 @@ if ($LiquidarS <= 0) {
 		if(mysqli_num_rows($sql_ver)>0){
 		    echo '<script>M.toast({html:"Ya se encuentra un pago con los mismos datos.", classes: "rounded"})</script>';
 		}else{
-			$sql = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, tipo_cambio) VALUES ($IdCliente, '$Descripcion', '$LiquidarS', '$Fecha_hoy', '$Hora', 'Orden Servicio', $id_user, 0, '$TipoE')";
+			$sql = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio) VALUES ($IdCliente, '$Descripcion', '$LiquidarS', '$Fecha_hoy', '$Hora', 'Orden Servicio', $id_user, 0, 0, '$TipoE')";
 			if (mysqli_query($conn, $sql)) {
 				$ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos WHERE id_cliente = $IdCliente"));            
     			$id_pago = $ultimo['id'];

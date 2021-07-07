@@ -82,6 +82,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    <li><a href="servidores.php" class="black-text"><i class="material-icons">router</i>Servidores </a></li>
 				    <li><a href="centrales.php" class="black-text"><i class="material-icons">satellite</i>Centrales </a></li>
 				    <li><a href="fichas.php" class="black-text"><i class="material-icons">tap_and_play</i>Fichas </a></li>
+				    <li><a href="perfiles.php" class="black-text"><i class="material-icons">note</i>Perfiles </a></li>
 				    <li><a href="pedidos.php" class="black-text"><i class="material-icons">assignment</i>Pedidos </a></li>
 				    <li><a href="sistema_mikrotik.php" class="black-text"><i class="material-icons">router</i>Mikrotik </a></li>
 				    <li><a href="form_actividad.php" class="black-text"><i class="material-icons">assignment_turned_in</i>Actividad </a></li>
@@ -100,7 +101,8 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    	<li><a href="canceladas.php" class="black-text"><i class="material-icons">do_not_disturb</i>Canceladas</a></li>    	
 				    	<li><a href="reporte_pedidos_entregados.php" class="black-text"><i class="material-icons">list</i>Pedidos Entregados</a></li>    	
 				    </ul> 
-				    <li><a href="cortes_pagos.php" class="black-text"><i class="material-icons">attach_money</i>Cortes Pagos </a></li>		  
+				    <li><a href="cortes_parciales.php" class="black-text"><i class="material-icons">attach_money</i>Corte Parcial </a></li>		  
+				    <li><a href="cortes_pagos.php" class="black-text"><i class="material-icons">local_atm</i>Cortes Pagos </a></li>		  
 				    <li><a href="Estatus_contratos.php" class="black-text"><i class="material-icons">assignment</i>Contratos Vencidos</a></li>
 				    <li><a href="usuarios.php" class="black-text"><i class="material-icons">people</i>Usuarios </a></li>
 				    <li><a class='dropdown-btn black-text' data-target='sub-dropdown2'><i class="material-icons left">content_cut</i> CORTES <i class="material-icons right">chevron_right</i></a></li>
@@ -190,6 +192,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 						    	  <li><a href="servidores.php"><i class="material-icons">router</i>Servidores</a></li>
 				    			  <li><a href="centrales.php"><i class="material-icons">satellite</i>Centrales </a></li>
 				    			  <li><a href="fichas.php"><i class="material-icons">tap_and_play</i>Fichas </a></li>
+				    			  <li><a href="perfiles.php"><i class="material-icons">note</i>Perfiles </a></li>
 				    			  <li><a href="pedidos.php"><i class="material-icons">assignment</i>Pedidos </a></li>
 				    			  <li><a href="sistema_mikrotik.php"><i class="material-icons">router</i>Mikrotik </a></li>
 					    		</ul>
@@ -208,6 +211,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 								    <li><a href="admin_clientes.php"><i class="material-icons">search</i>Clientes </a></li>
 								    <li><a href="Estatus_contratos.php"><i class="material-icons">assignment</i>Contratos Vencidos</a></li>
 								    <li><a href="cortes_pagos.php"><i class="material-icons">attach_money</i>Cortes Pagos </a></li>
+				    				<li><a href="cortes_parciales.php"><i class="material-icons">attach_money</i>Corte Parcial </a></li>
 								    <li><a href="usuarios.php"><i class="material-icons">people</i>Usuarios </a></li>
 								    <li><a href="rep_pagos.php"><i class="material-icons">report</i>Reporrte Pagos </a></li>
 								    <li><a href="total_cortes.php"><i class="material-icons">money_off</i>Total Cortes</a></li>

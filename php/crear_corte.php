@@ -79,8 +79,8 @@ if ($Pass['pass'] == $Clave){
                     a.target = "_blank";
                     a.href = "../php/corte_pago.php?id="+id_corte;
                     a.click();
-                //RECARGAMOS LA PAGINA cortes_pagos.php EN 2000 Milisegundos = 2 SEGUNDOS
-                setTimeout("location.href='cortes_pagos.php'", 2000);
+                //RECARGAMOS LA PAGINA cortes_pagos.php EN 1500 Milisegundos = 1.5 SEGUNDOS
+                setTimeout("location.href='cortes_pagos.php'", 1500);
             </script>
             <?php                  
         }

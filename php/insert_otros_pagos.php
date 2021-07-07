@@ -98,13 +98,13 @@ if ($entra == "Si") {
   if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdCliente AND descripcion = '$Descripcion' AND cantidad='$Cantidad' AND fecha='$Fecha_hoy'"))>0){
     echo '<script>M.toast({html:"Ya se encuentra un pago registrado con los mismos valores el día de hoy.", classes: "rounded"})</script>';
   }else{
-  $sql = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, tipo_cambio, Cotejado) VALUES ($IdCliente, '$Descripcion', '$Cantidad', '$Fecha_hoy', '$Hora', '$Tipo', $id_user, 0, '$Tipo_Campio', '$Cotejamiento')";
+  $sql = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio, Cotejado) VALUES ($IdCliente, '$Descripcion', '$Cantidad', '$Fecha_hoy', '$Hora', '$Tipo', $id_user, 0, 0, '$Tipo_Campio', '$Cotejamiento')";
   if ($Tipo_Campio == "Credito") {
     $mysql= "INSERT INTO deudas(id_cliente, cantidad, fecha_deuda, tipo, descripcion, usuario) VALUES ($IdCliente, '$Cantidad', '$Fecha_hoy', '$Tipo', '$Descripcion', $id_user)";
     mysqli_query($conn,$mysql);
     $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_deuda) AS id FROM deudas WHERE id_cliente = $IdCliente"));            
     $id_deuda = $ultimo['id'];
-    $sql = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, tipo_cambio, id_deuda, Cotejado) VALUES ($IdCliente, '$Descripcion', '$Cantidad', '$Fecha_hoy', '$Hora', '$Tipo', $id_user, 0, '$Tipo_Campio', $id_deuda, '$Cotejamiento')";
+    $sql = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio, id_deuda, Cotejado) VALUES ($IdCliente, '$Descripcion', '$Cantidad', '$Fecha_hoy', '$Hora', '$Tipo', $id_user, 0, 0, '$Tipo_Campio', $id_deuda, '$Cotejamiento')";
   }
   //o $consultaBusqueda sea igual a nombre + (espacio) + apellido
 

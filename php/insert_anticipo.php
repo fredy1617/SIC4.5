@@ -13,7 +13,7 @@ $id_user = $_SESSION['user_id'];
 if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $IdDispositivo AND descripcion = 'Anticipo' AND tipo = 'Dispositivo' AND fecha='$Fecha_Hoy' AND cantidad='$Monto'"))>0) {
 	echo "<script>M.toast({html: 'Ya se encuentra un abono registrado con los mismos valores el dia de hoy.', classes: 'rounded'})</script>";
 }else{
-	$sql = "INSERT INTO pagos(id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, tipo_cambio, Cotejado) VALUES ($IdDispositivo, 'Anticipo', '$Monto', '$Fecha_Hoy', '$Hora', 'Dispositivo', $id_user, 0, '$Tipo_Cambio', 0)";
+	$sql = "INSERT INTO pagos(id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio, Cotejado) VALUES ($IdDispositivo, 'Anticipo', '$Monto', '$Fecha_Hoy', '$Hora', 'Dispositivo', $id_user, 0, 0, '$Tipo_Cambio', 0)";
 	if (mysqli_query($conn, $sql)) {
 		echo '<script>M.toast({html:"El abono se dió de alta satisfcatoriamente.", classes: "rounded"})</script>';
 		$rs = mysqli_fetch_row(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos"));

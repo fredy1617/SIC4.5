@@ -241,3 +241,32 @@ function recargar10() {
   </div>
 </div>
 <!--Cierre modal Cortes-->
+
+<!--Modal cortes PARCIALES-->
+<div id="corteP" class="modal">
+  <div class="modal-content">
+    <h4 class="red-text center">! Advertencia !</h4><br>
+    <h6 ><b>Una vez generado el corte se comenzara una nueva lista de pagos para el siguinete corte parcial. </b></h6><br>
+    <h5 class="red-text darken-2">¿DESEA CONTINUAR?</h5>
+    <div class="row">
+    <div class="input-field col s6">
+        <i class="material-icons prefix">lock</i>
+        <input type="password" name="claveP" id="claveP">
+        <label for="claveP">Ingresar Clave</label>
+    </div>
+    </div>
+    <h4>Nombre del cobrador</h4>
+      <form class="row">
+      <div class="input-field col s10 m6 l6">
+          <i class="material-icons prefix">people</i>
+          <input id="cobradorP" type="text" class="validate" data-length="30" required>
+          <label for="cobradorP">Nombre:(ej: Marcos Santillan) </label>
+      </div>
+      </form>
+  </div>
+  <div class="modal-footer">
+      <a onclick="recargar_corteP()" class="modal-action modal-close waves-effect waves-green btn-flat">Aceptar</a>
+      <a href="#" class="modal-action modal-close waves-effect waves-red btn-flat">Cerrar<i class="material-icons right">close</i></a>
+  </div>
+</div>
+<!--Cierre modal Cortes PARCIALES-->

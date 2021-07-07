@@ -34,7 +34,7 @@ if ($num_filas > 0) {
     $resto = $Tot-$Total_anti;
     //MANO DE ORBRA-----}
     if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $Id AND descripcion = 'Liquidacion' AND tipo = 'Dispositivo' AND tipo_cambio = '$Tipo_Cambio'")) == 0){
-        $sql = "INSERT INTO pagos(id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, tipo_cambio, Cotejado) VALUES ($Id, 'Liquidacion', '$resto', '$FechaHoy', '$Hora', 'Dispositivo', $id_User, 0, '$Tipo_Cambio', 0)";
+        $sql = "INSERT INTO pagos(id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio, Cotejado) VALUES ($Id, 'Liquidacion', '$resto', '$FechaHoy', '$Hora', 'Dispositivo', $id_User, 0, 0, '$Tipo_Cambio', 0)";
         if (mysqli_query($conn, $sql)){
           echo '<script> M.toast({html :"El pago se dio de alta.", classes: "rounded"});</script>';
         }
