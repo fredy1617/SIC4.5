@@ -1,6 +1,7 @@
 <?php
 include('../php/conexion.php');
 $valorId = $conn->real_escape_string($_POST["valorId"]);
+include('../php/superAdmin.php');
 
 $sql_delete = "DELETE FROM users WHERE user_id=$valorId";
 

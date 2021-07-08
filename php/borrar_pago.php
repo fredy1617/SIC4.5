@@ -2,6 +2,7 @@
 session_start();
 date_default_timezone_set('America/Mexico_City');
 include('../php/conexion.php');
+include('../php/superAdmin.php');
 $IdPago = $conn->real_escape_string($_POST['valorIdPago']);
 $IdCliente = $conn->real_escape_string($_POST['valorIdCliente']);
 $Tipo = $conn->real_escape_string($_POST['valorTipo']);

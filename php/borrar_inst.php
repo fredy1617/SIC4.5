@@ -3,6 +3,8 @@
 include('../php/conexion.php');
 #INCLUIMOS EL PHP DONDE VIENE LA INFORMACION DEL INICIO DE SESSION
 include('is_logged.php');
+include('../php/superAdmin.php');
+
 $id_user = $_SESSION['user_id'];//ID DEL USUARIO LOGEADO EN LA SESSION DEL SISTEMA
 #RECIBIMOS EL LA VARIABLE valorIdCliente CON EL METODO POST QUE ES EL ID DE LA INSTALACION PARA PODERLA BORRAR
 $IdCliente = $conn->real_escape_string($_POST['valorIdCliente']);
