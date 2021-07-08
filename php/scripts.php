@@ -1,7 +1,7 @@
 <!--Adjuntando lo archivos js-->
-<script src="../js/jquery-3.1.1"></script>
-<script src="../js/materialize.min.js"></script>
-<link type="text/css" rel="stylesheet" href="../css/materialize.css" />
+<script src="../Materielize/js/jquery-3.1.1"></script>
+<script src="../Materielize/js/materialize.min.js"></script>
+<link type="text/css" rel="stylesheet" href="../Materielize/css/materialize.css" />
 <script>
  $('.dropdown-button2').dropdown({
       inDuration: 300,
