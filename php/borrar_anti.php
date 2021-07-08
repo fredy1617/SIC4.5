@@ -1,5 +1,6 @@
 <?php
 include('../php/conexion.php');
+include('../php/superAdmin.php');
 
 $IdPago = $conn->real_escape_string($_POST['valorIdPago']);
 $dispositivo = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM pagos WHERE id_pago = '$IdPago'"));

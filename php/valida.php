@@ -15,19 +15,19 @@
 			}else{
 				$comunidad = mysqli_fetch_array($consulta);
 				$id_comunidad = $comunidad['id_comunidad'];
-				$sql = "SELECT * FROM clientes WHERE lugar = '$id_comunidad' AND instalacion IS NOT NULL";
+				$sql = "SELECT * FROM clientes WHERE lugar = '$id_comunidad' AND instalacion IS NOT NULL ORDER BY id_cliente";
 			}
 		}else if (count($SiIp)>1) {
 			//DESPUES VERA SI ESTAMOS BUSACANDO UN CLIENTE POR IP
 			$ip = trim($SiIp[1]);
-			$sql = "SELECT * FROM clientes WHERE ip LIKE '$ip%' AND instalacion IS NOT NULL LIMIT 20";
+			$sql = "SELECT * FROM clientes WHERE ip LIKE '$ip%' AND instalacion IS NOT NULL ORDER BY id_cliente LIMIT 20";
 		}else{
 			//AQUI BUSCARA SI ES POR NOMBRE O POR ID DE CLIENTE
-			$sql = "SELECT * FROM clientes WHERE ( nombre LIKE '%$Texto%' OR id_cliente = '$Texto') AND instalacion IS NOT NULL LIMIT 20";
+			$sql = "SELECT * FROM clientes WHERE ( nombre LIKE '%$Texto%' OR id_cliente = '$Texto') AND instalacion IS NOT NULL ORDER BY id_cliente LIMIT 20";
 		}
 	}else{
 		//ESTA CONSULTA SE HARA SIEMPRE QUE NO ALLA NADA EN EL BUSCADOR...
-		$sql = "SELECT * FROM clientes WHERE instalacion IS NOT NULL LIMIT 30";
+		$sql = "SELECT * FROM clientes WHERE instalacion IS NOT NULL ORDER BY id_cliente LIMIT 30";
 	}
 
 	$consulta = mysqli_query($conn, $sql);
@@ -37,7 +37,7 @@
 	//Si no existe ninguna fila que sea igual a $consultaBusqueda, entonces mostramos el siguiente mensaje
 	$filas2 = 1;
 	if ($filas == 0) {
-		$sql2 = "SELECT * FROM especiales WHERE nombre LIKE '%$Texto%'  OR   id_cliente LIKE '$Texto'";
+		$sql2 = "SELECT * FROM especiales WHERE nombre LIKE '%$Texto%' OR  id_cliente LIKE '$Texto'";
 		$consulta = mysqli_query($conn, $sql2);
 		//Obtiene la cantidad de filas que hay en la consulta
 		$filas2 = mysqli_num_rows($consulta);
