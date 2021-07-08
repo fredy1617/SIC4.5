@@ -27,9 +27,9 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<!--Import material-icons.css-->
-      <link href="css/material-icons.css" rel="stylesheet">
+      <link href="../Materialize/css/material-icons.css" rel="stylesheet">
       <!--Import materialize.css-->
-      <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+      <link type="text/css" rel="stylesheet" href="../Materialize/css/materialize.min.css"  media="screen,projection"/>
       <!--Let browser know website is optimized for mobile-->
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	  <link rel="shortcut icon" href="../img/logo.jpg" type="image/jpg" />
@@ -242,9 +242,9 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 	include('../views/modals.php');
 	include('../php/scripts.php');
 	?>
-	<script src="js/jquery-3.1.1.js"></script>
+	<script src="../Materialize/js/jquery-3.1.1.js"></script>
 	<!--JavaScript at end of body for optimized loading-->
-    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script type="text/javascript" src="../Materialize/js/materialize.min.js"></script>
 	<script>
     	$(document).ready(function() {	    
 	 	$('.dropdown-button').dropdown({
