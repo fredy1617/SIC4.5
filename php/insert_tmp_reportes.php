@@ -18,8 +18,8 @@ if ($EnCampo['campo']==0 ) {
     	echo '<script>M.toast({html:"Ya se encuentra este reporte en ruta.", classes: "rounded"})</script>';
     }else{
     	if(mysqli_query($conn, "INSERT INTO tmp_reportes (id_reporte, usuario, hora) VALUES ('$id_Reporte', '$id_user', '$Hora')")){
-    		echo '<script>M.toast({html:"Reporte agregado correctamente a la ruta.", classes: "rounded"})</script>';
-    	}	
+            echo '<script>M.toast({html:"Reporte agregado correctamente a la ruta.", classes: "rounded"})</script>';
+        }	
     }
 }
 ?>

@@ -86,6 +86,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    <li><a href="pedidos.php" class="black-text"><i class="material-icons">assignment</i>Pedidos </a></li>
 				    <li><a href="sistema_mikrotik.php" class="black-text"><i class="material-icons">router</i>Mikrotik </a></li>
 				    <li><a href="form_actividad.php" class="black-text"><i class="material-icons">assignment_turned_in</i>Actividad </a></li>
+				    <li><a href="../views/inventario.php" class="black-text"><i class="material-icons">list</i>Inventario </a></li>
 				</ul>
 				<li><a class='dropdown-button' data-target='dropdown3'><i class="material-icons left">account_circle</i>Admin <i class="material-icons right">arrow_drop_down</i></a></li>
 				<ul id='dropdown3' class='dropdown-content'>
@@ -185,6 +186,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 						    	  <li><a href="tel.php"><i class="material-icons">phone</i>Teléfono <span class=" new badge pink" data-badge-caption=""><?php echo $tel['count(*)'];?></span></a></li>
 						    	  <li><a href="menu_rutas.php"><i class="material-icons">near_me</i>Rutas <span class=" new badge pink" data-badge-caption=""><?php echo $rutas['count(*)'];?></span></a></li>
 				    			  <li><a href="form_actividad.php"><i class="material-icons">assignment_turned_in</i>Actividad </a></li>
+				    			  <li><a href="../views/inventario.php"><i class="material-icons">list</i>Inventario </a></li>
 						    	  <li><a href="facturar_p.php"><i class="material-icons">assignment_late</i>Fac. Pendientes </a></li>   
 				    			  <li><a href="facturar_l.php"><i class="material-icons">assignment_turned_in</i>Fac. Listas </a></li>
 						    	  <li><a href="paquetes.php"><i class="material-icons">import_export</i>Paquetes</a></li>
@@ -223,7 +225,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    				<li><a href="reporte_material.php"><i class="material-icons">router</i>Reporte Material</a></li>  	
 				    				<li><a href="rep_ruta.php"><i class="material-icons">location_on</i>Reporte Rutas</a></li>    	
 				    				<li><a href="canceladas.php"><i class="material-icons">do_not_disturb</i>Canceladas</a></li>
-				    				<li><a href="reporte_pedidos_entregados.php"><i class="material-icons">list</i>Pedidos Entregados</a></li>    
+				    				<li><a href="reporte_pedidos_entregados.php"><i class="material-icons">list</i>Pedidos Entregados</a></li>   
 								    <li><a href="reporte_x_fecha.php"><i class="material-icons">assignment_turned_in</i>Trabajo Realizado</a></li>
 				    				<li><a href="calendario.php"><i class="material-icons">date_range</i>Calendario</a></li>
 								    <li><a href="en_cajas.php"><i class="material-icons">archive</i>En Cajas</a></li>
