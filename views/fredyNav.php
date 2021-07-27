@@ -251,19 +251,21 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
     	$(document).ready(function() {	    
 	 	$('.dropdown-button').dropdown({
 	      	  inDuration: 500,
-	          outDuration: 500, constrainWidth: false, // Does not change width of dropdown to that of the activator
+	          outDuration: 500, 
+	          constrainWidth: false, // Does not change width of dropdown to that of the activator
 	          coverTrigger: false, 
 	    });
 	    $('.dropdown-btn').dropdown({
 	      	  inDuration: 500,
 	          outDuration: 500,
 	          hover: true,
-	          constrainWidth: false, // Does not change width of dropdown to that of the activator
+	          constrainWidth: true, // Does not change width of dropdown to that of the activator
 	          coverTrigger: false, 
 	    });
 	    $('.dropdown-btn1').dropdown({
 	      	  inDuration: 500,
 	          outDuration: 500,
+	          alignment: 'left',
 	          hover: true,
 	          constrainWidth: true, // Does not change width of dropdown to that of the activator
 	          coverTrigger: false, 
