@@ -32,11 +32,11 @@
               <?php
               $aux = mysqli_num_rows($ingresos);
               if ($aux > 0) {
-                $Total = 0;
+                $Total_I = 0;
                 while ($ingreso = mysqli_fetch_array($ingresos)) {
                   $id_user = $ingreso['usuario'];
                   $user = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id = '$id_user'"));
-                  $Total += $ingreso['cantidad'];
+                  $Total_I += $ingreso['cantidad'];
               ?>
                   <tr>
                     <td><b><?php echo $ingreso['id'];?></b></td>         
@@ -54,7 +54,7 @@
                     <td></td>
                     <td></td>
                     <td><b>TOTAL = </b></td>
-                    <td><b>$<?php echo $Total;?></b></td>
+                    <td><b>$<?php echo $Total_I;?></b></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -85,11 +85,11 @@
               <?php
               $aux = mysqli_num_rows($egresos);
               if ($aux > 0) {
-                $Total = 0;
+                $Total_E = 0;
                 while ($egreso = mysqli_fetch_array($egresos)) {
                   $id_user = $egreso['usuario'];
                   $user = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id = '$id_user'"));
-                  $Total += $egreso['cantidad'];
+                  $Total_E += $egreso['cantidad'];
               ?>
                   <tr>
                     <td><b><?php echo $egreso['id'];?></b></td>         
@@ -107,7 +107,7 @@
                     <td></td>
                     <td></td>
                     <td><b>TOTAL = </b></td>
-                    <td><b>$<?php echo $Total;?></b></td>
+                    <td><b>$<?php echo $Total_E;?></b></td>
                     <td></td>
                     <td></td>
                     <td></td>
