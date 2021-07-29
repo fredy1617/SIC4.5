@@ -62,7 +62,7 @@
                 while($fila = mysqli_fetch_array($sql_efectivoI)){
                     //insertar pagos de corte...
                     $id_pago = $fila['id_pago'];
-                    mysqli_query($conn,"INSERT INTO detalles_parciales(id_corte, id_pago) VALUES ($corte, $id_pago )");
+                    mysqli_query($conn,"INSERT INTO detalles_parciales(corte, id_pago) VALUES ($corte, $id_pago )");
                     $this->SetX(6);
                     $this->MultiCell(70,4,utf8_decode("Cliente: # " .$fila['id_cliente'].'; '.$fila['descripcion'].'; Tipo: '.$fila['tipo']),0,'L',true);
                     $this->MultiCell(70,4,utf8_decode("$ ". $fila['cantidad'].'.00'),0,'R',true);
@@ -96,7 +96,7 @@
                       $referecia = mysqli_fetch_array($sqlR);
                       $refe = $referecia['descripcion'];
                     }
-                    mysqli_query($conn,"INSERT INTO detalles_parciales(id_corte, id_pago) VALUES ($corte, $id_pago )");
+                    mysqli_query($conn,"INSERT INTO detalles_parciales(corte, id_pago) VALUES ($corte, $id_pago )");
                     $this->SetX(6);
                     $this->MultiCell(70,4,utf8_decode("Cliente: # ".$fila['id_cliente'].'; '.$fila['descripcion'].'; Tipo: '.$fila['tipo'].' ('.$refe.')'),0,'L',true);
                     $this->MultiCell(70,4,utf8_decode("$ ". $fila['cantidad'].'.00'),0,'R',true);
@@ -122,7 +122,7 @@
                 while($fila = mysqli_fetch_array($sql_creditoI)){
                     //insertar pagos de corte...
                     $id_pago = $fila['id_pago'];
-                    mysqli_query($conn,"INSERT INTO detalles_parciales(id_corte, id_pago) VALUES ($corte, $id_pago )");
+                    mysqli_query($conn,"INSERT INTO detalles_parciales(corte, id_pago) VALUES ($corte, $id_pago )");
                     $this->SetX(6);
                     $this->MultiCell(70,4,utf8_decode("Cliente: # " .$fila['id_cliente'].'; '.$fila['descripcion'].'; Tipo: '.$fila['tipo']),0,'L',true);
                     $this->MultiCell(70,4,utf8_decode("$ ". $fila['cantidad'].'.00'),0,'R',true);
@@ -152,7 +152,7 @@
                 while($fila = mysqli_fetch_array($sql_efectivoO)){
                     //insertar pagos de corte...
                     $id_pago = $fila['id_pago'];
-                    mysqli_query($conn,"INSERT INTO detalles_parciales(id_corte, id_pago) VALUES ($corte, $id_pago )");
+                    mysqli_query($conn,"INSERT INTO detalles_parciales(corte, id_pago) VALUES ($corte, $id_pago )");
                     $this->SetX(6);
                     $this->MultiCell(70,4,utf8_decode("Cliente: # " .$fila['id_cliente'].'; '.$fila['descripcion'].'; Tipo: '.$fila['tipo']),0,'L',true);
                     $this->MultiCell(70,4,utf8_decode("$ ". $fila['cantidad'].'.00'),0,'R',true);
@@ -178,7 +178,7 @@
                 while($fila = mysqli_fetch_array($sql_bancoO)){
                     //insertar pagos de corte...
                     $id_pago = $fila['id_pago'];
-                    mysqli_query($conn,"INSERT INTO detalles_parciales(id_corte, id_pago) VALUES ($corte, $id_pago )");
+                    mysqli_query($conn,"INSERT INTO detalles_parciales(corte, id_pago) VALUES ($corte, $id_pago )");
                     $this->SetX(6);
                     $this->MultiCell(70,4,utf8_decode("Cliente: # ".$fila['id_cliente'].'; '.$fila['descripcion'].'; Tipo: '.$fila['tipo']),0,'L',true);
                     $this->MultiCell(70,4,utf8_decode("$ ". $fila['cantidad'].'.00'),0,'R',true);
@@ -210,7 +210,7 @@
                 while($fila = mysqli_fetch_array($sql_efectivoST)){
                     //insertar pagos de corte...
                     $id_pago = $fila['id_pago'];
-                    mysqli_query($conn,"INSERT INTO detalles_parciales(id_corte, id_pago) VALUES ($corte, $id_pago )");
+                    mysqli_query($conn,"INSERT INTO detalles_parciales(corte, id_pago) VALUES ($corte, $id_pago )");
                     $this->SetX(6);
                     $this->MultiCell(70,4,utf8_decode("Cliente: # " .$fila['id_cliente'].'; '.$fila['descripcion'].'; Tipo: '.$fila['tipo']),0,'L',true);
                     $this->MultiCell(70,4,utf8_decode("$ ". $fila['cantidad'].'.00'),0,'R',true);
@@ -236,7 +236,7 @@
                 while($fila = mysqli_fetch_array($sql_bancoST)){
                     //insertar pagos de corte...
                     $id_pago = $fila['id_pago'];
-                    mysqli_query($conn,"INSERT INTO detalles_parciales(id_corte, id_pago) VALUES ($corte, $id_pago )");
+                    mysqli_query($conn,"INSERT INTO detalles_parciales(corte, id_pago) VALUES ($corte, $id_pago )");
                     $this->SetX(6);
                     $this->MultiCell(70,4,utf8_decode("Cliente: # ".$fila['id_cliente'].'; '.$fila['descripcion'].'; Tipo: '.$fila['tipo']),0,'L',true);
                     $this->MultiCell(70,4,utf8_decode("$ ". $fila['cantidad'].'.00'),0,'R',true);
