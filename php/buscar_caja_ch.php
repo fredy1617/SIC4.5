@@ -32,9 +32,11 @@
               <?php
               $aux = mysqli_num_rows($ingresos);
               if ($aux > 0) {
+                $Total = 0;
                 while ($ingreso = mysqli_fetch_array($ingresos)) {
                   $id_user = $ingreso['usuario'];
                   $user = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id = '$id_user'"));
+                  $Total += $ingreso['cantidad'];
               ?>
                   <tr>
                     <td><b><?php echo $ingreso['id'];?></b></td>         
@@ -47,6 +49,17 @@
                   </tr>
                 <?php 
                 }//fin while
+                ?>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td><b>TOTAL = </b></td>
+                    <td><b>$<?php echo $Total;?></b></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                <?php
               }else{
                 echo "<center><b><h3>No se han registrado ingresos</h3></b></center>";
               }
@@ -72,9 +85,11 @@
               <?php
               $aux = mysqli_num_rows($egresos);
               if ($aux > 0) {
+                $Total = 0;
                 while ($egreso = mysqli_fetch_array($egresos)) {
                   $id_user = $egreso['usuario'];
                   $user = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id = '$id_user'"));
+                  $Total += $egreso['cantidad'];
               ?>
                   <tr>
                     <td><b><?php echo $egreso['id'];?></b></td>         
@@ -87,6 +102,17 @@
                   </tr>
                 <?php 
                 }//fin while
+                ?>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td><b>TOTAL = </b></td>
+                    <td><b>$<?php echo $Total;?></b></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                <?php
               }else{
                 echo "<center><b><h3>No se han registrado egresos</h3></b></center>";
               }
