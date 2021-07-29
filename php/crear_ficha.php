@@ -7,7 +7,7 @@ session_start();
 include('../php/conexion.php');
 #CREAMOS UNA FUNCION LA CUAL CREARA  NUMERO Y LETRAS MAYUSCULAS ALEATORIAS SEGUN LA LONGITUD QUE SE LE INDIQUE
 function generarRandomStringNum($length) { 
-  return substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $length); 
+  return substr(str_shuffle("123456789ABCDEFGHIJKLMNPQRSTUVWXYZ"), 0, $length); 
 }
 #CREAMOS UNA FUNCION LA CUAL CREA NUMEROS ALEATORIOS SEGUN A LA LONGITUD QUE SE LE INDIQUE
 function generarRandomNum($length) { 

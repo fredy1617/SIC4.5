@@ -57,9 +57,19 @@
         $("#mostrar_resultados").html(mensaje);
         }); 
       };
-  </script>
+      function buscar() {
+        var textoDe = $("input#fecha_de").val();
+        var textoA = $("input#fecha_a").val();
+        $.post("../php/buscar_caja_ch.php", {
+              valorDe: textoDe,
+              valorA: textoA,
+        }, function(mensaje) {
+                $("#datos").html(mensaje);
+        }); 
+      };
+    </script>
   </head>
-  <body>
+  <body onload="buscar();">
   	<div class="container" id="mostrar_resultados">
       <?php       
       // SACAMOS LA SUMA DE TODOS LOS EGRESOSO E INGRESOSO DE LA CAJA CHICA
@@ -101,90 +111,20 @@
         <br>
       </div>
       <br><hr><hr><br>
-      <div class="row" >
-        <div class="col s12 m6 l6">
-          <h4>Ingresos: </h4>
-          <table>
-            <thead>
-                <tr>
-                  <th>Id</th>
-                  <th>Cantidad</th>
-                  <th>Fecha y Hora</th>
-                  <th>Descripcion</th>
-                  <th>Usuario</th>
-                  <th>Imprimir</th>
-                  <th>Borrar</th>
-                </tr>
-            </thead>
-            <tbody>
-              <?php
-              $ingresos = mysqli_query($conn, "SELECT * FROM historila_caja_ch WHERE tipo = 'Ingreso'");
-              $aux = mysqli_num_rows($ingresos);
-              if ($aux > 0) {
-                while ($ingreso = mysqli_fetch_array($ingresos)) {
-                  $id_user = $ingreso['usuario'];
-                  $user = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id = '$id_user'"));
-              ?>
-                  <tr>
-                    <td><b><?php echo $ingreso['id'];?></b></td>         
-                    <td>$<?php echo $ingreso['cantidad'];?></td>
-                    <td><?php echo $ingreso['fecha'].' '.$ingreso['hora'];?></td>
-                    <td><?php echo $ingreso['descripcion'];?></td>
-                    <td><?php echo $user['user_name'];?></td>
-                    <td><a onclick="imprimir(<?php echo $ingreso['id']; ?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>
-                    <td><a onclick="borrar_caja(<?php echo $ingreso['id']; ?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
-                  </tr>
-                <?php 
-                }//fin while
-              }else{
-                echo "<center><b><h3>No se han registrado ingresos</h3></b></center>";
-              }
-              ?>
-            </tbody>
-          </table>
+      <div class="row">
+        <div class="col s12 l4 m4">
+          <label for="fecha_de">De:</label>
+          <input id="fecha_de" type="date" >    
         </div>
-        <div class="col s12 m6 l6">
-          <h4>Egresos: </h4>
-          <table >
-            <thead>
-                <tr>
-                  <th>Id</th>
-                  <th>Cantidad</th>
-                  <th>Fecha y Hora</th>
-                  <th>Descripcion</th>
-                  <th>Usuario</th>
-                  <th>Imprimir</th>
-                  <th>Borrar</th>
-                </tr>
-            </thead>
-            <tbody>
-              <?php
-              $egresos = mysqli_query($conn, "SELECT * FROM historila_caja_ch WHERE tipo = 'Egreso'");
-              $aux = mysqli_num_rows($egresos);
-              if ($aux > 0) {
-                while ($egreso = mysqli_fetch_array($egresos)) {
-                  $id_user = $egreso['usuario'];
-                  $user = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id = '$id_user'"));
-              ?>
-                  <tr>
-                    <td><b><?php echo $egreso['id'];?></b></td>         
-                    <td>$<?php echo $egreso['cantidad'];?></td>
-                    <td><?php echo $egreso['fecha'].' '.$egreso['hora'];?></td>
-                    <td><?php echo $egreso['descripcion'];?></td>
-                    <td><?php echo $user['user_name'];?></td>
-                    <td><a onclick="imprimir(<?php echo $egreso['id']; ?>);" class="btn btn-floating pink waves-effect waves-light"><i class="material-icons">print</i></a></td>
-                    <td><a onclick="borrar_caja(<?php echo $egreso['id']; ?>);" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>
-                  </tr>
-                <?php 
-                }//fin while
-              }else{
-                echo "<center><b><h3>No se han registrado egresos</h3></b></center>";
-              }
-              ?>
-            </tbody>
-          </table>
+        <div class="col s12 l4 m4">
+          <label for="fecha_a">A:</label>
+          <input id="fecha_a" type="date" >
+        </div><br>
+        <div>
+          <button class="btn waves-light waves-effect right pink" onclick="buscar();"><i class="material-icons prefix right">send</i> FILTRAR</button>
         </div>
       </div>
+      <div id="datos"></div>
   	</div>
   </body>
 </html>
