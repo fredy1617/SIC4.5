@@ -5,23 +5,27 @@ include('../php/conexion.php');
 #RECIBIMOS EL VALOR Codigo QUE SE NOS ENVIA DESDE EL FORMULARIO DE LA VISTA INVENTARIO (PARA VERIFICAR)
 $Codigo = $conn->real_escape_string($_POST['codigo']);
 
-//VERIFICAR SI EL CODIGO ES NUEVO O YA EXISTE (PRODUCTO/MATERIAL)
-$query = mysqli_query($conn, "SELECT * FROM inventario WHERE codigo = $Codigo");
-if (mysqli_num_rows($query)>0) {
-	$producto = mysqli_fetch_array($query);
-	$existe = 'SI';
-  $nombre = $producto['nombre'];
-  $unidad = '<option value="'.$producto['unidad'].'" selected>'.$producto['unidad'].'</option>';
-	$marca = $producto['marca'];
-  $estatus = $producto['estatus'];
-  $responsable = '<option value="'.$producto['responsable'].'" selected>'.$producto['responsable'].'</option>';
-}else{
-	$existe = 'NO';
-  $nombre = '';
-  $unidad = '<option value="0" selected>Unidad: </option>';
-  $marca = '';  
-  $estatus = '';
-  $responsable = '<option value="0" selected>Responsable: </option>';
+#DECLARAMOS LAS VARIABLES NORMARES O VACIAS LA UNICA FORMA EN QUE CAMBIEN ES SI PASA LAS DOS CONDICONES IF
+$existe = 'NO';
+$nombre = '';
+$unidad = '<option value="0" selected>Unidad: </option>';
+$marca = '';  
+$estatus = '';
+$responsable = '<option value="0" selected>Responsable: </option>';
+#CHECAMOS SI HAY ALGO EN EL INPUT CODIGO
+if ($Codigo != '') {
+  //VERIFICAR SI EL CODIGO ES NUEVO O YA EXISTE (PRODUCTO/MATERIAL)
+  $query = mysqli_query($conn, "SELECT * FROM inventario WHERE codigo = $Codigo");
+  if (mysqli_num_rows($query)>0) {
+    #SI YA EXISTE RELLENAMOS EL FORMULARIO CON LA INFO YA PUESTA
+    $producto = mysqli_fetch_array($query);
+    $existe = 'SI';
+    $nombre = $producto['nombre'];
+    $unidad = '<option value="'.$producto['unidad'].'" selected>'.$producto['unidad'].'</option>';
+    $marca = $producto['marca'];
+    $estatus = $producto['estatus'];
+    $responsable = '<option value="'.$producto['responsable'].'" selected>'.$producto['responsable'].'</option>';
+  }
 }
 ?>
 <div class="row col s12" id="resultado_codigo">
