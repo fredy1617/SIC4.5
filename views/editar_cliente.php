@@ -257,9 +257,17 @@ $paquete_cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM paquete
           </select>
         </div>
         </div><br>
+        <?php
+        $id_user = $_SESSION['user_id']; 
+        if ($id_user == 49 OR $id_user == 10 OR $id_user == 75 OR $id_user == 70) {
+          $FCORTE = '';
+        }else{
+          $FCORTE = 'disabled';
+        }
+        ?>
         <div class="input-field">
           <i class="material-icons prefix">date_range</i>
-          <input id="fecha_corte" type="date" class="validate" value="<?php echo $cliente['fecha_corte'];?>" required>
+          <input <?php echo $FCORTE;?>  id="fecha_corte" type="date" class="validate" value="<?php echo $cliente['fecha_corte'];?>" required>
           <label for="fecha_corte">Fecha de Corte Internet:</label>
         </div>
         <div class="input-field">
