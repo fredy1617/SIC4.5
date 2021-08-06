@@ -14,6 +14,7 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
         <th>Costo</th>
         <th width="12%">Fecha</th>
         <th>Hora</th>
+        <th>Registro</th>
         <th>Técnicos</th>
         <th>Se Pago</th>
       </tr>
@@ -62,6 +63,7 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
           <td>$<?php echo $instalaciones['total'];?></td>
           <td><?php echo $instalaciones['fecha_instalacion'];?></td>
           <td><?php echo $instalaciones['hora_alta']; ?></td>
+          <td><?php echo $instalaciones['registro'];?></td>
           <td><?php echo $instalaciones['tecnico'];?></td>
           <td><?php echo $Estatus; ?></td>
         </tr>
