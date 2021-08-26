@@ -106,7 +106,7 @@
                     <td>'.$resultados['descripcion'].'</td>
                     <td>'.$resultados['falla'].'</td>
                     <td>'.$resultados['fecha'].'</td>
-                    <td>'.$comunidad['nombre'].'</td>
+                    <td>'.$comunidad['nombre'].', '.$comunidad['municipio'].'</td>
                     <td>'.$tecnico1[1].$Apoyo.'</td>
                     <td>'.$Usuario.'</td>
                     '.$mas.'
