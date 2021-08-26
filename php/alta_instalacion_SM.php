@@ -14,6 +14,7 @@ $caracteres_buenos = array("& lt;", "& gt;", "& quot;", "& #x27;", "& #x2F;", "&
 
 $id_user = $_SESSION['user_id'];
 
+#VARIABLES RECIBIDAS POR EL FORMULARIO form_instalaciones.php ENVIDAS POR EL METODO $_POST
 $IdCliente = str_replace($caracteres_malos, $caracteres_buenos, $filtrarIdCliente);
 $Tecnico = str_replace($caracteres_malos, $caracteres_buenos, $filtrarTecnico);
 $Liquidar = $conn->real_escape_string($_POST['valorLiquidar']);
