@@ -27,6 +27,7 @@ if ($filas == 0) {
 			<tr>
 				<td>'.$resultados['id_comunidad'].'</td>
 		        <td>'.$resultados['nombre'].'</td>
+		        <td>'.$resultados['municipio'].'</td>
 		        <td>'.$servidor['nombre'].'</td>
 		        <td>'.$resultados['instalacion'].'</td>
 		        <td><form method="post" action="../views/editar_comunidad.php"><input name="no_comunidad" type="hidden" value="'.$resultados['id_comunidad'].'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">edit</i></button></form></td>

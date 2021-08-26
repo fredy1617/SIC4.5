@@ -20,17 +20,21 @@ function insert_comunidad() {
     var textoNombre = $("input#nombre").val();
     var textoInstalacion = $("input#instalacion").val();
     var textoServidor = $("select#servidor").val();
+    var textoMunicipio = $("select#municipio").val();
   
     if (textoNombre == "") {
       M.toast({html :"Por favor ingrese el nombre la comunidad.", classes: "rounded"});
     }else if(textoInstalacion == 0){
       M.toast({html :"El precio de instalación no puede quedar en 0.", classes: "rounded"});
     }else if(textoServidor == 0){
+      M.toast({html :"Por favor seleccione un Municipio.", classes: "rounded"});
+    }else if(textoServidor == 0){
       M.toast({html :"Por favor seleccione un servidor.", classes: "rounded"});
     }else{
       $.post("../php/insert_comunidad.php", {
           valorNombre: textoNombre,
           valorInstalacion: textoInstalacion,
+          valorMunicipio: textoMunicipio,
           valorServidor: textoServidor
         }, function(mensaje) {
             $("#resultado_comunidad").html(mensaje);
@@ -47,17 +51,30 @@ function insert_comunidad() {
     <h5 class="hide-on-large-only">Registrar Comunidad</h5>
   </div>
     <div class="row">
-      <div class="input-field col s7 m5 l5">
+      <div class="input-field col s7 m4 l4">
          <i class="material-icons prefix">business</i>
         <input type="text" id="nombre">
         <label for="nombre">Comunidad:</label>
       </div>
-      <div class="input-field col s5 m3 l3">
+      <div class="input-field col s7 m3 l3">
+        <select id="municipio" class="browser-default">
+          <option value="0" selected>Seleccione un municipio</option>
+          <option value="SOMBRERETE">SOMBRERETE</option>
+          <option value="CHALCHIHUITES">CHALCHIHUITES</option>
+          <option value="FRESNILLO">FRESNILLO</option>
+          <option value="JIMENEZ DEL TEUL">JIMENEZ DEL TEUL</option>
+          <option value="MIGUEL AUZA">MIGUEL AUZA</option>
+          <option value="RIO GRANDE">RIO GRANDE</option>
+          <option value="SAIN ALTO">SAIN ALTO</option>
+          <option value="VALPARAISO">VALPARAISO</option>
+        </select>
+      </div>
+      <div class="input-field col s5 m2 l2">
          <i class="material-icons prefix">monetization_on</i>
         <input type="number" id="instalacion" value="0">
         <label for="instalacion">Costo de Instalación:</label>
       </div>
-      <div class="input-field col s7 m4 l4">
+      <div class="input-field col s7 m3 l3">
         <select id="servidor" class="browser-default">
           <option value="0" selected>Seleccione un servidor</option>
           <?php
@@ -75,8 +92,8 @@ function insert_comunidad() {
         <a onclick="insert_comunidad();" class="waves-effect waves-light btn pink left right"><i class="material-icons center">send</i></a>
       </div>
     </div>
-    
-    <div id="resultado_comunidad">
+    <div id="resultado_comunidad"></div>
+    <div>
     <div class="row">
       <br><br>
       <h3 class="hide-on-med-and-down col s12 m6 l6">Comunidades</h3>
@@ -97,6 +114,7 @@ function insert_comunidad() {
                     <tr>
                         <th>No. Comunidad</th>
                         <th>Nombre</th>
+                        <th>Municipio</th>
                         <th>Servidor</th>
                         <th>Costo de Instalación</th>
                         <th>Editar</th>
