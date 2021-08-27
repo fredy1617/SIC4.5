@@ -45,7 +45,7 @@ if ($Tipo == 'tecnico') {
 				$tecnico = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id=$id_tecnico"));
 			}
 			$id_apoyo=$info['apoyo'];
-			if ($id_apoyo == NULL) {
+			if ($id_apoyo == NULL OR $id_apoyo == 0) {
 				$apoyo['user_name'] = 'Sin apoyo';
 			}else{
 				$apoyo = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id=$id_apoyo"));
