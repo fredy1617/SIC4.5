@@ -152,7 +152,7 @@ $user_id = $_SESSION['user_id'];
                     <td><a class="tooltipped" data-position="top" data-tooltip=" Telefono: '.$cliente['telefono'].'  Comunidad: '.$comunidad['nombre'].'">'.$cliente['nombre'].'</a></td>
                     <td>'.$resultados['descripcion'].'</td>
                     <td>'.$resultados['fecha'].'</td>
-                    <td>'.$comunidad['nombre'].'</td>
+                    <td>'.$comunidad['nombre'].', '.$comunidad['nombre'].'</td>
                     <td>'.$tecnico1[1].$Apoyo.'</td>
                     <td>'.$Usuario.'</td>
                     <td><br><form action="atender_reporte.php" method="post"><input type="hidden" name="id_reporte" value="'.$id_reporte.'"><button type="submit" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">send</i></button></form></td>
