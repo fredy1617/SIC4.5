@@ -11,7 +11,6 @@ $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE atendido = 1 OR atendid
 <script>
 	function buscar_reporte(tipo) {
 		if (tipo == 1) {
-			textoNombre = "";
 			textoTipo = "tecnico";
 			var textoDe = $("input#fecha_de1").val();
 		    var textoA = $("input#fecha_a1").val();
@@ -24,17 +23,12 @@ $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE atendido = 1 OR atendid
 			textoTipo = "cliente";
 			var textoDe = $("input#fecha_de").val();
 		    var textoA = $("input#fecha_a").val();
-		    var textoNombre = $("input#nombre").val();
-		    if (textoNombre == "") {
-	      		M.toast({html:"Ingrese un nombre.", classes: "rounded"});
-	    	}
 		}
 	    $.post("../php/buscar_reporte.php", {
 	    	  valorTipo: textoTipo,
 	          valorDe: textoDe,
 	          valorA: textoA,
 	          valorUsuario: textoUsuario,
-	          valorNombre: textoNombre
 	        }, function(mensaje) {
 	            $("#resultado_pagos").html(mensaje);
 	        }); 
@@ -53,7 +47,7 @@ $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE atendido = 1 OR atendid
 	    <div class="col s12">
 	    <ul id="tabs-swipe-demo" class="tabs">
 	      <li class="tab col s6"><a class="active black-text" href="#test-swipe-1">Tecnico</a></li>
-	      <li class="tab col s6"><a class="black-text" href="#test-swipe-2">Cliente</a></li>
+	      <li class="tab col s6"><a class="black-text" href="#test-swipe-2">General</a></li>
 	    </ul>
 	    </div>
 <!-- ----------------------------  FORMULARIO 1 Tabs  ---------------------------------------->
@@ -96,13 +90,7 @@ $sql = mysqli_query($conn, "SELECT * FROM reportes WHERE atendido = 1 OR atendid
 	            <div class="col s12 l4 m4">
 	                <label for="fecha_a">A:</label>
 	                <input id="fecha_a"  type="date">
-	            </div>
-
-	            <div class="input-field col s12 l4 m4">
-		          <input id="nombre" type="text" class="validate" data-length="30" required>
-		          <label for="nombre">Cliente: (Id, Nombre)</label>
-	            </div>
-	            <br><br><br>
+	            </div><br>
 	            <div>
 	                <button class="btn waves-light waves-effect right pink" onclick="buscar_reporte(2);"><i class="material-icons prefix">send</i></button>
 	            </div>
