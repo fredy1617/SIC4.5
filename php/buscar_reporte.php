@@ -46,9 +46,10 @@ if ($Tipo == 'tecnico') {
 			}
 			$id_apoyo=$info['apoyo'];
 			if ($id_apoyo == NULL OR $id_apoyo == 0) {
-				$apoyo['user_name'] = 'Sin apoyo';
+				$apoyo = '';
 			}else{
-				$apoyo = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id=$id_apoyo"));
+				$sql_apoyo = mysqli_fetch_array(mysqli_query($conn, "SELECT user_name FROM users WHERE user_id=$id_apoyo"));
+				$apoyo = ', Apoyo: '.$sql_apoyo['user_name'];
 			}
 			?>
 			<tr>
@@ -59,7 +60,7 @@ if ($Tipo == 'tecnico') {
 				<td><?php echo $info['fecha_solucion']; ?></td>
 				<td><?php echo $info['hora_atendido']; ?></td>
 				<td><?php echo $info['descripcion']; ?></td>
-				<td><?php echo $tecnico['user_name'].' Apoyo: '.$apoyo['user_name']; ?></td>
+				<td><?php echo $tecnico['user_name'].$apoyo; ?></td>
 			</tr>
 		<?php } //FIN WHILE
 		mysqli_close($conn);
