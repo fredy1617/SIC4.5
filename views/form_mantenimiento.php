@@ -62,7 +62,7 @@ function insert_mantenimiento() {
 		            require('../php/conexion.php');
 		            $sql = mysqli_query($conn,"SELECT * FROM comunidades ORDER BY nombre");
 		            while($comunidad = mysqli_fetch_array($sql)){ ?>
-		                <option value="<?php echo $comunidad['id_comunidad'];?>"><?php echo $comunidad['nombre'];?></option>
+		                <option value="<?php echo $comunidad['id_comunidad'];?>"><?php echo $comunidad['nombre'].', '.$comunidad['municipio'];?></option>
 		            <?php  }  ?>
 		          </select>
 		        </div>
