@@ -89,8 +89,8 @@
               if ($id_comunidad == "") {
                 $comuni= "CONOCIDA";
               }else{
-                $sql_comunidad = mysqli_fetch_array(mysqli_query($conn,"SELECT nombre FROM comunidades WHERE id_comunidad=$id_comunidad"));
-                $comuni=$sql_comunidad['nombre'];
+                $sql_comunidad = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad"));
+                $comuni=$sql_comunidad['nombre'].', '.$sql_comunidad['municipio'];
               }
         			?>
                     <tr>
