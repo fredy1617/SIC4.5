@@ -6,6 +6,7 @@ date_default_timezone_set('America/Mexico_City');
 $Descripcion = $conn->real_escape_string($_POST['valorSolucion']);
 $Apoyo = $conn->real_escape_string($_POST['valorApoyo']);
 $Campo = $conn->real_escape_string($_POST['valorCampo']);
+$Comunidad = $conn->real_escape_string($_POST['valorComunidad']);
 $Fechahoy = date('Y-m-d');
 $Hora = date('H:i:s');
 $id_user = $_SESSION['user_id'];
@@ -25,9 +26,23 @@ $id_cliente = $cliente['id_cliente'];
 
 #VERIFICAMOS QUE LA ACTIVIDAD NO HAYA SIDO CREADA PARA EVITAR DUPLICIDAD
 if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM reportes WHERE descripcion = 'Actividad' AND registro = $id_user AND solucion = '$Descripcion' AND fecha = '$Fechahoy'"))<=0) {
-	#SU NO FE CREADA LA CREAMOS INSERT
+	#SI NO FUE CREADA, LA CREAMOS INSERT
 	$sql = "INSERT INTO reportes (id_cliente, descripcion, fecha, hora_registro, registro, solucion, atendido, fecha_solucion, hora_atendido, tecnico, apoyo, campo) VALUES ($id_cliente, 'Actividad', '$Fechahoy', '$Hora', $id_user, '$Descripcion', 1, '$Fechahoy', '$Hora', $id_user, $Apoyo, $Campo)";
 	if(mysqli_query($conn, $sql)){
+		#SI SE INSERTO GUARDAMOS EN QUE COMUNIDAD FUE REALIZADA
+		$ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_reporte) AS id FROM reportes WHERE id_cliente = $id_cliente AND descripcion = 'Actividad' AND solucion = '$Descripcion'"));            
+    	$id_reporte = $ultimo['id'];
+		mysqli_query($conn, "INSERT INTO lugar_actividades (id_actividad, lugar) VALUES ($id_reporte, '$Comunidad')");
+
+		#AQUI SE VERIFICARA SI ES UNA ACTIVIDAD DE CIERRE Y LA HORA DE REGISTRO EXCEDE LA HORA DE SALIDA
+		$HORA_SALIDA = '17:30';//05:30 pm
+		if ($Descripcion == 'Actividad de Cierre' AND $Hora > $HORA_SALIDA) {
+			$a = new DateTime($HORA_SALIDA);
+			$b = new DateTime($Hora);
+			$extra = ($b->diff($a))->format('%H:%i');
+			#SI CUMPLE ESTAS CONDICIONES HARA UN REGISTRO EN LA TABLA horas_extras
+			mysqli_query($conn, "INSERT INTO horas_extras (fecha, tiempo, usuario, apoyo) VALUES ('$Fechahoy', '$extra',$id_user, $Apoyo)");
+		}
 		echo  '<script>M.toast({html:"Actividad creada correctamente.", classes: "rounded"})</script>';	
 		?>
 	  	<script>

@@ -192,7 +192,7 @@
         }
         $cliente = mysqli_fetch_array($sql);
         $id_comunidad = $cliente['lugar'];
-        $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunidades WHERE id_comunidad=$id_comunidad"));
+        $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad"));
 
         if($resultado['tecnico']==''){
             $tecnico1[0] = '';
@@ -241,7 +241,7 @@
                   <input type="text" id="coordenada" name="coordenada" value="<?php echo $cliente['coordenadas'];?>">
                 </div>
               </div>
-              <b>Comunidad: </b><?php echo $comunidad['nombre'];?><a onclick="irconsumo();" class="waves-effect waves-light btn pink right"><i class="material-icons right">equalizer</i>CONSUMO</a><br>
+              <b>Comunidad: </b><?php echo $comunidad['nombre'].', '.$comunidad['municipio'];?><a onclick="irconsumo();" class="waves-effect waves-light btn pink right"><i class="material-icons right">equalizer</i>CONSUMO</a><br>
               <b>IP: </b><a href="http://<?php echo $cliente['ip'];?>" target="_blank"><?php echo $cliente['ip'];?></a><br>
               <!-- Switch -->
               <?php 
@@ -288,10 +288,10 @@
                   }
                   ?>
                     <div class="right">
-                      <form method="post" action="../php/insert_pedidos.php"><input type="hidden" name="valorNombre" value="<?php echo $cliente['nombre'];?>"><input type="hidden" name="valorOrden" value="<?php echo $id_reporte;?>"><button button type="submit" class="btn pink waves-effect waves-light"><i class="material-icons right">file_upload</i>CREAR PEDIDO</button></form>                  
+                      <form method="post" action="../php/insert_pedidos.php"><input type="hidden" name="valorNombre" value="<?php echo $cliente['nombre'];?>"><input type="hidden" name="valorFecha" value="2000-01-01"><input type="hidden" name="valorOrden" value="<?php echo $id_reporte;?>"><button button type="submit" class="btn pink waves-effect waves-light"><i class="material-icons right">file_upload</i>CREAR PEDIDO</button></form>                  
                     </div>
-                  </div>
-              <?php echo $espacio; } // FIN ELSE ?>                 
+                  </div><br><br> 
+              <?php echo $espacio; } // FIN ELSE ?>             
               <span class="new badge pink hide-on-med-and-up" data-badge-caption="<?php echo $resultado['fecha'];?>"></span><br><br><hr>
               <b>Descripción: </b><?php echo $resultado['descripcion'];?><br>
               <a href="#!" class="secondary-content hide-on-small-only"><span class="new badge pink" data-badge-caption="<?php echo $resultado['fecha'];?>"></span></a>

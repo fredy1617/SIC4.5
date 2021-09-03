@@ -1,3 +1,29 @@
+<script >
+  function insert_pago2(caso) {  
+    var textoIdCliente = $("input#valorIdCliente").val();
+    var textoTipo_Campio = $("input#valorTipo_Campio").val();
+    var textoCantidad = $("input#valorCantidad").val();
+    var textoDescripcion = $("input#valorDescripcion").val();
+    var textoFecha = $("input#valorFechaCorte").val();
+    if (caso == 2) {
+      var textoFecha = $("input#valorFechaCorte2").val();
+      var textoCantidad2 = $("input#valorCantidad2").val();
+      var textoDescripcion2 = $("input#valorDescripcion2").val();
+    }
+    $.post("../php/diasRegistroNormal.php" , { 
+      valorTipo_Campio: textoTipo_Campio,
+      valorCantidad: textoCantidad,
+      valorDescripcion: textoDescripcion,
+      valorIdCliente: textoIdCliente,
+      valorFechaCorte: textoFecha,
+      valorCantidad2: textoCantidad2,
+      valorDescripcion2: textoDescripcion2,
+      caso: caso
+    }, function(mensaje) {
+      $("#tabla2").html(mensaje);
+    });     
+  };
+</script>
 <?php
 session_start();
 include('../php/conexion.php');
@@ -96,8 +122,7 @@ if ($Respuesta == 'Ver') {
   $entra = $Respuesta;
 }
 
-if ($entra == "Si") { 
-  
+if ($entra == "Si") {   
   $Mes = $conn->real_escape_string($_POST['valorMes']);
   $Año = $conn->real_escape_string($_POST['valorAño']);
   $ver = $Mes.' '.$Año;
@@ -106,11 +131,11 @@ if ($entra == "Si") {
     echo '<script>M.toast({html:"Ya se encuentra un pago del mismo mes y mismo año.", classes: "rounded"})</script>';
     ?>
     <script>
-   $(document).ready(function(){
-      $('#mostrarmodal').modal();
-      $('#mostrarmodal').modal('open'); 
-   });
-  </script>
+     $(document).ready(function(){
+        $('#mostrarmodal').modal();
+        $('#mostrarmodal').modal('open'); 
+     });
+    </script>
     <!-- Modal Structure -->
     <div id="mostrarmodal" class="modal">
       <div class="modal-content">
@@ -176,73 +201,124 @@ if ($entra == "Si") {
     </div>
     <?php
   }else{
-  if ($Descuento == "") {
-    $Descuento = 0;
-  }
-  $RegistrarCan = $Cantidad-$Descuento;
-  $Cotejamiento = 0;
-  $array =  array('ENERO' => '02','FEBRERO' => '03', 'MARZO' => '04','ABRIL' => '05', 'MAYO' => '06', 'JUNIO' => '07', 'JULIO' => '08', 'AGOSTO' => '09', 'SEPTIEMBRE' => '10', 'OCTUBRE' => '11', 'NOVIEMBRE' => '12',  'DICIEMBRE' => '01');
-    
-  $N_Mes = $array[$Mes];
-  #COMO ES DICIEMBRE ADELANTAMOS UN AÑO PORQUE LA FECHA DE CORTE YA ES EL SIGUINETE AÑO PAGO TODO DICIEMBRE
-  if ($Mes == 'DICIEMBRE') {  $Año ++; }
-  #FECHA DE CORTE SEGUN EL MES Y AÑO SELECCIONADO
-  $FechaCorte = date($Año.'-'.$N_Mes.'-05');  
+    #ARREGLO EL CUAL DEFINE EL MES SIGUIENTE PARA LA FECHA DE CORTE DEL CLIENTE
+    $array =  array('ENERO' => '02','FEBRERO' => '03', 'MARZO' => '04','ABRIL' => '05', 'MAYO' => '06', 'JUNIO' => '07', 'JULIO' => '08', 'AGOSTO' => '09', 'SEPTIEMBRE' => '10', 'OCTUBRE' => '11', 'NOVIEMBRE' => '12',  'DICIEMBRE' => '01');      
+    $N_Mes = $array[$Mes];
+    #-- AQUI TOMAMOS EL MES EN TURNO PARA COMPARAR
+    $mes_sig = ['ENERO' ,'FEBRERO' , 'MARZO' ,'ABRIL' , 'MAYO' , 'JUNIO' , 'JULIO' , 'AGOSTO' , 'SEPTIEMBRE' , 'OCTUBRE' , 'NOVIEMBRE' ,  'DICIEMBRE' ][$N_Mes-1];
+    #COMO ES DICIEMBRE ADELANTAMOS UN AÑO PORQUE LA FECHA DE CORTE YA ES EL SIGUINETE AÑO PAGO TODO DICIEMBRE
+    if ($Mes == 'DICIEMBRE') {  $Año ++; }
+    #FECHA DE CORTE SEGUN EL MES Y AÑO SELECCIONADO
+    $FechaCorte = date($Año.'-'.$N_Mes.'-05'); 
 
-  $sql = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio, Cotejado) VALUES ($IdCliente, '$Descripcion', '$RegistrarCan', '$Fecha_hoy', '$Hora', '$Tipo', $id_user, 0, 0, '$Tipo_Campio', '$Cotejamiento')";
-  if ($Tipo_Campio == "Credito") {
-    $mysql= "INSERT INTO deudas(id_cliente, cantidad, fecha_deuda, hasta, tipo, descripcion, usuario) VALUES ($IdCliente, '$RegistrarCan', '$Fecha_hoy', '$Hasta', '$Tipo', '$Descripcion', $id_user)";
-    if ($Hasta == "") {
-     $mysql = "INSERT INTO deudas(id_cliente, cantidad, fecha_deuda, tipo, descripcion, usuario) VALUES ($IdCliente, '$RegistrarCan', '$Fecha_hoy', '$Tipo', '$Descripcion', $id_user)";
-    }
-    mysqli_query($conn,$mysql);
-    $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_deuda) AS id FROM deudas WHERE id_cliente = $IdCliente"));            
-    $id_deuda = $ultimo['id'];
-    $sql = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio, id_deuda, Cotejado) VALUES ($IdCliente, '$Descripcion', '$RegistrarCan', '$Fecha_hoy', '$Hora', '$Tipo', $id_user, 0, 0, '$Tipo_Campio', $id_deuda, '$Cotejamiento')";
-  }
-   
-  //SE INSERTA EL PAGO -----------
-  if(mysqli_query($conn, $sql)){
-    echo '<script>M.toast({html:"El pago se dió de alta satisfcatoriamente.", classes: "rounded"})</script>';
-    // Si el pago es de banco guardar la referencia....
-    if (($Tipo_Campio == 'Banco' OR $Tipo_Campio == 'SAN') AND $ReferenciaB != '') {
-      $ultimoPago =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos WHERE id_cliente = $IdCliente"));            
-      $id_pago = $ultimoPago['id'];
-      mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion) VALUES ('$id_pago', '$ReferenciaB')");
-    }
     $cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente = $IdCliente"));
-    mysqli_query($conn, "UPDATE clientes SET fecha_corte='$FechaCorte' WHERE id_cliente='$IdCliente'");
-
+    if ($Descuento == "") {
+      $Descuento = 0;
+    }
+    $RegistrarCan = $Cantidad-$Descuento;//CANTIDAD A REGISTRAR EL PAGO SI HAY DESCUENTO SE LE RESTA 
     $id_mensualidad=$cliente['paquete'];
     $mensualidad = mysqli_fetch_array(mysqli_query($conn, "SELECT mensualidad FROM paquetes WHERE id_paquete='$id_mensualidad'"));
-    $dif = $mensualidad['mensualidad']-$Cantidad;
-    if ($Cantidad == ($mensualidad['mensualidad']*10)) {
+    $Tercio = ($mensualidad['mensualidad']/3);
+    #VAMOS A COMPARAR EL TERCIO DE LA ACNTIDAD A PAGAR MAS $50 PARA VER SI ESTA PAGANDO MENOS DE 10 DIAS
+    if (($mensualidad['mensualidad']-$Descuento)<=$Tercio) {
+      #SI PAGA MENOS DEL EQUIOVALENTE A 10 DIAS MOSTRAR MODAL Y HACER ACCIONES
+      $Descripcion2 = $mes_sig.' '.$Año;
+      $N_Mes_Sig = $array[$mes_sig];
+      if ($mes_sig == 'DICIEMBRE') {  $Año ++; }
+      #FECHA DE CORTE SI ES HASTA EL MES SIGUIENTE
+      $FechaCorte2 = date($Año.'-'.$N_Mes_Sig.'-05');
+      $Cantidad2 = $mensualidad['mensualidad'];// ($Cantidad-50)+($Cantidad-50)%100;
+      echo '<script>M.toast({html:"CANTIDAD A REGISTRAR MENOR AL EQUIVALENTE DE 10 DIAS.", classes: "rounded"})</script>';
+      ?>
+      <script>
+       $(document).ready(function(){
+          $('#modalDias').modal();
+          $('#modalDias').modal('open'); 
+       });
+      </script>
+      <!-- Modal Structure -->
+      <div id="modalDias" class="modal">
+        <div class="modal-content">
+          <h4 class="red-text center">! Advertencia !</h4> <br>
+          <p>
+            <h6 class="blue-text center"><b>¡LA CANTIDAD A REGISTRAR ES IGUAL O MENOR AL EQUIVALENTE A PAGAR 10 DIAS DE INTERNET!</b></h6>            <br>
+            <h6 class="blue-text center"><b>¡SE LE RECOMIENDA REGISTRAR EL MES SIGUIENTE PARA EVITAR CORTES DE SERVICO!</b></h6>            <br>
+          </p>
+        </div>
+        <div class="modal-footer row">
+          <form id="tabla2">
+            <input id="valorIdCliente" name="valorIdCliente" type="hidden" value="<?php echo $IdCliente;?>">
+            <input id="valorTipo_Campio" name="valorTipo_Campio" type="hidden" value="<?php echo $Tipo_Campio;?>">
+            <input id="valorCantidad" name="valorCantidad" type="hidden" value="<?php echo $RegistrarCan;?>">
+            <input id="valorDescripcion" name="valorDescripcion" type="hidden" value="<?php echo $Descripcion;?>">
+            <input id="valorFechaCorte" name="valorFechaCorte" type="hidden" value="<?php echo $FechaCorte;?>">
+            <input id="valorFechaCorte2" name="valorFechaCorte2" type="hidden" value="<?php echo $FechaCorte2;?>">
+            <input id="valorCantidad2" name="valorCantidad2" type="hidden" value="<?php echo $Cantidad2;?>">
+            <input id="valorDescripcion2" name="valorDescripcion2" type="hidden" value="<?php echo $Descripcion2;?>">
+            <button class="btn waves-effect green accent-4 waves-light" onclick="insert_pago2(2)"><b>REGISTRAR <?php echo $mes_sig;?></b></button>
+            <button class="btn waves-effect waves-light" onclick="insert_pago2(1);"><b>REGISTRAR SOLO <?php echo $Mes;?></b></button>
+          </form><br>
+        </div>
+      </div>
+    <?php
     }else{
-      if ($dif < -50) {
-        $Descrip = "AUMENTAR PAQUETE pago: ".$Cantidad." por: ".$Descripcion;
-        if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, '$Descrip', '$Fecha_hoy', $id_user)")) {
-          echo '<script>M.toast({html:"Se registro el reporte (AUMENTAR)", classes: "rounded"})</script>';
+      #SI EL PAGO ES NORMAL REGISTRAR     
+       
+      #--- CREAMOS EL SQL PARA LA INSERCION ---
+      $sql = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio, Cotejado) VALUES ($IdCliente, '$Descripcion', '$RegistrarCan', '$Fecha_hoy', '$Hora', '$Tipo', $id_user, 0, 0, '$Tipo_Campio', 0)";
+      if ($Tipo_Campio == "Credito") {
+        $mysql= "INSERT INTO deudas(id_cliente, cantidad, fecha_deuda, hasta, tipo, descripcion, usuario) VALUES ($IdCliente, '$RegistrarCan', '$Fecha_hoy', '$Hasta', '$Tipo', '$Descripcion', $id_user)";
+        if ($Hasta == "") {
+         $mysql = "INSERT INTO deudas(id_cliente, cantidad, fecha_deuda, tipo, descripcion, usuario) VALUES ($IdCliente, '$RegistrarCan', '$Fecha_hoy', '$Tipo', '$Descripcion', $id_user)";
         }
-      }elseif ($dif > 0) {
-        $Descrip = "DISMINUIR PAQUETE pago: ".$Cantidad." por: ".$Descripcion;
-        if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, '$Descrip', '$Fecha_hoy', $id_user)")) {
-          echo '<script>M.toast({html:"Se registro el reporte (DISMINUIR)", classes: "rounded"})</script>';
-        }
+        mysqli_query($conn,$mysql);
+        $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_deuda) AS id FROM deudas WHERE id_cliente = $IdCliente"));            
+        $id_deuda = $ultimo['id'];
+        $sql = "INSERT INTO pagos (id_cliente, descripcion, cantidad, fecha, hora, tipo, id_user, corte, corteP, tipo_cambio, id_deuda, Cotejado) VALUES ($IdCliente, '$Descripcion', '$RegistrarCan', '$Fecha_hoy', '$Hora', '$Tipo', $id_user, 0, 0, '$Tipo_Campio', $id_deuda, 0)";
       }
-    }    
-    ?>
-    <script>
-      id_cliente = <?php echo $IdCliente; ?>;
-      var a = document.createElement("a");
-        a.target = "_blank";
-        a.href = "../php/activar_pago.php?id="+id_cliente;
-        a.click();
-    </script>
-    <?php   
-  }else{
-    echo '<script>M.toast({html:"Ha ocurrido un error.", classes: "rounded"})</script>';  
-    }
-  }
+     
+      #--- SE INSERTA EL PAGO -----------
+      if(mysqli_query($conn, $sql)){
+        echo '<script>M.toast({html:"El pago se dió de alta satisfcatoriamente.", classes: "rounded"})</script>';
+        // Si el pago es de banco guardar la referencia....
+        if (($Tipo_Campio == 'Banco' OR $Tipo_Campio == 'SAN') AND $ReferenciaB != '') {
+          $ultimoPago =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id FROM pagos WHERE id_cliente = $IdCliente"));            
+          $id_pago = $ultimoPago['id'];
+          mysqli_query($conn,  "INSERT INTO referencias (id_pago, descripcion) VALUES ('$id_pago', '$ReferenciaB')");
+        }
+        #ACTUALIZAMOS LA FECHA DE CORTE   --- IMPORTANTE----
+        mysqli_query($conn, "UPDATE clientes SET fecha_corte='$FechaCorte' WHERE id_cliente='$IdCliente'");
+
+        $dif = $mensualidad['mensualidad']-$Cantidad;
+        #VERIFICAMOS SI LA CANTIDAD DE LA MENSUALIDAD FUE MODIFICADA Y SI REQUIERE AUMENTO O DISMINUCION DE VELOCIDAD
+        if ($Cantidad == ($mensualidad['mensualidad']*10)) {
+        }else{
+          if ($dif < -50) {
+            $Descrip = "AUMENTAR PAQUETE pago: ".$Cantidad." por: ".$Descripcion;
+            if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, '$Descrip', '$Fecha_hoy', $id_user)")) {
+              echo '<script>M.toast({html:"Se registro el reporte (AUMENTAR)", classes: "rounded"})</script>';
+            }
+          }elseif ($dif > 0) {
+            $Descrip = "DISMINUIR PAQUETE pago: ".$Cantidad." por: ".$Descripcion;
+            if (mysqli_query($conn,"INSERT INTO reportes(id_cliente, descripcion, fecha, registro) VALUES ($IdCliente, '$Descrip', '$Fecha_hoy', $id_user)")) {
+              echo '<script>M.toast({html:"Se registro el reporte (DISMINUIR)", classes: "rounded"})</script>';
+            }
+          }
+        }    
+        ?>
+        <script>
+          id_cliente = <?php echo $IdCliente; ?>;
+          var a = document.createElement("a");
+            a.target = "_blank";
+            a.href = "../php/activar_pago.php?id="+id_cliente;
+            a.click();
+        </script>
+        <?php   
+      }else{
+        echo '<script>M.toast({html:"Ha ocurrido un error.", classes: "rounded"})</script>';  
+      }
+    }//FIN IF 10 DIAS???    
+  }// FIN SE ELSE PAGO NO REPETIDO ??
   ?>
   <div id="tabla">
     <table class="bordered highlight responsive-table">
@@ -291,6 +367,6 @@ if ($entra == "Si") {
    </table>
   </div>
 <?php
-}
+}// FIN IF ENTRA ??
 mysqli_close($conn);
 ?>

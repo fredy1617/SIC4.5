@@ -7,18 +7,25 @@ include('fredyNav.php');
 include('../php/conexion.php');
 date_default_timezone_set('America/Mexico_City');
 $Fecha_Hoy = date('Y-m-d');
+$no_cliente = 0;
 if (isset($_POST['no_cliente']) == false) {
-  ?>
-  <script>    
-    function atras() {
-      M.toast({html: "Regresando a clientes.", classes: "rounded"})
-      setTimeout("location.href='clientes.php'", 800);
-    };
-    atras();
-  </script>
-  <?php
+  if (isset($_GET['cliente']) == false) {
+    ?>
+    <script>    
+      function atras() {
+        M.toast({html: "Regresando a clientes.", classes: "rounded"})
+        setTimeout("location.href='clientes.php'", 800);
+      };
+      atras();
+    </script>
+    <?php
+  }else{
+    $no_cliente = $_GET['cliente'];
+  }
 }else{
 $no_cliente = $_POST['no_cliente'];
+}#VERIFICAMOS QUE RECIBAMOS UN ID DE CLIENTE VALIDO
+if ($no_cliente > 0) {
 if (isset($_POST['resp']) == false) {
   $respuesta = 'Ver';
 }else{

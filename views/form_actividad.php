@@ -9,6 +9,7 @@
 	<script>
 		function insert_actividad(bandera) {
 		    var textoDescripcion = $("textarea#descripcion").val();
+		    var textoComunidad = $("select#comunidad").val();
 		    textoApoyo = 0;
 	        for(var i=1;i<=bandera;i++){
 	            if(document.getElementById('tecnico'+i).checked==true){
@@ -16,16 +17,22 @@
 	            }
 	        }   
 	        if(document.getElementById('campo').checked==true){
-	            textoCampo = 1;
-	          }else{
-	            textoCampo = 0;
-	          }		  
+	           textoCampo = 1;
+	        }else{
+	           textoCampo = 0;
+	        }
+	        if(document.getElementById('cierre').checked==true){
+	           textoDescripcion = 'Actividad de Cierre';
+	        }		  
 		    if(textoDescripcion == ""){
 		      M.toast({html: 'El campo Descripcion se encuentra vacío.', classes: 'rounded'});
+		    }else if(textoComunidad == 0){
+		      M.toast({html: 'Seleccione una comunidad.', classes: 'rounded'});
 		    }else{
 		      $.post("../php/insert_actividad_bitacora.php", {
                 valorApoyo: textoApoyo,
                 valorSolucion: textoDescripcion,
+                valorComunidad: textoComunidad,
                 valorCampo: textoCampo
 		      }, function(mensaje) {
 		        $("#insert").html(mensaje);
@@ -53,10 +60,30 @@
 			        </div>
 			        <div class="col s12 m6 l6">
 	                  <p>
+	                    <input type="checkbox" id="cierre" />
+	                    <label for="cierre">Actividad Cierre</label>
+	                  </p>
+                	</div>
+                	<div class="col s12 m6 l6">
+	                  <p>
 	                    <input type="checkbox" id="campo" />
 	                    <label for="campo">En Campo</label>
 	                  </p>
                 	</div>
+                	<div class="input-field col s9"><br><br>
+			          <select id="comunidad" class="browser-default">
+			            <option value="0" selected>Comunidad</option>
+			            <?php
+			            require('../php/conexion.php');
+			            $sql = mysqli_query($conn,"SELECT * FROM comunidades ORDER BY nombre");
+			            while($com = mysqli_fetch_array($sql)){
+			            ?>
+			                <option value="<?php echo $com['id_comunidad'];?>"><?php echo $com['nombre'].', '.$com['municipio'];?></option>
+			            <?php
+			            } 
+			            ?>
+			          </select>
+			        </div>
 		        </div>
 		          <!-- AQUI SE ENCUENTRA LA DOBLE COLUMNA EN ESCRITORIO.-->
 		        <div class="col s12 m6 l6"><br>
@@ -79,7 +106,7 @@
 			    </div>
 		      </div>
 		    </form>
-	  	  </div><br>
+	  	  </div>
 	      <a onclick="insert_actividad(<?php echo $bandera;?>);" class="waves-effect waves-light btn pink right"><i class="material-icons right">send</i>REGISTRAR</a>
 		</div><br>
 	</body>

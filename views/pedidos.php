@@ -26,6 +26,8 @@ function buscar_pedidos2(){
 function insert_pedidos() {
     var textoNombre = $("input#nombre").val();
     var textoOrden = $("input#orden").val();
+    var textoFecha = $("input#fecha_req").val();
+
     if (textoOrden == 0 || textoOrden == '') {
       textoOrden = "N/A";
     }
@@ -34,6 +36,7 @@ function insert_pedidos() {
     }else{
       $.post("../php/insert_pedidos.php", {
           valorNombre: textoNombre,
+          valorFecha: textoFecha,
           valorOrden: textoOrden
         }, function(mensaje) {
             $("#resultado_pedido").html(mensaje);
@@ -65,7 +68,7 @@ function entregar(folio){
       <h5 class="hide-on-large-only">Nuevo Pedido</h5>
     </div>
     <div class="row">
-      <div class="input-field col s12 m5 l5">
+      <div class="input-field col s12 m3 l3">
         <i class="material-icons prefix">people</i>
         <input type="text" id="nombre">
         <label for="nombre">Nombre del Cliente:</label>
@@ -75,7 +78,10 @@ function entregar(folio){
         <input type="number" id="orden">
         <label for="orden">Id Orden (Puede ir vacio):</label>
       </div>
-      
+      <div class="col s12 l3 m3">
+        <label for="fecha_req">Fecha Requerido (Puede ir vacio):</label>
+        <input id="fecha_req" type="date" >
+      </div>
       <div class="input-field">
         <a onclick="insert_pedidos();" class="waves-effect waves-light btn pink left right">REGISTRAR PEDIDO<i class="material-icons center right">send</i></a>
       </div>
@@ -107,6 +113,7 @@ function entregar(folio){
               <th>Orden</th>
               <th>Fecha Y Hora Creacion</th>
               <th>Fecha Cerrado</th>
+              <th>Fecha Requerido</th>
               <th>Registró</th>
               <th>Ver</th>
               <th>Borrar</th>
@@ -140,6 +147,7 @@ function entregar(folio){
               <th>Fecha Y Hora Creacion</th>
               <th>Fecha Cerrado</th>
               <th>Fecha Autorizado</th>
+              <th>Fecha Requerido</th>
               <th>Registró</th>
               <th>Ver</th>
               <th>Borrar</th>

@@ -21,6 +21,7 @@ if (mysqli_num_rows($consulta) <= 0) {
     $folio = $pedido['folio'];
     $color = ($pedido['cerrado'] == 0)? 'red': 'green';
     $es = ($pedido['cerrado'] == 0)? 'PENDIENTE': 'CERRADO';
+    $Fecha_req = ($pedido['fecha_requerido']=='0000-00-00' OR $pedido['fecha_requerido']== NULL OR $pedido['fecha_requerido']== '2000-01-01') ? 'N/A':'<b>'.$pedido['fecha_requerido'].'</b>';
     //Output / Salida
     $mensaje .= '
       <tr>
@@ -30,6 +31,7 @@ if (mysqli_num_rows($consulta) <= 0) {
         <td>'.$pedido['id_orden'].'</td>
         <td>'.$pedido['fecha'].' '.$pedido['hora'].'</td>
         <td>'.$pedido['fecha_cerrado'].'</td>
+        <td>'.$Fecha_req .'</td>
         <td>'.$datos['firstname'].'</td>
         <td><a href = "../views/detalles_pedido.php?folio='.$folio.'" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">visibility</i></a></td>
         <td><a onclick="borrar('.$folio.');" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>

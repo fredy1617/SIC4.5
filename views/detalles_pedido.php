@@ -77,6 +77,15 @@ function selObservacion(id){
   $("#materialALL").html(mensaje);
   }); 
 };
+function selFecha(){
+  textoFolio = <?php echo $folio; ?>;
+  $.post("../views/modal_agregar_fecha.php", { 
+          valorFolio:textoFolio
+  }, function(mensaje) {
+  $("#materialALL").html(mensaje);
+  }); 
+};
+
   
 </script>
 <body>
@@ -98,6 +107,10 @@ function selObservacion(id){
           $mantenimiento = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM reportes WHERE id_reporte = $id_orden"));
           $accion = '<form action="atender_reporte.php" method="post"><input type="hidden" name="id_reporte" value="'.$id_orden.'"><button type="submit" class="">'.$id_orden.'</button> - ('.$mantenimiento['descripcion'].').</form>';
         }
+        $Fecha_req = ($Pedido['fecha_requerido']=='0000-00-00' OR $Pedido['fecha_requerido']== NULL) ? 'N/A':$Pedido['fecha_requerido'];
+        if ($Fecha_req == '2000-01-01') {
+          $Fecha_req = '<a onclick="selFecha();" class="waves-effect waves-light btn-small pink"><i class="material-icons left">edit</i>AGREGAR</a>';          
+        }
         ?>
         <li class="collection-item avatar">
             <img src="../img/cliente.png" alt="" class="circle">
@@ -106,6 +119,7 @@ function selObservacion(id){
             <b>Orden: </b><?php echo $accion;?><br>
             <b>Fecha de Creación: </b><?php echo $Pedido['fecha'];?><br>
             <b>Hora de Creación: </b><?php echo $Pedido['hora'];?><br>
+            <b>Fecha de Requerido: </b><?php echo $Fecha_req;?><br>
             <div class="row col s10"><br>
               <b>Acción : </b>
               <div class="right">

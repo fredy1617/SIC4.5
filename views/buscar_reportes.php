@@ -102,7 +102,7 @@
                     <td><span class="new badge '.$color.'" data-badge-caption="">'.$estatus.'</span>'.$EnCampo.'
                     </td>
                     <td><b>'.$id_reporte.'</b></td>
-                    <td><a class="tooltipped" data-position="top" data-tooltip=" Telefono: '.$cliente['telefono'].'  Comunidad: '.$comunidad['nombre'].'">'.$cliente['nombre'].'</a></td>
+                    <td>'.$cliente['nombre'].'</a></td>
                     <td>'.$resultados['descripcion'].'</td>
                     <td>'.$resultados['falla'].'</td>
                     <td>'.$resultados['fecha'].'</td>

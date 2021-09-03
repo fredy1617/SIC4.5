@@ -46,7 +46,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
       if ($instalaciones['count(*)'] == 0 AND $Reportes_Campo['count(*)'] == 0 AND $Reportes_Oficina['count(*)'] == 0 AND $Ordenes['count(*)'] > 0) {
           $sql_orden1 = mysqli_query($conn,"SELECT * FROM orden_servicios  WHERE (fecha_r = '$DIA' AND tecnicos_r LIKE '%$user%') OR (fecha_s = '$DIA' AND tecnicos_s LIKE '%$user%')");
           if(mysqli_num_rows($sql_orden1) > 0){ 
-              #IMPRIMIR ORDEN --- --- 11
+              #IMPRIMIR ORDEN --- --- 11 +++++++++++++++++++++++++++++++++++++++++
               while($orden = mysqli_fetch_array($sql_orden1)){
                 $id_cliente_o = $orden['id_cliente'];
                 $cliente_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente_o"));
@@ -103,7 +103,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
           $hora_reporte_men = $info['hora_atendido'];
           $sql_orden1 = mysqli_query($conn,"SELECT * FROM orden_servicios WHERE (fecha_r = '$DIA' AND  hora_r < '$hora_reporte_men' AND tecnicos_r LIKE '%$user%') OR (fecha_s = '$DIA' AND  hora_s < '$hora_reporte_men' AND tecnicos_s LIKE '%$user%' ) LIMIT $iniciar_orden, 20");
           if(mysqli_num_rows($sql_orden1) > 0){ 
-            #IMPRIMIR ORDEN ---1
+            #IMPRIMIR ORDEN ---1  +++++++++++++++++++++++++++++++++++++++++++++++
             $iniciar_orden = $iniciar_orden+mysqli_num_rows($sql_orden1);
             while($orden = mysqli_fetch_array($sql_orden1)){
               $id_cliente_o = $orden['id_cliente'];
@@ -144,14 +144,25 @@ while($usuario = mysqli_fetch_array($usuarios)){
           }
           }
           
-          #IMPRIMIR REPOERTE ---- 2
+          #IMPRIMIR REPOERTE ---- 2 ******************************************
           $id_cliente = $info['id_cliente'];            
           $sql2 = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente");
           if (mysqli_num_rows($sql2) == 0) {
             $sql2 = mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente");
           }
           $cliente = mysqli_fetch_array($sql2);
-          $id_comunidad = $cliente['lugar'];
+          if ($info['descripcion'] == 'Actividad') {
+            $id_actividad =$info['id_reporte'];
+            $sql_lugar = mysqli_query($conn, "SELECT * FROM lugar_actividades WHERE id_actividad=$id_actividad");
+            if (mysqli_num_rows($sql_lugar)) {
+              $lugar = mysqli_fetch_array($sql_lugar);
+              $id_comunidad = $lugar['lugar'];
+            }else{
+              $id_comunidad = $cliente['lugar']; 
+            }
+          }else{
+            $id_comunidad = $cliente['lugar'];
+          }
           $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad"));
           #VEMOS SI ES SOLO UN DIAGNOSTICO DE REPORTE
           if ($info['fecha_d']==$DIA AND $info['tecnico_d'] == $id_user) {
@@ -207,7 +218,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
           #SQL ORDEN COMPARANDO CON HORA DE INSTALACION e $iniciar_orden E IF SI HAY 
           $sql_orden2 = mysqli_query($conn,"SELECT * FROM orden_servicios WHERE (fecha_r = '$DIA' AND  hora_r < '$hora_alta' AND tecnicos_r LIKE '%$user%') OR (fecha_s = '$DIA' AND  hora_s < '$hora_alta' AND tecnicos_s LIKE '%$user%') LIMIT $iniciar_orden, 20");
           if(mysqli_num_rows($sql_orden2) > 0){ 
-            #IMPRIMIR ORDEN --- 3
+            #IMPRIMIR ORDEN --- 3 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             $iniciar_orden = $iniciar_orden+mysqli_num_rows($sql_orden2);
             while($orden2 = mysqli_fetch_array($sql_orden2)){
               $id_cliente_o2 = $orden2['id_cliente'];
@@ -247,7 +258,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
           <?php
             }
           }
-        #IMPRIMIR LA INSTALACION ----- 4
+        #IMPRIMIR LA INSTALACION ----- 4 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         $id_comunidad = $instalaciones['lugar'];        
         $comunidad = mysqli_fetch_array(mysqli_query($conn,"SELECT * FROM comunidades WHERE id_comunidad = '$id_comunidad'"));
         ?>
@@ -278,7 +289,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
             $hora_reporte_mayor = $info['hora_atendido'];
             $sql_orden1 = mysqli_query($conn,"SELECT * FROM orden_servicios WHERE (fecha_r = '$DIA' AND  hora_r < '$hora_reporte_mayor' AND tecnicos_r LIKE '%$user%') OR (fecha_s = '$DIA' AND  hora_s < '$hora_reporte_mayor' AND tecnicos_s LIKE '%$user%' ) LIMIT $iniciar_orden, 20");
             if(mysqli_num_rows($sql_orden1) > 0){ 
-              #IMPRIMIR ORDEN --- --- 5
+              #IMPRIMIR ORDEN --- --- 5 +++++++++++++++++++++++++++++++++++++++++++++++++++++
               $iniciar_orden = $iniciar_orden+mysqli_num_rows($sql_orden1);
               while($orden = mysqli_fetch_array($sql_orden1)){
                 $id_cliente_o = $orden['id_cliente'];
@@ -318,14 +329,25 @@ while($usuario = mysqli_fetch_array($usuarios)){
             <?php
               }
             }
-          #IMPRIMIR REPOERTE ---- 6
+          #IMPRIMIR REPOERTE ---- 6 ********************************************************
           $id_cliente = $info['id_cliente'];            
           $sql2 = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente");
           if (mysqli_num_rows($sql2) == 0) {
             $sql2 = mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente");
           }
           $cliente = mysqli_fetch_array($sql2);
-          $id_comunidad = $cliente['lugar'];
+          if ($info['descripcion'] == 'Actividad') {
+            $id_actividad =$info['id_reporte'];
+            $sql_lugar = mysqli_query($conn, "SELECT * FROM lugar_actividades WHERE id_actividad=$id_actividad");
+            if (mysqli_num_rows($sql_lugar)) {
+              $lugar = mysqli_fetch_array($sql_lugar);
+              $id_comunidad = $lugar['lugar'];
+            }else{
+              $id_comunidad = $cliente['lugar']; 
+            }
+          }else{
+            $id_comunidad = $cliente['lugar'];
+          }
           $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad"));
           #VEMOS SI ES SOLO UN DIAGNOSTICO DE REPORTE
           if ($info['fecha_d']==$DIA AND $info['tecnico_d'] == $id_user) {
@@ -380,7 +402,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
             if ($cont_r == 0) {
                $sql_orden1 = mysqli_query($conn,"SELECT * FROM orden_servicios WHERE (fecha_r = '$DIA' AND  hora_r > '$hora_reporte_mayor' AND tecnicos_r LIKE '%$user%') OR (fecha_s = '$DIA' AND  hora_s > '$hora_reporte_mayor' AND tecnicos_s LIKE '%$user%')");
                 if(mysqli_num_rows($sql_orden1) > 0){ 
-                #IMPRIMIR ORDEN --- --- 7
+                #IMPRIMIR ORDEN --- --- 7 +++++++++++++++++++++++++++++++++++++++++++++
                 while($orden = mysqli_fetch_array($sql_orden1)){
                   $id_cliente_o = $orden['id_cliente'];
                   $cliente_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente_o"));
@@ -424,7 +446,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
           }else{
               $sql_orden1 = mysqli_query($conn,"SELECT * FROM orden_servicios WHERE (fecha_r = '$DIA' AND  hora_r > '$hora_alta' AND tecnicos_r LIKE '%$user%') OR (fecha_s = '$DIA' AND  hora_s > '$hora_alta' AND tecnicos_s LIKE '%$user%')");
                 if(mysqli_num_rows($sql_orden1) > 0){ 
-                #IMPRIMIR ORDEN --- --- 12
+                #IMPRIMIR ORDEN --- --- 12 ++++++++++++++++++++++++++++++++++++++++++++++++
                 while($orden = mysqli_fetch_array($sql_orden1)){
                   $id_cliente_o = $orden['id_cliente'];
                   $cliente_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente_o"));
@@ -478,7 +500,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
             $hora_reporte_mayor = $info['hora_atendido'];
             $sql_orden1 = mysqli_query($conn,"SELECT * FROM orden_servicios WHERE (fecha_r = '$DIA' AND  hora_r < '$hora_reporte_mayor' AND tecnicos_r LIKE '%$user%') OR (fecha_s = '$DIA' AND  hora_s < '$hora_reporte_mayor' AND tecnicos_s LIKE '%$user%' ) LIMIT $iniciar_orden, 20");
             if(mysqli_num_rows($sql_orden1) > 0){ 
-              #IMPRIMIR ORDEN --- --- 8
+              #IMPRIMIR ORDEN --- --- 8 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
               $iniciar_orden = $iniciar_orden+mysqli_num_rows($sql_orden1);
               while($orden = mysqli_fetch_array($sql_orden1)){
                 $id_cliente_o = $orden['id_cliente'];
@@ -518,14 +540,25 @@ while($usuario = mysqli_fetch_array($usuarios)){
             <?php
               }
             }
-            #IMPRIMIR REPORTES ---- 9
+            #IMPRIMIR REPORTES ---- 9 **************************************************
             $id_cliente = $info['id_cliente'];            
             $sql2 = mysqli_query($conn, "SELECT * FROM clientes WHERE id_cliente=$id_cliente");
             if (mysqli_num_rows($sql2) == 0) {
               $sql2 = mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente");
             }
             $cliente = mysqli_fetch_array($sql2);
-            $id_comunidad = $cliente['lugar'];
+            if ($info['descripcion'] == 'Actividad') {
+              $id_actividad =$info['id_reporte'];
+              $sql_lugar = mysqli_query($conn, "SELECT * FROM lugar_actividades WHERE id_actividad=$id_actividad");
+              if (mysqli_num_rows($sql_lugar)) {
+                $lugar = mysqli_fetch_array($sql_lugar);
+                $id_comunidad = $lugar['lugar'];
+              }else{
+                $id_comunidad = $cliente['lugar']; 
+              }
+            }else{
+              $id_comunidad = $cliente['lugar'];
+            }
             $comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad=$id_comunidad"));
             #VEMOS SI ES SOLO UN DIAGNOSTICO DE REPORTE
             if ($info['fecha_d']==$DIA AND $info['tecnico_d'] == $id_user) {
@@ -580,7 +613,7 @@ while($usuario = mysqli_fetch_array($usuarios)){
             if ($cont_r2 == 0) {
               $sql_orden1 = mysqli_query($conn,"SELECT * FROM orden_servicios WHERE (fecha_r = '$DIA' AND  hora_r > '$hora_reporte_mayor' AND tecnicos_r LIKE '%$user%') OR (fecha_s = '$DIA' AND  hora_s > '$hora_reporte_mayor' AND tecnicos_s LIKE '%$user%')");
                 if(mysqli_num_rows($sql_orden1) > 0){ 
-                #IMPRIMIR ORDEN --- --- 10
+                #IMPRIMIR ORDEN --- --- 10  ++++++++++++++++++++++++++++++++++++++++++
                 while($orden = mysqli_fetch_array($sql_orden1)){
                   $id_cliente_o = $orden['id_cliente'];
                   $cliente_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM especiales WHERE id_cliente=$id_cliente_o"));

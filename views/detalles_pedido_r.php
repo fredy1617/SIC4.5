@@ -68,6 +68,10 @@ function selCerrar(){
    <ul class="collection">
         <?php
         $accion = '<form action="detalles_ruta.php" method="post"><input type="hidden" name="id_ruta" value="'.$id_orden.'"><button type="submit" class="">'.$id_orden.'</button> - (Ruta No.'.$id_orden.').</form>';
+        $Fecha_req = ($Pedido['fecha_requerido']=='0000-00-00' OR $Pedido['fecha_requerido']== NULL) ? 'N/A':$Pedido['fecha_requerido'];
+        if ($Fecha_req == '2000-01-01') {
+          $Fecha_req = '<a onclick="selFecha('.$folio.');" class="waves-effect waves-light btn-small pink"><i class="material-icons left">edit</i>AGREGAR</a>';          
+        }
         ?>
         <li class="collection-item avatar">
             <img src="../img/cliente.png" alt="" class="circle">
@@ -76,6 +80,7 @@ function selCerrar(){
             <b>Orden: </b><?php echo $accion;?><br>
             <b>Fecha de Creación: </b><?php echo $Pedido['fecha'];?><br>
             <b>Hora de Creación: </b><?php echo $Pedido['hora'];?><br>
+            <b>Fecha Requerido: </b><?php echo $Fecha_req;?><br>
             <a href="../php/imprimir_pedido.php?folio=<?php echo $folio;?>" target="blank" class="waves-effect waves-light btn pink right"><i class="material-icons right">print</i>IMPRIMIR PEDIDO</a>
         </li>
     </ul><br>

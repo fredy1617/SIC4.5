@@ -227,7 +227,7 @@ function update_orden() {
                   }
                   ?>
                   <div class="right">
-                      <form method="post" action="../php/insert_pedidos.php"><input type="hidden" name="valorNombre" value="<?php echo $datos['nombre'];?>"><input type="hidden" name="valorOrden" value="<?php echo $id_orden;?>"><button button type="submit" class="btn pink waves-effect waves-light"><i class="material-icons right">file_upload</i>CREAR PEDIDO</button></form>                  
+                      <form method="post" action="../php/insert_pedidos.php"><input type="hidden" name="valorNombre" value="<?php echo $datos['nombre'];?>"><input type="hidden" name="valorOrden" value="<?php echo $id_orden;?>"><input type="hidden" name="valorFecha" value="2000-01-01"><button button type="submit" class="btn pink waves-effect waves-light"><i class="material-icons right">file_upload</i>CREAR PEDIDO</button></form>                  
                   </div>
                 </div>
                 <div id="documento"></div>  

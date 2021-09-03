@@ -28,7 +28,7 @@ if($aux<=0 or $aux==null){
 	    
 	    $Nombre = 'Ruta No.'.$ultima_ruta;
 
-		$sql = "INSERT INTO pedidos (nombre, id_orden, fecha, hora, usuario) VALUES('$Nombre', '$ultima_ruta', '$Fecha', '$Hora', '$id_user')";
+		$sql = "INSERT INTO pedidos (nombre, id_orden, fecha, hora, fecha_requerido, usuario) VALUES('$Nombre', '$ultima_ruta', '$Fecha', '$Hora', '2000-01-01', '$id_user')";
 		if(mysqli_query($conn, $sql)){
 			echo '<script>M.toast({html :"el pedido se registró satisfactoriamente.", classes: "rounded"})</script>';
 		    $ultimo =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(folio) AS folio FROM pedidos WHERE usuario = $id_user"));            

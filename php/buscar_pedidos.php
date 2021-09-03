@@ -22,6 +22,8 @@ if (mysqli_num_rows($consulta) <= 0) {
 	    $LISTOS = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM detalles_pedidos WHERE folio = $folio AND listo = 1"));
 	    $TOTAL = mysqli_num_rows(mysqli_query($conn, "SELECT * FROM detalles_pedidos WHERE folio = $folio"));
 	    $color = ($LISTOS == $TOTAL)? 'green':'red';
+    	$Fecha_req = ($resultados['fecha_requerido']=='0000-00-00' OR $resultados['fecha_requerido']== NULL OR $resultados['fecha_requerido']== '2000-01-01') ? 'N/A':'<b>'.$resultados['fecha_requerido'].'</b>';
+
 		//Output / Salida
 		$mensaje .= '
 			<tr>
@@ -32,6 +34,7 @@ if (mysqli_num_rows($consulta) <= 0) {
 		        <td>'.$resultados['fecha'].' '.$resultados['hora'].'</td>
 		        <td>'.$resultados['fecha_cerrado'].'</td>
 		        <td>'.$resultados['fecha_autorizado'].'</td>
+		        <td>'.$Fecha_req.'</td>
 		        <td>'.$datos['firstname'].'</td>
 		        <td><a href = "../views/detalles_pedido.php?folio='.$folio.'" class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">visibility</i></a></td>
 		        <td><a onclick="borrar('.$folio.');" class="btn btn-floating red darken-1 waves-effect waves-light"><i class="material-icons">delete</i></a></td>

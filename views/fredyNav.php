@@ -96,6 +96,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    	<li><a href="rep_pagos.php" class="black-text"><i class="material-icons">report</i>Reporte Pagos </a></li>
 				    	<li><a href="reportes_atendidos.php" class="black-text"><i class="material-icons">done</i>Reportes Atendidos </a></li>
 				    	<li><a href="rep_instalaciones.php" class="black-text"><i class="material-icons">format_list_numbered</i>Rep. Instalaciones</a></li>
+				    	<li><a href="estadistica.php" class="black-text"><i class="material-icons">equalizer</i>Estadistica</a></li>
 				    	<li><a href="reporte_deudas.php" class="black-text"><i class="material-icons">list</i>Reporte Deudas</a></li>    	
 				    	<li><a href="reporte_material.php" class="black-text"><i class="material-icons">router</i>Reporte Material</a></li>    	
 				    	<li><a href="rep_ruta.php" class="black-text"><i class="material-icons">location_on</i>Reporte Rutas</a></li>    	
@@ -221,6 +222,7 @@ $rutas = mysqli_fetch_array(mysqli_query($conn,"SELECT count(*)FROM rutas WHERE 
 				    				<li><a href="list_cortes_sin_confirmar.php"><i class="material-icons">done</i>Sin Confirmar </a></li>
 				    				<li><a href="cobradores_list.php"><i class="material-icons">attach_money</i>Saldo Cobradores </a></li>  	
 								    <li><a href="rep_instalaciones.php"><i class="material-icons">format_list_numbered</i>Reporte Instalaciones</a></li>
+				    				<li><a href="estadistica.php"><i class="material-icons">equalizer</i>Estadistica</a></li>
 								    <li><a href="reportes_atendidos.php"><i class="material-icons">done</i>Reportes Atendidos</a></li>
 				    				<li><a href="reporte_material.php"><i class="material-icons">router</i>Reporte Material</a></li>  	
 				    				<li><a href="rep_ruta.php"><i class="material-icons">location_on</i>Reporte Rutas</a></li>    	

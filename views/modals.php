@@ -216,7 +216,7 @@ function recargar10() {
     <h6 ><b>Una vez generado el corte se comenzara una nueva lista de pagos para el siguinete corte. </b></h6><br>
     <h5 class="red-text darken-2">¿DESEA CONTINUAR?</h5>
     <div class="row">
-    <div class="input-field col s6">
+    <div class="input-field col s12 m6 l6">
         <i class="material-icons prefix">lock</i>
         <input type="password" name="clave" id="clave">
         <label for="clave">Ingresar Clave</label>
@@ -229,7 +229,7 @@ function recargar10() {
           <input id="cantidadD" type="number" class="validate" data-length="30" value="0" required>
           <label for="cantidadD">Cantidad:</label>
       </div>
-      <div class="input-field col s10 m6 l6">
+      <div class="input-field col s12 m6 l6">
           <i class="material-icons prefix">edit</i>
           <input id="descripcionD" type="text" class="validate" data-length="30" required>
           <label for="descripcionD">Descripcion:(ej: Viaticos para Marcos y Luis) </label>
@@ -250,7 +250,7 @@ function recargar10() {
     <h6 ><b>Una vez generado el corte se comenzara una nueva lista de pagos para el siguinete corte parcial. </b></h6><br>
     <h5 class="red-text darken-2">¿DESEA CONTINUAR?</h5>
     <div class="row">
-    <div class="input-field col s6">
+    <div class="input-field col s12 m6 l6">
         <i class="material-icons prefix">lock</i>
         <input type="password" name="claveP" id="claveP">
         <label for="claveP">Ingresar Clave</label>
@@ -258,7 +258,7 @@ function recargar10() {
     </div>
     <h4>Nombre del cobrador</h4>
       <form class="row">
-      <div class="input-field col s10 m6 l6">
+      <div class="input-field col s12 m6 l6">
           <i class="material-icons prefix">people</i>
           <input id="cobradorP" type="text" class="validate" data-length="30" required>
           <label for="cobradorP">Nombre:(ej: Marcos Santillan) </label>
@@ -266,7 +266,7 @@ function recargar10() {
       </form>
   </div>
   <div class="modal-footer">
-      <a onclick="recargar_corteP()" class="modal-action modal-close waves-effect waves-green btn-flat">Aceptar</a>
+      <a onclick="recargar_corteP()" class="modal-action modal-close waves-effect waves-green btn-flat right">Aceptar</a>
       <a href="#" class="modal-action modal-close waves-effect waves-red btn-flat">Cerrar<i class="material-icons right">close</i></a>
   </div>
 </div>
