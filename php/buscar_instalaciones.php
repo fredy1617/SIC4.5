@@ -11,6 +11,7 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
         <th>Id_Cliente</th>
         <th>Nombre</th>
         <th>Comunidad</th>
+        <th>Municipio</th>
         <th>Costo</th>
         <th width="12%">Fecha</th>
         <th>Hora</th>
@@ -59,7 +60,8 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
           <td><?php echo $aux;?></td>
           <td><b><?php echo $id_cliente;?></b></td>
           <td><?php echo $instalaciones['nombre'];?></td>
-          <td><?php echo $comunidad['nombre'].', '.$comunidad['municipio'];?></td>
+          <td><?php echo $comunidad['nombre']];?></td>
+          <td><?php echo $comunidad['municipio'];?></td>
           <td>$<?php echo $instalaciones['total'];?></td>
           <td><?php echo $instalaciones['fecha_instalacion'];?></td>
           <td><?php echo $instalaciones['hora_alta']; ?></td>
