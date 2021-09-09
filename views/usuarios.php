@@ -135,7 +135,7 @@
                 $paginas = ceil($paginas);//paginacion
                 if($filas == 0){
                     ?>
-                    <h5 class="center">No hay comunidades</h5>
+                    <h5 class="center">No hay usuarios</h5>
                     <?php
                 }else{
                     while($tmp = mysqli_fetch_array($sql_tmp)){

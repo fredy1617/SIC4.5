@@ -71,7 +71,7 @@
 						<td><span class="new badge <?php echo $color; ?>" data-badge-caption="<?php echo $Dias; ?>"><?php echo $signos; ?></span></td>
 						<td><?php echo $contrato['id_cliente']; ?></td>
 						<td><?php echo $contrato['nombre']; ?></td>
-						<td><?php echo $Comunidad['nombre']; ?></td>
+						<td><?php echo $Comunidad['nombre'].', '.$Comunidad['municipio']; ?></td>
 						<td><?php echo $contrato['telefono']; ?></td>
 						<td><?php echo $contrato['fecha_corte']; ?></td>
 						<td><form method="post" action="../views/crear_pago.php"><input id="no_cliente" name="no_cliente" type="hidden" value="<?php echo $contrato['id_cliente']; ?>"><button class="btn-floating btn-tiny waves-effect waves-light pink"><i class="material-icons">payment</i></button></form></td>
