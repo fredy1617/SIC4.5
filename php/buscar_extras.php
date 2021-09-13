@@ -44,6 +44,7 @@ $ValorA = $conn->real_escape_string($_POST['valorA']);
               }
             }
           }
+          #VACIAMOS EL ARREGLO EN CADA CELDA PARA CERAR LA FILA
           $Filas .= '<td>'.$dias[0].'</td>
                     <td>'.$dias[1].'</td>
                     <td>'.$dias[2].'</td>
