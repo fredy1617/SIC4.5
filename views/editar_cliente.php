@@ -153,7 +153,7 @@ $paquete_cliente = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM paquete
                 $sql = mysqli_query($conn,"SELECT * FROM comunidades ORDER BY nombre");
                 while($comunidad = mysqli_fetch_array($sql)){
                   ?>
-                    <option value="<?php echo $comunidad['id_comunidad'];?>"><?php echo $comunidad['nombre'];?> - $<?php echo $comunidad['instalacion'];?></option>
+                    <option value="<?php echo $comunidad['id_comunidad'];?>"><?php echo $comunidad['nombre'].', '.$comunidad['municipio'];?> - $<?php echo $comunidad['instalacion'];?></option>
                   <?php
                 } 
             ?>
