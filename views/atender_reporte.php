@@ -259,7 +259,11 @@
                     <span class="lever"></span>
                     On
                   </label>
-                </div>
+                </div><br><br>
+                <?php
+                  $ultimoPago =  mysqli_fetch_array(mysqli_query($conn, "SELECT MAX(id_pago) AS id, descripcion, cantidad FROM pagos WHERE id_cliente = $id_cliente AND tipo = 'Mensualidad'"));
+                ?>
+                <b>Ultima Mensualidad: </b><?php echo 'Pago: $'.$ultimoPago['cantidad'].' por '.$ultimoPago['descripcion']; ?>
               <?php
               }else{
                 ?>
