@@ -14,8 +14,8 @@
 				$id_comunidad = $cliente['lugar'];
 				$comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad = '$id_comunidad'"));
 				$id_cliente = $cliente['id_cliente'];
-				$pago =  mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $id_cliente AND tipo = 'Mensualidad' ORDER BY id_pago DESC LIMIT 1,1"));
-				$pago2 =  mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $id_cliente AND tipo = 'Mensualidad' ORDER BY id_pago DESC LIMIT 2,2"));
+				$pago =  mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $id_cliente AND tipo = 'Mensualidad' ORDER BY id_pago DESC LIMIT 1"));
+				$pago2 =  mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $id_cliente AND tipo = 'Mensualidad' ORDER BY id_pago DESC LIMIT 1,1"));
 
 		?>
 			<tr>

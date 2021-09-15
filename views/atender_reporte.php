@@ -261,7 +261,7 @@
                   </label>
                 </div><br><br>
                 <?php
-                  $ultimoPago =  mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $id_cliente AND tipo = 'Mensualidad' ORDER BY id_pago DESC LIMIT 1,1"));
+                  $ultimoPago =  mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM pagos WHERE id_cliente = $id_cliente AND tipo = 'Mensualidad' ORDER BY id_pago DESC"));
                 ?>
                 <b>Ultima Mensualidad: </b><?php echo 'Pago: $'.$ultimoPago['cantidad'].' por '.$ultimoPago['descripcion']; ?>
               <?php
