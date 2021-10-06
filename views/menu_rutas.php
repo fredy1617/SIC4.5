@@ -20,7 +20,7 @@ include('../php/cobrador.php');
 		</div>
 		<?php
 		#ES UN CICLO QUE SE RECORRERA 2 VECES CON LA I PRIMERO EN 0 Y LUEGO EN 1
-		for ($i=0; $i <= 1; $i++) {
+		for ($i=0; $i <= 3; $i++) {
 			$inicia=$i*3;//VARIABLE QUE SE USA PARA MARCAR DONDE INICIA EL REGNLO PRIMERO SERA EN 0 LUEGO INICIARA EN 3
 			#SELECCIONAMOS LAS RUTAS DE 3 EN 3 EN ORDEN DECENDENTE ELIGIRA PRIMERO LA 0,1,2 LUEGO EN UNA SEGUNA VUELTA DEL CICLO ELEGIRA 3,4,5 SEGUN LA VARIABLE INICIAR Y EL VALOR ELEGIRA DE 3 EN 3
 			$rutas = mysqli_query($conn, "SELECT * FROM rutas ORDER BY id_ruta DESC LIMIT $inicia,3");
@@ -53,11 +53,17 @@ include('../php/cobrador.php');
 
 					#SUMAMOS LOS CONTADORES DE REPORTES, ORDENES E INSTALACIONES TERMINADAS PARA SABER QUE AVANCE LLEVA DEL TOTAL
 					$Avance = $instalacion['count(*)']+$reporte['count(*)']+$orden['count(*)'];
-					#SUMAMOS DOS DIA A LA FECHA DE LA RUTA
-					$mas_dias = strtotime('+1 day', strtotime($fecha_ruta));
-					$dosdias = date('Y-m-d', $mas_dias);//SE ASIGNA UNA VARIABLE LA SUMA DE LOS DOS DIAS
-					#IF QUE COMPARA SI EL LA CARGA YA ESTA TERMINADO (TODOS LOS REPORTES E UNSTALACIONES QUE LLEVAVA LA RUTA 10/10), O SI YA PASARON 2 DIAS DESDE EL DIA DE CREACION DE LA RUTA
-					if (($Total == $Avance OR $Hoy > $dosdias) AND $ruta['estatus'] != 1) {
+
+					$Dia_num = date('N', strtotime($fecha_ruta));//COMBIERTE FECHA EN NUMERO : Domingo(7), Lunes(1), Martes(2), Miercoles(3), Jueves(4) ,Viernes(5) ,Sabado(6)
+
+					if($Dia_num == 5){
+						$Cierra = date("d-m-Y",strtotime($fecha_ruta."+ 4 days")); 
+						#echo '<br>Cerrar el martes (2)'.$Cierra;
+					}else{
+						$Cierra = date("d-m-Y",strtotime($fecha_ruta."+ 2 days")); 
+						#echo '<br> Cerrar dos dias despues '.$Cierra;
+					}
+					if (($Total == $Avance OR $Hoy == $Cierra) AND $ruta['estatus'] != 1) {
 						#SI LA RUTA EN TURNO TIENE LA CARGA TERMINADA O PASARON LOS 2 DIAS PASAMOS SU ESTAUS PENDIENTE = 0 A TERMINADA = 1
 						#VERIFICAMOS SI SE HIZO EL CAMBIO A LA RUTA EN EL ESTATUS = 1 PARA SEÑALAR QUE ESTA TERMINADA
 						if(mysqli_query($conn, "UPDATE rutas SET estatus = 1  WHERE id_ruta = $id_ruta")){
