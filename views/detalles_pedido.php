@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title>SIC | Detalles Pedido</title>
+  <title>SIC | Detalles Pedido</title>
 </head>
 <?php 
 include('../views/fredyNav.php');
@@ -126,7 +126,7 @@ function selFecha(){
               <?php  if ($Pedido['cerrado'] == 0) {  ?>
                 <a onclick="selCerrar();" class="waves-effect waves-light btn pink <?php echo ($user_id == $Pedido['usuario'])? '':'disabled'; ?>"><i class="material-icons right">lock</i>CERRAR PEDIDO</a> 
               <?php } else if ($Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'No Autorizado')  {  // FIN IF $Hay ?>
-                <form method="post" action="../php/autorizar_pedido.php"><input type="hidden" name="folio" value="<?php echo $folio;?>"><button type="submit" class="btn pink waves-effect waves-light <?php echo($user_id == 10 OR $user_id == 49 OR $user_id == 75)? '':'disabled'; ?>"><i class="material-icons right">check</i>Autorizar Pedido</button></form>
+                <form method="post" action="../php/autorizar_pedido.php"><input type="hidden" name="folio" value="<?php echo $folio;?>"><button type="submit" class="btn pink waves-effect waves-light <?php echo($user_id == 10 OR $user_id == 49 OR $user_id == 88 OR $user_id = 70)? '':'disabled'; ?>"><i class="material-icons right">check</i>Autorizar Pedido</button></form>
               <?php } // FIN IF ?>                    
               </div>
             </div>
@@ -136,7 +136,7 @@ function selFecha(){
     <?php if (($Pedido['cerrado'] == 0) OR ($Pedido['cerrado'] == 1 AND ($user_id == 10 OR $user_id == 49))) { ?>
     <h5>Agregar Material</h5>
     <form class="row">
-    	<div class="input-field col s12 m5 l5">
+      <div class="input-field col s12 m5 l5">
           <i class="material-icons prefix">edit</i>
           <input id="descripcion" type="text" class="validate" data-length="100" required>
           <label for="descripcion">Maretrial (Nombre y descripcion):</label>
@@ -166,47 +166,47 @@ function selFecha(){
     ?>
     <h4>Material (<b class="<?php echo $color; ?>-text"><?php echo $LISTOS; ?> / <?php echo $TOTAL; ?></b>):</h4>
     <form class="col s12">
-    	<table>
-    		<thead>
-    			<tr>
-    				<th>Listo</th>
+      <table>
+        <thead>
+          <tr>
+            <th>Listo</th>
             <th>Descripcion</th>
             <th>Proveedor</th>
             <th>Registro</th>
             <th>Observacion</th>
-    				<th>Observo</th>
-    				<th>Borrar</th>
-    			</tr>
-    		</thead>
-    		<tbody>
-    		<?php
-    		if($TOTAL>0){
-    			while($material = mysqli_fetch_array($detalles_pedido)){
+            <th>Observo</th>
+            <th>Borrar</th>
+          </tr>
+        </thead>
+        <tbody>
+        <?php
+        if($TOTAL>0){
+          while($material = mysqli_fetch_array($detalles_pedido)){
             $user_id_mat = $material['usuario']; 
             $user_mat = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $user_id_mat"));
             $user_id_o = $material['observo']; 
             $user_o = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM users WHERE user_id = $user_id_o"));
-    		?>
-    			<tr>
-    				<td><p>
-		            <input <?php echo $Check; ?> type="checkbox" <?php echo ($material['listo'] == 1 )? 'checked': ''; ?> onclick="actualizaCheck(<?php echo $material['id']; ?>);" id="todos<?php echo $material['id'] ?>"/>
-		            <label for="todos<?php echo $material['id'] ?>"></label>
-         			</p></td>
+        ?>
+          <tr>
+            <td><p>
+                <input <?php echo $Check; ?> type="checkbox" <?php echo ($material['listo'] == 1 )? 'checked': ''; ?> onclick="actualizaCheck(<?php echo $material['id']; ?>);" id="todos<?php echo $material['id'] ?>"/>
+                <label for="todos<?php echo $material['id'] ?>"></label>
+              </p></td>
             <td><?php echo $material['descripcion']; ?></td>
             <td><?php echo $material['proveedor']; ?></td>
-    				<td><?php echo $user_mat['firstname']; ?></td>
+            <td><?php echo $user_mat['firstname']; ?></td>
             <td><?php if ($Pedido['cerrado'] == 1 AND $Pedido['estatus'] == 'No Autorizado' AND ($user_id == 10 OR $user_id == 49 OR $user_id == 75)) { 
               echo ($material['observacion'] == 'N/A')? '<a onclick="selObservacion('.$material['id'].');" class="waves-effect waves-light btn-small pink"><i class="material-icons left">edit</i>AGREGAR</a> ': $material['observacion']; 
               }else{ echo  'N/A';}?></td>
             <td><?php echo $user_o['firstname']; ?></td>
-    				<td><a onclick="borrar(<?php echo $material['id'] ?>);" class="btn btn-floating red darken-1 waves-effect waves-light <?php echo $Button; ?>"><i class="material-icons">delete</i></a></td>
-    			</tr>    			
-    		<?php
-    			}
-    		}
-    		?>
-    		</tbody>
-    	</table>
+            <td><a onclick="borrar(<?php echo $material['id'] ?>);" class="btn btn-floating red darken-1 waves-effect waves-light <?php echo $Button; ?>"><i class="material-icons">delete</i></a></td>
+          </tr>         
+        <?php
+          }
+        }
+        ?>
+        </tbody>
+      </table>
     </form>  
   </div> 
 </div>
