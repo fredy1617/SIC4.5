@@ -44,7 +44,7 @@
 				date_default_timezone_set('America/Mexico_City');
 
 				$Hoy = date('Y-m-d');
-				$contratos = mysqli_query($conn, "SELECT * FROM clientes WHERE contrato = 1  ORDER BY fecha_instalacion");
+				$contratos = mysqli_query($conn, "SELECT * FROM clientes WHERE contrato = 1  AND instalacion = 1 ORDER BY fecha_instalacion");
 				$aux = mysqli_num_rows($contratos);
 				if ($aux>0) {
 					while ($contrato = mysqli_fetch_array($contratos)) {						
@@ -61,7 +61,7 @@
 							$color = "red accent-4";
 							$Estatus = "Vencido";
 						}
-				?>
+				        ?>
 					<tr>
 						<td><span class="new badge <?php echo $color; ?>" data-badge-caption=""><?php echo $Estatus; ?></span></td>
 						<td><?php echo $contrato['id_cliente']; ?></td>

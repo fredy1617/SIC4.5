@@ -261,7 +261,8 @@ function update_orden() {
                     }
                     echo '  </tbody>
                         </table>'; 
-                  } ?>
+                  } 
+                  $TOTAL_O =$orden['precio']+$totalE; ?>
                 </div>
               </p>
               <br>
@@ -341,7 +342,7 @@ function update_orden() {
           <?php }elseif ($orden['estatus'] == 'Cotizado' OR $orden['estatus'] == 'Pedir' OR $orden['estatus'] == 'Ejecutar' OR $orden['estatus'] == 'Autorizado') { ?>
           <div class="col s12 l9 m9"><br>
            <div class="input-field col s12 l4 m4">
-              <h5><b>Total = $<?php echo $orden['precio']+$totalE;?></b></h5>
+              <h5><b>Total = $<?php echo $TOTAL_O;?></b></h5>
            </div>
            <div class="input-field col s12 l8 m8">
               <i class="material-icons prefix">check</i>
@@ -369,31 +370,31 @@ function update_orden() {
             <div class="input-field col s12 m4 l4">
                 <i class="material-icons col s2">satellite<br></i>
                 <select id="antena" class="browser-default col s10" required>
-                    <option value="0" selected >Antena:</option>
-                    <option value="N/A">Ninguna</option>
-                    <?php
-                      $sql = mysqli_query($conn,"SELECT * FROM stock_tecnicos WHERE tipo = 'Antena' AND disponible = 0 AND tecnico = $id_user");
-                      while($antena = mysqli_fetch_array($sql)){
-                      ?>
-                        <option value="<?php echo $antena['serie'];?>"><?php echo $antena['nombre'];?> (Serie: <?php echo $antena['serie'];?>)</option>
-                        <?php
-                      } 
-                      ?>
+                  <option value="0" selected >Antena:</option>
+                  <option value="N/A">Ninguna</option>
+                  <?php
+                  $sql = mysqli_query($conn,"SELECT * FROM stock_tecnicos WHERE tipo = 'Antena' AND disponible = 0 AND tecnico = $id_user");
+                  while($antena = mysqli_fetch_array($sql)){
+                  ?>
+                    <option value="<?php echo $antena['serie'];?>"><?php echo $antena['nombre'];?> (Serie: <?php echo $antena['serie'];?>)</option>
+                  <?php
+                  } 
+                  ?>
                 </select>
             </div>
             <div class="input-field col s12 m4 l4">
                 <i class="material-icons col s2">router<br></i>
                 <select id="router" class="browser-default col s10" required>
-                    <option value="0" selected >Router:</option>
-                    <option value="N/A">Ninguno</option>
-                    <?php
-                      $sql = mysqli_query($conn,"SELECT * FROM stock_tecnicos WHERE tipo = 'Router' AND disponible = 0 AND tecnico = $id_user");
-                      while($router = mysqli_fetch_array($sql)){
-                      ?>
-                        <option value="<?php echo $router['serie'];?>"><?php echo $router['nombre'];?> (Serie: <?php echo $router['serie'];?>)</option>
-                      <?php
-                      } 
-                      ?>
+                  <option value="0" selected >Router:</option>
+                  <option value="N/A">Ninguno</option>
+                  <?php
+                  $sql = mysqli_query($conn,"SELECT * FROM stock_tecnicos WHERE tipo = 'Router' AND disponible = 0 AND tecnico = $id_user");
+                  while($router = mysqli_fetch_array($sql)){
+                  ?>
+                    <option value="<?php echo $router['serie'];?>"><?php echo $router['nombre'];?> (Serie: <?php echo $router['serie'];?>)</option>
+                  <?php
+                  } 
+                  ?>
                 </select>
             </div>
             <?php
@@ -429,15 +430,15 @@ function update_orden() {
                 <option value="Revisar">Revisar</option> 
                 <option value="Cotizar">Cotizar</option> 
                 <option value="Cotizado">Cotizado</option> 
-                <?php if ($id_user == 75 OR $id_user == 10 OR $id_user == 49 OR $id_user == 25 OR $id_user == 28) { ?>
-                <option value="Autorizado">Autorizado</option> 
+                <?php if ($id_user == 75 OR $id_user == 10 OR $id_user == 49 OR $id_user == 25 OR $id_user == 70) { ?>
+                  <option value="Autorizado">Autorizado</option> 
                 <?php 
                 } //FIN IF PARA AUTORIZADO
-                if ($orden['estatus'] == 'Pedir' OR $orden['estatus'] == 'Autorizado' OR $orden['estatus'] == 'Ejecutar') {
+                if ($orden['estatus'] == 'Pedir' OR $orden['estatus'] == 'Autorizado' OR $orden['estatus'] == 'Ejecutar' OR ($orden['estatus'] == 'Cotizado') AND $TOTAL_O <= 5000) {
                 ?>
-                <option value="Pedir">Pedir</option> 
-                <option value="Ejecutar">Ejecutar</option> 
-                <option value="Facturar">Facturar</option> 
+                  <option value="Pedir">Pedir</option> 
+                  <option value="Ejecutar">Ejecutar</option> 
+                  <option value="Facturar">Facturar</option> 
                 <?php }//FIN DEL IF ?>
                 <option value="Pendiente">Pendiente</option> 
                 <option value="Cancelada">Cancelada</option> 

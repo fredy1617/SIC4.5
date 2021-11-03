@@ -17,17 +17,28 @@ function borrar_refa(IdRefaccion){
 };
 function sacar(){
     var textoIdDispositivo = $("input#id_dispositivo").val();
+    var textoRef = $("input#ref").val();
+
     if (document.getElementById('banco').checked == true) {
       textoTipo_Cambio = "Banco";
+    }else if (document.getElementById('san').checked==true) {
+      textoTipo_Campio = "SAN";
     }else{
       textoTipo_Cambio = "Efectivo";
     }
-    $.post("../php/dar_salida.php", {           
-            valorIdDispositivo: textoIdDispositivo,
-            valorTipo_Cambio: textoTipo_Cambio,
-    }, function(mensaje) {
-    $("#sacar").html(mensaje);
-    }); 
+    if ((document.getElementById('banco').checked==true || document.getElementById('san').checked==true) && textoRef == "") {
+        M.toast({html: 'Los pagos en banco deben de llevar una referencia.', classes: 'rounded'});
+    }else if (document.getElementById('banco').checked==false && document.getElementById('san').checked==false && textoRef != "") {
+          M.toast({html: 'Pusiste referencia y no elegiste Banco o SAN.', classes: 'rounded'});
+    }else{
+      $.post("../php/dar_salida.php", {           
+              valorIdDispositivo: textoIdDispositivo,
+              valorRef: textoRef,
+              valorTipo_Cambio: textoTipo_Cambio,
+      }, function(mensaje) {
+      $("#sacar").html(mensaje);
+      }); 
+    }
 };
 function salida() {
     var textoLink = $("textarea#link").val();
@@ -233,17 +244,35 @@ if (isset($_POST['id_dispositivo']) == false) {
                 <div class="input-field col s12 m3 l3"><br>
                   <h5><b>TOTAL: $<?php if($datos['precio'] > 0){ echo $datos['precio']; }else{ echo $datos['mano_obra']+$datos['t_refacciones'];}?></b></h5>
                 </div>
-                <div class="col s3 m2 l2">
-                  <p><br>
-                    <input type="checkbox" id="banco"/>
+                <?php if (in_array($_SESSION['user_id'], array(10, 70, 49, 88, 38, 84, 90))) { 
+                  $Ser = '';
+                }else{ $Ser = 'disabled="disabled"';}?>
+                <div class="col s6 m1 l1">
+                  <p>
+                    <br>
+                    <input type="checkbox" id="banco" <?php echo $Ser;?>/>
                     <label for="banco">Banco</label>
                   </p>
-                </div><br>
+                </div>
+                <div class="col s6 m1 l1">
+                  <p>
+                    <br>
+                    <input type="checkbox" id="san" <?php echo $Ser;?>/>
+                    <label for="san">SAN</label>
+                  </p>
+                </div>
+                <br>
                 <div>
                  <input name="id_dispositivo" id="id_dispositivo" type="hidden" class="validate center" data-length="200" value="<?php echo $datos['id_dispositivo'];?>"><br>
                 <a onclick="salida();" class="btn btn-floating pink  tooltipped" data-position="bottom" data-tooltip="GUARDAR"><i class="material-icons">save</i></a>
                 <button onclick="salida();" type="submit"  class="btn btn-floating pink waves-effect waves-light tooltipped" data-position="bottom" data-tooltip="GUARDAR e IMPRIMIR"><i class="material-icons">print</i></button>
                 <a onclick="sacar();" class="btn btn-floating pink waves-effect waves-light tooltipped" data-position="bottom" data-tooltip="SALIDA"><i class="material-icons">exit_to_app</i></a>
+                </div>
+                <div class="col s6 m2 l2">
+                  <div class="input-field">
+                    <input id="ref" type="text" class="validate" data-length="15" required value="">
+                    <label for="ref">Referencia:</label>
+                  </div>
                 </div>
              </div>             
           </form>

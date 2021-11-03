@@ -43,7 +43,11 @@ class PDF extends FPDF{
             $this->Ln(2);
             $this->MultiCell(60,4,utf8_decode('Referencia: '.$cliente['referencia']),0,'L',true);
             $this->Ln(2);
-            $this->MultiCell(60,4,utf8_decode('Solicitud: '.$fila['solicitud']),0,'L',true);
+            if ($fila['estatus'] == 'Cotizado') {
+                $this->MultiCell(60,4,utf8_decode('Trabajo: '.$fila['trabajo']),0,'L',true);
+            }else{
+                $this->MultiCell(60,4,utf8_decode('Solicitud: '.$fila['solicitud']),0,'L',true);
+            }
             $this->Ln(2);
             $this->MultiCell(60,4,utf8_decode('Estatus: '.$fila['estatus']),0,'L',true);
             $this->Ln(2);

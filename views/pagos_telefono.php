@@ -102,7 +102,7 @@ $sql = "SELECT * FROM clientes WHERE id_cliente=$no_cliente";
 $datos = mysqli_fetch_array(mysqli_query($conn, $sql));
 //Sacamos la Comunidad
 $id_comunidad = $datos['lugar'];
-$comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT nombre FROM comunidades WHERE id_comunidad='$id_comunidad'"));
+$comunidad = mysqli_fetch_array(mysqli_query($conn, "SELECT * FROM comunidades WHERE id_comunidad='$id_comunidad'"));
 //Sacamos la suma de todas las deudas y abonos...
 $deuda = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS suma FROM deudas WHERE id_cliente='$no_cliente'"));
 $abono = mysqli_fetch_array(mysqli_query($conn, "SELECT SUM(cantidad) AS suma FROM pagos WHERE id_cliente = $no_cliente AND tipo = 'Abono'"));
@@ -136,7 +136,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
          <b>Telefono: </b><?php echo $datos['telefono'];?><br>
          <b>Extención: </b><?php echo $datos['tel_servicio'];?><br>
          <?php }?>
-         <b>Comunidad: </b><?php echo $comunidad['nombre'];?><br>
+         <b>Comunidad: </b><?php echo $comunidad['nombre'].', '.$comunidad['municipio'];?><br>
          <?php if ($area['area'] != 'Cobrador') { ?>
          <b>Dirección: </b><?php echo $datos['direccion'];?><br>
          <b>Referencia: </b><?php echo $datos['referencia'];?><br>
@@ -204,7 +204,7 @@ $area = mysqli_fetch_array(mysqli_query($conn, "SELECT area FROM users WHERE use
             <option value="2021">2021</option>
           </select>
         </div>  
-        <?php if ($user_id == 38 OR $user_id == 10 OR $user_id == 77 OR $user_id == 49 OR $user_id == 70  OR $user_id == 75) { 
+        <?php if (in_array($user_id, array(10, 70, 49, 88, 38, 84, 90))) { 
            $Ser = '';
         }else{ $Ser = 'disabled="disabled"';}?>
         <div class="col s6 m1 l1">

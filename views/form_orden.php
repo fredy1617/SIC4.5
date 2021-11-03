@@ -7,6 +7,17 @@ include('fredyNav.php');
 include ('../php/cobrador.php');
 ?>
 <script>
+	function showContent() {
+    element2 = document.getElementById("content_o");
+    var textoEstatus = $("select#estatus").val();
+
+    if (textoEstatus == 'Cotizado') {
+      element2.style.display='block';
+    }
+    else {
+      element2.style.display='none';
+    }     
+  };
 function buscar() {
     var texto = $("input#nombresC").val();
 	$.post("../php/orden_cliente.php", {
@@ -25,6 +36,18 @@ function create_orden() {
     var textoColor = $("textarea#color").val();
     var textoCerca = $("textarea#cercas").val();    
     var textoEsp = $("textarea#especificacion").val();
+    No = 'si';
+    if (textoEstatus == 'Cotizado') {
+      var textoCosto = $("input#costo").val();
+      if (textoCosto == '' || textoCosto <= 0) {
+        No = 'No';
+        text = 'Colocar un costo valido a la orden.';
+      }else{
+        No = 'Si';
+      }
+    }else{
+    	textoCosto = 0;
+    }
   
     if (textoNombreC == "") {
       M.toast({html: 'El campo Nombre(s) se encuentra vacío.', classes: 'rounded'});
@@ -46,6 +69,8 @@ function create_orden() {
       M.toast({html: 'El campo Cerca De se encuentra vacío.', classes: 'rounded'});
     }else if(textoEsp == ""){
       M.toast({html: 'El campo Especificación se encuentra vacío.', classes: 'rounded'});
+    }else if(No == "No"){
+      M.toast({html:""+text, classes: "rounded"})
     }else{
       $.post("../php/create_orden.php", {
           valorNuevo: 'Si',
@@ -55,6 +80,7 @@ function create_orden() {
           valorEstatus: textoEstatus,
           valorDpto: textoDpto,
           valorSolicitud: textoSolicitud,
+          valorCosto: textoCosto,
           valorReferencia: 'Casa de color: '+textoColor+', Cercas de '+textoCerca+' ('+textoEsp+')'
         }, function(mensaje) {
             $("#orden").html(mensaje);
@@ -117,11 +143,12 @@ function create_orden() {
 		    </div>
 		    <div class="col s12 m6 l2"> <br>
 		        <div class="input-field row">
-		          <select id="estatus" class="browser-default col s11">
+		          <select id="estatus" class="browser-default col s11" onchange="javascript:showContent()">
 		            <option value="0" selected>Estatus:</option>
 		            <option value="PorConfirmar">Por Confirmar</option>		            
 		            <option value="Revisar">Revisar</option>		            
 		            <option value="Cotizar">Cotizar</option>		            
+		            <option value="Cotizado">Cotizado</option>		            
 		          </select>
 		        </div>   
 		    </div>
@@ -140,10 +167,15 @@ function create_orden() {
 		          <i class="material-icons prefix">comment</i>
 		          <textarea id="solicitud" class="
 		         materialize-textarea validate" data-length="100"></textarea>
-		          <label for="solicitud">Solicitud Del Cliente:</label>
+		          <label for="solicitud">Solicitud Del Cliente o Trabajo a Realizar:</label>
 		        </div>       
 	       </div>
-	      </div>
+	       <div class="input-field col s10 m4 l4" id="content_o" style="display: none;">
+		        <i class="material-icons prefix">attach_money</i>
+            <input id="costo" type="number" class="validate" data-length="100" required>
+            <label for="costo">Costo de la orden:</label>
+        </div>
+	    </div>
 		</div>
       <a onclick="create_orden();" class="waves-effect waves-light btn pink right"><i class="material-icons right">send</i>GUARDAR</a>
   </div> 
